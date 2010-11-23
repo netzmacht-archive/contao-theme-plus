@@ -1,0 +1,61 @@
+<?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
+
+/**
+ * Contao Open Source CMS
+ * Copyright (C) 2005-2010 Leo Feyer
+ *
+ * Formerly known as TYPOlight Open Source CMS.
+ *
+ * This program is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program. If not, please visit the Free
+ * Software Foundation website at <http://www.gnu.org/licenses/>.
+ *
+ * PHP version 5
+ * @copyright  InfinitySoft 2010
+ * @author     Tristan Lins <tristan.lins@infinitysoft.de>
+ * @package    Layout Additional Sources
+ * @license    http://opensource.org/licenses/lgpl-3.0.html
+ */
+
+
+/**
+ * Fields
+ */
+$GLOBALS['TL_LANG']['tl_additional_source']['type']            = array('Dateityp', 'Bitte wählen Sie hier den Typ der Datei.');
+$GLOBALS['TL_LANG']['tl_additional_source']['js_file']         = array('JavaScript Datei', 'Bitte wählen Sie hier die JavaScript Datei aus.');
+$GLOBALS['TL_LANG']['tl_additional_source']['js_url']          = array('JavaScript URL', 'Bitte geben Sie die URL zur JavaScript Datei an.');
+$GLOBALS['TL_LANG']['tl_additional_source']['css_file']        = array('CSS Datei', 'Bitte wählen Sie hier die CSS Datei aus.');
+$GLOBALS['TL_LANG']['tl_additional_source']['css_url']         = array('CSS URL', 'Bitte geben Sie die URL zur CSS Datei an.');
+$GLOBALS['TL_LANG']['tl_additional_source']['cc']              = array('Conditional Comment', 'Conditional Comments ermöglichen das Einbinden Internet Explorer-spezifischer Dateien.');
+$GLOBALS['TL_LANG']['tl_additional_source']['media']           = array('Medientypen', 'Bitte wählen Sie die Medientypen aus, für die die CSS Datei gültig ist.');
+$GLOBALS['TL_LANG']['tl_additional_source']['restrictLayout']  = array('Datei auf Seitenlayout beschränken', 'Bitte wählen Sie hier die Seitenlayout aus, in denen die Datei eingebunden wird.');
+$GLOBALS['TL_LANG']['tl_additional_source']['layout']          = array('Seitenlayout', 'Seitenlayouts können mit dem Modul "Themes" verwaltet werden.');
+
+
+/**
+ * References
+ */
+$GLOBALS['TL_LANG']['tl_additional_source']['source_legend']   = 'Datei';
+
+/**
+ * Buttons
+ */
+$GLOBALS['TL_LANG']['tl_additional_source']['new']         = array('Neue Datei', 'Eine neue Datei anlegen');
+$GLOBALS['TL_LANG']['tl_additional_source']['show']        = array('Details', 'Details der Datei ID %s anzeigen');
+$GLOBALS['TL_LANG']['tl_additional_source']['edit']        = array('Datei bearbeiten', 'Datei ID %s bearbeiten');
+$GLOBALS['TL_LANG']['tl_additional_source']['delete']      = array('Datei löschen', 'Datei ID %s löschen');
+$GLOBALS['TL_LANG']['tl_additional_source']['cut']         = array('Datei verschieben ', 'Datei ID %s verschieben');
+$GLOBALS['TL_LANG']['tl_additional_source']['copy']        = array('Datei duplizieren', 'Datei ID %s duplizieren');
+$GLOBALS['TL_LANG']['tl_additional_source']['delete']      = array('Datei löschen', 'Datei ID %s löschen');
+
+?>
