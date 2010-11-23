@@ -72,14 +72,6 @@ class tl_layout_additional_source extends Backend
 			$strType = $objAdditionalSource->type;
 			$label = $objAdditionalSource->$strType;
 			
-			if ($objAdditionalSource->compress_yui) {
-				$label .= '<span style="color: #009;">.yui</span>';
-			}
-			
-			if ($objAdditionalSource->compress_gz) {
-				$label .= '<span style="color: #009;">.gz</span>';
-			}
-			
 			if (strlen($objAdditionalSource->cc)) {
 				$label .= ' <span style="color: #B3B3B3;">[' . $objAdditionalSource->cc . ']</span>';
 			}

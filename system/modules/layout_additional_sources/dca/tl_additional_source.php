@@ -308,27 +308,6 @@ class tl_additional_source extends Backend
 	{
 		$label = $row[$row['type']];
 		
-		if ($row['compress_yui']) {
-			$label .= '<span style="color: #009;">.yui</span>';
-		}
-		
-		if ($row['compress_gz']) {
-			$label .= '<span style="color: #009;">.gz</span>';
-		}
-		
-		$objTheme = $this->detectTheme();
-		if ($objTheme) {
-			$folders = unserialize($objTheme->folders);
-			if (is_array($folders)) {
-				foreach ($folders as $folder) {
-					$label = str_replace(
-						$folder.'/',
-						'<span style="color: #B3B3B3;">'.$folder.'/'.'</span>',
-						$label);
-				}
-			}
-		}
-		
 		if (strlen($row['cc'])) {
 			$label .= ' <span style="color: #B3B3B3;">[' . $row['cc'] . ']</span>';
 		}
