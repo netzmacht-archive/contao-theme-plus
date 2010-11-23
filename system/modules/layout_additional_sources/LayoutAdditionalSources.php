@@ -288,7 +288,7 @@ class LayoutAdditionalSources extends Frontend
 							$strRemappingPath = $this->calculateRemappingPath($arrSource['css_file'], $strFile);
 						}
 						$objUrlRemapper = new UrlRemapper($strRemappingPath, $blnAbsolutizeUrls, $objAbsolutizePage);
-						$strContent = preg_replace_callback('#url\(["\']?(.*)["\']?\)#U', array(&$objUrlRemapper, 'replace'), $strContent);
+						$strContent = preg_replace_callback('#url\((.*)\)#U', array(&$objUrlRemapper, 'replace'), $strContent);
 					
 						// add media definition
 						$arrMedia = deserialize($arrSource['media'], true);
@@ -586,6 +586,12 @@ class UrlRemapper extends Controller {
 	
 	public function replace($arrMatch)
 	{
+		if (preg_match('#^["\']#', $arrMatch[1])) {
+			$arrMatch[1] = substr($arrMatch[1], 1);
+		}
+		if (preg_match('#["\']$#', $arrMatch[1])) {
+			$arrMatch[1] = substr($arrMatch[1], 0, -1);
+		}
 		if (!preg_match('#^\w+://#', $arrMatch[1]) && $arrMatch[1][0] != '/')
 		{
 			$strPath = $this->strRelativePath;
@@ -600,7 +606,7 @@ class UrlRemapper extends Controller {
 			{
 				$strUrl = $this->DomainLink->absolutizeUrl($strUrl, $this->objAbsolutizePage);
 			}
-			return 'url(' . $strUrl . ')';
+			return 'url("' . $strUrl . '")';
 		}
 		return $arrMatch[0];
 	}
