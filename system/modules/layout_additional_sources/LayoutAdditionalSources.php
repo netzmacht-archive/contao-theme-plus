@@ -480,82 +480,85 @@ class LayoutAdditionalSources extends Frontend
 	{
 		$arrLayoutAdditionalSources = deserialize($objLayout->additional_source, true);
 		
-		// check if a BE user is logged in
-		// include the original source files
-		if ($this->getBELoginStatus())
+		if (count($arrLayoutAdditionalSources))
 		{
-			$arrArrAdditionalSources = array
-			(
-				'css' => array(),
-				'js' => array()
-			);
-			
-			$objAdditionalSources = $this->Database->execute("
-					SELECT
-						*
-					FROM
-						`tl_additional_source`
-					WHERE
-						`id` IN (" . implode(',', array_map('intval', $arrLayoutAdditionalSources)) . ")
-					ORDER BY
-						`sorting`");
-			while ($objAdditionalSources->next())
+			// check if a BE user is logged in
+			// include the original source files
+			if ($this->getBELoginStatus())
 			{
-				$strType = $objAdditionalSources->type;
-				$strCc = $objAdditionalSources->cc ? $objAdditionalSources->cc : '';
-				$strSource = $objAdditionalSources->$strType;
+				$arrArrAdditionalSources = array
+				(
+					'css' => array(),
+					'js' => array()
+				);
 				
-				switch ($strType)
+				$objAdditionalSources = $this->Database->execute("
+						SELECT
+							*
+						FROM
+							`tl_additional_source`
+						WHERE
+							`id` IN (" . implode(',', array_map('intval', $arrLayoutAdditionalSources)) . ")
+						ORDER BY
+							`sorting`");
+				while ($objAdditionalSources->next())
 				{
-				case 'css_file':
-				case 'css_url':
-					$arrMedia = deserialize($objAdditionalSources->media, true);
-					$strAdditionalSource = sprintf('<link type="text/css" rel="stylesheet" href="%s"%s />', $strSource, count($arrMedia) ? ' media="' . implode(',', $arrMedia) . '"' : '');
-					break;
+					$strType = $objAdditionalSources->type;
+					$strCc = $objAdditionalSources->cc ? $objAdditionalSources->cc : '';
+					$strSource = $objAdditionalSources->$strType;
 					
-				case 'js_file':
-				case 'js_url':
-					$strAdditionalSource = sprintf('<script type="text/javascript" src="%s"></script>', $strSource);
-				}
-				
-				// add the conditional comment
-				if (strlen($strCc))
-				{
-					$strAdditionalSource = '<!--[' . $strCc . ']>' . $strAdditionalSource . '<![endif]-->';
-				}
-			
-				// add the html to the layout head
-				$GLOBALS['TL_HEAD'][] = $strAdditionalSource;
-			}
-		}
-		
-		// use reduced files
-		else
-		{
-			$arrArrAdditionalSources = $this->getSources($arrLayoutAdditionalSources);
-			foreach ($arrArrAdditionalSources as $strType => $arrAdditionalSources)
-			{
-				foreach ($arrAdditionalSources as $arrAdditionalSource)
-				{
 					switch ($strType)
 					{
-					case 'css':
-						$strAdditionalSource = sprintf('<link type="text/css" rel="stylesheet" href="%s" />', $arrAdditionalSource['src']);
+					case 'css_file':
+					case 'css_url':
+						$arrMedia = deserialize($objAdditionalSources->media, true);
+						$strAdditionalSource = sprintf('<link type="text/css" rel="stylesheet" href="%s"%s />', $strSource, count($arrMedia) ? ' media="' . implode(',', $arrMedia) . '"' : '');
 						break;
-					
-					case 'js':
-						$strAdditionalSource = sprintf('<script type="text/javascript" src="%s"></script>', $arrAdditionalSource['src']);
-						break;
+						
+					case 'js_file':
+					case 'js_url':
+						$strAdditionalSource = sprintf('<script type="text/javascript" src="%s"></script>', $strSource);
 					}
 					
 					// add the conditional comment
-					if (strlen($arrAdditionalSource['cc']))
+					if (strlen($strCc))
 					{
-						$strAdditionalSource = '<!--[' . $arrAdditionalSource['cc'] . ']>' . $strAdditionalSource . '<![endif]-->';
+						$strAdditionalSource = '<!--[' . $strCc . ']>' . $strAdditionalSource . '<![endif]-->';
 					}
 				
 					// add the html to the layout head
 					$GLOBALS['TL_HEAD'][] = $strAdditionalSource;
+				}
+			}
+			
+			// use reduced files
+			else
+			{
+				$arrArrAdditionalSources = $this->getSources($arrLayoutAdditionalSources);
+				foreach ($arrArrAdditionalSources as $strType => $arrAdditionalSources)
+				{
+					foreach ($arrAdditionalSources as $arrAdditionalSource)
+					{
+						switch ($strType)
+						{
+						case 'css':
+							$strAdditionalSource = sprintf('<link type="text/css" rel="stylesheet" href="%s" />', $arrAdditionalSource['src']);
+							break;
+						
+						case 'js':
+							$strAdditionalSource = sprintf('<script type="text/javascript" src="%s"></script>', $arrAdditionalSource['src']);
+							break;
+						}
+						
+						// add the conditional comment
+						if (strlen($arrAdditionalSource['cc']))
+						{
+							$strAdditionalSource = '<!--[' . $arrAdditionalSource['cc'] . ']>' . $strAdditionalSource . '<![endif]-->';
+						}
+					
+						// add the html to the layout head
+						$GLOBALS['TL_HEAD'][] = $strAdditionalSource;
+					}
 				}
 			}
 		}
