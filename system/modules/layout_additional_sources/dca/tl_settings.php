@@ -31,7 +31,16 @@
 /**
  * System configuration
  */
-$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{additional_source_legend:hide},yui_cmd,yui_compression_disabled,gz_compression_disabled';
+$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{additional_source_legend:hide},additional_sources_combination,yui_cmd,yui_compression_disabled,gz_compression_disabled';
+$GLOBALS['TL_DCA']['tl_settings']['fields']['additional_sources_combination'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['additional_sources_combination'],
+	'default'                 => 'combine_all',
+	'inputType'               => 'select',
+	'options'                 => array('combine_all', 'combine_local', 'combine_none'),
+	'reference'               => &$GLOBALS['TL_LANG']['tl_settings'],
+	'eval'                    => array('mandatory'=>true, 'decodeEntities'=>true, 'tl_class'=>'long')
+);
 $GLOBALS['TL_DCA']['tl_settings']['fields']['yui_cmd'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['yui_cmd'],

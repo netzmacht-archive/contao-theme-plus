@@ -38,11 +38,13 @@ $GLOBALS['BE_MOD']['design']['themes']['tables'][] = 'tl_additional_source';
  * HOOKs
  */
 $GLOBALS['TL_HOOKS']['generatePage'][] = array('LayoutAdditionalSources', 'generatePage');
+$GLOBALS['TL_HOOKS']['replaceInsertTags'][] = array('LayoutAdditionalSources', 'hookReplaceInsertTags');
 
 
 /**
  * Settings
  */
+$GLOBALS['TL_CONFIG']['additional_sources_combination'] = 'combine_all';
 $GLOBALS['TL_CONFIG']['yui_cmd'] = 'yui-compressor';
 $GLOBALS['TL_CONFIG']['yui_compression_disabled'] = '';
 $GLOBALS['TL_CONFIG']['gz_compression_disabled'] = '';
