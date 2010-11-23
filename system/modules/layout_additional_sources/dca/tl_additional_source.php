@@ -136,7 +136,7 @@ $GLOBALS['TL_DCA']['tl_additional_source'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_additional_source']['js_file'],
 			'exclude'                 => true,
 			'inputType'               => 'fileTree',
-			'eval'                    => array('mandatory'=>true, 'fieldType'=>'radio', 'files'=>true, 'extensions'=>'js', 'path'=>'tl_files', 'tl_class'=>'clr')
+			'eval'                    => array('mandatory'=>true, 'fieldType'=>'radio', 'files'=>true, 'extensions'=>'js', 'path'=>$GLOBALS['TL_CONFIG']['uploadPath'], 'tl_class'=>'clr')
 		),
 		'js_url' => array
 		(
@@ -150,7 +150,7 @@ $GLOBALS['TL_DCA']['tl_additional_source'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_additional_source']['css_file'],
 			'exclude'                 => true,
 			'inputType'               => 'fileTree',
-			'eval'                    => array('mandatory'=>true, 'fieldType'=>'radio', 'files'=>true, 'extensions'=>'css', 'path'=>'tl_files', 'tl_class'=>'clr')
+			'eval'                    => array('mandatory'=>true, 'fieldType'=>'radio', 'files'=>true, 'extensions'=>'css', 'path'=>$GLOBALS['TL_CONFIG']['uploadPath'], 'tl_class'=>'clr')
 		),
 		'css_url' => array
 		(
