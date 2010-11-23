@@ -31,6 +31,6 @@
 /**
  * Back end modules
  */
-$GLOBALS['TL_LANG']['MOD']['additional_source'] = array('Weitere Dateien', 'Weitere Dateien in die Frontend-Ausgabe hinzufügen.');
+$GLOBALS['TL_LANG']['MOD']['layout_additional_sources'] = array('Zusätzliche Layoutdateien', 'Weitere Dateien in die Frontend-Ausgabe hinzufügen.');
 
 ?>
