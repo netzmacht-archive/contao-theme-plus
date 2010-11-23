@@ -108,8 +108,8 @@ $GLOBALS['TL_DCA']['tl_additional_source'] = array
 		'default'                     => '{source_legend},type',
 		'js_file'                     => '{source_legend},type,cc,js_file;{restrict_legend:hide},restrictLayout;{compress_legend:hide},compress_yui,compress_gz,compress_outdir',
 		'js_url'                      => '{source_legend},type,cc,js_url;{restrict_legend:hide},restrictLayout',
-		'css_file'                    => '{source_legend},type,cc,css_file,media;{restrict_legend:hide},restrictLayout;{compress_legend:hide},compress_yui,compress_gz,compress_outdir',
-		'css_url'                     => '{source_legend},type,cc,css_url,media;{restrict_legend:hide},restrictLayout'
+		'css_file'                    => '{source_legend},type,cc,css_file,media,editor_integration;{restrict_legend:hide},restrictLayout;{compress_legend:hide},compress_yui,compress_gz,compress_outdir',
+		'css_url'                     => '{source_legend},type,cc,css_url,media,editor_integration;{restrict_legend:hide},restrictLayout'
 	),
 
 	// Subpalettes
@@ -212,6 +212,15 @@ $GLOBALS['TL_DCA']['tl_additional_source'] = array
 			'exclude'                 => true,
 			'inputType'               => 'fileTree',
 			'eval'                    => array('fieldType'=>'radio', 'files'=>false, 'path'=>'', 'tl_class'=>'clr')
+		),
+		'editor_integration' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_additional_source']['editor_integration'],
+			'exclude'                 => true,
+			'inputType'               => 'checkbox',
+			'options'                 => array('default', 'newsletter', 'flash'),
+			'reference'               => &$GLOBALS['TL_LANG']['tl_additional_source']['editors'],
+			'eval'                    => array('multiple'=>true, 'tl_class'=>'clr')
 		)
 	)
 );

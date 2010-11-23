@@ -42,7 +42,89 @@ class LayoutAdditionalSources extends Frontend {
 		$this->import('Database');
 	}
 	
-	public function generatePage(Database_Result $objPage, Database_Result $objLayout, PageRegular $objPageRegular) {
+	public static function getSource(&$objAdditionalSources)
+	{
+		// type of the source
+		$strType = $objAdditionalSources->type;
+		// uri of the source
+		$strSrc = $objAdditionalSources->$strType;
+		
+		if (	$GLOBALS['TL_CONFIG']['additional_sources_compression'] == 'always'
+			||  $GLOBALS['TL_CONFIG']['additional_sources_compression'] == 'no_be_user'
+			&&  !BE_USER_LOGGED_IN)
+		{
+			// yui compression
+			if (	$objAdditionalSources->compress_yui
+				&&  (	$strType == 'js_file'
+					||  $strType == 'css_file'))
+			{
+				$strTarget = preg_replace('#\.(js|css)$#', '.yui.$1', $strSrc);
+				if (strlen($objAdditionalSources->compress_outdir)) {
+					$strTarget = $objAdditionalSources->compress_outdir . '/' . basename($strTarget);
+				}
+				if (	!file_exists($strTarget)
+					||  filemtime($strTarget) < filemtime($strSrc))
+				{
+					$strCmd = sprintf("%s -o %s %s",
+						escapeshellcmd($GLOBALS['TL_CONFIG']['yui_cmd']),
+						escapeshellarg(TL_ROOT . '/' . $strTarget),
+						escapeshellarg(TL_ROOT . '/' . $strSrc));
+					// execute yui-compressor
+					$procYUI = proc_open(
+						$strCmd,
+						array(
+							0 => array("pipe", "r"),
+							1 => array("pipe", "w"),
+							2 => array("pipe", "w")
+						),
+						$arrPipes);
+					if ($procYUI === false) {
+						throw new Exception(sprintf("yui compressor could not be started!"));
+					}
+					// close stdin
+					fclose($arrPipes[0]);
+					// read and close stdout
+					$strOut = stream_get_contents($arrPipes[1]);
+					fclose($arrPipes[1]);
+					// read and close stderr
+					$strErr = stream_get_contents($arrPipes[2]);
+					fclose($arrPipes[2]);
+					// wait until yui-compressor terminates
+					$intCode = proc_close($procYUI);
+					if ($intCode != 0) {
+						throw new Exception(sprintf("Execution of yui compressor failed!\nstdout: %s\nstderr: %s", $strOut, $strErr));
+					}
+				}
+				$strSrc = $strTarget;
+			}
+			
+			// gz compression
+			if ($objAdditionalSources->compress_gz && $boolAcceptGzip)
+			{
+				$strTarget = preg_replace('#\.(js|css)$#', '.gz.$1', $strSrc);
+				if (strlen($objAdditionalSources->compress_outdir)) {
+					$strTarget = $objAdditionalSources->compress_outdir . '/' . basename($strTarget);
+				}
+				if (	!file_exists($strTarget)
+					||  filemtime($strTarget) < filemtime($strSrc))
+				{
+					$fileSrc = new File($strSrc);
+					$fileTarget = new File($strTarget);
+					if (!$fileTarget->write(gzencode($fileSrc->getContent()))) {
+						throw new Exception(sprintf("GZ Compression of %s to %s failed!", $strTarget));
+					}
+					unset($fileSrc, $fileTarget);
+				}
+				
+				$strSrc = $strTarget;
+			}
+		}
+		
+		return $strSrc;
+	}
+	
+	public function generatePage(Database_Result $objPage, Database_Result $objLayout, PageRegular $objPageRegular)
+	{
 		$boolAcceptGzip = false;
 		$arrAcceptEncoding = explode(',', str_replace(' ', '', $_SERVER['HTTP_ACCEPT_ENCODING']));
 		if (in_array('gzip', $arrAcceptEncoding))
@@ -54,11 +136,11 @@ class LayoutAdditionalSources extends Frontend {
 				SELECT
 					*
 				FROM
-					tl_additional_source
+					`tl_additional_source`
 				WHERE
-					pid=?
+					`pid`=?
 				ORDER BY
-					sorting")
+					`sorting`")
 			->execute($objLayout->pid);
 
 		while ($objAdditionalSources->next()) {
@@ -77,78 +159,7 @@ class LayoutAdditionalSources extends Frontend {
 			// type of the source
 			$strType = $objAdditionalSources->type;
 			// uri of the source
-			$strSrc = $objAdditionalSources->$strType;
-			
-			if (	$GLOBALS['TL_CONFIG']['additional_sources_compression'] == 'always'
-				||  $GLOBALS['TL_CONFIG']['additional_sources_compression'] == 'no_be_user'
-				&&  !BE_USER_LOGGED_IN)
-			{
-				// yui compression
-				if (	$objAdditionalSources->compress_yui
-					&&  (	$strType == 'js_file'
-						||  $strType == 'css_file'))
-				{
-					$strTarget = preg_replace('#\.(js|css)$#', '.yui.$1', $strSrc);
-					if (strlen($objAdditionalSources->compress_outdir)) {
-						$strTarget = $objAdditionalSources->compress_outdir . '/' . basename($strTarget);
-					}
-					if (	!file_exists($strTarget)
-						||  filemtime($strTarget) < filemtime($strSrc))
-					{
-						$strCmd = sprintf("%s -o %s %s",
-							escapeshellcmd($GLOBALS['TL_CONFIG']['yui_cmd']),
-							escapeshellarg(TL_ROOT . '/' . $strTarget),
-							escapeshellarg(TL_ROOT . '/' . $strSrc));
-						// execute yui-compressor
-						$procYUI = proc_open(
-							$strCmd,
-							array(
-								0 => array("pipe", "r"),
-								1 => array("pipe", "w"),
-								2 => array("pipe", "w")
-							),
-							$arrPipes);
-						if ($procYUI === false) {
-							throw new Exception(sprintf("yui compressor could not be started!"));
-						}
-						// close stdin
-						fclose($arrPipes[0]);
-						// read and close stdout
-						$strOut = stream_get_contents($arrPipes[1]);
-						fclose($arrPipes[1]);
-						// read and close stderr
-						$strErr = stream_get_contents($arrPipes[2]);
-						fclose($arrPipes[2]);
-						// wait until yui-compressor terminates
-						$intCode = proc_close($procYUI);
-						if ($intCode != 0) {
-							throw new Exception(sprintf("Execution of yui compressor failed!\nstdout: %s\nstderr: %s", $strOut, $strErr));
-						}
-					}
-					$strSrc = $strTarget;
-				}
-				
-				// gz compression
-				if ($objAdditionalSources->compress_gz && $boolAcceptGzip)
-				{
-					$strTarget = preg_replace('#\.(js|css)$#', '.gz.$1', $strSrc);
-					if (strlen($objAdditionalSources->compress_outdir)) {
-						$strTarget = $objAdditionalSources->compress_outdir . '/' . basename($strTarget);
-					}
-					if (	!file_exists($strTarget)
-						||  filemtime($strTarget) < filemtime($strSrc))
-					{
-						$fileSrc = new File($strSrc);
-						$fileTarget = new File($strTarget);
-						if (!$fileTarget->write(gzencode($fileSrc->getContent()))) {
-							throw new Exception(sprintf("GZ Compression of %s to %s failed!", $strTarget));
-						}
-						unset($fileSrc, $fileTarget);
-					}
-					
-					$strSrc = $strTarget;
-				}
-			}
+			$strSrc = self::getSource($objAdditionalSources);
 			
 			// add the html
 			switch ($strType) {
