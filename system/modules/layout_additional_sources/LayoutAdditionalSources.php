@@ -120,8 +120,7 @@ class LayoutAdditionalSources extends Frontend {
 						$strTarget = $objAdditionalSources->compress_outdir . '/' . basename($strTarget);
 					}
 					if (	!file_exists($strTarget)
-						||  BE_USER_LOGGED_IN
-						&&  filemtime($strTarget) < filemtime($strSrc))
+						||  filemtime($strTarget) < filemtime($strSrc))
 					{
 						$fileSrc = new File($strSrc);
 						$fileTarget = new File($strTarget);
