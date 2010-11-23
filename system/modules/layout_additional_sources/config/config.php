@@ -39,4 +39,11 @@ $GLOBALS['BE_MOD']['design']['themes']['tables'][] = 'tl_additional_source';
  */
 $GLOBALS['TL_HOOKS']['generatePage'][] = array('LayoutAdditionalSources', 'generatePage');
 
+
+/**
+ * Settings
+ */
+$GLOBALS['TL_CONFIG']['yui_cmd'] = 'yui-compressor';
+$GLOBALS['TL_CONFIG']['additional_sources_compression'] = 'no_be_user';
+
 ?>

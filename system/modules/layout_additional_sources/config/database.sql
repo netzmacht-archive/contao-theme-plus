@@ -25,6 +25,9 @@ CREATE TABLE `tl_additional_source` (
   `media` varchar(255) NOT NULL default '',
   `restrictLayout` char(1) NOT NULL default '',
   `layout` blob NULL,
+  `compress_yui` char(1) NOT NULL default '',
+  `compress_gz` char(1) NOT NULL default '',
+  `compress_outdir` blob NULL,
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

@@ -106,10 +106,10 @@ $GLOBALS['TL_DCA']['tl_additional_source'] = array
 	(
 		'__selector__'                => array('type', 'restrictLayout'),
 		'default'                     => '{source_legend},type',
-		'js_file'                     => '{source_legend},type,cc,js_file,restrictLayout',
-		'js_url'                      => '{source_legend},type,cc,js_url,restrictLayout',
-		'css_file'                    => '{source_legend},type,cc,css_file,media,restrictLayout',
-		'css_url'                     => '{source_legend},type,cc,css_url,media,restrictLayout'
+		'js_file'                     => '{source_legend},type,cc,js_file;{restrict_legend:hide},restrictLayout;{compress_legend:hide},compress_yui,compress_gz,compress_outdir',
+		'js_url'                      => '{source_legend},type,cc,js_url;{restrict_legend:hide},restrictLayout',
+		'css_file'                    => '{source_legend},type,cc,css_file,media;{restrict_legend:hide},restrictLayout;{compress_legend:hide},compress_yui,compress_gz,compress_outdir',
+		'css_url'                     => '{source_legend},type,cc,css_url,media;{restrict_legend:hide},restrictLayout'
 	),
 
 	// Subpalettes
@@ -136,7 +136,7 @@ $GLOBALS['TL_DCA']['tl_additional_source'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_additional_source']['js_file'],
 			'exclude'                 => true,
 			'inputType'               => 'fileTree',
-			'eval'                    => array('mandatory'=>true, 'fieldType'=>'radio', 'files'=>true, 'extensions'=>'js', 'path'=>'templates', 'tl_class'=>'clr')
+			'eval'                    => array('mandatory'=>true, 'fieldType'=>'radio', 'files'=>true, 'extensions'=>'js', 'path'=>'tl_files', 'tl_class'=>'clr')
 		),
 		'js_url' => array
 		(
@@ -150,7 +150,7 @@ $GLOBALS['TL_DCA']['tl_additional_source'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_additional_source']['css_file'],
 			'exclude'                 => true,
 			'inputType'               => 'fileTree',
-			'eval'                    => array('mandatory'=>true, 'fieldType'=>'radio', 'files'=>true, 'extensions'=>'css', 'path'=>'templates', 'tl_class'=>'clr')
+			'eval'                    => array('mandatory'=>true, 'fieldType'=>'radio', 'files'=>true, 'extensions'=>'css', 'path'=>'tl_files', 'tl_class'=>'clr')
 		),
 		'css_url' => array
 		(
@@ -191,6 +191,27 @@ $GLOBALS['TL_DCA']['tl_additional_source'] = array
 			'inputType'               => 'checkbox',
 			'options_callback'        => array('tl_additional_source', 'getPageLayouts'),
 			'eval'                    => array('multiple'=>'true', 'mandatory'=>true)
+		),
+		'compress_yui' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_additional_source']['compress_yui'],
+			'exclude'                 => true,
+			'inputType'               => 'checkbox',
+			'eval'                    => array('tl_class'=>'w50')
+		),
+		'compress_gz' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_additional_source']['compress_gz'],
+			'exclude'                 => true,
+			'inputType'               => 'checkbox',
+			'eval'                    => array('tl_class'=>'w50')
+		),
+		'compress_outdir' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_additional_source']['compress_outdir'],
+			'exclude'                 => true,
+			'inputType'               => 'fileTree',
+			'eval'                    => array('fieldType'=>'radio', 'files'=>false, 'path'=>'', 'tl_class'=>'clr')
 		)
 	)
 );
@@ -300,12 +321,25 @@ class tl_additional_source extends Backend
 	{
 		$label = $row[$row['type']];
 		
+		if ($row['compress_yui']) {
+			$label .= '<span style="color: #009;">.yui</span>';
+		}
+		
+		if ($row['compress_gz']) {
+			$label .= '<span style="color: #009;">.gz</span>';
+		}
+		
 		$objTheme = $this->detectTheme();
 		if ($objTheme) {
-			$label = str_replace(
-				$objTheme->templates.'/',
-				'<span style="color: #B3B3B3;">'.$objTheme->templates.'/'.'</span>',
-				$label);
+			$folders = unserialize($objTheme->folders);
+			if (is_array($folders)) {
+				foreach ($folders as $folder) {
+					$label = str_replace(
+						$folder.'/',
+						'<span style="color: #B3B3B3;">'.$folder.'/'.'</span>',
+						$label);
+				}
+			}
 		}
 		
 		if (strlen($row['cc'])) {
@@ -329,7 +363,18 @@ class tl_additional_source extends Backend
 			break;
 		
 		default:
-			$image = '';
+			$image = false;
+			if (isset($GLOBALS['TL_HOOKS']['getAdditionalSourceIconImage']) && is_array($GLOBALS['TL_HOOKS']['getAdditionalSourceIconImage']))
+			{
+				foreach ($GLOBALS['TL_HOOKS']['getAdditionalSourceIconImage'] as $callback)
+				{
+					$this->import($callback[0]);
+					$image = $this->$callback[0]->$callback[1]($row);
+					if ($image !== false) {
+						break;
+					}
+				}
+			}
 		}
 		
 		return '<div>' . ($image ? $this->generateImage($image, $label, 'style="vertical-align:middle"') . ' ' : '') . $label ."</div>\n";
@@ -356,8 +401,11 @@ class tl_additional_source extends Backend
 $this->import('tl_additional_source');
 $objTheme = $this->tl_additional_source->detectTheme();
 if ($objTheme) {
-	$GLOBALS['TL_DCA']['tl_additional_source']['fields']['js_file']['eval']['path'] = $objTheme->templates;
-	$GLOBALS['TL_DCA']['tl_additional_source']['fields']['css_file']['eval']['path'] = $objTheme->templates;
+	$folders = unserialize($objTheme->folders);
+	if (is_array($folders) && count($folders)) {
+		$GLOBALS['TL_DCA']['tl_additional_source']['fields']['js_file']['eval']['path'] = $folders[0];
+		$GLOBALS['TL_DCA']['tl_additional_source']['fields']['css_file']['eval']['path'] = $folders[0];
+	}
 }
 
 ?>
