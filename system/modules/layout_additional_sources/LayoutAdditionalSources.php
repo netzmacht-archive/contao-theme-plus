@@ -50,7 +50,7 @@ class LayoutAdditionalSources extends Frontend {
 	 * @throws Exception Throws Exception if compression failed.
 	 * @return The resource path.
 	 */
-	public static function getSource(Database_Result &$objAdditionalSources)
+	public static function getSource(Database_Result &$objAdditionalSources, $blnAllowGzip = true)
 	{
 		// type of the source
 		$strType = $objAdditionalSources->type;
@@ -59,7 +59,7 @@ class LayoutAdditionalSources extends Frontend {
 		
 		if (	$GLOBALS['TL_CONFIG']['additional_sources_compression'] == 'always'
 			||  $GLOBALS['TL_CONFIG']['additional_sources_compression'] == 'no_be_user'
-			&&  !BE_USER_LOGGED_IN)
+			&&  (!BE_USER_LOGGED_IN && TL_MODE == 'FE' || TL_MODE == 'BE'))
 		{
 			// yui compression
 			if (	$objAdditionalSources->compress_yui
@@ -116,7 +116,7 @@ class LayoutAdditionalSources extends Frontend {
 			}
 			
 			// gz compression
-			if ($objAdditionalSources->compress_gz && $boolAcceptGzip)
+			if ($objAdditionalSources->compress_gz && $blnAcceptGzip)
 			{
 				$strTarget = preg_replace('#\.(js|css)$#', '.gz.$1', $strSrc);
 				// alternative output directory
@@ -158,11 +158,11 @@ class LayoutAdditionalSources extends Frontend {
 	 */
 	public function generatePage(Database_Result $objPage, Database_Result $objLayout, PageRegular $objPageRegular)
 	{
-		$boolAcceptGzip = false;
+		$blnAcceptGzip = false;
 		$arrAcceptEncoding = explode(',', str_replace(' ', '', $_SERVER['HTTP_ACCEPT_ENCODING']));
 		if (in_array('gzip', $arrAcceptEncoding))
 		{
-			$boolAcceptGzip = true;
+			$blnAcceptGzip = true;
 		}
 		
 		$objAdditionalSources = $this->Database->prepare("
@@ -194,7 +194,7 @@ class LayoutAdditionalSources extends Frontend {
 			// type of the source
 			$strType = $objAdditionalSources->type;
 			// uri of the source
-			$strSrc = self::getSource($objAdditionalSources);
+			$strSrc = self::getSource($objAdditionalSources, $blnAcceptGzip);
 			
 			// add the html
 			switch ($strType) {
