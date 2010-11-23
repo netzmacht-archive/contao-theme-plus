@@ -139,6 +139,7 @@ class LayoutAdditionalSources extends Frontend {
 					`tl_additional_source`
 				WHERE
 					`pid`=?
+				AND `editor_only`=''
 				ORDER BY
 					`sorting`")
 			->execute($objLayout->pid);

@@ -44,12 +44,14 @@ $GLOBALS['TL_LANG']['tl_additional_source']['compress_yui']       = array('YUI K
 $GLOBALS['TL_LANG']['tl_additional_source']['compress_gz']        = array('GZ Komprimieren', 'Datei mit GZ komprimieren.');
 $GLOBALS['TL_LANG']['tl_additional_source']['compress_outdir']    = array('Ausgabeverzeichnis', 'Hier kann ein Ausgabeverzeichnis definiert werden, wenn die komprimierte Datei nicht im gleichen Verzeichnis wie das Original abgelegt werden soll.');
 $GLOBALS['TL_LANG']['tl_additional_source']['editor_integration'] = array('WYSIWYG Editor Integration', 'Hier kann die Datei dem WYSIWYG Editor hinzugefügt werden. Lesen Sie hierzu die Hinweise im Handbuch.');
+$GLOBALS['TL_LANG']['tl_additional_source']['editor_only']        = array('Nur im Editor benutzen', 'Hier können Sie die Datei als reine Editor-Datei definieren, sie wird dann nicht in der Seite selbst eingebunden.');
 
 
 /**
  * References
  */
 $GLOBALS['TL_LANG']['tl_additional_source']['source_legend']         = 'Datei';
+$GLOBALS['TL_LANG']['tl_additional_source']['editor_legend']         = 'WYSIWYG Editor Integration';
 $GLOBALS['TL_LANG']['tl_additional_source']['restrict_legend']       = 'Layoutbeschränkung';
 $GLOBALS['TL_LANG']['tl_additional_source']['compress_legend']       = 'Komprimierung';
 $GLOBALS['TL_LANG']['tl_additional_source']['editors']['default']    = 'Standard Editor';

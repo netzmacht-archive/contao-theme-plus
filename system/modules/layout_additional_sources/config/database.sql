@@ -29,6 +29,7 @@ CREATE TABLE `tl_additional_source` (
   `compress_gz` char(1) NOT NULL default '',
   `compress_outdir` blob NULL,
   `editor_integration` blob NULL,
+  `editor_only` char(1) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
