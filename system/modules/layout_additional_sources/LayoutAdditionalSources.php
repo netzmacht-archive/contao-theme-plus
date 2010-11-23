@@ -141,7 +141,7 @@ class LayoutAdditionalSources extends Frontend
 			$arrPipes);
 		if ($procYUI === false)
 		{
-			throw new Exception(sprintf("yui compressor could not be started!"));
+			throw new Exception(sprintf("yui compressor could not be started!<br/>\ncmd: %s", $strCmd));
 		}
 		// write contents
 		fwrite($arrPipes[0], $strContent);
@@ -157,7 +157,7 @@ class LayoutAdditionalSources extends Frontend
 		$intCode = proc_close($procYUI);
 		if ($intCode != 0)
 		{
-			throw new Exception(sprintf("Execution of yui compressor failed!\ncmd: %s\nstdout: %s\nstderr: %s", $strCmd, $strOut));
+			throw new Exception(sprintf("Execution of yui compressor failed!<br/>\ncmd: %s<br/>\nstdout: %s<br/>\nstderr: %s", $strCmd, $strOut, $strErr));
 		}
 		return $strOut;
 	}
