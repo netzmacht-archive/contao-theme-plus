@@ -241,7 +241,6 @@ class EditorStyles extends Backend {
 									$intLayout = $objPage->layout;
 								}
 								break;
-								break;
 						}
 						break;
 				}
@@ -292,47 +291,7 @@ class EditorStyles extends Backend {
 						switch ($this->Input->get('act'))
 						{
 							case 'edit':
-								$objLayout = $this->Database->prepare("
-										SELECT
-											l.*
-										FROM
-											`tl_layout` l
-										INNER JOIN
-											`tl_theme` t
-										ON
-											t.id=l.pid
-										INNER JOIN
-											`tl_module` m
-										ON
-											t.id=m.pid
-										WHERE
-											m.id=?")
-									->execute($this->Input->get('id'));
-								if ($objLayout->next())
-								{
-									// no explicit layout can be specified, this hide all restricted sources
-									$intLayout = -1;
-									$objAdditionalSources = $this->Database->prepare("
-											SELECT
-												s.*
-											FROM
-												`tl_additional_source` s
-											INNER JOIN
-												`tl_theme` t
-											ON
-												t.id=s.pid
-											INNER JOIN
-												`tl_module` m
-											ON
-												t.id=m.pid
-											WHERE
-													m.`id`=?
-												AND (	s.`type` = 'css_url'
-													OR  s.`type` = 'css_file')
-											ORDER BY
-												`sorting`")
-										->execute($this->Input->get('id'));
-								}
+								$intLayout = $this->Input->get('id');
 								break;
 						}
 						break;
@@ -348,7 +307,7 @@ class EditorStyles extends Backend {
 				{
 					$this->import($callback[0]);
 					$intResult = $this->$callback[0]->$callback[1]($strEditor);
-					if ($intResult!=0)
+					if ($intResult > 0)
 					{
 						$intLayout = intval($intResult);
 						break;
@@ -371,7 +330,7 @@ class EditorStyles extends Backend {
 				return array();
 			}
 		}
-		elseif (!$objLayout)
+		else
 		{
 			$objLayout = $this->Database->prepare("
 					SELECT
@@ -387,26 +346,28 @@ class EditorStyles extends Backend {
 			}
 		}
 		
-		if (!$objAdditionalSources)
-		{
-			$objAdditionalSources = $this->Database->prepare("
-					SELECT
-						*
-					FROM
-						`tl_additional_source`
-					WHERE
-							`pid`=?
-						AND (	`type` = 'css_url'
-							OR  `type` = 'css_file')
-					ORDER BY
-						`sorting`")
-				->execute($objLayout->pid);
-		}
+		$arrLayoutAdditionalSources = deserialize($objLayout->additional_source, true);
+		
+		$objAdditionalSources = $this->Database->prepare("
+				SELECT
+					*
+				FROM
+					`tl_additional_source`
+				WHERE
+						`pid`=?
+					AND (	`type` = 'css_url'
+						OR  `type` = 'css_file')
+				ORDER BY
+					`sorting`")
+			->execute($objLayout->pid);
 		
 		$arrSources = array();
 		while ($objAdditionalSources->next()) {
-			$arrEditorIntegration = unserialize($objAdditionalSources->editor_integration);
-			if (is_array($arrEditorIntegration) && in_array($strEditor, $arrEditorIntegration))
+			$arrEditorIntegration = deserialize($objAdditionalSources->editor_integration, true);
+			
+			if (	in_array($strEditor, $arrEditorIntegration)
+				&&	(	in_array($objAdditionalSources->id, $arrLayoutAdditionalSources)
+					||	$objAdditionalSources->force_editor_integration))
 			{
 				switch ($objAdditionalSources->type)
 				{

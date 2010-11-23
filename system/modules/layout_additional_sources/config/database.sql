@@ -26,6 +26,7 @@ CREATE TABLE `tl_additional_source` (
   `cc` varchar(32) NOT NULL default '',
   `media` varchar(255) NOT NULL default '',
   `editor_integration` blob NULL,
+  `force_editor_integration` char(1) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

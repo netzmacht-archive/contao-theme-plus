@@ -108,8 +108,8 @@ $GLOBALS['TL_DCA']['tl_additional_source'] = array
 		'default'                     => '{source_legend},type',
 		'js_file'                     => '{source_legend},type,cc,js_file',
 		'js_url'                      => '{source_legend},type,cc,js_url,js_url_real_path',
-		'css_file'                    => '{source_legend},type,cc,css_file,media;{editor_legend:hide},editor_integration',
-		'css_url'                     => '{source_legend},type,cc,css_url,css_url_real_path,media;{editor_legend:hide},editor_integration'
+		'css_file'                    => '{source_legend},type,cc,css_file,media;{editor_legend:hide},editor_integration,force_editor_integration',
+		'css_url'                     => '{source_legend},type,cc,css_url,css_url_real_path,media;{editor_legend:hide},editor_integration,force_editor_integration'
 	),
 
 	// Subpalettes
@@ -199,6 +199,12 @@ $GLOBALS['TL_DCA']['tl_additional_source'] = array
 			'options'                 => array('default', 'newsletter', 'flash'),
 			'reference'               => &$GLOBALS['TL_LANG']['tl_additional_source']['editors'],
 			'eval'                    => array('multiple'=>true, 'tl_class'=>'clr')
+		),
+		'force_editor_integration' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_additional_source']['force_editor_integration'],
+			'exclude'                 => true,
+			'inputType'               => 'checkbox'
 		)
 	)
 );
