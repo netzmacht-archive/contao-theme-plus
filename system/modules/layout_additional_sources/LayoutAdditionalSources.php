@@ -190,7 +190,7 @@ class LayoutAdditionalSources extends Frontend
 	 * @param boolean
 	 * @return array
 	 */
-	public function getSources($arrIds, $blnAllowGzip = true, $blnAddCharset = true, $blnAbsolutizeUrls = false)
+	public function getSources($arrIds, $blnAllowGzip = true, $blnAddCharset = true, $blnAbsolutizeUrls = false, $objAbsolutizePage = null)
 	{
 		$blnAcceptGzip = false;
 		$arrAcceptEncoding = explode(',', str_replace(' ', '', $_SERVER['HTTP_ACCEPT_ENCODING']));
@@ -278,9 +278,16 @@ class LayoutAdditionalSources extends Frontend
 							$strContent = str_replace($arrMatch[0], '', $strContent);
 						}
 						
-						// remap url() entries
-						$strRemappingPath = $this->calculateRemappingPath($arrSource['css_file'], $strFile);
-						$objUrlRemapper = new UrlRemapper($strRemappingPath);
+						// remap url(..) entries
+						if ($blnAbsolutizeUrls)
+						{
+							$strRemappingPath = dirname($arrSource['css_file']);
+						}
+						else
+						{
+							$strRemappingPath = $this->calculateRemappingPath($arrSource['css_file'], $strFile);
+						}
+						$objUrlRemapper = new UrlRemapper($strRemappingPath, $blnAbsolutizeUrls, $objAbsolutizePage);
 						$strContent = preg_replace_callback('#url\(["\']?(.*)["\']?\)#U', array(&$objUrlRemapper, 'replace'), $strContent);
 					
 						// add media definition
@@ -564,12 +571,17 @@ class LayoutAdditionalSources extends Frontend
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Layout Additional Sources
  */
-class UrlRemapper {
+class UrlRemapper extends Controller {
 	private $strRelativePath;
+	private $blnAbsolutizeUrls;
+	private $objAbsolutizePage;
 	
-	public function __construct($strRelativePath)
+	public function __construct($strRelativePath, $blnAbsolutizeUrls = false, $objAbsolutizePage = null)
 	{
+		$this->import('DomainLink');
 		$this->strRelativePath = $strRelativePath;
+		$this->blnAbsolutizeUrls = $blnAbsolutizeUrls;
+		$this->objAbsolutizePage = $objAbsolutizePage;
 	}
 	
 	public function replace($arrMatch)
@@ -583,7 +595,12 @@ class UrlRemapper {
 				$strPath = dirname($strPath);
 				$strUrl = substr($strUrl, 3);
 			}
-			return 'url(' . $this->strRelativePath . '/' . $arrMatch[1] . ')';
+			$strUrl = $strPath . '/' . $strUrl;
+			if ($this->blnAbsolutizeUrls)
+			{
+				$strUrl = $this->DomainLink->absolutizeUrl($strUrl, $this->objAbsolutizePage);
+			}
+			return 'url(' . $strUrl . ')';
 		}
 		return $arrMatch[0];
 	}
