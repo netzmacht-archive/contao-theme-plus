@@ -181,6 +181,22 @@ class LayoutAdditionalSources extends Frontend
 		}
 	}
 	
+	
+	/**
+	 * Detect gzip data end decode it.
+	 * 
+	 * @param mixed $varData
+	 */
+	public function decompressGzip($varData) {
+		if (	$varData[0] == 31
+			&&	$varData[0] == 139
+			&&	$varData[0] == 8) {
+			return gzdecode($varData);
+		} else {
+			return $varData;
+		}
+	}
+	
 	/**
 	 * Get the sources from ids, combine them and return an array of it.
 	 * 
@@ -254,7 +270,7 @@ class LayoutAdditionalSources extends Frontend
 		foreach ($arrSourcesMap['css'] as $strCc => $arrCssSources)
 		{
 			$strFile = $this->calculateTempFile('css', $strCc, $arrCssSources);
-			$strFileGz = preg_replace('#\.(js|css)$#', '.gz.$1', $strFile);
+			$strFileGz = $strFile . '.gz';
 			if (!file_exists(TL_ROOT . '/' . $strFile))
 			{
 				$strCss = '';
@@ -265,6 +281,7 @@ class LayoutAdditionalSources extends Frontend
 					case 'css_file':
 						$objFile = new File($arrSource['css_file']);
 						$strContent = $objFile->getContent();
+						$strContent = $this->decompressGzip($strContent);
 						
 						// handle @charset
 						if (preg_match('#\@charset\s+[\'"]([\w\-]+)[\'"]\;#Ui', $strContent, $arrMatch))
@@ -307,8 +324,9 @@ class LayoutAdditionalSources extends Frontend
 						}
 						else
 						{
-							$strContent = file_get_contents($this->DomainLink->absolutizeUrl($arrSource['css_url'])) . "\n";
+							$strContent = file_get_contents($this->DomainLink->absolutizeUrl($arrSource['css_url']));
 						}
+						$strContent = $this->decompressGzip($strContent);
 						
 						// handle @charset
 						if (preg_match('#\@charset\s+[\'"]([\w\-]+)[\'"]\;#Ui', $strContent, $arrMatch))
@@ -349,11 +367,6 @@ class LayoutAdditionalSources extends Frontend
 				}
 			}
 			
-			if ($blnAcceptGzip && $blnAllowGzip)
-			{
-				$strFile = $strFileGz;
-			}
-			
 			if (!isset($arrSources['css']))
 			{
 				$arrSources['css'] = array();
@@ -369,7 +382,7 @@ class LayoutAdditionalSources extends Frontend
 		foreach ($arrSourcesMap['js'] as $strCc => $arrJsSources)
 		{	
 			$strFile = $this->calculateTempFile('js', $strCc, $arrSourcesMap['js'][$strCc]);
-			$strFileGz = preg_replace('#\.(js|css)$#', '.gz.$1', $strFile);
+			$strFileGz = $strFile . '.gz';
 			if (!file_exists(TL_ROOT . '/' . $strFile))
 			{
 				$strJs = '';
@@ -380,6 +393,7 @@ class LayoutAdditionalSources extends Frontend
 					case 'js_file':
 						$objFile = new File($arrSource['js_file']);
 						$strContent = $objFile->getContent();
+						$strContent = $this->decompressGzip($strContent);
 						
 						$strJs .= $strContent . "\n";
 						break;
@@ -393,6 +407,7 @@ class LayoutAdditionalSources extends Frontend
 						{
 							$strContent = file_get_contents($this->DomainLink->absolutizeUrl($arrSource['js_url']));
 						}
+						$strContent = $this->decompressGzip($strContent);
 												
 						$strJs .= $strContent . "\n";
 						break;
@@ -413,11 +428,6 @@ class LayoutAdditionalSources extends Frontend
 				{
 					$this->compressFileGzip($strFile, $strFileGz);
 				}
-			}
-			
-			if ($blnAcceptGzip && $blnAllowGzip)
-			{
-				$strFile = $strFileGz;
 			}
 			
 			if (!isset($arrSources['js']))
