@@ -42,7 +42,15 @@ class LayoutAdditionalSources extends Frontend {
 		$this->import('Database');
 	}
 	
-	public static function getSource(&$objAdditionalSources)
+	/**
+	 * Get the resource path from the database result.
+	 * If necessary compress the resource and return the compressed resource path.
+	 * 
+	 * @param Database_Result $objAdditionalSources
+	 * @throws Exception Throws Exception if compression failed.
+	 * @return The resource path.
+	 */
+	public static function getSource(Database_Result &$objAdditionalSources)
 	{
 		// type of the source
 		$strType = $objAdditionalSources->type;
@@ -59,8 +67,10 @@ class LayoutAdditionalSources extends Frontend {
 					||  $strType == 'css_file'))
 			{
 				$strTarget = preg_replace('#\.(js|css)$#', '.yui.$1', $strSrc);
+				// alternative output directory
 				if (strlen($objAdditionalSources->compress_outdir))
 				{
+					// create the outdir if not exists
 					if (!is_dir(TL_ROOT . '/' . $objAdditionalSources->compress_outdir))
 					{
 						mkdir(TL_ROOT . '/' . $objAdditionalSources->compress_outdir, 0777, true);
@@ -109,8 +119,10 @@ class LayoutAdditionalSources extends Frontend {
 			if ($objAdditionalSources->compress_gz && $boolAcceptGzip)
 			{
 				$strTarget = preg_replace('#\.(js|css)$#', '.gz.$1', $strSrc);
+				// alternative output directory
 				if (strlen($objAdditionalSources->compress_outdir))
 				{
+					// create the outdir if not exists
 					if (!is_dir(TL_ROOT . '/' . $objAdditionalSources->compress_outdir))
 					{
 						mkdir(TL_ROOT . '/' . $objAdditionalSources->compress_outdir, 0777, true);
@@ -122,6 +134,7 @@ class LayoutAdditionalSources extends Frontend {
 				{
 					$fileSrc = new File($strSrc);
 					$fileTarget = new File($strTarget);
+					// write gzip-encoded source data to target file
 					if (!$fileTarget->write(gzencode($fileSrc->getContent())))
 					{
 						throw new Exception(sprintf("GZ Compression of %s to %s failed!", $strTarget));
@@ -136,6 +149,13 @@ class LayoutAdditionalSources extends Frontend {
 		return $strSrc;
 	}
 	
+	/**
+	 * Hook
+	 * 
+	 * @param Database_Result $objPage
+	 * @param Database_Result $objLayout
+	 * @param PageRegular $objPageRegular
+	 */
 	public function generatePage(Database_Result $objPage, Database_Result $objLayout, PageRegular $objPageRegular)
 	{
 		$boolAcceptGzip = false;
@@ -157,7 +177,8 @@ class LayoutAdditionalSources extends Frontend {
 					`sorting`")
 			->execute($objLayout->pid);
 
-		while ($objAdditionalSources->next()) {
+		while ($objAdditionalSources->next())
+		{
 			// If the source is restricted ...
 			if ($objAdditionalSources->restrictLayout) {
 				$arrLayouts = unserialize($objAdditionalSources->layout);
@@ -212,12 +233,14 @@ class LayoutAdditionalSources extends Frontend {
 			}
 			
 			// continue, if there is no html
-			if (!is_string($strAdditionalSource) || !strlen($strAdditionalSource)) {
+			if (!is_string($strAdditionalSource) || !strlen($strAdditionalSource))
+			{
 				continue;
 			}
 			
 			// add the conditional comment
-			if (strlen($objAdditionalSources->cc)) {
+			if (strlen($objAdditionalSources->cc))
+			{
 				$strAdditionalSource = '<!--[' . $objAdditionalSources->cc . ']>' . $strAdditionalSource . '<![endif]-->';
 			}
 		
