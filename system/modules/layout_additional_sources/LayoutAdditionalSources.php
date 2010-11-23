@@ -59,7 +59,12 @@ class LayoutAdditionalSources extends Frontend {
 					||  $strType == 'css_file'))
 			{
 				$strTarget = preg_replace('#\.(js|css)$#', '.yui.$1', $strSrc);
-				if (strlen($objAdditionalSources->compress_outdir)) {
+				if (strlen($objAdditionalSources->compress_outdir))
+				{
+					if (!is_dir(TL_ROOT . '/' . $objAdditionalSources->compress_outdir))
+					{
+						mkdir(TL_ROOT . '/' . $objAdditionalSources->compress_outdir, 0777, true);
+					}
 					$strTarget = $objAdditionalSources->compress_outdir . '/' . basename($strTarget);
 				}
 				if (	!file_exists($strTarget)
@@ -78,7 +83,8 @@ class LayoutAdditionalSources extends Frontend {
 							2 => array("pipe", "w")
 						),
 						$arrPipes);
-					if ($procYUI === false) {
+					if ($procYUI === false)
+					{
 						throw new Exception(sprintf("yui compressor could not be started!"));
 					}
 					// close stdin
@@ -91,7 +97,8 @@ class LayoutAdditionalSources extends Frontend {
 					fclose($arrPipes[2]);
 					// wait until yui-compressor terminates
 					$intCode = proc_close($procYUI);
-					if ($intCode != 0) {
+					if ($intCode != 0)
+					{
 						throw new Exception(sprintf("Execution of yui compressor failed!\nstdout: %s\nstderr: %s", $strOut, $strErr));
 					}
 				}
@@ -102,7 +109,12 @@ class LayoutAdditionalSources extends Frontend {
 			if ($objAdditionalSources->compress_gz && $boolAcceptGzip)
 			{
 				$strTarget = preg_replace('#\.(js|css)$#', '.gz.$1', $strSrc);
-				if (strlen($objAdditionalSources->compress_outdir)) {
+				if (strlen($objAdditionalSources->compress_outdir))
+				{
+					if (!is_dir(TL_ROOT . '/' . $objAdditionalSources->compress_outdir))
+					{
+						mkdir(TL_ROOT . '/' . $objAdditionalSources->compress_outdir, 0777, true);
+					}
 					$strTarget = $objAdditionalSources->compress_outdir . '/' . basename($strTarget);
 				}
 				if (	!file_exists($strTarget)
@@ -110,7 +122,8 @@ class LayoutAdditionalSources extends Frontend {
 				{
 					$fileSrc = new File($strSrc);
 					$fileTarget = new File($strTarget);
-					if (!$fileTarget->write(gzencode($fileSrc->getContent()))) {
+					if (!$fileTarget->write(gzencode($fileSrc->getContent())))
+					{
 						throw new Exception(sprintf("GZ Compression of %s to %s failed!", $strTarget));
 					}
 					unset($fileSrc, $fileTarget);
