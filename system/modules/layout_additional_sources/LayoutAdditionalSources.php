@@ -43,8 +43,24 @@ class LayoutAdditionalSources extends Frontend {
 	}
 	
 	public function generatePage(Database_Result $objPage, Database_Result $objLayout, PageRegular $objPageRegular) {
-		$objAdditionalSources = $this->Database->prepare("SELECT * FROM tl_additional_source WHERE pid=? ORDER BY sorting")
-											   ->execute($objLayout->pid);
+		$boolAcceptGzip = false;
+		$arrAcceptEncoding = explode(',', str_replace(' ', '', $_SERVER['HTTP_ACCEPT_ENCODING']));
+		if (in_array('gzip', $arrAcceptEncoding))
+		{
+			$boolAcceptGzip = true;
+		}
+		
+		$objAdditionalSources = $this->Database->prepare("
+				SELECT
+					*
+				FROM
+					tl_additional_source
+				WHERE
+					pid=?
+				ORDER BY
+					sorting")
+			->execute($objLayout->pid);
+
 		while ($objAdditionalSources->next()) {
 			// If the source is restricted ...
 			if ($objAdditionalSources->restrictLayout) {
@@ -113,9 +129,9 @@ class LayoutAdditionalSources extends Frontend {
 				}
 				
 				// gz compression
-				if ($objAdditionalSources->compress_gz)
+				if ($objAdditionalSources->compress_gz && $boolAcceptGzip)
 				{
-					$strTarget = $strSrc . '.gz';
+					$strTarget = preg_replace('#\.(js|css)$#', '.gz.$1', $strSrc);
 					if (strlen($objAdditionalSources->compress_outdir)) {
 						$strTarget = $objAdditionalSources->compress_outdir . '/' . basename($strTarget);
 					}
@@ -129,6 +145,7 @@ class LayoutAdditionalSources extends Frontend {
 						}
 						unset($fileSrc, $fileTarget);
 					}
+					
 					$strSrc = $strTarget;
 				}
 			}
