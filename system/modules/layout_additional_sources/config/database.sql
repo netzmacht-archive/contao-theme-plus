@@ -23,13 +23,18 @@ CREATE TABLE `tl_additional_source` (
   `css_url` blob NULL,
   `cc` varchar(32) NOT NULL default '',
   `media` varchar(255) NOT NULL default '',
-  `restrictLayout` char(1) NOT NULL default '',
-  `layout` blob NULL,
   `compress_yui` char(1) NOT NULL default '',
-  `compress_gz` char(1) NOT NULL default '',
-  `compress_outdir` blob NULL,
   `editor_integration` blob NULL,
-  `editor_only` char(1) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table `tl_layout`
+-- 
+
+CREATE TABLE `tl_layout` (
+  `additional_source` blob NULL,
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

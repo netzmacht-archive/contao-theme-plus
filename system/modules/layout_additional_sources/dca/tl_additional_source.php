@@ -106,10 +106,10 @@ $GLOBALS['TL_DCA']['tl_additional_source'] = array
 	(
 		'__selector__'                => array('type', 'restrictLayout'),
 		'default'                     => '{source_legend},type',
-		'js_file'                     => '{source_legend},type,cc,js_file;{restrict_legend:hide},restrictLayout;{compress_legend:hide},compress_yui,compress_gz,compress_outdir',
-		'js_url'                      => '{source_legend},type,cc,js_url;{restrict_legend:hide},restrictLayout',
-		'css_file'                    => '{source_legend},type,cc,css_file,media;{editor_legend:hide},editor_integration,editor_only;{restrict_legend:hide},restrictLayout;{compress_legend:hide},compress_yui,compress_gz,compress_outdir',
-		'css_url'                     => '{source_legend},type,cc,css_url,media;{editor_legend:hide},editor_integration,editor_only;{restrict_legend:hide},restrictLayout'
+		'js_file'                     => '{source_legend},type,cc,js_file;{restrict_legend:hide},restrictLayout;{compress_legend:hide},compress_yui',
+		'js_url'                      => '{source_legend},type,cc,js_url;{restrict_legend:hide},restrictLayout;{compress_legend:hide},compress_yui',
+		'css_file'                    => '{source_legend},type,cc,css_file,media;{editor_legend:hide},editor_integration;{restrict_legend:hide},restrictLayout;{compress_legend:hide},compress_yui',
+		'css_url'                     => '{source_legend},type,cc,css_url,media;{editor_legend:hide},editor_integration;{restrict_legend:hide},restrictLayout;{compress_legend:hide},compress_yui'
 	),
 
 	// Subpalettes
@@ -221,12 +221,6 @@ $GLOBALS['TL_DCA']['tl_additional_source'] = array
 			'options'                 => array('default', 'newsletter', 'flash'),
 			'reference'               => &$GLOBALS['TL_LANG']['tl_additional_source']['editors'],
 			'eval'                    => array('multiple'=>true, 'tl_class'=>'clr')
-		),
-		'editor_only' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_additional_source']['editor_only'],
-			'exclude'                 => true,
-			'inputType'               => 'checkbox'
 		)
 	)
 );
@@ -410,16 +404,6 @@ class tl_additional_source extends Backend
 	public function editHeader($row, $href, $label, $title, $icon, $attributes)
 	{
 		return ($this->User->isAdmin || count(preg_grep('/^tl_additional_source::/', $this->User->alexf)) > 0) ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ' : '';
-	}
-}
-
-$this->import('tl_additional_source');
-$objTheme = $this->tl_additional_source->detectTheme();
-if ($objTheme) {
-	$folders = unserialize($objTheme->folders);
-	if (is_array($folders) && count($folders)) {
-		$GLOBALS['TL_DCA']['tl_additional_source']['fields']['js_file']['eval']['path'] = $folders[0];
-		$GLOBALS['TL_DCA']['tl_additional_source']['fields']['css_file']['eval']['path'] = $folders[0];
 	}
 }
 

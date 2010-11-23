@@ -405,15 +405,6 @@ class EditorStyles extends Backend {
 		
 		$arrSources = array();
 		while ($objAdditionalSources->next()) {
-			// If the source is restricted ...
-			if ($objAdditionalSources->restrictLayout) {
-				$arrLayouts = unserialize($objAdditionalSources->layout);
-				// ... check the layout
-				if (!in_array($objLayout->id, $arrLayouts)) {
-					continue;
-				}
-			}
-			
 			$arrEditorIntegration = unserialize($objAdditionalSources->editor_integration);
 			if (is_array($arrEditorIntegration) && in_array($strEditor, $arrEditorIntegration))
 			{

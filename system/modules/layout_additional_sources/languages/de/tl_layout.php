@@ -29,37 +29,8 @@
 
 
 /**
- * Back end modules
+ * Buttons
  */
-$GLOBALS['BE_MOD']['design']['themes']['tables'][] = 'tl_additional_source';
-
-
-/**
- * HOOKs
- */
-$GLOBALS['TL_HOOKS']['generatePage'][] = array('LayoutAdditionalSources', 'generatePage');
-
-
-/**
- * Settings
- */
-$GLOBALS['TL_CONFIG']['yui_cmd'] = 'yui-compressor';
-$GLOBALS['TL_CONFIG']['additional_sources_compression'] = 'no_be_user';
-
-
-/**
- * runonce job
- */
-$strExecutionLockFile = 'system/modules/layout_additional_sources/config/runonce-1.5.0_stable.lock';
-if (!file_exists(TL_ROOT . '/' . $strExecutionLockFile))
-{
-	# load the runonce class
-	require_once(TL_ROOT . '/system/modules/layout_additional_sources/LayoutAdditionalSourcesRunonceJob.php');
-	# execute the runonce update job
-	LayoutAdditionalSourcesRunonceJob::getInstance()->run("1.5.0 stable");
-	# lock the update
-	$objLock = new File($strExecutionLockFile);
-	$objLock->write('1');
-}
+$GLOBALS['TL_LANG']['tl_layout']['additional_source'] = array('Weitere Dateien', 'Weitere Dateien in das Layout einbinden');
 
 ?>
