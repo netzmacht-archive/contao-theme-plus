@@ -34,8 +34,10 @@
 $GLOBALS['TL_LANG']['tl_additional_source']['type']               = array('Dateityp', 'Bitte wählen Sie hier den Typ der Datei.');
 $GLOBALS['TL_LANG']['tl_additional_source']['js_file']            = array('JavaScript Datei', 'Bitte wählen Sie hier die JavaScript Datei aus.');
 $GLOBALS['TL_LANG']['tl_additional_source']['js_url']             = array('JavaScript URL', 'Bitte geben Sie die URL zur JavaScript Datei an.');
+$GLOBALS['TL_LANG']['tl_additional_source']['js_url_real_path']   = array('JavaScript URL - lokaler Dateipfad', 'Hier kann zur JavaScript URL, ein lokaler Pfad zu der Datei angegeben werden. Dieser wird verwendet, wenn die Dateien zusammengeführt werden.');
 $GLOBALS['TL_LANG']['tl_additional_source']['css_file']           = array('CSS Datei', 'Bitte wählen Sie hier die CSS Datei aus.');
 $GLOBALS['TL_LANG']['tl_additional_source']['css_url']            = array('CSS URL', 'Bitte geben Sie die URL zur CSS Datei an.');
+$GLOBALS['TL_LANG']['tl_additional_source']['css_url_real_path']  = array('CSS URL - lokaler Dateipfad', 'Hier kann zur CSS URL, ein lokaler Pfad zu der Datei angegeben werden. Dieser wird verwendet, wenn die Dateien zusammengeführt werden.');
 $GLOBALS['TL_LANG']['tl_additional_source']['cc']                 = array('Conditional Comment', 'Conditional Comments ermöglichen das Einbinden Internet Explorer-spezifischer Dateien.');
 $GLOBALS['TL_LANG']['tl_additional_source']['media']              = array('Medientypen', 'Bitte wählen Sie die Medientypen aus, für die die CSS Datei gültig ist.');
 $GLOBALS['TL_LANG']['tl_additional_source']['restrictLayout']     = array('Datei auf Seitenlayout beschränken', 'Bitte wählen Sie hier die Seitenlayout aus, in denen die Datei eingebunden wird.');

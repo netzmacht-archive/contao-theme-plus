@@ -107,9 +107,9 @@ $GLOBALS['TL_DCA']['tl_additional_source'] = array
 		'__selector__'                => array('type', 'restrictLayout'),
 		'default'                     => '{source_legend},type',
 		'js_file'                     => '{source_legend},type,cc,js_file;{restrict_legend:hide},restrictLayout;{compress_legend:hide},compress_yui',
-		'js_url'                      => '{source_legend},type,cc,js_url;{restrict_legend:hide},restrictLayout;{compress_legend:hide},compress_yui',
+		'js_url'                      => '{source_legend},type,cc,js_url,js_url_real_path;{restrict_legend:hide},restrictLayout;{compress_legend:hide},compress_yui',
 		'css_file'                    => '{source_legend},type,cc,css_file,media;{editor_legend:hide},editor_integration;{restrict_legend:hide},restrictLayout;{compress_legend:hide},compress_yui',
-		'css_url'                     => '{source_legend},type,cc,css_url,media;{editor_legend:hide},editor_integration;{restrict_legend:hide},restrictLayout;{compress_legend:hide},compress_yui'
+		'css_url'                     => '{source_legend},type,cc,css_url,css_url_real_path,media;{editor_legend:hide},editor_integration;{restrict_legend:hide},restrictLayout;{compress_legend:hide},compress_yui'
 	),
 
 	// Subpalettes
@@ -143,7 +143,14 @@ $GLOBALS['TL_DCA']['tl_additional_source'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_additional_source']['js_url'],
 			'exclude'                 => true,
 			'inputType'               => 'text',
-			'eval'                    => array('mandatory'=>true, 'tl_class'=>'clr')
+			'eval'                    => array('mandatory'=>true, 'tl_class'=>'clr long')
+		),
+		'js_url_real_path' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_additional_source']['js_url_real_path'],
+			'exclude'                 => true,
+			'inputType'               => 'text',
+			'eval'                    => array('tl_class'=>'clr long')
 		),
 		'css_file' => array
 		(
@@ -157,7 +164,14 @@ $GLOBALS['TL_DCA']['tl_additional_source'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_additional_source']['css_url'],
 			'exclude'                 => true,
 			'inputType'               => 'text',
-			'eval'                    => array('mandatory'=>true, 'tl_class'=>'clr')
+			'eval'                    => array('mandatory'=>true, 'tl_class'=>'clr long')
+		),
+		'css_url_real_path' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_additional_source']['css_url_real_path'],
+			'exclude'                 => true,
+			'inputType'               => 'text',
+			'eval'                    => array('tl_class'=>'clr long')
 		),
 		'cc' => array
 		(

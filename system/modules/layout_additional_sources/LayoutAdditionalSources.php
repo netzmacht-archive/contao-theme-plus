@@ -46,127 +46,6 @@ class LayoutAdditionalSources extends Frontend
 	
 	
 	/**
-	 * Get the resource path from the database result.
-	 * If necessary compress the resource and return the compressed resource path.
-	 * 
-	 * @param Database_Result $objAdditionalSources
-	 * @throws Exception Throws Exception if compression failed.
-	 * @return The resource path.
-	 * 
-	 * @deprecated
-	 */
-	public static function getSource(Database_Result &$objAdditionalSources, $blnAllowGzip = true)
-	{
-		$blnAcceptGzip = false;
-		$arrAcceptEncoding = explode(',', str_replace(' ', '', $_SERVER['HTTP_ACCEPT_ENCODING']));
-		if (in_array('gzip', $arrAcceptEncoding))
-		{
-			$blnAcceptGzip = true;
-		}
-		
-		// type of the source
-		$strType = $objAdditionalSources->type;
-		// uri of the source
-		$strSrc = $objAdditionalSources->$strType;
-		
-		if (	$GLOBALS['TL_CONFIG']['additional_sources_compression'] == 'always'
-			||  $GLOBALS['TL_CONFIG']['additional_sources_compression'] == 'no_be_user'
-			&&  (!BE_USER_LOGGED_IN && TL_MODE == 'FE' || TL_MODE == 'BE'))
-		{
-			// yui compression
-			if (	$objAdditionalSources->compress_yui
-				&&  (	$strType == 'js_file'
-					||  $strType == 'css_file'))
-			{
-				$strTarget = preg_replace('#\.(js|css)$#', '.yui.$1', $strSrc);
-				// alternative output directory
-				if (strlen($objAdditionalSources->compress_outdir))
-				{
-					// create the outdir if not exists
-					if (!is_dir(TL_ROOT . '/' . $objAdditionalSources->compress_outdir))
-					{
-						mkdir(TL_ROOT . '/' . $objAdditionalSources->compress_outdir, 0777, true);
-					}
-					$strTarget = $objAdditionalSources->compress_outdir . '/' . basename($strTarget);
-				}
-				if (	!file_exists($strTarget)
-					||  filemtime($strTarget) < filemtime($strSrc))
-				{
-					$strCmd = sprintf("%s -o %s %s",
-						escapeshellcmd($GLOBALS['TL_CONFIG']['yui_cmd']),
-						escapeshellarg(TL_ROOT . '/' . $strTarget),
-						escapeshellarg(TL_ROOT . '/' . $strSrc));
-					// execute yui-compressor
-					$procYUI = proc_open(
-						$strCmd,
-						array(
-							0 => array("pipe", "r"),
-							1 => array("pipe", "w"),
-							2 => array("pipe", "w")
-						),
-						$arrPipes);
-					if ($procYUI === false)
-					{
-						throw new Exception(sprintf("yui compressor could not be started!"));
-					}
-					// close stdin
-					fclose($arrPipes[0]);
-					// read and close stdout
-					$strOut = stream_get_contents($arrPipes[1]);
-					fclose($arrPipes[1]);
-					// read and close stderr
-					$strErr = stream_get_contents($arrPipes[2]);
-					fclose($arrPipes[2]);
-					// wait until yui-compressor terminates
-					$intCode = proc_close($procYUI);
-					if ($intCode != 0)
-					{
-						throw new Exception(sprintf("Execution of yui compressor failed!\nstdout: %s\nstderr: %s", $strOut, $strErr));
-					}
-				}
-				$strSrc = $strTarget;
-			}
-			
-			// gz compression
-			if (	$objAdditionalSources->compress_gz
-				&&  $blnAcceptGzip
-				&&  $blnAllowGzip
-				&&  (	$strType == 'js_file'
-					||  $strType == 'css_file'))
-			{
-				$strTarget = preg_replace('#\.(js|css)$#', '.gz.$1', $strSrc);
-				// alternative output directory
-				if (strlen($objAdditionalSources->compress_outdir))
-				{
-					// create the outdir if not exists
-					if (!is_dir(TL_ROOT . '/' . $objAdditionalSources->compress_outdir))
-					{
-						mkdir(TL_ROOT . '/' . $objAdditionalSources->compress_outdir, 0777, true);
-					}
-					$strTarget = $objAdditionalSources->compress_outdir . '/' . basename($strTarget);
-				}
-				if (	!file_exists($strTarget)
-					||  filemtime($strTarget) < filemtime($strSrc))
-				{
-					$fileSrc = new File($strSrc);
-					$fileTarget = new File($strTarget);
-					// write gzip-encoded source data to target file
-					if (!$fileTarget->write(gzencode($fileSrc->getContent())))
-					{
-						throw new Exception(sprintf("GZ Compression of %s to %s failed!", $strTarget));
-					}
-					unset($fileSrc, $fileTarget);
-				}
-				
-				$strSrc = $strTarget;
-			}
-		}
-		
-		return $strSrc;
-	}
-	
-	
-	/**
 	 * Calculate a temporary combined file name. 
 	 * 
 	 * @param string $strGroup
@@ -177,20 +56,29 @@ class LayoutAdditionalSources extends Frontend
 	protected function calculateTempFile($strGroup, $strCc, $arrAdditionalSources)
 	{
 		$strKey = $strCc;
-		foreach ($arrAdditionalSources as $arrCssSource)
+		foreach ($arrAdditionalSources as $arrSource)
 		{
-			$strSource = $arrCssSource[$arrCssSource['type']];
-			switch ($arrCssSource['type'])
+			$strSource = $arrSource[$arrSource['type']];
+			switch ($arrSource['type'])
 			{
 			case 'css_file':
 			case 'js_file':
 				$objFile = new File($strSource);
-				$strKey .= '.' . $arrCssSource['id'] . ':' . $objFile->mtime;
+				$strKey .= '.' . $arrSource['id'] . ':' . $objFile->mtime;
 				break;
 				
 			case 'css_url':
 			case 'js_url':
-				$strKey .= '.' . $arrCssSource['id'];
+				$strRealPath = $arrSource[$arrSource['type'].'_real_path'];
+				if ($strRealPath)
+				{
+					$objFile = new File($strRealPath);
+					$strKey .= '.' . $arrSource['id'] . ':' . $objFile->mtime;
+				}
+				else
+				{
+					$strKey .= '.' . $arrSource['id'];
+				}
 				break;
 			}
 		}
@@ -275,6 +163,13 @@ class LayoutAdditionalSources extends Frontend
 	}
 	
 	
+	/**
+	 * Compress a source file with gzip and save it as the target file.
+	 * 
+	 * @param string $strSrc
+	 * @param string $strTarget
+	 * @throws Exception
+	 */
 	public function compressFileGzip($strSrc, $strTarget)
 	{
 		$fileSrc = new File($strSrc);
@@ -306,10 +201,11 @@ class LayoutAdditionalSources extends Frontend
 		
 		$arrSourcesMap = array
 		(
-			'css' => array(),
-			'js' => array()
+			'css' => array('-' => array()),
+			'js' => array('-' => array())
 		);
 		
+		// collect css and js files into $arrSourcesMap, depending of the conditional comment
 		$objAdditionalSources = $this->Database->execute("
 				SELECT
 					*
@@ -347,6 +243,7 @@ class LayoutAdditionalSources extends Frontend
 			$arrSourcesMap[$strGroup][$strCc][] = $objAdditionalSources->row();
 		}
 		
+		// remap css and js files from $arrSourcesMap to $arrSources, combine files if possible
 		$arrSources = array
 		(
 			'css' => array(),
@@ -403,7 +300,14 @@ class LayoutAdditionalSources extends Frontend
 						break;
 					
 					case 'css_url':
-						$strContent = file_get_contents($this->DomainLink->absolutizeUrl($arrSource['css_url'])) . "\n";
+						if ($arrSource['css_url_real_path'])
+						{
+							$strContent = file_get_contents($arrSource['css_url_real_path']);
+						}
+						else
+						{
+							$strContent = file_get_contents($this->DomainLink->absolutizeUrl($arrSource['css_url'])) . "\n";
+						}
 						
 						// handle @charset
 						if (preg_match('#\@charset\s+[\'"]([\w\-]+)[\'"]\;#Ui', $strContent, $arrMatch))
@@ -428,12 +332,16 @@ class LayoutAdditionalSources extends Frontend
 					}
 				}
 				
+				// add charset definition
 				if ($blnAddCharset)
 				{
 					$strCss = '@charset "UTF-8";' . "\n" . $strCss;
 				}
 				
+				// store the temporary file
 				file_put_contents(TL_ROOT . '/' . $strFile, $strCss);
+				
+				// always create the gzip compressed version
 				$this->compressFileGzip($strFile, $strFileGz);
 			}
 			
@@ -479,7 +387,14 @@ class LayoutAdditionalSources extends Frontend
 						break;
 					
 					case 'js_url':
-						$strContent = file_get_contents($this->DomainLink->absolutizeUrl($arrSource['js_url']));
+						if ($arrSource['js_url_real_path'])
+						{
+							$strContent = file_get_contents($arrSource['js_url_real_path']);
+						}
+						else
+						{
+							$strContent = file_get_contents($this->DomainLink->absolutizeUrl($arrSource['js_url']));
+						}
 						
 						// minify
 						if ($arrSource['compress_yui'])
@@ -492,7 +407,10 @@ class LayoutAdditionalSources extends Frontend
 					}
 				}
 				
+				// store the temporary file
 				file_put_contents(TL_ROOT . '/' . $strFile, $strJs);
+				
+				// always create the gzip compressed version
 				$this->compressFileGzip($strFile, $strFileGz);
 			}
 			
