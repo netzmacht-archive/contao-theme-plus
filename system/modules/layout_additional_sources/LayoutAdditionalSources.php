@@ -194,7 +194,7 @@ class LayoutAdditionalSources extends Frontend
 	{
 		$blnAcceptGzip = false;
 		$arrAcceptEncoding = explode(',', str_replace(' ', '', $_SERVER['HTTP_ACCEPT_ENCODING']));
-		if (in_array('gzip', $arrAcceptEncoding))
+		if (!$GLOBALS['TL_CONFIG']['gz_compression_disabled'] && in_array('gzip', $arrAcceptEncoding))
 		{
 			$blnAcceptGzip = true;
 		}
@@ -283,12 +283,6 @@ class LayoutAdditionalSources extends Frontend
 						$objUrlRemapper = new UrlRemapper($strRemappingPath);
 						$strContent = preg_replace_callback('#url\(["\']?(.*)["\']?\)#U', array(&$objUrlRemapper, 'replace'), $strContent);
 					
-						// minify
-						if ($arrSource['compress_yui'])
-						{
-							$strContent = $this->compressYui($strContent, 'css');
-						}
-						
 						// add media definition
 						$arrMedia = deserialize($arrSource['media'], true);
 						if (count($arrMedia))
@@ -321,28 +315,31 @@ class LayoutAdditionalSources extends Frontend
 							$strContent = str_replace($arrMatch[0], '', $strContent);
 						}
 						
-						// minify
-						if ($arrSource['compress_yui'])
-						{
-							$strContent = $this->compressYui($strContent, 'css');
-						}
-						
 						$strCss .= trim($strContent) . "\n";
 						break;
 					}
 				}
-				
+		
 				// add charset definition
 				if ($blnAddCharset)
 				{
 					$strCss = '@charset "UTF-8";' . "\n" . $strCss;
 				}
 				
+				// minify
+				if (!$GLOBALS['TL_CONFIG']['yui_compression_disabled'])
+				{
+					$strCss = $this->compressYui($strCss, 'css');
+				}
+				
 				// store the temporary file
 				file_put_contents(TL_ROOT . '/' . $strFile, $strCss);
 				
 				// always create the gzip compressed version
-				$this->compressFileGzip($strFile, $strFileGz);
+				if (!$GLOBALS['TL_CONFIG']['gz_compression_disabled'])
+				{
+					$this->compressFileGzip($strFile, $strFileGz);
+				}
 			}
 			
 			if ($blnAcceptGzip && $blnAllowGzip)
@@ -377,12 +374,6 @@ class LayoutAdditionalSources extends Frontend
 						$objFile = new File($arrSource['js_file']);
 						$strContent = $objFile->getContent();
 						
-						// minify
-						if ($arrSource['compress_yui'])
-						{
-							$strContent = $this->compressYui($strContent, 'js');
-						}
-						
 						$strJs .= $strContent . "\n";
 						break;
 					
@@ -395,23 +386,26 @@ class LayoutAdditionalSources extends Frontend
 						{
 							$strContent = file_get_contents($this->DomainLink->absolutizeUrl($arrSource['js_url']));
 						}
-						
-						// minify
-						if ($arrSource['compress_yui'])
-						{
-							$strContent = $this->compressYui($strContent, 'js');
-						}
-						
+												
 						$strJs .= $strContent . "\n";
 						break;
 					}
+				}
+				
+				// minify
+				if (!$GLOBALS['TL_CONFIG']['yui_compression_disabled'])
+				{
+					$strJs = $this->compressYui($strJs, 'js');
 				}
 				
 				// store the temporary file
 				file_put_contents(TL_ROOT . '/' . $strFile, $strJs);
 				
 				// always create the gzip compressed version
-				$this->compressFileGzip($strFile, $strFileGz);
+				if (!$GLOBALS['TL_CONFIG']['gz_compression_disabled'])
+				{
+					$this->compressFileGzip($strFile, $strFileGz);
+				}
 			}
 			
 			if ($blnAcceptGzip && $blnAllowGzip)

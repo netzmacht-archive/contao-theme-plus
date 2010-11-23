@@ -106,10 +106,10 @@ $GLOBALS['TL_DCA']['tl_additional_source'] = array
 	(
 		'__selector__'                => array('type', 'restrictLayout'),
 		'default'                     => '{source_legend},type',
-		'js_file'                     => '{source_legend},type,cc,js_file;{restrict_legend:hide},restrictLayout;{compress_legend:hide},compress_yui',
-		'js_url'                      => '{source_legend},type,cc,js_url,js_url_real_path;{restrict_legend:hide},restrictLayout;{compress_legend:hide},compress_yui',
-		'css_file'                    => '{source_legend},type,cc,css_file,media;{editor_legend:hide},editor_integration;{restrict_legend:hide},restrictLayout;{compress_legend:hide},compress_yui',
-		'css_url'                     => '{source_legend},type,cc,css_url,css_url_real_path,media;{editor_legend:hide},editor_integration;{restrict_legend:hide},restrictLayout;{compress_legend:hide},compress_yui'
+		'js_file'                     => '{source_legend},type,cc,js_file',
+		'js_url'                      => '{source_legend},type,cc,js_url,js_url_real_path',
+		'css_file'                    => '{source_legend},type,cc,css_file,media;{editor_legend:hide},editor_integration',
+		'css_url'                     => '{source_legend},type,cc,css_url,css_url_real_path,media;{editor_legend:hide},editor_integration'
 	),
 
 	// Subpalettes
@@ -143,14 +143,14 @@ $GLOBALS['TL_DCA']['tl_additional_source'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_additional_source']['js_url'],
 			'exclude'                 => true,
 			'inputType'               => 'text',
-			'eval'                    => array('mandatory'=>true, 'tl_class'=>'clr long')
+			'eval'                    => array('mandatory'=>true, 'decodeEntities'=>true, 'tl_class'=>'clr long')
 		),
 		'js_url_real_path' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_additional_source']['js_url_real_path'],
 			'exclude'                 => true,
 			'inputType'               => 'text',
-			'eval'                    => array('tl_class'=>'clr long')
+			'eval'                    => array('decodeEntities'=>true, 'tl_class'=>'clr long')
 		),
 		'css_file' => array
 		(
@@ -164,14 +164,14 @@ $GLOBALS['TL_DCA']['tl_additional_source'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_additional_source']['css_url'],
 			'exclude'                 => true,
 			'inputType'               => 'text',
-			'eval'                    => array('mandatory'=>true, 'tl_class'=>'clr long')
+			'eval'                    => array('mandatory'=>true, 'decodeEntities'=>true, 'tl_class'=>'clr long')
 		),
 		'css_url_real_path' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_additional_source']['css_url_real_path'],
 			'exclude'                 => true,
 			'inputType'               => 'text',
-			'eval'                    => array('tl_class'=>'clr long')
+			'eval'                    => array('decodeEntities'=>true, 'tl_class'=>'clr long')
 		),
 		'cc' => array
 		(
@@ -190,42 +190,6 @@ $GLOBALS['TL_DCA']['tl_additional_source'] = array
 			'filter'                  => true,
 			'options'                 => array('all', 'aural', 'braille', 'embossed', 'handheld', 'print', 'projection', 'screen', 'tty', 'tv'),
 			'eval'                    => array('multiple'=>true, 'tl_class'=>'clr')
-		),
-		'restrictLayout' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_additional_source']['restrictLayout'],
-			'exclude'                 => true,
-			'inputType'               => 'checkbox',
-			'eval'                    => array('submitOnChange'=>true)
-		),
-		'layout' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_additional_source']['layout'],
-			'exclude'                 => true,
-			'inputType'               => 'checkbox',
-			'options_callback'        => array('tl_additional_source', 'getPageLayouts'),
-			'eval'                    => array('multiple'=>'true', 'mandatory'=>true)
-		),
-		'compress_yui' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_additional_source']['compress_yui'],
-			'exclude'                 => true,
-			'inputType'               => 'checkbox',
-			'eval'                    => array('tl_class'=>'w50')
-		),
-		'compress_gz' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_additional_source']['compress_gz'],
-			'exclude'                 => true,
-			'inputType'               => 'checkbox',
-			'eval'                    => array('tl_class'=>'w50')
-		),
-		'compress_outdir' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_additional_source']['compress_outdir'],
-			'exclude'                 => true,
-			'inputType'               => 'fileTree',
-			'eval'                    => array('fieldType'=>'radio', 'files'=>false, 'path'=>'', 'tl_class'=>'clr')
 		),
 		'editor_integration' => array
 		(

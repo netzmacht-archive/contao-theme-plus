@@ -29,38 +29,16 @@
 
 
 /**
- * Back end modules
+ * Fields
  */
-$GLOBALS['BE_MOD']['design']['themes']['tables'][] = 'tl_additional_source';
+$GLOBALS['TL_LANG']['tl_settings']['yui_cmd']                  = array('YUI-Compressor Befehle', 'Der auzuführende YUI-Compressor Befehl. Z.B. <em>yui-compressor</em> oder <em>/usr/local/bin/yui-compressor</em>.');
+$GLOBALS['TL_LANG']['tl_settings']['yui_compression_disabled'] = array('YUI Komprimierung deaktivieren', 'YUI Komprimierung für CSS und JS Dateien deaktivieren.');
+$GLOBALS['TL_LANG']['tl_settings']['gz_compression_disabled']  = array('GZip Komprimierung deaktivieren', 'GZip Komprimierung für CSS und JS Dateien deaktivieren.');
 
 
 /**
- * HOOKs
+ * Legend
  */
-$GLOBALS['TL_HOOKS']['generatePage'][] = array('LayoutAdditionalSources', 'generatePage');
-
-
-/**
- * Settings
- */
-$GLOBALS['TL_CONFIG']['yui_cmd'] = 'yui-compressor';
-$GLOBALS['TL_CONFIG']['yui_compression_disabled'] = '';
-$GLOBALS['TL_CONFIG']['gz_compression_disabled'] = '';
-
-
-/**
- * runonce job
- */
-$strExecutionLockFile = 'system/modules/layout_additional_sources/config/runonce-1.5.0_stable.lock';
-if (!file_exists(TL_ROOT . '/' . $strExecutionLockFile))
-{
-	# load the runonce class
-	require_once(TL_ROOT . '/system/modules/layout_additional_sources/LayoutAdditionalSourcesRunonceJob.php');
-	# execute the runonce update job
-	LayoutAdditionalSourcesRunonceJob::getInstance()->run("1.5.0 stable");
-	# lock the update
-	$objLock = new File($strExecutionLockFile);
-	$objLock->write('1');
-}
+$GLOBALS['TL_LANG']['tl_settings']['additional_source_legend'] = 'Zusätzliche Layoutdateien Einstellungen';
 
 ?>

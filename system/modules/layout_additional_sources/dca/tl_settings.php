@@ -29,38 +29,27 @@
 
 
 /**
- * Back end modules
+ * System configuration
  */
-$GLOBALS['BE_MOD']['design']['themes']['tables'][] = 'tl_additional_source';
-
-
-/**
- * HOOKs
- */
-$GLOBALS['TL_HOOKS']['generatePage'][] = array('LayoutAdditionalSources', 'generatePage');
-
-
-/**
- * Settings
- */
-$GLOBALS['TL_CONFIG']['yui_cmd'] = 'yui-compressor';
-$GLOBALS['TL_CONFIG']['yui_compression_disabled'] = '';
-$GLOBALS['TL_CONFIG']['gz_compression_disabled'] = '';
-
-
-/**
- * runonce job
- */
-$strExecutionLockFile = 'system/modules/layout_additional_sources/config/runonce-1.5.0_stable.lock';
-if (!file_exists(TL_ROOT . '/' . $strExecutionLockFile))
-{
-	# load the runonce class
-	require_once(TL_ROOT . '/system/modules/layout_additional_sources/LayoutAdditionalSourcesRunonceJob.php');
-	# execute the runonce update job
-	LayoutAdditionalSourcesRunonceJob::getInstance()->run("1.5.0 stable");
-	# lock the update
-	$objLock = new File($strExecutionLockFile);
-	$objLock->write('1');
-}
+$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{additional_source_legend:hide},yui_cmd,yui_compression_disabled,gz_compression_disabled';
+$GLOBALS['TL_DCA']['tl_settings']['fields']['yui_cmd'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['yui_cmd'],
+	'default'                 => 'yui-compressor',
+	'inputType'               => 'text',
+	'eval'                    => array('mandatory'=>true, 'decodeEntities'=>true, 'tl_class'=>'long')
+);
+$GLOBALS['TL_DCA']['tl_settings']['fields']['yui_compression_disabled'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['yui_compression_disabled'],
+	'inputType'               => 'checkbox',
+	'eval'                    => array('tl_class'=>'w50 m12')
+);
+$GLOBALS['TL_DCA']['tl_settings']['fields']['gz_compression_disabled'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['gz_compression_disabled'],
+	'inputType'               => 'checkbox',
+	'eval'                    => array('tl_class'=>'w50 m12')
+);
 
 ?>

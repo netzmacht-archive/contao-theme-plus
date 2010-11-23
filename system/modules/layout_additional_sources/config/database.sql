@@ -25,7 +25,6 @@ CREATE TABLE `tl_additional_source` (
   `css_url_real_path` blob NULL,
   `cc` varchar(32) NOT NULL default '',
   `media` varchar(255) NOT NULL default '',
-  `compress_yui` char(1) NOT NULL default '',
   `editor_integration` blob NULL,
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`)
