@@ -58,7 +58,7 @@ class LayoutAdditionalSourcesRunonceJob extends Backend
 		{
 		// update from version prior 1.0.6 stable
 		case "1.5.0 stable":
-			if ($this->Database->tableExists('tl_additional_source', $arrTables) && !$this->Database->fieldExists('additional_source', 'tl_layout'))
+			if ($this->Database->tableExists('tl_additional_source') && !$this->Database->fieldExists('additional_source', 'tl_layout'))
 			{
 				$this->Database->execute('ALTER TABLE `tl_layout` ADD `additional_source` blob NULL');
 				

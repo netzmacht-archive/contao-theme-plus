@@ -53,16 +53,18 @@ $GLOBALS['TL_CONFIG']['gz_compression_disabled'] = '';
 /**
  * runonce job
  */
-$strExecutionLockFile = 'system/modules/layout_additional_sources/config/runonce-1.5.0_stable.lock';
-if (!file_exists(TL_ROOT . '/' . $strExecutionLockFile))
-{
-	# load the runonce class
-	require_once(TL_ROOT . '/system/modules/layout_additional_sources/LayoutAdditionalSourcesRunonceJob.php');
-	# execute the runonce update job
-	LayoutAdditionalSourcesRunonceJob::getInstance()->run("1.5.0 stable");
-	# lock the update
-	$objLock = new File($strExecutionLockFile);
-	$objLock->write('1');
-}
+try {
+	$strExecutionLockFile = 'system/modules/layout_additional_sources/config/runonce-1.5.0_stable.lock';
+	if (!file_exists(TL_ROOT . '/' . $strExecutionLockFile))
+	{
+		# load the runonce class
+		require_once(TL_ROOT . '/system/modules/layout_additional_sources/LayoutAdditionalSourcesRunonceJob.php');
+		# execute the runonce update job
+		LayoutAdditionalSourcesRunonceJob::getInstance()->run("1.5.0 stable");
+		# lock the update
+		$objLock = new File($strExecutionLockFile);
+		$objLock->write('1');
+	}
+} catch(Exception $e) {}
 
 ?>
