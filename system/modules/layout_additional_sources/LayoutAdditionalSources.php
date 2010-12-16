@@ -765,7 +765,7 @@ class LayoutAdditionalSources extends Frontend
 								$strContent = "\n" . $objFile->getContent() . "\n";
 								if (!strlen($strCc))
 								{
-									$strContent = "\n<!--/*--><![CDATA[/*><!--*/" . $strContent . "/*]]>*/-->\n";
+									$strContent = "\n<!--//--><![CDATA[//><!--" . $strContent . "//--><!]]>\n";
 								}
 								$strAdditionalSource = sprintf("<script type=\"text/javascript\">%s</script>", $strContent);
 							}
