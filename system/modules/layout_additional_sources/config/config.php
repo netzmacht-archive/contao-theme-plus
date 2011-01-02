@@ -51,6 +51,15 @@ $GLOBALS['TL_CONFIG']['gz_compression_disabled'] = '';
 
 
 /**
+ * easy_themes integration
+ */
+$GLOBALS['TL_EASY_THEMES_MODULES']['additional_source'] = array
+(
+	'href_fragment' => 'table=tl_additional_source',
+	'icon'          => 'system/modules/layout_additional_sources/html/additional_source.png'
+);
+
+/**
  * runonce job
  */
 try {
