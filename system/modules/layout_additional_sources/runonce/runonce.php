@@ -78,7 +78,7 @@ class LayoutAdditionalSourcesRunonce extends Frontend
 	 */
 	protected function testYUI()
 	{
-		$cmd = 'which ' . escapeshellarg($GLOBALS['TL_CONFIG']['additional_sources_yui_cmd']);
+		$strCmd = escapeshellcmd($GLOBALS['TL_CONFIG']['additional_sources_yui_cmd']);
 		$proc = proc_open(
 			$strCmd,
 			array(
@@ -102,7 +102,8 @@ class LayoutAdditionalSourcesRunonce extends Frontend
 		// wait until process terminates
 		proc_close($proc);
 		
-		return strlen($strOut) > 0;
+		// no error means, the command was found and successfully executed
+		return !strlen($strErr);
 	}
 
 	public function run()
