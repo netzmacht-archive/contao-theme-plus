@@ -31,32 +31,44 @@
 /**
  * System configuration
  */
-$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{additional_source_legend:hide},additional_sources_combination,yui_cmd,yui_compression_disabled,gz_compression_disabled';
+$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{additional_source_legend:hide},additional_sources_combination,additional_sources_css_compression,additional_sources_js_compression,additional_sources_yui_cmd,additional_sources_gz_compression_disabled';
 $GLOBALS['TL_DCA']['tl_settings']['fields']['additional_sources_combination'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['additional_sources_combination'],
 	'default'                 => 'combine_all',
 	'inputType'               => 'select',
 	'options'                 => array('combine_all', 'combine_local', 'combine_none'),
-	'reference'               => &$GLOBALS['TL_LANG']['tl_settings'],
+	'reference'               => &$GLOBALS['TL_LANG']['tl_settings']['additional_sources_combinations'],
 	'eval'                    => array('mandatory'=>true, 'decodeEntities'=>true, 'tl_class'=>'long')
 );
-$GLOBALS['TL_DCA']['tl_settings']['fields']['yui_cmd'] = array
+$GLOBALS['TL_DCA']['tl_settings']['fields']['additional_sources_css_compression'] = array
 (
-	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['yui_cmd'],
+	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['additional_sources_css_compression'],
+	'default'                 => 'combine_all',
+	'inputType'               => 'select',
+	'options'                 => array('yui', 'cssmin', 'none'),
+	'reference'               => &$GLOBALS['TL_LANG']['tl_settings']['additional_sources_compression'],
+	'eval'                    => array('mandatory'=>true, 'decodeEntities'=>true, 'tl_class'=>'w50')
+);
+$GLOBALS['TL_DCA']['tl_settings']['fields']['additional_sources_js_compression'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['additional_sources_js_compression'],
+	'default'                 => 'combine_all',
+	'inputType'               => 'select',
+	'options'                 => array('yui', 'none'),
+	'reference'               => &$GLOBALS['TL_LANG']['tl_settings']['additional_sources_compression'],
+	'eval'                    => array('mandatory'=>true, 'decodeEntities'=>true, 'tl_class'=>'w50')
+);
+$GLOBALS['TL_DCA']['tl_settings']['fields']['additional_sources_yui_cmd'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['additional_sources_yui_cmd'],
 	'default'                 => 'yui-compressor',
 	'inputType'               => 'text',
-	'eval'                    => array('mandatory'=>true, 'decodeEntities'=>true, 'tl_class'=>'long')
+	'eval'                    => array('mandatory'=>true, 'decodeEntities'=>true, 'tl_class'=>'clr long')
 );
-$GLOBALS['TL_DCA']['tl_settings']['fields']['yui_compression_disabled'] = array
+$GLOBALS['TL_DCA']['tl_settings']['fields']['additional_sources_gz_compression_disabled'] = array
 (
-	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['yui_compression_disabled'],
-	'inputType'               => 'checkbox',
-	'eval'                    => array('tl_class'=>'w50 m12')
-);
-$GLOBALS['TL_DCA']['tl_settings']['fields']['gz_compression_disabled'] = array
-(
-	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['gz_compression_disabled'],
+	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['additional_sources_gz_compression_disabled'],
 	'inputType'               => 'checkbox',
 	'eval'                    => array('tl_class'=>'w50 m12')
 );

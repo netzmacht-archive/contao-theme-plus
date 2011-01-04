@@ -120,6 +120,45 @@ class LayoutAdditionalSources extends Frontend
 	
 	
 	/**
+	 * Compress css code by configuration.
+	 * 
+	 * @param string $strContent
+	 */
+	protected function compressCss($strContent)
+	{
+		switch ($GLOBALS['TL_CONFIG']['additional_sources_css_compression'])
+		{
+		case 'yui':
+			return $this->compressYui($strContent, 'css');
+			
+		case 'cssmin':
+			return $this->compressCssMin($strContent);
+			
+		default:
+			return $strContent;
+		}
+	}
+	
+	
+	/**
+	 * Compress js code by configuration.
+	 * 
+	 * @param string $strContent
+	 */
+	protected function compressJavaScript($strContent)
+	{
+		switch ($GLOBALS['TL_CONFIG']['additional_sources_js_compression'])
+		{
+		case 'yui':
+			return $this->compressYui($strContent, 'js');
+			
+		default:
+			return $strContent;
+		}
+	}
+	
+	
+	/**
 	 * Compress the content with yui compressor.
 	 * 
 	 * @param string $strContent
@@ -129,7 +168,7 @@ class LayoutAdditionalSources extends Frontend
 	 */
 	public function compressYui($strContent, $strType)
 	{
-		$strCmd = escapeshellcmd($GLOBALS['TL_CONFIG']['yui_cmd']) . ' --type ' . escapeshellarg($strType) . ' --charset utf8';
+		$strCmd = escapeshellcmd($GLOBALS['TL_CONFIG']['additional_sources_yui_cmd']) . ' --type ' . escapeshellarg($strType) . ' --charset utf8';
 		// execute yui-compressor
 		$procYUI = proc_open(
 			$strCmd,
@@ -160,6 +199,21 @@ class LayoutAdditionalSources extends Frontend
 			throw new Exception(sprintf("Execution of yui compressor failed!<br/>\ncmd: %s<br/>\nstdout: %s<br/>\nstderr: %s", $strCmd, $strOut, $strErr));
 		}
 		return $strOut;
+	}
+	
+	
+	/**
+	 * Compress the content with cssmin.
+	 * 
+	 * @param string $strContent
+	 * @return string
+	 * @throws Exception
+	 */
+	public function compressCssMin($strContent)
+	{
+		$this->import('CssMinimizer');
+		$this->CssMinimizer->loadCssFromString($strContent);
+		return $this->CssMinimizer->minimize();
 	}
 	
 	
@@ -210,7 +264,7 @@ class LayoutAdditionalSources extends Frontend
 	{
 		$blnAcceptGzip = false;
 		$arrAcceptEncoding = explode(',', str_replace(' ', '', $_SERVER['HTTP_ACCEPT_ENCODING']));
-		if (!$GLOBALS['TL_CONFIG']['gz_compression_disabled'] && in_array('gzip', $arrAcceptEncoding))
+		if (!$GLOBALS['TL_CONFIG']['additional_sources_gz_compression_disabled'] && in_array('gzip', $arrAcceptEncoding))
 		{
 			$blnAcceptGzip = true;
 		}
@@ -374,16 +428,13 @@ class LayoutAdditionalSources extends Frontend
 					}
 					
 					// minify
-					if (!$GLOBALS['TL_CONFIG']['yui_compression_disabled'])
-					{
-						$strCss = $this->compressYui($strCss, 'css');
-					}
+					$strCss = $this->compressCss($strCss);
 					
 					// store the temporary file
 					file_put_contents(TL_ROOT . '/' . $strFile, $strCss);
 					
 					// always create the gzip compressed version
-					if (!$GLOBALS['TL_CONFIG']['gz_compression_disabled'])
+					if (!$GLOBALS['TL_CONFIG']['additional_sources_gz_compression_disabled'])
 					{
 						$this->compressFileGzip($strFile, $strFileGz);
 					}
@@ -441,16 +492,13 @@ class LayoutAdditionalSources extends Frontend
 					}
 					
 					// minify
-					if (!$GLOBALS['TL_CONFIG']['yui_compression_disabled'])
-					{
-						$strJs = $this->compressYui($strJs, 'js');
-					}
+					$strJs = $this->compressJavaScript($strJs);
 					
 					// store the temporary file
 					file_put_contents(TL_ROOT . '/' . $strFile, $strJs);
 					
 					// always create the gzip compressed version
-					if (!$GLOBALS['TL_CONFIG']['gz_compression_disabled'])
+					if (!$GLOBALS['TL_CONFIG']['additional_sources_gz_compression_disabled'])
 					{
 						$this->compressFileGzip($strFile, $strFileGz);
 					}

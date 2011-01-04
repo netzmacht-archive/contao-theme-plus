@@ -44,10 +44,11 @@ $GLOBALS['TL_HOOKS']['replaceInsertTags'][] = array('LayoutAdditionalSources', '
 /**
  * Settings
  */
-$GLOBALS['TL_CONFIG']['additional_sources_combination'] = 'combine_all';
-$GLOBALS['TL_CONFIG']['yui_cmd'] = 'yui-compressor';
-$GLOBALS['TL_CONFIG']['yui_compression_disabled'] = '';
-$GLOBALS['TL_CONFIG']['gz_compression_disabled'] = '';
+$GLOBALS['TL_CONFIG']['additional_sources_combination']             = 'combine_local';
+$GLOBALS['TL_CONFIG']['additional_sources_css_compression']         = 'yui';
+$GLOBALS['TL_CONFIG']['additional_sources_js_compression']          = 'yui';
+$GLOBALS['TL_CONFIG']['additional_sources_yui_cmd']                 = 'yui-compressor';
+$GLOBALS['TL_CONFIG']['additional_sources_gz_compression_disabled'] = '';
 
 
 /**
@@ -59,21 +60,5 @@ $GLOBALS['TL_EASY_THEMES_MODULES']['additional_source'] = array
 	'icon'          => 'system/modules/layout_additional_sources/html/additional_source.png'
 );
 
-/**
- * runonce job
- */
-try {
-	$strExecutionLockFile = 'system/modules/layout_additional_sources/config/runonce-1.5.0_stable.lock';
-	if (!file_exists(TL_ROOT . '/' . $strExecutionLockFile))
-	{
-		# load the runonce class
-		require_once(TL_ROOT . '/system/modules/layout_additional_sources/LayoutAdditionalSourcesRunonceJob.php');
-		# execute the runonce update job
-		LayoutAdditionalSourcesRunonceJob::getInstance()->run("1.5.0 stable");
-		# lock the update
-		$objLock = new File($strExecutionLockFile);
-		$objLock->write('1');
-	}
-} catch(Exception $e) {}
 
 ?>
