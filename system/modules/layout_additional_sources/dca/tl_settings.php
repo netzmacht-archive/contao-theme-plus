@@ -31,7 +31,7 @@
 /**
  * System configuration
  */
-$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{additional_source_legend:hide},additional_sources_combination,additional_sources_css_compression,additional_sources_js_compression,additional_sources_yui_cmd,additional_sources_gz_compression_disabled';
+$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{additional_source_legend:hide},additional_sources_combination,additional_sources_css_compression,additional_sources_js_compression,additional_sources_yui_cmd,additional_sources_gz_compression_disabled,additional_sources_hide_cssmin_message';
 $GLOBALS['TL_DCA']['tl_settings']['fields']['additional_sources_combination'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['additional_sources_combination'],
@@ -69,6 +69,18 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['additional_sources_yui_cmd'] = arra
 $GLOBALS['TL_DCA']['tl_settings']['fields']['additional_sources_gz_compression_disabled'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['additional_sources_gz_compression_disabled'],
+	'inputType'               => 'checkbox',
+	'eval'                    => array('tl_class'=>'w50 m12')
+);
+$GLOBALS['TL_DCA']['tl_settings']['fields']['additional_sources_hide_cssmin_message'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['additional_sources_hide_cssmin_message'],
+	'inputType'               => 'checkbox',
+	'eval'                    => array('tl_class'=>'clr w50 m12')
+);
+$GLOBALS['TL_DCA']['tl_settings']['fields']['additional_sources_hide_jsmin_message'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['additional_sources_hide_jsmin_message'],
 	'inputType'               => 'checkbox',
 	'eval'                    => array('tl_class'=>'w50 m12')
 );

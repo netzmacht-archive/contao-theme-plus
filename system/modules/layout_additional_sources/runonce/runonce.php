@@ -165,7 +165,8 @@ class LayoutAdditionalSourcesRunonce extends Frontend
 				}
 			}
 			
-			$_SESSION['TL_CONFIRM'][] = 'Auto-Upgrade <strong>layout_additional_sources</strong> to version <strong>1.5.0 stable</strong> completed!';
+			$this->loadLanguageFile('layout_additional_sources');
+			$_SESSION['TL_CONFIRM'][] = $GLOBALS['TL_LANG']['layout_additional_sources']['upgrade1.5'];
 		}
 	}
 	
@@ -231,7 +232,7 @@ class LayoutAdditionalSourcesRunonce extends Frontend
 		 */
 		if (	$GLOBALS['TL_CONFIG']['additional_sources_css_compression'] == 'cssmin')
 		{
-			if (!class_exists('CssMinimizer'))
+			if (!in_array('cssMinimizer', $this->Config->getActiveModules()))
 			{
 				$this->updateConfig('additional_sources_css_compression', 'none');
 			}

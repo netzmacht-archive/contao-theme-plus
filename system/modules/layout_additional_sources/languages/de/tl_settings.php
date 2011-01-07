@@ -36,6 +36,8 @@ $GLOBALS['TL_LANG']['tl_settings']['additional_sources_css_compression']        
 $GLOBALS['TL_LANG']['tl_settings']['additional_sources_js_compression']           = array('JavaScript Komprimierung', 'Wählen Sie hier wie JavaScript Code Komprimiert werden soll.');
 $GLOBALS['TL_LANG']['tl_settings']['additional_sources_yui_cmd']                  = array('YUI-Compressor Befehle', 'Der auzuführende YUI-Compressor Befehl. Z.B. <em>yui-compressor</em> oder <em>/usr/local/bin/yui-compressor</em>.');
 $GLOBALS['TL_LANG']['tl_settings']['additional_sources_gz_compression_disabled']  = array('GZip Komprimierung deaktivieren', 'GZip Komprimierung für CSS und JS Dateien deaktivieren.');
+$GLOBALS['TL_LANG']['tl_settings']['additional_sources_hide_cssmin_message']      = array('cssMinimizer Meldung abschalten', 'Die Info-Meldung zum cssMinimizer auf der Startseite abschalten.');
+$GLOBALS['TL_LANG']['tl_settings']['additional_sources_hide_jsmin_message']       = array('jsMinimizer Meldung abschalten', 'Die Info-Meldung zum jsMinimizer auf der Startseite abschalten.');
 
 
 /**
@@ -45,7 +47,7 @@ $GLOBALS['TL_LANG']['tl_settings']['additional_sources_combinations']['combine_a
 $GLOBALS['TL_LANG']['tl_settings']['additional_sources_combinations']['combine_local'] = 'Nur lokale Dateien (keine externe Quellen)';
 $GLOBALS['TL_LANG']['tl_settings']['additional_sources_combinations']['combine_none']  = 'Dateien nicht vereinigen';
 $GLOBALS['TL_LANG']['tl_settings']['additional_sources_compression']['yui']            = 'YUI Compressor';
-$GLOBALS['TL_LANG']['tl_settings']['additional_sources_compression']['cssmin']         = 'CssMinimizer';
+$GLOBALS['TL_LANG']['tl_settings']['additional_sources_compression']['cssmin']         = 'cssMinimizer';
 $GLOBALS['TL_LANG']['tl_settings']['additional_sources_compression']['none']           = 'keine';
 
 /**
