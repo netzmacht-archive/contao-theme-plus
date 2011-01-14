@@ -152,6 +152,12 @@ class LayoutAdditionalSources extends Frontend
 		case 'yui':
 			return $this->compressYui($strContent, 'js');
 			
+		case 'dep':
+			return $this->compressDeanEdwardsPacker($strContent);
+			
+		case 'jsmin':
+			return $this->compressJsMin($strContent);
+			
 		default:
 			return $strContent;
 		}
@@ -211,9 +217,39 @@ class LayoutAdditionalSources extends Frontend
 	 */
 	public function compressCssMin($strContent)
 	{
-		$this->import('CssMinimizer');
-		$this->CssMinimizer->loadCssFromString($strContent);
-		return $this->CssMinimizer->minimize();
+		$objCssMinimizer = new CssMinimizer();
+		$objCssMinimizer->loadCssFromString($strContent);
+		return $objCssMinimizer->minimize();
+	}
+	
+	
+	/**
+	 * Compress the content with Dean Edwards Packer.
+	 * 
+	 * @param string $strContent
+	 * @return string
+	 * @throws Exception
+	 */
+	public function compressDeanEdwardsPacker($strContent)
+	{
+		$objDeanEdwardsPacker = new DeanEdwardsPacker();
+		$objDeanEdwardsPacker->loadJsFromString($strContent);
+		return $objDeanEdwardsPacker->minimize();
+	}
+	
+	
+	/**
+	 * Compress the content with jsmin.
+	 * 
+	 * @param string $strContent
+	 * @return string
+	 * @throws Exception
+	 */
+	public function compressJsMin($strContent)
+	{
+		$objJsMinimizer = new JsMinimizer();
+		$objJsMinimizer->loadJsFromString($strContent);
+		return $objJsMinimizer->minimize();
 	}
 	
 	

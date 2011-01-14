@@ -31,7 +31,7 @@
 /**
  * System configuration
  */
-$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{additional_source_legend:hide},additional_sources_combination,additional_sources_css_compression,additional_sources_js_compression,additional_sources_yui_cmd,additional_sources_gz_compression_disabled,additional_sources_hide_cssmin_message';
+$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{additional_source_legend:hide},additional_sources_combination,additional_sources_css_compression,additional_sources_js_compression,additional_sources_yui_cmd,additional_sources_gz_compression_disabled,additional_sources_hide_cssmin_message,additional_sources_hide_jsmin_message';
 $GLOBALS['TL_DCA']['tl_settings']['fields']['additional_sources_combination'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['additional_sources_combination'],
@@ -55,7 +55,7 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['additional_sources_js_compression']
 	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['additional_sources_js_compression'],
 	'default'                 => 'combine_all',
 	'inputType'               => 'select',
-	'options'                 => array('yui', 'none'),
+	'options'                 => array('yui', 'jsmin', 'dep', 'none'),
 	'reference'               => &$GLOBALS['TL_LANG']['tl_settings']['additional_sources_compression'],
 	'eval'                    => array('mandatory'=>true, 'decodeEntities'=>true, 'tl_class'=>'w50')
 );

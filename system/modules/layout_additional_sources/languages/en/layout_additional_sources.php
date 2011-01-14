@@ -31,7 +31,13 @@
 /**
  * Back end modules
  */
-$GLOBALS['TL_LANG']['layout_additional_sources']['upgrade1.5']   = 'Auto-Upgrade <strong>layout_additional_sources</strong> to version <strong>1.5.0 stable</strong> completed!';
-$GLOBALS['TL_LANG']['layout_additional_sources']['cssMinimizer'] = array('Der YUI Compressor ist auf Ihrem System nicht verfügbar. Alternativ können Sie den cssMinimizer benutzen um CSS Dateien zu Minimieren. <strong>Nach der Installation muss in den Systemeinstellungen die CSS Komprimierung auf <u>cssMinimizer</u> gestellt werden!</strong>', 'cssMinimizer installieren');
+$GLOBALS['TL_LANG']['layout_additional_sources']['upgrade1.5']         = 'Auto-Upgrade <strong>layout_additional_sources</strong> to version <strong>1.5.0 stable</strong> completed!';
+$GLOBALS['TL_LANG']['layout_additional_sources']['cssMinimizer']       = array(
+	'Der YUI Compressor ist auf Ihrem System nicht verfügbar. Alternativ können Sie den <strong>cssMinimizer</strong> benutzen um CSS Dateien zu minimieren. <strong>Nach der Installation muss in den Systemeinstellungen die CSS Komprimierung auf <u>cssMinimizer</u> gestellt werden!</strong>',
+	'cssMinimizer installieren');
+$GLOBALS['TL_LANG']['layout_additional_sources']['jsMinimizer']        = array(
+	'Der YUI Compressor ist auf Ihrem System nicht verfügbar. Alternativ können Sie den <strong>Dean Edwards Packer</strong> oder <strong>jsMinimizer</strong> benutzen um JS Dateien zu minimieren. <strong>Nach der Installation muss in den Systemeinstellungen die JS Komprimierung auf <u>Dean Edwards Packer</u>/<u>jsMinimizer</u> gestellt werden!</strong>',
+	'Dean Edwards Packer installieren',
+	'jsMinimizer installieren');
 
 ?>
