@@ -124,7 +124,7 @@ class LayoutAdditionalSources extends Frontend
 	 * 
 	 * @param string $strContent
 	 */
-	protected function compressCss($strContent)
+	public function compressCss($strContent)
 	{
 		switch ($GLOBALS['TL_CONFIG']['additional_sources_css_compression'])
 		{
@@ -141,11 +141,31 @@ class LayoutAdditionalSources extends Frontend
 	
 	
 	/**
+	 * Compress css file by configuration.
+	 * 
+	 * @param string $strSrc
+	 * @param string $strTarget
+	 */
+	public function compressCssFile($strSrc, $strTarget)
+	{
+		$objSrc = new File($strSrc);
+		$strContent = $objSrc->getContent();
+		$objSrc->close();
+		
+		$strContent = $this->compressCss($strContent);
+		
+		$objTarget = new File($strTarget);
+		$objTarget->write($strContent);
+		$objTarget->close;
+	}
+	
+	
+	/**
 	 * Compress js code by configuration.
 	 * 
 	 * @param string $strContent
 	 */
-	protected function compressJavaScript($strContent)
+	public function compressJavaScript($strContent)
 	{
 		switch ($GLOBALS['TL_CONFIG']['additional_sources_js_compression'])
 		{
@@ -165,6 +185,26 @@ class LayoutAdditionalSources extends Frontend
 	
 	
 	/**
+	 * Compress js file by configuration.
+	 * 
+	 * @param string $strSrc
+	 * @param string $strTarget
+	 */
+	public function compressJavaScriptFile($strSrc, $strTarget)
+	{
+		$objSrc = new File($strSrc);
+		$strContent = $objSrc->getContent();
+		$objSrc->close();
+		
+		$strContent = $this->compressJavaScript($strContent);
+		
+		$objTarget = new File($strTarget);
+		$objTarget->write($strContent);
+		$objTarget->close;
+	}
+	
+	
+	/**
 	 * Compress the content with yui compressor.
 	 * 
 	 * @param string $strContent
@@ -172,7 +212,7 @@ class LayoutAdditionalSources extends Frontend
 	 * @return string
 	 * @throws Exception
 	 */
-	public function compressYui($strContent, $strType)
+	protected function compressYui($strContent, $strType)
 	{
 		$strCmd = escapeshellcmd($GLOBALS['TL_CONFIG']['additional_sources_yui_cmd']) . ' --type ' . escapeshellarg($strType) . ' --charset utf8';
 		// execute yui-compressor
@@ -215,7 +255,7 @@ class LayoutAdditionalSources extends Frontend
 	 * @return string
 	 * @throws Exception
 	 */
-	public function compressCssMin($strContent)
+	protected function compressCssMin($strContent)
 	{
 		$objCssMinimizer = new CssMinimizer();
 		$objCssMinimizer->loadCssFromString($strContent);
@@ -230,7 +270,7 @@ class LayoutAdditionalSources extends Frontend
 	 * @return string
 	 * @throws Exception
 	 */
-	public function compressDeanEdwardsPacker($strContent)
+	protected function compressDeanEdwardsPacker($strContent)
 	{
 		$objDeanEdwardsPacker = new DeanEdwardsPacker();
 		$objDeanEdwardsPacker->loadJsFromString($strContent);
@@ -245,7 +285,7 @@ class LayoutAdditionalSources extends Frontend
 	 * @return string
 	 * @throws Exception
 	 */
-	public function compressJsMin($strContent)
+	protected function compressJsMin($strContent)
 	{
 		$objJsMinimizer = new JsMinimizer();
 		$objJsMinimizer->loadJsFromString($strContent);
@@ -260,7 +300,7 @@ class LayoutAdditionalSources extends Frontend
 	 * @param string $strTarget
 	 * @throws Exception
 	 */
-	public function compressFileGzip($strSrc, $strTarget)
+	protected function compressFileGzip($strSrc, $strTarget)
 	{
 		$fileSrc = new File($strSrc);
 		$fileTarget = new File($strTarget);
@@ -277,7 +317,7 @@ class LayoutAdditionalSources extends Frontend
 	 * 
 	 * @param mixed $varData
 	 */
-	public function decompressGzip($varData) {
+	protected function decompressGzip($varData) {
 		if (	$varData[0] == 31
 			&&	$varData[0] == 139
 			&&	$varData[0] == 8) {
@@ -562,7 +602,7 @@ class LayoutAdditionalSources extends Frontend
 	 * 
 	 * @return boolean
 	 */
-	private function getBELoginStatus()
+	protected function getBELoginStatus()
 	{
 		$this->import('Input');
 		$this->import('Environment');
