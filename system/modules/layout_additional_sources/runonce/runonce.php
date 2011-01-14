@@ -222,7 +222,7 @@ class LayoutAdditionalSourcesRunonce extends Frontend
 				}
 				if ($GLOBALS['TL_CONFIG']['additional_sources_js_compression']  == 'yui')
 				{
-					$this->updateConfig('additional_sources_js_compression', 'none');
+					$this->updateConfig('additional_sources_js_compression', 'jsmin');
 				}
 			}
 		}
@@ -232,9 +232,31 @@ class LayoutAdditionalSourcesRunonce extends Frontend
 		 */
 		if (	$GLOBALS['TL_CONFIG']['additional_sources_css_compression'] == 'cssmin')
 		{
-			if (!in_array('cssMinimizer', $this->Config->getActiveModules()))
+			if (!file_exists(TL_ROOT . '/system/libraries/CssMinimizer.php'))
 			{
 				$this->updateConfig('additional_sources_css_compression', 'none');
+			}
+		}
+		
+		/**
+		 * Test if jsmin is available, otherwise try dep.
+		 */
+		if (	$GLOBALS['TL_CONFIG']['additional_sources_js_compression'] == 'jsmin')
+		{
+			if (!file_exists(TL_ROOT . '/system/libraries/JsMinimizer.php'))
+			{
+				$this->updateConfig('additional_sources_js_compression', 'dep');
+			}
+		}
+		
+		/**
+		 * Test if dep is available, otherwise disable js compression.
+		 */
+		if (	$GLOBALS['TL_CONFIG']['additional_sources_js_compression'] == 'dep')
+		{
+			if (!file_exists(TL_ROOT . '/system/libraries/DeanEdwardsPacker.php'))
+			{
+				$this->updateConfig('additional_sources_js_compression', 'none');
 			}
 		}
 	}
