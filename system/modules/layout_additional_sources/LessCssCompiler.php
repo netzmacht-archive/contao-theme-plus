@@ -226,7 +226,7 @@ class LessCssCompiler extends CompilerBase {
 						}
 						
 						// minify
-						if ($this->Yui && !$this->Yui->minimizeToFile($strFile, $strCss))
+						if (!$this->Yui || $this->Yui && !$this->Yui->minimizeToFile($strFile, $strCss))
 						{
 							$objFile = new File($strFile);
 							$objFile->write($strCss);
