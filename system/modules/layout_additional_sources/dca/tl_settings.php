@@ -21,7 +21,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
- * @copyright  InfinitySoft 2010
+ * @copyright  InfinitySoft 2011
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Layout Additional Sources
  * @license    http://opensource.org/licenses/lgpl-3.0.html
@@ -31,7 +31,7 @@
 /**
  * System configuration
  */
-$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{additional_source_legend:hide},additional_sources_combination,additional_sources_css_compression,additional_sources_js_compression,additional_sources_yui_cmd,additional_sources_gz_compression_disabled,additional_sources_hide_cssmin_message,additional_sources_hide_jsmin_message';
+$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{additional_source_legend:hide},additional_sources_combination,additional_sources_css_compression,additional_sources_js_compression,additional_sources_gz_compression_disabled,additional_sources_hide_cssmin_message,additional_sources_hide_jsmin_message';
 $GLOBALS['TL_DCA']['tl_settings']['fields']['additional_sources_combination'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['additional_sources_combination'],
@@ -46,25 +46,16 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['additional_sources_css_compression'
 	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['additional_sources_css_compression'],
 	'default'                 => 'combine_all',
 	'inputType'               => 'select',
-	'options'                 => array('yui', 'cssmin', 'none'),
-	'reference'               => &$GLOBALS['TL_LANG']['tl_settings']['additional_sources_compression'],
-	'eval'                    => array('mandatory'=>true, 'decodeEntities'=>true, 'tl_class'=>'w50')
+	'options_callback'        => array('tl_settings_layout_additional_sources', 'getCssMinimizers'),
+	'eval'                    => array('decodeEntities'=>true, 'tl_class'=>'w50')
 );
 $GLOBALS['TL_DCA']['tl_settings']['fields']['additional_sources_js_compression'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['additional_sources_js_compression'],
 	'default'                 => 'combine_all',
 	'inputType'               => 'select',
-	'options'                 => array('yui', 'jsmin', 'dep', 'none'),
-	'reference'               => &$GLOBALS['TL_LANG']['tl_settings']['additional_sources_compression'],
-	'eval'                    => array('mandatory'=>true, 'decodeEntities'=>true, 'tl_class'=>'w50')
-);
-$GLOBALS['TL_DCA']['tl_settings']['fields']['additional_sources_yui_cmd'] = array
-(
-	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['additional_sources_yui_cmd'],
-	'default'                 => 'yui-compressor',
-	'inputType'               => 'text',
-	'eval'                    => array('mandatory'=>true, 'decodeEntities'=>true, 'tl_class'=>'clr long')
+	'options_callback'        => array('tl_settings_layout_additional_sources', 'getJsMinimizers'),
+	'eval'                    => array('decodeEntities'=>true, 'tl_class'=>'w50')
 );
 $GLOBALS['TL_DCA']['tl_settings']['fields']['additional_sources_gz_compression_disabled'] = array
 (
@@ -84,5 +75,44 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['additional_sources_hide_jsmin_messa
 	'inputType'               => 'checkbox',
 	'eval'                    => array('tl_class'=>'w50 m12')
 );
+
+class tl_settings_layout_additional_sources extends Backend
+{
+	public function __construct()
+	{
+		$this->import('Compression');
+		$this->import('Config');
+	}
+	
+	
+	public function getCssMinimizers()
+	{
+		$arrMinimizers = array_merge
+		(
+			array('' => $GLOBALS['TL_LANG']['tl_settings']['additional_sources_compression']['inherit']),
+			$this->Compression->getCssMinimizers()
+		);
+		if (in_array('lesscss', $this->Config->getActiveModules()))
+		{
+			$arrMinimizers['less'] = $GLOBALS['TL_LANG']['tl_settings']['additional_sources_compression']['less'];
+			if (isset($arrMinimizers['yui']))
+			{
+				$arrMinimizers['less+yui'] = $GLOBALS['TL_LANG']['tl_settings']['additional_sources_compression']['less+yui'];
+			}
+		}
+		return $arrMinimizers;
+	}
+	
+	
+	public function getJsMinimizers()
+	{
+		$arrMinimizers = array_merge
+		(
+			array('' => $GLOBALS['TL_LANG']['tl_settings']['additional_sources_compression']['inherit']),
+			$this->Compression->getJsMinimizers()
+		);
+		return $arrMinimizers;
+	}
+}
 
 ?>

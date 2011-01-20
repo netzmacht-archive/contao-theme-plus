@@ -21,7 +21,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
- * @copyright  InfinitySoft 2010
+ * @copyright  InfinitySoft 2011
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Layout Additional Sources
  * @license    http://opensource.org/licenses/lgpl-3.0.html
@@ -32,7 +32,7 @@
  * Class LayoutAdditionalSourcesRunonce
  * 
  * 
- * @copyright  InfinitySoft 2010
+ * @copyright  InfinitySoft 2011
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Layout Additional Sources
  */

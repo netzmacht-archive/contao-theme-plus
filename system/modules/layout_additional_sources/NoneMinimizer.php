@@ -23,14 +23,28 @@
  * PHP version 5
  * @copyright  InfinitySoft 2011
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
- * @package    Layout Additional Sources
- * @license    http://opensource.org/licenses/lgpl-3.0.html
+ * @package    Compression API
+ * @license    LGPL
+ * @filesource
  */
-
 
 /**
- * Buttons
+ * Class NoneMinimizer
+ *
+ * wrapper class for the less css compiler (http://lesscss.org)
+ * @copyright  InfinitySoft 2011
+ * @author     Tristan Lins <tristan.lins@infinitysoft.de>
+ * @package    Compression API
  */
-$GLOBALS['TL_LANG']['tl_layout']['additional_source'] = array('Weitere Dateien', 'Weitere Dateien in das Layout einbinden');
-
+class NoneMinimizer extends AbstractMinimizer
+{
+	/**
+	 * (non-PHPdoc)
+	 * @see Minimizer::minimizeCode($strCode)
+	 */
+	public function minimizeCode($strCode)
+	{
+		return $strCode;
+	}
+}
 ?>

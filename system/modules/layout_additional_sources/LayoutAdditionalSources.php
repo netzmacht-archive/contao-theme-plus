@@ -21,7 +21,7 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
- * @copyright  InfinitySoft 2010
+ * @copyright  InfinitySoft 2011
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Layout Additional Sources
  * @license    http://opensource.org/licenses/lgpl-3.0.html
@@ -33,7 +33,7 @@
  * 
  * Adding additional sources to the page layout.
  * 
- * @copyright  InfinitySoft 2010
+ * @copyright  InfinitySoft 2011
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Layout Additional Sources
  */
@@ -42,290 +42,21 @@ class LayoutAdditionalSources extends Frontend
 	public function __construct() {
 		$this->import('Database');
 		$this->import('DomainLink');
-	}
-	
-	
-	/**
-	 * Calculate a temporary combined file name. 
-	 * 
-	 * @param string $strGroup
-	 * @param string $strCc
-	 * @param array $arrAdditionalSources
-	 * @return string
-	 */
-	protected function calculateTempFile($strGroup, $strCc, $arrAdditionalSources)
-	{
-		$strKey = $strCc;
-		foreach ($arrAdditionalSources as $arrSource)
-		{
-			$strSource = $arrSource[$arrSource['type']];
-			switch ($arrSource['type'])
-			{
-			case 'css_file':
-			case 'js_file':
-				$objFile = new File($strSource);
-				$strKey .= '.' . $arrSource['id'] . ':' . $objFile->mtime;
-				break;
-				
-			case 'css_url':
-			case 'js_url':
-				$strRealPath = $arrSource[$arrSource['type'].'_real_path'];
-				if ($strRealPath)
-				{
-					$objFile = new File($strRealPath);
-					$strKey .= '.' . $arrSource['id'] . ':' . $objFile->mtime;
-				}
-				else
-				{
-					$strKey .= '.' . $arrSource['id'];
-				}
-				break;
-			}
-		}
-		switch ($strGroup)
-		{
-		case 'css':
-			$strPrefix = 'stylesheet';
-			$strExtension = 'css';
-			break;
-			
-		case 'js':
-			$strPrefix = 'javascript';
-			$strExtension = 'js';
-			break;
-		}
-		return 'system/html/' . $strPrefix . '.' . substr(md5($strKey), 0, 8) . '.' . $strExtension;
-	}
-	
-	
-	/**
-	 * Calculate a remapped url prefix.
-	 * 
-	 * @param string $strSourceFile
-	 * @param string $strTargetFile
-	 * @return string
-	 */
-	protected function calculateRemappingPath($strSourceFile, $strTargetFile)
-	{
-		$strSourceDir = dirname($strSourceFile);
-		$strTargetDir = dirname($strTargetFile);
-		$strRelativePath = '';
-		while ($strTargetDir && $strTargetDir != '.' && strpos($strSourceDir . '/', $strTargetDir . '/') !== 0)
-		{
-			$strRelativePath .= '../';
-			$strTargetDir = dirname($strTargetDir);
-		}
-		return $strRelativePath . ($strTargetDir != '.' ? substr($strSourceDir, strlen($strTargetDir) + 1) : $strSourceDir);
-	}
-	
-	
-	/**
-	 * Compress css code by configuration.
-	 * 
-	 * @param string $strContent
-	 */
-	public function compressCss($strContent)
-	{
+		
 		switch ($GLOBALS['TL_CONFIG']['additional_sources_css_compression'])
 		{
-		case 'yui':
-			return $this->compressYui($strContent, 'css');
-			
-		case 'cssmin':
-			return $this->compressCssMin($strContent);
-			
-		default:
-			return $strContent;
-		}
-	}
-	
-	
-	/**
-	 * Compress css file by configuration.
-	 * 
-	 * @param string $strSrc
-	 * @param string $strTarget
-	 */
-	public function compressCssFile($strSrc, $strTarget)
-	{
-		$objSrc = new File($strSrc);
-		$strContent = $objSrc->getContent();
-		$objSrc->close();
-		
-		$strContent = $this->compressCss($strContent);
-		
-		$objTarget = new File($strTarget);
-		$objTarget->write($strContent);
-		$objTarget->close;
-	}
-	
-	
-	/**
-	 * Compress js code by configuration.
-	 * 
-	 * @param string $strContent
-	 */
-	public function compressJavaScript($strContent)
-	{
-		switch ($GLOBALS['TL_CONFIG']['additional_sources_js_compression'])
-		{
-		case 'yui':
-			return $this->compressYui($strContent, 'js');
-			
-		case 'dep':
-			return $this->compressDeanEdwardsPacker($strContent);
-			
-		case 'jsmin':
-			return $this->compressJsMin($strContent);
+		case 'less':
+		case 'less+yui':
+			$this->import('LessCssCompiler', 'CssCompiler');
+			break;
 			
 		default:
-			return $strContent;
+			$this->import('DefaultCssCompiler', 'CssCompiler');
 		}
-	}
-	
-	
-	/**
-	 * Compress js file by configuration.
-	 * 
-	 * @param string $strSrc
-	 * @param string $strTarget
-	 */
-	public function compressJavaScriptFile($strSrc, $strTarget)
-	{
-		$objSrc = new File($strSrc);
-		$strContent = $objSrc->getContent();
-		$objSrc->close();
 		
-		$strContent = $this->compressJavaScript($strContent);
-		
-		$objTarget = new File($strTarget);
-		$objTarget->write($strContent);
-		$objTarget->close;
+		$this->import('DefaultJsCompiler', 'JsCompiler');
 	}
 	
-	
-	/**
-	 * Compress the content with yui compressor.
-	 * 
-	 * @param string $strContent
-	 * @param string $strType
-	 * @return string
-	 * @throws Exception
-	 */
-	protected function compressYui($strContent, $strType)
-	{
-		$strCmd = escapeshellcmd($GLOBALS['TL_CONFIG']['additional_sources_yui_cmd']) . ' --type ' . escapeshellarg($strType) . ' --charset utf8';
-		// execute yui-compressor
-		$procYUI = proc_open(
-			$strCmd,
-			array(
-				0 => array("pipe", "r"),
-				1 => array("pipe", "w"),
-				2 => array("pipe", "w")
-			),
-			$arrPipes);
-		if ($procYUI === false)
-		{
-			throw new Exception(sprintf("yui compressor could not be started!<br/>\ncmd: %s", $strCmd));
-		}
-		// write contents
-		fwrite($arrPipes[0], $strContent);
-		// close stdin
-		fclose($arrPipes[0]);
-		// read and close stdout
-		$strOut = stream_get_contents($arrPipes[1]);
-		fclose($arrPipes[1]);
-		// read and close stderr
-		$strErr = stream_get_contents($arrPipes[2]);
-		fclose($arrPipes[2]);
-		// wait until yui-compressor terminates
-		$intCode = proc_close($procYUI);
-		if ($intCode != 0)
-		{
-			throw new Exception(sprintf("Execution of yui compressor failed!<br/>\ncmd: %s<br/>\nstdout: %s<br/>\nstderr: %s", $strCmd, $strOut, $strErr));
-		}
-		return $strOut;
-	}
-	
-	
-	/**
-	 * Compress the content with cssmin.
-	 * 
-	 * @param string $strContent
-	 * @return string
-	 * @throws Exception
-	 */
-	protected function compressCssMin($strContent)
-	{
-		$objCssMinimizer = new CssMinimizer();
-		$objCssMinimizer->loadCssFromString($strContent);
-		return $objCssMinimizer->minimize();
-	}
-	
-	
-	/**
-	 * Compress the content with Dean Edwards Packer.
-	 * 
-	 * @param string $strContent
-	 * @return string
-	 * @throws Exception
-	 */
-	protected function compressDeanEdwardsPacker($strContent)
-	{
-		$objDeanEdwardsPacker = new DeanEdwardsPacker();
-		$objDeanEdwardsPacker->loadJsFromString($strContent);
-		return $objDeanEdwardsPacker->minimize();
-	}
-	
-	
-	/**
-	 * Compress the content with jsmin.
-	 * 
-	 * @param string $strContent
-	 * @return string
-	 * @throws Exception
-	 */
-	protected function compressJsMin($strContent)
-	{
-		$objJsMinimizer = new JsMinimizer();
-		$objJsMinimizer->loadJsFromString($strContent);
-		return $objJsMinimizer->minimize();
-	}
-	
-	
-	/**
-	 * Compress a source file with gzip and save it as the target file.
-	 * 
-	 * @param string $strSrc
-	 * @param string $strTarget
-	 * @throws Exception
-	 */
-	protected function compressFileGzip($strSrc, $strTarget)
-	{
-		$fileSrc = new File($strSrc);
-		$fileTarget = new File($strTarget);
-		// write gzip-encoded source data to target file
-		if (!$fileTarget->write(gzencode($fileSrc->getContent())))
-		{
-			throw new Exception(sprintf("GZ Compression of %s to %s failed!", $strTarget));
-		}
-	}
-	
-	
-	/**
-	 * Detect gzip data end decode it.
-	 * 
-	 * @param mixed $varData
-	 */
-	protected function decompressGzip($varData) {
-		if (	$varData[0] == 31
-			&&	$varData[0] == 139
-			&&	$varData[0] == 8) {
-			return gzdecode($varData);
-		} else {
-			return $varData;
-		}
-	}
 	
 	/**
 	 * Get the sources from ids, combine them and return an array of it.
@@ -338,12 +69,7 @@ class LayoutAdditionalSources extends Frontend
 	 */
 	public function getSources($arrIds, $blnAllowGzip = true, $blnAddCharset = true, $blnAbsolutizeUrls = false, $objAbsolutizePage = null)
 	{
-		$blnAcceptGzip = false;
-		$arrAcceptEncoding = explode(',', str_replace(' ', '', $_SERVER['HTTP_ACCEPT_ENCODING']));
-		if (!$GLOBALS['TL_CONFIG']['additional_sources_gz_compression_disabled'] && in_array('gzip', $arrAcceptEncoding))
-		{
-			$blnAcceptGzip = true;
-		}
+		$blnUserLoggedIn = $this->getBELoginStatus();
 		
 		$arrSourcesMap = array
 		(
@@ -376,7 +102,8 @@ class LayoutAdditionalSources extends Frontend
 			switch ($strType)
 			{
 			case 'css_url':
-				if ($GLOBALS['TL_CONFIG']['additional_sources_combination'] != 'combine_all')
+				if (	$GLOBALS['TL_CONFIG']['additional_sources_combination'] != 'combine_all'
+					||	!$blnMinimizeCss)
 				{
 					$arrSources['css'][] = array
 					(
@@ -391,7 +118,8 @@ class LayoutAdditionalSources extends Frontend
 				break;
 			
 			case 'js_url':
-				if ($GLOBALS['TL_CONFIG']['additional_sources_combination'] != 'combine_all')
+				if (	$GLOBALS['TL_CONFIG']['additional_sources_combination'] != 'combine_all'
+					||	!$blnMinimizeJs)
 				{
 					$arrSources['js'][] = array
 					(
@@ -417,180 +145,15 @@ class LayoutAdditionalSources extends Frontend
 		}
 		
 		// handle css files
-		foreach ($arrSourcesMap['css'] as $strCc => $arrCssSources)
+		if (count($arrSourcesMap['css']))
 		{
-			if (count($arrCssSources))
-			{
-				$strFile = $this->calculateTempFile('css', $strCc, $arrCssSources);
-				$strFileGz = $strFile . '.gz';
-				if (!file_exists(TL_ROOT . '/' . $strFile))
-				{
-					$strCss = '';
-					foreach ($arrCssSources as $arrSource)
-					{
-						switch ($arrSource['type'])
-						{
-						case 'css_file':
-							$objFile = new File($arrSource['css_file']);
-							$strContent = $objFile->getContent();
-							$strContent = $this->decompressGzip($strContent);
-							
-							// handle @charset
-							if (preg_match('#\@charset\s+[\'"]([\w\-]+)[\'"]\;#Ui', $strContent, $arrMatch))
-							{
-								// convert character encoding to utf-8
-								if (strtoupper($arrMatch[1]) != 'UTF-8')
-								{
-									$strContent = iconv(strtoupper($arrMatch[1]), 'UTF-8', $strContent);
-								}
-								// remove @charset tag
-								$strContent = str_replace($arrMatch[0], '', $strContent);
-							}
-							
-							// remap url(..) entries
-							if ($blnAbsolutizeUrls)
-							{
-								$strRemappingPath = dirname($arrSource['css_file']);
-							}
-							else
-							{
-								$strRemappingPath = $this->calculateRemappingPath($arrSource['css_file'], $strFile);
-							}
-							$objUrlRemapper = new UrlRemapper($strRemappingPath, $blnAbsolutizeUrls, $objAbsolutizePage);
-							$strContent = preg_replace_callback('#url\((.*)\)#U', array(&$objUrlRemapper, 'replace'), $strContent);
-						
-							// add media definition
-							$arrMedia = deserialize($arrSource['media'], true);
-							if (count($arrMedia))
-							{
-								$strContent = sprintf('@media %s{%s}', implode(',', $arrMedia), $strContent);
-							}
-							
-							$strCss .= trim($strContent) . "\n";
-							break;
-						
-						case 'css_url':
-							if ($arrSource['css_url_real_path'])
-							{
-								$strContent = file_get_contents($arrSource['css_url_real_path']);
-							}
-							else
-							{
-								$strContent = file_get_contents($this->DomainLink->absolutizeUrl($arrSource['css_url']));
-							}
-							$strContent = $this->decompressGzip($strContent);
-							
-							// handle @charset
-							if (preg_match('#\@charset\s+[\'"]([\w\-]+)[\'"]\;#Ui', $strContent, $arrMatch))
-							{
-								// convert character encoding to utf-8
-								if (strtoupper($arrMatch[1]) != 'UTF-8')
-								{
-									$strContent = iconv(strtoupper($arrMatch[1]), 'UTF-8', $strContent);
-								}
-								// remove @charset tag
-								$strContent = str_replace($arrMatch[0], '', $strContent);
-							}
-							
-							$strCss .= trim($strContent) . "\n";
-							break;
-						}
-					}
-			
-					// add charset definition
-					if ($blnAddCharset)
-					{
-						$strCss = '@charset "UTF-8";' . "\n" . $strCss;
-					}
-					
-					// minify
-					$strCss = $this->compressCss($strCss);
-					
-					// store the temporary file
-					file_put_contents(TL_ROOT . '/' . $strFile, $strCss);
-					
-					// always create the gzip compressed version
-					if (!$GLOBALS['TL_CONFIG']['additional_sources_gz_compression_disabled'])
-					{
-						$this->compressFileGzip($strFile, $strFileGz);
-					}
-				}
-			
-				if (!isset($arrSources['css']))
-				{
-					$arrSources['css'] = array();
-				}
-				$arrSources['css'][] = array
-				(
-					'src'      => $strFile,
-					'cc'       => $strCc != '-' ? $strCc : '',
-					'external' => false
-				);
-			}
+			$this->CssCompiler->compile($arrSourcesMap['css'], $arrSources['css'], $blnUserLoggedIn);
 		}
 		
 		// handle js file
-		foreach ($arrSourcesMap['js'] as $strCc => $arrJsSources)
-		{	
-			if (count($arrJsSources))
-			{
-				$strFile = $this->calculateTempFile('js', $strCc, $arrSourcesMap['js'][$strCc]);
-				$strFileGz = $strFile . '.gz';
-				if (!file_exists(TL_ROOT . '/' . $strFile))
-				{
-					$strJs = '';
-					foreach ($arrJsSources as $arrSource)
-					{
-						switch ($arrSource['type'])
-						{
-						case 'js_file':
-							$objFile = new File($arrSource['js_file']);
-							$strContent = $objFile->getContent();
-							$strContent = $this->decompressGzip($strContent);
-							
-							$strJs .= $strContent . "\n";
-							break;
-						
-						case 'js_url':
-							if ($arrSource['js_url_real_path'])
-							{
-								$strContent = file_get_contents($arrSource['js_url_real_path']);
-							}
-							else
-							{
-								$strContent = file_get_contents($this->DomainLink->absolutizeUrl($arrSource['js_url']));
-							}
-							$strContent = $this->decompressGzip($strContent);
-													
-							$strJs .= $strContent . "\n";
-							break;
-						}
-					}
-					
-					// minify
-					$strJs = $this->compressJavaScript($strJs);
-					
-					// store the temporary file
-					file_put_contents(TL_ROOT . '/' . $strFile, $strJs);
-					
-					// always create the gzip compressed version
-					if (!$GLOBALS['TL_CONFIG']['additional_sources_gz_compression_disabled'])
-					{
-						$this->compressFileGzip($strFile, $strFileGz);
-					}
-				}
-				
-				if (!isset($arrSources['js']))
-				{
-					$arrSources['js'] = array();
-				}
-				$arrSources['js'][] = array
-				(
-					'src'      => $strFile,
-					'cc'       => $strCc != '-' ? $strCc : '',
-					'external' => false
-				);
-			}
+		if (count($arrSourcesMap['js']))
+		{
+			$this->JsCompiler->compile($arrSourcesMap['js'], $arrSources['js'], $blnUserLoggedIn);
 		}
 		
 		return $arrSources;
@@ -682,83 +245,30 @@ class LayoutAdditionalSources extends Frontend
 		$arrResult = array();
 		if (count($arrLayoutAdditionalSources))
 		{
-			// check if a BE user is logged in
-			// include the original source files
-			if ($this->getBELoginStatus())
+			$arrArrAdditionalSources = $this->getSources($arrLayoutAdditionalSources);
+			foreach ($arrArrAdditionalSources as $strType => $arrAdditionalSources)
 			{
-				$arrArrAdditionalSources = array
-				(
-					'css' => array(),
-					'js' => array()
-				);
-				
-				$objAdditionalSources = $this->Database->execute("
-						SELECT
-							*
-						FROM
-							`tl_additional_source`
-						WHERE
-							`id` IN (" . implode(',', array_map('intval', $arrLayoutAdditionalSources)) . ")
-						ORDER BY
-							`sorting`");
-				while ($objAdditionalSources->next())
+				foreach ($arrAdditionalSources as $arrAdditionalSource)
 				{
-					$strType = $objAdditionalSources->type;
-					$strCc = $objAdditionalSources->cc ? $objAdditionalSources->cc : '';
-					$strSource = $objAdditionalSources->$strType;
-					
 					switch ($strType)
 					{
-					case 'css_file':
-					case 'css_url':
-						$arrMedia = deserialize($objAdditionalSources->media, true);
-						$strAdditionalSource = sprintf('<link type="text/css" rel="stylesheet" href="%s"%s />', $strSource, count($arrMedia) ? ' media="' . implode(',', $arrMedia) . '"' : '');
+					case 'css':
+						$strAdditionalSource = sprintf('<link type="text/css" rel="stylesheet" href="%s" />', $arrAdditionalSource['src']);
 						break;
-						
-					case 'js_file':
-					case 'js_url':
-						$strAdditionalSource = sprintf('<script type="text/javascript" src="%s"></script>', $strSource);
+					
+					case 'js':
+						$strAdditionalSource = sprintf('<script type="text/javascript" src="%s"></script>', $arrAdditionalSource['src']);
+						break;
 					}
 					
 					// add the conditional comment
-					if (strlen($strCc))
+					if (strlen($arrAdditionalSource['cc']))
 					{
-						$strAdditionalSource = '<!--[' . $strCc . ']>' . $strAdditionalSource . '<![endif]-->';
+						$strAdditionalSource = '<!--[' . $arrAdditionalSource['cc'] . ']>' . $strAdditionalSource . '<![endif]-->';
 					}
 				
 					// add the html to the layout head
 					$arrResult[] = $strAdditionalSource;
-				}
-			}
-			
-			// use reduced files
-			else
-			{
-				$arrArrAdditionalSources = $this->getSources($arrLayoutAdditionalSources);
-				foreach ($arrArrAdditionalSources as $strType => $arrAdditionalSources)
-				{
-					foreach ($arrAdditionalSources as $arrAdditionalSource)
-					{
-						switch ($strType)
-						{
-						case 'css':
-							$strAdditionalSource = sprintf('<link type="text/css" rel="stylesheet" href="%s" />', $arrAdditionalSource['src']);
-							break;
-						
-						case 'js':
-							$strAdditionalSource = sprintf('<script type="text/javascript" src="%s"></script>', $arrAdditionalSource['src']);
-							break;
-						}
-						
-						// add the conditional comment
-						if (strlen($arrAdditionalSource['cc']))
-						{
-							$strAdditionalSource = '<!--[' . $arrAdditionalSource['cc'] . ']>' . $strAdditionalSource . '<![endif]-->';
-						}
-					
-						// add the html to the layout head
-						$arrResult[] = $strAdditionalSource;
-					}
 				}
 			}
 		}
@@ -777,134 +287,56 @@ class LayoutAdditionalSources extends Frontend
 		$arrResult = array();
 		if (count($arrLayoutAdditionalSources))
 		{
-			// check if a BE user is logged in
-			// include the original source files
-			if ($this->getBELoginStatus())
+			$arrArrAdditionalSources = $this->getSources($arrLayoutAdditionalSources, false, false);
+			foreach ($arrArrAdditionalSources as $strType => $arrAdditionalSources)
 			{
-				$arrArrAdditionalSources = array
-				(
-					'css' => array(),
-					'js' => array()
-				);
-				
-				$objAdditionalSources = $this->Database->execute("
-						SELECT
-							*
-						FROM
-							`tl_additional_source`
-						WHERE
-							`id` IN (" . implode(',', array_map('intval', $arrLayoutAdditionalSources)) . ")
-						ORDER BY
-							`sorting`");
-				while ($objAdditionalSources->next())
+				foreach ($arrAdditionalSources as $arrAdditionalSource)
 				{
-					$strType = $objAdditionalSources->type;
-					$strCc = $objAdditionalSources->cc ? $objAdditionalSources->cc : '';
-					$strSource = $objAdditionalSources->$strType;
-					
 					switch ($strType)
 					{
-					case 'css_file':
-						$arrMedia = deserialize($objAdditionalSources->media, true);
-						if (file_exists(TL_ROOT . '/' . $strSource))
+					case 'css':
+						if ($arrAdditionalSource['external'])
 						{
-							$objFile = new File($strSource);
+							$strAdditionalSource = sprintf('<link type="text/css" rel="stylesheet" href="%s" />', $arrAdditionalSource['src']);
+						}
+						else
+						{
+							$objFile = new File($arrAdditionalSource['src']);
 							$strContent = "\n" . $objFile->getContent() . "\n";
 							if (!strlen($strCc))
 							{
 								$strContent = "\n<!--/*--><![CDATA[/*><!--*/" . $strContent . "/*]]>*/-->\n";
 							}
-							$strAdditionalSource = sprintf("<style type=\"text/css\"%s>%s</style>", count($arrMedia) ? ' media="' . implode(',', $arrMedia) . '"' : '', $strContent);
+							$strAdditionalSource = sprintf("<style type=\"text/css\">%s</style>", $strContent);
 						}
 						break;
-						
-					case 'css_url':
-						$arrMedia = deserialize($objAdditionalSources->media, true);
-						$strAdditionalSource = sprintf('<link type="text/css" rel="stylesheet" href="%s"%s />', $strSource, count($arrMedia) ? ' media="' . implode(',', $arrMedia) . '"' : '');
-						break;
-						
-					case 'js_file':
-						if (file_exists(TL_ROOT . '/' . $strSource))
+					
+					case 'js':
+						if ($arrAdditionalSource['external'])
 						{
-							$objFile = new File($strSource);
+							$strAdditionalSource = sprintf('<script type="text/javascript" src="%s"></script>', $arrAdditionalSource['src']);
+						}
+						else
+						{
+							$objFile = new File($arrAdditionalSource['src']);
 							$strContent = "\n" . $objFile->getContent() . "\n";
 							if (!strlen($strCc))
 							{
-								$strContent = "\n<!--/*--><![CDATA[/*><!--*/" . $strContent . "/*]]>*/-->\n";
+								$strContent = "\n<!--//--><![CDATA[//><!--" . $strContent . "//--><!]]>\n";
 							}
 							$strAdditionalSource = sprintf("<script type=\"text/javascript\">%s</script>", $strContent);
 						}
 						break;
-						
-					case 'js_url':
-						$strAdditionalSource = sprintf('<script type="text/javascript" src="%s"></script>', $strSource);
 					}
 					
 					// add the conditional comment
-					if (strlen($strCc))
+					if (strlen($arrAdditionalSource['cc']))
 					{
-						$strAdditionalSource = '<!--[' . $strCc . ']>' . $strAdditionalSource . '<![endif]-->';
+						$strAdditionalSource = '<!--[' . $arrAdditionalSource['cc'] . ']>' . $strAdditionalSource . '<![endif]-->';
 					}
 				
 					// add the html to the layout head
 					$arrResult[] = $strAdditionalSource;
-				}
-			}
-			
-			// use reduced files
-			else
-			{
-				$arrArrAdditionalSources = $this->getSources($arrLayoutAdditionalSources, false, false);
-				foreach ($arrArrAdditionalSources as $strType => $arrAdditionalSources)
-				{
-					foreach ($arrAdditionalSources as $arrAdditionalSource)
-					{
-						switch ($strType)
-						{
-						case 'css':
-							if ($arrAdditionalSource['external'])
-							{
-								$strAdditionalSource = sprintf('<link type="text/css" rel="stylesheet" href="%s" />', $arrAdditionalSource['src']);
-							}
-							else
-							{
-								$objFile = new File($arrAdditionalSource['src']);
-								$strContent = "\n" . $objFile->getContent() . "\n";
-								if (!strlen($strCc))
-								{
-									$strContent = "\n<!--/*--><![CDATA[/*><!--*/" . $strContent . "/*]]>*/-->\n";
-								}
-								$strAdditionalSource = sprintf("<style type=\"text/css\">%s</style>", $strContent);
-							}
-							break;
-						
-						case 'js':
-							if ($arrAdditionalSource['external'])
-							{
-								$strAdditionalSource = sprintf('<script type="text/javascript" src="%s"></script>', $arrAdditionalSource['src']);
-							}
-							else
-							{
-								$objFile = new File($arrAdditionalSource['src']);
-								$strContent = "\n" . $objFile->getContent() . "\n";
-								if (!strlen($strCc))
-								{
-									$strContent = "\n<!--//--><![CDATA[//><!--" . $strContent . "//--><!]]>\n";
-								}
-								$strAdditionalSource = sprintf("<script type=\"text/javascript\">%s</script>", $strContent);
-							}
-							break;
-						}
-						
-						// add the conditional comment
-						if (strlen($arrAdditionalSource['cc']))
-						{
-							$strAdditionalSource = '<!--[' . $arrAdditionalSource['cc'] . ']>' . $strAdditionalSource . '<![endif]-->';
-						}
-					
-						// add the html to the layout head
-						$arrResult[] = $strAdditionalSource;
-					}
 				}
 			}
 		}
@@ -912,53 +344,4 @@ class LayoutAdditionalSources extends Frontend
 	}
 }
 
-/**
- * Class UrlRemapper
- * 
- * Callback class for preg_replace_callback.
- * 
- * @copyright  InfinitySoft 2010
- * @author     Tristan Lins <tristan.lins@infinitysoft.de>
- * @package    Layout Additional Sources
- */
-class UrlRemapper extends Controller {
-	private $strRelativePath;
-	private $blnAbsolutizeUrls;
-	private $objAbsolutizePage;
-	
-	public function __construct($strRelativePath, $blnAbsolutizeUrls = false, $objAbsolutizePage = null)
-	{
-		$this->import('DomainLink');
-		$this->strRelativePath = $strRelativePath;
-		$this->blnAbsolutizeUrls = $blnAbsolutizeUrls;
-		$this->objAbsolutizePage = $objAbsolutizePage;
-	}
-	
-	public function replace($arrMatch)
-	{
-		if (preg_match('#^["\']#', $arrMatch[1])) {
-			$arrMatch[1] = substr($arrMatch[1], 1);
-		}
-		if (preg_match('#["\']$#', $arrMatch[1])) {
-			$arrMatch[1] = substr($arrMatch[1], 0, -1);
-		}
-		if (!preg_match('#^\w+://#', $arrMatch[1]) && $arrMatch[1][0] != '/')
-		{
-			$strPath = $this->strRelativePath;
-			$strUrl = $arrMatch[1];
-			while (preg_match('#^\.\./#', $strUrl))
-			{
-				$strPath = dirname($strPath);
-				$strUrl = substr($strUrl, 3);
-			}
-			$strUrl = $strPath . '/' . $strUrl;
-			if ($this->blnAbsolutizeUrls)
-			{
-				$strUrl = $this->DomainLink->absolutizeUrl($strUrl, $this->objAbsolutizePage);
-			}
-			return 'url("' . $strUrl . '")';
-		}
-		return $arrMatch[0];
-	}
-}
 ?>
