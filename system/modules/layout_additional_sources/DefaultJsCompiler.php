@@ -49,7 +49,7 @@ class DefaultJsCompiler extends CompilerBase {
 	}
 	
 	
-	public function compile($arrSourcesMap, &$arrJs, $blnUserLoggedIn)
+	public function compile($arrSourcesMap, &$arrSources, $blnUserLoggedIn)
 	{
 		foreach ($arrSourcesMap as $strCc => $arrJsSources)
 		{	
@@ -59,7 +59,7 @@ class DefaultJsCompiler extends CompilerBase {
 				{
 					foreach ($arrJsSources as $arrSource)
 					{
-						$arrJs[] = array
+						$arrSources['js'][] = array
 						(
 							'src'      => $arrSource[$arrSource['type']],
 							'cc'       => $strCc != '-' ? $strCc : '',
@@ -117,7 +117,7 @@ class DefaultJsCompiler extends CompilerBase {
 					}
 				}
 				
-				$arrJs[] = array
+				$arrSources['js'][] = array
 				(
 					'src'      => $strFile,
 					'cc'       => $strCc != '-' ? $strCc : '',

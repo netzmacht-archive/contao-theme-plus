@@ -157,7 +157,7 @@ $GLOBALS['TL_DCA']['tl_additional_source'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_additional_source']['css_file'],
 			'exclude'                 => true,
 			'inputType'               => 'fileTree',
-			'eval'                    => array('mandatory'=>true, 'fieldType'=>'radio', 'files'=>true, 'extensions'=>'css', 'path'=>$GLOBALS['TL_CONFIG']['uploadPath'], 'tl_class'=>'clr')
+			'eval'                    => array('mandatory'=>true, 'fieldType'=>'radio', 'files'=>true, 'extensions'=>'css,less', 'path'=>$GLOBALS['TL_CONFIG']['uploadPath'], 'tl_class'=>'clr')
 		),
 		'css_url' => array
 		(

@@ -92,15 +92,56 @@ class tl_settings_layout_additional_sources extends Backend
 			array('' => $GLOBALS['TL_LANG']['tl_settings']['additional_sources_compression']['inherit']),
 			$this->Compression->getCssMinimizers()
 		);
+		
 		if (in_array('lesscss', $this->Config->getActiveModules()))
 		{
-			$arrMinimizers['less'] = $GLOBALS['TL_LANG']['tl_settings']['additional_sources_compression']['less'];
-			if (isset($arrMinimizers['yui']))
+			$arrMinimizers['less.js'] = $GLOBALS['TL_LANG']['tl_settings']['additional_sources_compression']['less.js'];
+			if ($this->tryNode())
 			{
-				$arrMinimizers['less+yui'] = $GLOBALS['TL_LANG']['tl_settings']['additional_sources_compression']['less+yui'];
+				$arrMinimizers['less.js+pre'] = $GLOBALS['TL_LANG']['tl_settings']['additional_sources_compression']['less.js+pre'];
+			}
+			foreach ($this->Compression->getCssMinimizers() as $strKey=>$strValue)
+			{
+				if ($strKey != 'none')
+				{
+					$arrMinimizers['less.js+' . $strKey] = $GLOBALS['TL_LANG']['tl_settings']['additional_sources_compression']['less.js'] . ' + ' . $strValue;
+				}
 			}
 		}
+		
 		return $arrMinimizers;
+	}
+	
+	
+	protected function tryNode()
+	{
+		// execute lessc
+		$procLessC = proc_open(
+			'node --version',
+			array(
+				0 => array("pipe", "r"),
+				1 => array("pipe", "w"),
+				2 => array("pipe", "w")
+			),
+			$arrPipes);
+		if ($procLessC === false)
+		{
+			return false;
+		}
+		// close stdin
+		fclose($arrPipes[0]);
+		// close stdout
+		fclose($arrPipes[1]);
+		// read and close stderr
+		$strErr = stream_get_contents($arrPipes[2]);
+		fclose($arrPipes[2]);
+		// wait until yui-compressor terminates
+		$intCode = proc_close($procLessC);
+		if ($intCode != 0 || strlen($strErr))
+		{
+			return false;
+		}
+		return true;
 	}
 	
 	

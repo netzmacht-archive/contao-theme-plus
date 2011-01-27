@@ -37,30 +37,6 @@
  * @package    Layout Additional Sources
  */
 class LessCssCompiler extends CompilerBase {
-	public function __construct()
-	{
-		$this->import('Compression');
-		
-		if ($GLOBALS['TL_CONFIG']['additional_sources_css_compression'] == 'less+yui')
-		{
-			$strCssMinimizerClass = $this->Compression->getCssMinimizerClass('yui');
-			$this->import($strCssMinimizerClass, 'Yui');
-		}
-		else
-		{
-			$this->Yui = false;
-		}
-		
-		$this->import('LessCss');
-		$this->LessCss->configure(array('remove-charset'=>false));
-		
-		$strGzipCompressorClass = $this->Compression->getCompressorClass('gzip');
-		$this->import($strGzipCompressorClass, 'GzipCompressor');
-		
-		$this->import('CssUrlRemapper');
-	}
-	
-	
 	/**
 	 * Calculate a temporary combined file name. 
 	 * 
@@ -72,12 +48,102 @@ class LessCssCompiler extends CompilerBase {
 	protected function calculateTempCompilerName($strCc, File $objFile)
 	{
 		$strKey = $objFile->value . '.' . $strCc . '.' . $objFile->mtime;
-		return $objFile->filename . '.' . substr(md5($strKey), 0, 8) . '.' . $objFile->extension;
+		return $objFile->filename . '.' . substr(md5($strKey), 0, 8);
 	}
 	
 	
-	public function compile($arrSourcesMap, &$arrCss, $blnUserLoggedIn)
+	public function compile($arrSourcesMap, &$arrSources, $blnUserLoggedIn)
 	{
+		if ($blnUserLoggedIn || $GLOBALS['TL_CONFIG']['additional_sources_css_compression'] == 'less.js')
+		{
+			$this->compileClientSide($arrSourcesMap, $arrSources, $blnUserLoggedIn);
+		}
+		else
+		{
+			$this->compileServerSide($arrSourcesMap, $arrSources, $blnUserLoggedIn);
+		}
+	}
+
+	protected function compileClientSide($arrSourcesMap, &$arrSources, $blnUserLoggedIn)
+	{
+		$blnLess = false;
+		
+		foreach ($arrSourcesMap as $strCc => $arrCssSources)
+		{
+			if (count($arrCssSources))
+			{
+				foreach ($arrCssSources as $arrSource)
+				{
+					$arrTemp = false;
+					
+					switch ($arrSource['type'])
+					{
+					case 'css_file':
+						$arrTemp = array
+						(
+							'src'      => $arrSource['css_file'],
+							'cc'       => $strCc != '-' ? $strCc : '',
+							'external' => false,
+						);
+						break;
+					
+					case 'css_url':
+						$arrTemp = array
+						(
+							'src'      => $arrSource['css_url'],
+							'cc'       => $strCc != '-' ? $strCc : '',
+							'external' => true
+						);
+						break;
+					}
+					
+					if ($arrTemp)
+					{
+						if (preg_match('#\.less$#i', $arrTemp['src']))
+						{
+							$blnLess = true;
+							$arrTemp['rel'] = 'stylesheet/less';
+						}
+						$arrSources['css'][] = $arrTemp;
+					}
+				}
+			}
+		}
+		
+		if ($blnLess)
+		{
+			$arrSources['js'][] = array
+			(
+				'src'      => 'system/modules/lesscss/html/less-1.0.41.min.js',
+				'cc'       => '',
+				'external' => false
+			);
+		}
+	}
+	
+	protected function compileServerSide($arrSourcesMap, &$arrSources, $blnUserLoggedIn)
+	{
+		$this->import('Compression');
+		
+		$this->import('LessCss');
+		
+		if (preg_match('#^less\+(\w+)$#', $GLOBALS['TL_CONFIG']['additional_sources_css_compression'], $m) && $m[1] != 'pre')
+		{
+			$strCssMinimizerClass = $this->Compression->getCssMinimizerClass($m[1]);
+			$this->import($strCssMinimizerClass, 'CssMinimizer');
+			
+			$this->LessCss->configure(array('compress'=>false));
+		}
+		else
+		{
+			$this->CssMinimizer = false;
+		}
+		
+		$strGzipCompressorClass = $this->Compression->getCompressorClass('gzip');
+		$this->import($strGzipCompressorClass, 'GzipCompressor');
+		
+		$this->import('CssUrlRemapper');
+		
 		foreach ($arrSourcesMap as $strCc => $arrCssSources)
 		{
 			if (count($arrCssSources))
@@ -95,36 +161,26 @@ class LessCssCompiler extends CompilerBase {
 							$objFile = new File($arrSource['css_file']);
 							
 							$strCompilerName = $this->calculateTempCompilerName($strCc, $objFile);
-							$strCompilerFile = 'system/html/' . $strCompilerName;
+							$strCompilerFile = 'system/html/' . $strCompilerName . '.css';
 							
 							if (!file_exists(TL_ROOT . '/' . $strCompilerFile))
 							{
 								$objCompilerFile = new File($strCompilerFile);
 								
-								$strCompilerSource = 'system/html/source_' . $strCompilerName;
+								$strCompilerSource = 'system/html/source_' . $strCompilerName . '.less';
 								$objCompilerSource = new File($strCompilerSource);
 								
 								$strContent = $objFile->getContent();
 								$strContent = $this->decompressGzip($strContent);
 								
 								// handle @charset
-								if (preg_match('#\@charset\s+[\'"]([\w\-]+)[\'"]\;#Ui', $strContent, $arrMatch))
-								{
-									// convert character encoding to utf-8
-									if (strtoupper($arrMatch[1]) != 'UTF-8')
-									{
-										$strContent = iconv(strtoupper($arrMatch[1]), 'UTF-8', $strContent);
-									}
-									// remove @charset tag
-									$strContent = str_replace($arrMatch[0], '', $strContent);
-								}
+								$strContent = $this->handleCharset($strContent);
 								
 								// remap url(..) entries
-								// this is done by minimizeToFile
 								$strContent = $this->CssUrlRemapper->remapCode($strContent, $arrSource['css_file'], $objCompilerSource->value, $blnAbsolutizeUrls, $objAbsolutizePage);
 								
 								// write the temporary source file
-								$objCompilerSource->write(trim($strContent));
+								$objCompilerSource->write('@charset "UTF-8";' . "\n" . trim($strContent));
 								
 								// compile with less
 								if (!$this->LessCss->minimize($strCompilerSource, $strCompilerFile))
@@ -137,44 +193,23 @@ class LessCssCompiler extends CompilerBase {
 								if (count($arrMedia))
 								{
 									$strContent = $objCompilerFile->getContent();
+									$strContent = $this->handleCharset($strContent);
 									$strContent = sprintf('@media %s{%s}', implode(',', $arrMedia), $strContent);
 									$objCompilerFile->write($strContent);
 								}
 								
 								// delete temporary source file
-								$objCompilerSource->delete();
+								#$objCompilerSource->delete();
 							}
 							else
 							{
 								$objCompilerFile = new File($strCompilerFile);
 							}
 							
-							if ($blnUserLoggedIn)
-							{
-								$arrCss[] = array
-								(
-									'src'      => $objCompilerFile->value,
-									'cc'       => $strCc != '-' ? $strCc : '',
-									'external' => false
-								);
-								continue;
-							}
-							
 							$arrData[] = $objCompilerFile;
 							break;
 						
 						case 'css_url':
-							if ($blnUserLoggedIn)
-							{
-								$arrCss[] = array
-								(
-									'src'      => $arrSource['css_url'],
-									'cc'       => $strCc != '-' ? $strCc : '',
-									'external' => true
-								);
-								continue;
-							}
-							
 							if ($arrSource['css_url_real_path'])
 							{
 								$strContent = file_get_contents($arrSource['css_url_real_path']);
@@ -186,16 +221,7 @@ class LessCssCompiler extends CompilerBase {
 							$strContent = $this->decompressGzip($strContent);
 							
 							// handle @charset
-							if (preg_match('#\@charset\s+[\'"]([\w\-]+)[\'"]\;#Ui', $strContent, $arrMatch))
-							{
-								// convert character encoding to utf-8
-								if (strtoupper($arrMatch[1]) != 'UTF-8')
-								{
-									$strContent = iconv(strtoupper($arrMatch[1]), 'UTF-8', $strContent);
-								}
-								// remove @charset tag
-								$strContent = str_replace($arrMatch[0], '', $strContent);
-							}
+							$strContent = $this->handleCharset($strContent);
 							
 							$arrData[] = trim($strContent);
 							break;
@@ -213,11 +239,11 @@ class LessCssCompiler extends CompilerBase {
 						{
 							if (is_string($varData))
 							{
-								$strCss .= $varData . "\n";
+								$strCss .= $this->handleCharset($varData) . "\n";
 							}
 							else if (is_a($varData, 'File'))
 							{
-								$strCss .= $varData->getContent() . "\n";
+								$strCss .= $this->handleCharset($varData->getContent()) . "\n";
 							}
 							else
 							{
@@ -226,29 +252,26 @@ class LessCssCompiler extends CompilerBase {
 						}
 						
 						// minify
-						if (!$this->Yui || $this->Yui && !$this->Yui->minimizeToFile($strFile, $strCss))
+						if (!$this->CssMinimizer || $this->CssMinimizer && !$this->CssMinimizer->minimizeToFile($strFile, $strCss))
 						{
 							$objFile = new File($strFile);
 							$objFile->write($strCss);
 							$objFile->close();
 						}
 						
-						// always create the gzip compressed version
+						// create the gzip compressed version
 						if (!$GLOBALS['TL_CONFIG']['additional_sources_gz_compression_disabled'])
 						{
 							$this->GzipCompressor->compress($strFile, $strFileGz);
 						}
+						
+						$arrSources['css'][] = array
+						(
+							'src'      => $strFile,
+							'cc'       => $strCc != '-' ? $strCc : '',
+							'external' => false
+						);
 					}
-				}
-			
-				if (!$blnUserLoggedIn)
-				{
-					$arrCss[] = array
-					(
-						'src'      => $strFile,
-						'cc'       => $strCc != '-' ? $strCc : '',
-						'external' => false
-					);
 				}
 			}
 		}

@@ -105,6 +105,25 @@ class CompilerBase extends Backend
 			return $varData;
 		}
 	}
+	
+	
+	/**
+	 * Handle @charset and remove the rule.
+	 */
+	protected function handleCharset($strContent)
+	{
+		if (preg_match('#\@charset\s+[\'"]([\w\-]+)[\'"]\;#Ui', $strContent, $arrMatch))
+		{
+			// convert character encoding to utf-8
+			if (strtoupper($arrMatch[1]) != 'UTF-8')
+			{
+				$strContent = iconv(strtoupper($arrMatch[1]), 'UTF-8', $strContent);
+			}
+			// remove all @charset rules
+			$strContent = preg_replace('#\@charset\s+.*\;#Ui', '', $strContent);
+		}
+		return $strContent;
+	}
 }
 
 ?>

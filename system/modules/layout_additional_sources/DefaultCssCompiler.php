@@ -50,7 +50,7 @@ class DefaultCssCompiler extends CompilerBase {
 		$this->import('CssUrlRemapper');
 	}
 	
-	public function compile($arrSourcesMap, &$arrCss, $blnUserLoggedIn)
+	public function compile($arrSourcesMap, &$arrSources, $blnUserLoggedIn)
 	{
 		foreach ($arrSourcesMap as $strCc => $arrCssSources)
 		{
@@ -88,16 +88,7 @@ class DefaultCssCompiler extends CompilerBase {
 							$strContent = $this->decompressGzip($strContent);
 							
 							// handle @charset
-							if (preg_match('#\@charset\s+[\'"]([\w\-]+)[\'"]\;#Ui', $strContent, $arrMatch))
-							{
-								// convert character encoding to utf-8
-								if (strtoupper($arrMatch[1]) != 'UTF-8')
-								{
-									$strContent = iconv(strtoupper($arrMatch[1]), 'UTF-8', $strContent);
-								}
-								// remove @charset tag
-								$strContent = str_replace($arrMatch[0], '', $strContent);
-							}
+							$strContent = $this->handleCharset($strContent);
 							
 							// remap url(..) entries
 							$strContent = $this->CssUrlRemapper->remapCode($strContent, $arrSource['css_file'], $strFile, $blnAbsolutizeUrls, $objAbsolutizePage);
@@ -124,16 +115,7 @@ class DefaultCssCompiler extends CompilerBase {
 							$strContent = $this->decompressGzip($strContent);
 							
 							// handle @charset
-							if (preg_match('#\@charset\s+[\'"]([\w\-]+)[\'"]\;#Ui', $strContent, $arrMatch))
-							{
-								// convert character encoding to utf-8
-								if (strtoupper($arrMatch[1]) != 'UTF-8')
-								{
-									$strContent = iconv(strtoupper($arrMatch[1]), 'UTF-8', $strContent);
-								}
-								// remove @charset tag
-								$strContent = str_replace($arrMatch[0], '', $strContent);
-							}
+							$strContent = $this->handleCharset($strContent);
 							
 							$strCss .= trim($strContent) . "\n";
 							break;
@@ -155,7 +137,7 @@ class DefaultCssCompiler extends CompilerBase {
 					}
 				}
 			
-				$arrCss[] = array
+				$arrSources['css'][] = array
 				(
 					'src'      => $strFile,
 					'cc'       => $strCc != '-' ? $strCc : '',

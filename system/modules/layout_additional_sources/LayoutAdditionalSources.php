@@ -43,14 +43,12 @@ class LayoutAdditionalSources extends Frontend
 		$this->import('Database');
 		$this->import('DomainLink');
 		
-		switch ($GLOBALS['TL_CONFIG']['additional_sources_css_compression'])
+		if (preg_match('#^less.js#', $GLOBALS['TL_CONFIG']['additional_sources_css_compression']))
 		{
-		case 'less':
-		case 'less+yui':
 			$this->import('LessCssCompiler', 'CssCompiler');
-			break;
-			
-		default:
+		}
+		else
+		{
 			$this->import('DefaultCssCompiler', 'CssCompiler');
 		}
 		
@@ -102,8 +100,7 @@ class LayoutAdditionalSources extends Frontend
 			switch ($strType)
 			{
 			case 'css_url':
-				if (	$GLOBALS['TL_CONFIG']['additional_sources_combination'] != 'combine_all'
-					||	!$blnMinimizeCss)
+				if ($GLOBALS['TL_CONFIG']['additional_sources_combination'] != 'combine_all')
 				{
 					$arrSources['css'][] = array
 					(
@@ -118,8 +115,7 @@ class LayoutAdditionalSources extends Frontend
 				break;
 			
 			case 'js_url':
-				if (	$GLOBALS['TL_CONFIG']['additional_sources_combination'] != 'combine_all'
-					||	!$blnMinimizeJs)
+				if ($GLOBALS['TL_CONFIG']['additional_sources_combination'] != 'combine_all')
 				{
 					$arrSources['js'][] = array
 					(
@@ -147,13 +143,13 @@ class LayoutAdditionalSources extends Frontend
 		// handle css files
 		if (count($arrSourcesMap['css']))
 		{
-			$this->CssCompiler->compile($arrSourcesMap['css'], $arrSources['css'], $blnUserLoggedIn);
+			$this->CssCompiler->compile($arrSourcesMap['css'], $arrSources, $blnUserLoggedIn);
 		}
 		
 		// handle js file
 		if (count($arrSourcesMap['js']))
 		{
-			$this->JsCompiler->compile($arrSourcesMap['js'], $arrSources['js'], $blnUserLoggedIn);
+			$this->JsCompiler->compile($arrSourcesMap['js'], $arrSources, $blnUserLoggedIn);
 		}
 		
 		return $arrSources;
@@ -253,11 +249,16 @@ class LayoutAdditionalSources extends Frontend
 					switch ($strType)
 					{
 					case 'css':
-						$strAdditionalSource = sprintf('<link type="text/css" rel="stylesheet" href="%s" />', $arrAdditionalSource['src']);
+						$strAdditionalSource = sprintf('<link type="%s" rel="%s" href="%s" />',
+							(isset($arrAdditionalSource['type']) ? $arrAdditionalSource['type'] : 'text/css'),
+							(isset($arrAdditionalSource['rel']) ? $arrAdditionalSource['rel'] : 'stylesheet'),
+							$arrAdditionalSource['src']);
 						break;
 					
 					case 'js':
-						$strAdditionalSource = sprintf('<script type="text/javascript" src="%s"></script>', $arrAdditionalSource['src']);
+						$strAdditionalSource = sprintf('<script type="%s" src="%s"></script>',
+							(isset($arrAdditionalSource['type']) ? $arrAdditionalSource['type'] : 'text/javascript'),
+							$arrAdditionalSource['src']);
 						break;
 					}
 					
@@ -297,7 +298,10 @@ class LayoutAdditionalSources extends Frontend
 					case 'css':
 						if ($arrAdditionalSource['external'])
 						{
-							$strAdditionalSource = sprintf('<link type="text/css" rel="stylesheet" href="%s" />', $arrAdditionalSource['src']);
+							$strAdditionalSource = sprintf('<link type="%s" rel="%s" href="%s" />',
+								(isset($arrAdditionalSource['type']) ? $arrAdditionalSource['type'] : 'text/css'),
+								(isset($arrAdditionalSource['rel']) ? $arrAdditionalSource['rel'] : 'stylesheet'),
+								$arrAdditionalSource['src']);
 						}
 						else
 						{
@@ -307,14 +311,18 @@ class LayoutAdditionalSources extends Frontend
 							{
 								$strContent = "\n<!--/*--><![CDATA[/*><!--*/" . $strContent . "/*]]>*/-->\n";
 							}
-							$strAdditionalSource = sprintf("<style type=\"text/css\">%s</style>", $strContent);
+							$strAdditionalSource = sprintf('<style type="%s">%s</style>',
+								(isset($arrAdditionalSource['type']) ? $arrAdditionalSource['type'] : 'text/css'),
+								$strContent);
 						}
 						break;
 					
 					case 'js':
 						if ($arrAdditionalSource['external'])
 						{
-							$strAdditionalSource = sprintf('<script type="text/javascript" src="%s"></script>', $arrAdditionalSource['src']);
+							$strAdditionalSource = sprintf('<script type="%s" src="%s"></script>',
+								(isset($arrAdditionalSource['type']) ? $arrAdditionalSource['type'] : 'text/javascript'),
+								$arrAdditionalSource['src']);
 						}
 						else
 						{
@@ -324,7 +332,9 @@ class LayoutAdditionalSources extends Frontend
 							{
 								$strContent = "\n<!--//--><![CDATA[//><!--" . $strContent . "//--><!]]>\n";
 							}
-							$strAdditionalSource = sprintf("<script type=\"text/javascript\">%s</script>", $strContent);
+							$strAdditionalSource = sprintf('<script type="%s">%s</script>',
+								(isset($arrAdditionalSource['type']) ? $arrAdditionalSource['type'] : 'text/javascript'),
+								$strContent);
 						}
 						break;
 					}

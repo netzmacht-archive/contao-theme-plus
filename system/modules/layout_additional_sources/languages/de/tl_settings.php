@@ -49,8 +49,8 @@ $GLOBALS['TL_LANG']['tl_settings']['additional_sources_combinations']['combine_a
 $GLOBALS['TL_LANG']['tl_settings']['additional_sources_combinations']['combine_local'] = 'Nur lokale Dateien (keine externe Quellen)';
 $GLOBALS['TL_LANG']['tl_settings']['additional_sources_combinations']['combine_none']  = 'Dateien nicht vereinigen';
 $GLOBALS['TL_LANG']['tl_settings']['additional_sources_compression']['inherit']        = 'Compression API Voreinstellung';
-$GLOBALS['TL_LANG']['tl_settings']['additional_sources_compression']['less']           = '{less}';
-$GLOBALS['TL_LANG']['tl_settings']['additional_sources_compression']['less+yui']       = '{less} + YUI Compressor';
+$GLOBALS['TL_LANG']['tl_settings']['additional_sources_compression']['less.js']        = 'less.js';
+$GLOBALS['TL_LANG']['tl_settings']['additional_sources_compression']['less.js+pre']    = 'less.js (Vorkompiliert)';
 
 
 /**
