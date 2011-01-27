@@ -40,3 +40,13 @@ CREATE TABLE `tl_additional_source` (
 CREATE TABLE `tl_layout` (
   `additional_source` blob NULL,
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table `tl_page`
+-- 
+
+CREATE TABLE `tl_page` (
+  `additional_source` blob NULL,
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

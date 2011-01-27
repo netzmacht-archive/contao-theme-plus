@@ -199,12 +199,48 @@ class LayoutAdditionalSources extends Frontend
 	 */
 	public function generatePage(Database_Result $objPage, Database_Result $objLayout, PageRegular $objPageRegular)
 	{
-		$arrLayoutAdditionalSources = deserialize($objLayout->additional_source, true);
+		$arrLayoutAdditionalSources = array_merge
+		(
+			deserialize($objLayout->additional_source, true),
+			$this->inheritAdditionalSources($objPage)
+		);
+		
 		$arrHtml = $this->generateInsertHtml($arrLayoutAdditionalSources);
 		foreach ($arrHtml as $strHtml)
 		{
 			$GLOBALS['TL_HEAD'][] = $strHtml;
 		}
+	}
+	
+	
+	/**
+	 * Inherit additional sources from pages.
+	 * 
+	 * @param Database_Result $objPage
+	 */
+	public function inheritAdditionalSources(Database_Result $objPage)
+	{
+		$arrTemp = deserialize($objPage->additional_source, true);
+		if ($objPage->pid > 0)
+		{
+			$objParentPage = $this->Database->prepare("
+					SELECT
+						*
+					FROM
+						tl_page
+					WHERE
+						id=?")
+				->execute($objPage->pid);
+			if ($objParentPage->next())
+			{
+				$arrTemp = array_merge
+				(
+					$arrTemp,
+					$this->inheritAdditionalSources($objParentPage)
+				);
+			}
+		}
+		return $arrTemp;
 	}
 	
 	
