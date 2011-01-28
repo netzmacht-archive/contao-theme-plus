@@ -65,7 +65,7 @@ class LayoutAdditionalSources extends Frontend
 	 * @param boolean
 	 * @return array
 	 */
-	public function getSources($arrIds, $blnAllowGzip = true, $blnAddCharset = true, $blnAbsolutizeUrls = false, $objAbsolutizePage = null)
+	public function getSources($arrIds, $blnAbsolutizeUrls = false, $objAbsolutizePage = null)
 	{
 		$blnUserLoggedIn = $this->getBELoginStatus();
 		
@@ -81,6 +81,12 @@ class LayoutAdditionalSources extends Frontend
 			'css' => array(),
 			'js' => array()
 		);
+		
+		// return empty result if input id array is empty
+		if (count($arrIds) == 0)
+		{
+			return $arrSources;
+		}
 		
 		// collect css and js files into $arrSourcesMap, depending of the conditional comment
 		$objAdditionalSources = $this->Database->execute("
@@ -106,7 +112,8 @@ class LayoutAdditionalSources extends Frontend
 					(
 						'src'      => $strSource,
 						'cc'       => $strCc != '-' ? $strCc : '',
-						'external' => true
+						'external' => true,
+						'media'    => deserialize($objAdditionalSources->media, true)
 					);
 					continue;
 				}
@@ -143,13 +150,13 @@ class LayoutAdditionalSources extends Frontend
 		// handle css files
 		if (count($arrSourcesMap['css']))
 		{
-			$this->CssCompiler->compile($arrSourcesMap['css'], $arrSources, $blnUserLoggedIn);
+			$this->CssCompiler->compile($arrSourcesMap['css'], $arrSources, $blnUserLoggedIn, $blnAbsolutizeUrls, $objAbsolutizePage);
 		}
 		
 		// handle js file
 		if (count($arrSourcesMap['js']))
 		{
-			$this->JsCompiler->compile($arrSourcesMap['js'], $arrSources, $blnUserLoggedIn);
+			$this->JsCompiler->compile($arrSourcesMap['js'], $arrSources, $blnUserLoggedIn, $blnAbsolutizeUrls, $objAbsolutizePage);
 		}
 		
 		return $arrSources;
@@ -218,7 +225,7 @@ class LayoutAdditionalSources extends Frontend
 	 * 
 	 * @param Database_Result $objPage
 	 */
-	public function inheritAdditionalSources(Database_Result $objPage)
+	protected function inheritAdditionalSources(Database_Result $objPage)
 	{
 		$arrTemp = deserialize($objPage->additional_source, true);
 		if ($objPage->pid > 0)
@@ -324,7 +331,7 @@ class LayoutAdditionalSources extends Frontend
 		$arrResult = array();
 		if (count($arrLayoutAdditionalSources))
 		{
-			$arrArrAdditionalSources = $this->getSources($arrLayoutAdditionalSources, false, false);
+			$arrArrAdditionalSources = $this->getSources($arrLayoutAdditionalSources);
 			foreach ($arrArrAdditionalSources as $strType => $arrAdditionalSources)
 			{
 				foreach ($arrAdditionalSources as $arrAdditionalSource)
@@ -342,7 +349,7 @@ class LayoutAdditionalSources extends Frontend
 						else
 						{
 							$objFile = new File($arrAdditionalSource['src']);
-							$strContent = "\n" . $objFile->getContent() . "\n";
+							$strContent = "\n" . $this->handleCharset($objFile->getContent()) . "\n";
 							if (!strlen($strCc))
 							{
 								$strContent = "\n<!--/*--><![CDATA[/*><!--*/" . $strContent . "/*]]>*/-->\n";

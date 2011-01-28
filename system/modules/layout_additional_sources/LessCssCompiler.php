@@ -52,19 +52,19 @@ class LessCssCompiler extends CompilerBase {
 	}
 	
 	
-	public function compile($arrSourcesMap, &$arrSources, $blnUserLoggedIn)
+	public function compile($arrSourcesMap, &$arrSources, $blnUserLoggedIn, $blnAbsolutizeUrls = false, $objAbsolutizePage = null)
 	{
 		if ($blnUserLoggedIn || $GLOBALS['TL_CONFIG']['additional_sources_css_compression'] == 'less.js')
 		{
-			$this->compileClientSide($arrSourcesMap, $arrSources, $blnUserLoggedIn);
+			$this->compileClientSide($arrSourcesMap, $arrSources, $blnUserLoggedIn, $blnAbsolutizeUrls, $objAbsolutizePage);
 		}
 		else
 		{
-			$this->compileServerSide($arrSourcesMap, $arrSources, $blnUserLoggedIn);
+			$this->compileServerSide($arrSourcesMap, $arrSources, $blnUserLoggedIn, $blnAbsolutizeUrls, $objAbsolutizePage);
 		}
 	}
 
-	protected function compileClientSide($arrSourcesMap, &$arrSources, $blnUserLoggedIn)
+	protected function compileClientSide($arrSourcesMap, &$arrSources, $blnUserLoggedIn, $blnAbsolutizeUrls = false, $objAbsolutizePage = null)
 	{
 		$blnLess = false;
 		
@@ -121,7 +121,7 @@ class LessCssCompiler extends CompilerBase {
 		}
 	}
 	
-	protected function compileServerSide($arrSourcesMap, &$arrSources, $blnUserLoggedIn)
+	protected function compileServerSide($arrSourcesMap, &$arrSources, $blnUserLoggedIn, $blnAbsolutizeUrls = false, $objAbsolutizePage = null)
 	{
 		$this->import('Compression');
 		

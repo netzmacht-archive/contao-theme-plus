@@ -36,9 +36,9 @@
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Layout Additional Sources
  */
-class EditorStyles extends Backend {
+class EditorStyles extends LayoutAdditionalSources {
 	public function __construct() {
-		$this->import('Database');
+		parent::__construct();
 		$this->import('Input');
 	}
 	
@@ -68,8 +68,9 @@ class EditorStyles extends Backend {
 	 * 
 	 * @param string $strEditor
 	 */
-	public function _getEditorContentCSSArray($strEditor)
+	protected function _getEditorContentCSSArray($strEditor)
 	{
+		$objPage = false;
 		$intLayout = 0;
 		
 		switch ($this->Input->get('do'))
@@ -87,9 +88,9 @@ class EditorStyles extends Backend {
 										SELECT
 											p.*
 										FROM
-											`tl_page` p
+											tl_page p
 										INNER JOIN
-											`tl_article` a
+											tl_article a
 										ON
 											p.id=a.pid
 										WHERE
@@ -113,13 +114,13 @@ class EditorStyles extends Backend {
 										SELECT
 											p.*
 										FROM
-											`tl_page` p
+											tl_page p
 										INNER JOIN
-											`tl_article` a
+											tl_article a
 										ON
 											p.id=a.pid
 										INNER JOIN
-											`tl_content` c
+											tl_content c
 										ON
 											a.id=c.pid
 										WHERE
@@ -149,13 +150,13 @@ class EditorStyles extends Backend {
 										SELECT
 											p.*
 										FROM
-											`tl_page` p
+											tl_page p
 										INNER JOIN
-											`tl_news_archive` a
+											tl_news_archive a
 										ON
 											p.id=a.jumpTo
 										INNER JOIN
-											`tl_news` n
+											tl_news n
 										ON
 											a.id=n.pid
 										WHERE
@@ -186,13 +187,13 @@ class EditorStyles extends Backend {
 										SELECT
 											p.*
 										FROM
-											`tl_page` p
+											tl_page p
 										INNER JOIN
-											`tl_calendar` c
+											tl_calendar c
 										ON
 											p.id=c.jumpTo
 										INNER JOIN
-											`tl_calendar_events` e
+											tl_calendar_events e
 										ON
 											c.id=e.pid
 										WHERE
@@ -223,13 +224,13 @@ class EditorStyles extends Backend {
 										SELECT
 											p.*
 										FROM
-											`tl_page` p
+											tl_page p
 										INNER JOIN
-											`tl_form` f
+											tl_form f
 										ON
 											p.id=f.jumpTo
 										INNER JOIN
-											`tl_form_field` e
+											tl_form_field e
 										ON
 											f.id=e.pid
 										WHERE
@@ -259,13 +260,13 @@ class EditorStyles extends Backend {
 										SELECT
 											p.*
 										FROM
-											`tl_page` p
+											tl_page p
 										INNER JOIN
-											`tl_newsletter_channel` c
+											tl_newsletter_channel c
 										ON
 											p.id=c.jumpTo
 										INNER JOIN
-											`tl_newsletter` n
+											tl_newsletter n
 										ON
 											c.id=n.pid
 										WHERE
@@ -322,9 +323,9 @@ class EditorStyles extends Backend {
 					SELECT
 						*
 					FROM
-						`tl_layout`
+						tl_layout
 					WHERE
-						`fallback`='1'");
+						fallback='1'");
 			if (!$objLayout->next())
 			{
 				return array();
@@ -336,9 +337,9 @@ class EditorStyles extends Backend {
 					SELECT
 						*
 					FROM
-						`tl_layout`
+						tl_layout
 					WHERE
-						`id`=?")
+						id=?")
 				->execute($intLayout);
 			if (!$objLayout->next())
 			{
@@ -346,42 +347,62 @@ class EditorStyles extends Backend {
 			}
 		}
 		
-		$arrLayoutAdditionalSources = deserialize($objLayout->additional_source, true);
+		$arrLayoutAdditionalSources = array_merge
+		(
+			array('0'),
+			deserialize($objLayout->additional_source, true),
+			$objPage ? $this->inheritAdditionalSources($objPage) : array()
+		);
 		
 		$objAdditionalSources = $this->Database->prepare("
 				SELECT
 					*
 				FROM
-					`tl_additional_source`
+					tl_additional_source
 				WHERE
-						`pid`=?
-					AND (	`type` = 'css_url'
-						OR  `type` = 'css_file')
+						pid=?
+					AND	(	id IN (" . implode(',', array_map('intval', $arrLayoutAdditionalSources)) . ")
+						OR	force_editor_integration='1')
+					AND (	type = 'css_url'
+						OR  type = 'css_file')
 				ORDER BY
-					`sorting`")
+					sorting")
 			->execute($objLayout->pid);
+		$arrIds = array();
+		while ($objAdditionalSources->next())
+		{
+			if (	$objAdditionalSources->force_editor_integration
+				||	in_array($strEditor, deserialize($objAdditionalSources->editor_integration, true)))
+			{
+				$arrIds[] = $objAdditionalSources->id;
+			}
+		}
 		
 		$arrSources = array();
-		while ($objAdditionalSources->next()) {
-			$arrEditorIntegration = deserialize($objAdditionalSources->editor_integration, true);
-			
-			if (	in_array($strEditor, $arrEditorIntegration)
-				&&	(	in_array($objAdditionalSources->id, $arrLayoutAdditionalSources)
-					||	$objAdditionalSources->force_editor_integration))
+		if (count($arrIds) > 0)
+		{
+			$arrArrAdditionalSources = $this->getSources($arrIds);
+			foreach ($arrArrAdditionalSources as $strType => $arrAdditionalSources)
 			{
-				switch ($objAdditionalSources->type)
+				foreach ($arrAdditionalSources as $arrAdditionalSource)
 				{
-					case 'css_url':
-						$arrSources[] = $objAdditionalSources->css_url;
-						break;
-					
-					case 'css_file':
-						$arrSources[] = $objAdditionalSources->css_file;
-						break;
+					$arrSources[] = $arrAdditionalSource['src'];
 				}
 			}
 		}
 		return $arrSources;
+	}
+	
+	
+	/**
+	 * Overwrite be login status detection!
+	 * 
+	 * (non-PHPdoc)
+	 * @see LayoutAdditionalSources::getBELoginStatus()
+	 */
+	protected function getBELoginStatus()
+	{
+		return false;
 	}
 }
 

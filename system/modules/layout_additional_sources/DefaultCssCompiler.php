@@ -50,7 +50,7 @@ class DefaultCssCompiler extends CompilerBase {
 		$this->import('CssUrlRemapper');
 	}
 	
-	public function compile($arrSourcesMap, &$arrSources, $blnUserLoggedIn)
+	public function compile($arrSourcesMap, &$arrSources, $blnUserLoggedIn, $blnAbsolutizeUrls = false, $objAbsolutizePage = null)
 	{
 		foreach ($arrSourcesMap as $strCc => $arrCssSources)
 		{
