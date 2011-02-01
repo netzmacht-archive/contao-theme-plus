@@ -52,6 +52,15 @@ class LessCssCompiler extends CompilerBase {
 	}
 	
 	
+	/**
+	 * Compile the css files and add them to the layout.
+	 * 
+	 * @param array $arrSourcesMap
+	 * @param array $arrSources
+	 * @param bool $blnUserLoggedIn
+	 * @param bool $blnAbsolutizeUrls
+	 * @param Database_Result $objAbsolutizePage
+	 */
 	public function compile($arrSourcesMap, &$arrSources, $blnUserLoggedIn, $blnAbsolutizeUrls = false, $objAbsolutizePage = null)
 	{
 		if ($blnUserLoggedIn || $GLOBALS['TL_CONFIG']['additional_sources_css_compression'] == 'less.js')
@@ -63,7 +72,18 @@ class LessCssCompiler extends CompilerBase {
 			$this->compileServerSide($arrSourcesMap, $arrSources, $blnUserLoggedIn, $blnAbsolutizeUrls, $objAbsolutizePage);
 		}
 	}
-
+	
+	
+	/**
+	 * Prepare the css files for client side compilation via javascript.
+	 * 
+	 * @param array $arrSourcesMap
+	 * @param array $arrSources
+	 * @param bool $blnUserLoggedIn
+	 * @param bool $blnAbsolutizeUrls
+	 * @param Database_Result $objAbsolutizePage
+	 * @throws Exception
+	 */
 	protected function compileClientSide($arrSourcesMap, &$arrSources, $blnUserLoggedIn, $blnAbsolutizeUrls = false, $objAbsolutizePage = null)
 	{
 		$blnLess = false;
@@ -121,13 +141,24 @@ class LessCssCompiler extends CompilerBase {
 		}
 	}
 	
+	
+	/**
+	 * Compile the less files on server via lessc and add a precompiled css file to layout.
+	 * 
+	 * @param array $arrSourcesMap
+	 * @param array $arrSources
+	 * @param bool $blnUserLoggedIn
+	 * @param bool $blnAbsolutizeUrls
+	 * @param Database_Result $objAbsolutizePage
+	 * @throws Exception
+	 */
 	protected function compileServerSide($arrSourcesMap, &$arrSources, $blnUserLoggedIn, $blnAbsolutizeUrls = false, $objAbsolutizePage = null)
 	{
 		$this->import('Compression');
 		
 		$this->import('LessCss');
 		
-		if (preg_match('#^less\+(\w+)$#', $GLOBALS['TL_CONFIG']['additional_sources_css_compression'], $m) && $m[1] != 'pre')
+		if (preg_match('#^less\.js\+(\w+)$#', $GLOBALS['TL_CONFIG']['additional_sources_css_compression'], $m) && $m[1] != 'pre')
 		{
 			$strCssMinimizerClass = $this->Compression->getCssMinimizerClass($m[1]);
 			$this->import($strCssMinimizerClass, 'CssMinimizer');
@@ -227,6 +258,7 @@ class LessCssCompiler extends CompilerBase {
 							break;
 						}
 					}
+					var_dump($arrData);
 					
 					// combine the css code
 					if (count($arrData))
@@ -264,15 +296,21 @@ class LessCssCompiler extends CompilerBase {
 						{
 							$this->GzipCompressor->compress($strFile, $strFileGz);
 						}
-						
-						$arrSources['css'][] = array
-						(
-							'src'      => $strFile,
-							'cc'       => $strCc != '-' ? $strCc : '',
-							'external' => false
-						);
+					}
+					else
+					{
+							$objFile = new File($strFile);
+							$objFile->write('// no css' . "\n");
+							$objFile->close();
 					}
 				}
+						
+				$arrSources['css'][] = array
+				(
+					'src'      => $strFile,
+					'cc'       => $strCc != '-' ? $strCc : '',
+					'external' => false
+				);
 			}
 		}
 	}
