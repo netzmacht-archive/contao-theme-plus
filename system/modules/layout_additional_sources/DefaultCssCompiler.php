@@ -60,7 +60,7 @@ class DefaultCssCompiler extends CompilerBase {
 				{
 					foreach ($arrCssSources as $arrSource)
 					{
-						$arrCss[] = array
+						$arrSources['css'][] = array
 						(
 							'src'      => $arrSource[$arrSource['type']],
 							'cc'       => $strCc != '-' ? $strCc : '',

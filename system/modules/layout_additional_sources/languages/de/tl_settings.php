@@ -33,10 +33,7 @@
  */
 $GLOBALS['TL_LANG']['tl_settings']['additional_sources_combination']              = array('Vereinigung', 'Wählen Sie hier ob und welche Dateien vereinigt werden sollen.');
 $GLOBALS['TL_LANG']['tl_settings']['additional_sources_css_compression']          = array('CSS Komprimierung', 'Wählen Sie hier wie CSS Code komprimiert werden soll.');
-$GLOBALS['TL_LANG']['tl_settings']['additional_sources_css_compression_mode']     = array('CSS Komprimierungsmodus', 'Wählen Sie hier den Modus, wie CSS komprimiert werden soll.');
 $GLOBALS['TL_LANG']['tl_settings']['additional_sources_js_compression']           = array('JavaScript Komprimierung', 'Wählen Sie hier wie JavaScript Code komprimiert werden soll.');
-$GLOBALS['TL_LANG']['tl_settings']['additional_sources_js_compression_mode']      = array('JavaScript Komprimierungsmodus', 'Wählen Sie hier den Modus, wie JavaScript komprimiert werden soll.');
-$GLOBALS['TL_LANG']['tl_settings']['additional_sources_yui_cmd']                  = array('YUI-Compressor Befehle', 'Der auzuführende YUI-Compressor Befehl. Z.B. <em>yui-compressor</em> oder <em>/usr/local/bin/yui-compressor</em>.');
 $GLOBALS['TL_LANG']['tl_settings']['additional_sources_gz_compression_disabled']  = array('GZip Komprimierung deaktivieren', 'GZip Komprimierung für CSS und JS Dateien deaktivieren.');
 $GLOBALS['TL_LANG']['tl_settings']['additional_sources_hide_cssmin_message']      = array('cssMinimizer Meldung abschalten', 'Die Info-Meldung zum cssMinimizer auf der Startseite abschalten.');
 $GLOBALS['TL_LANG']['tl_settings']['additional_sources_hide_jsmin_message']       = array('jsMinimizer/D\'E\'Packer Meldung abschalten', 'Die Info-Meldung zum jsMinimizer/DeanEdwardsPacker auf der Startseite abschalten.');

@@ -40,11 +40,6 @@ $GLOBALS['TL_LANG']['tl_additional_source']['css_url']                  = array(
 $GLOBALS['TL_LANG']['tl_additional_source']['css_url_real_path']        = array('CSS URL - lokaler Dateipfad', 'Hier kann zur CSS URL, ein lokaler Pfad zu der Datei angegeben werden. Dieser wird verwendet, wenn die Dateien zusammengeführt werden.');
 $GLOBALS['TL_LANG']['tl_additional_source']['cc']                       = array('Conditional Comment', 'Conditional Comments ermöglichen das Einbinden Internet Explorer-spezifischer Dateien.');
 $GLOBALS['TL_LANG']['tl_additional_source']['media']                    = array('Medientypen', 'Bitte wählen Sie die Medientypen aus, für die die CSS Datei gültig ist.');
-$GLOBALS['TL_LANG']['tl_additional_source']['restrictLayout']           = array('Datei auf Seitenlayout beschränken', 'Bitte wählen Sie hier die Seitenlayout aus, in denen die Datei eingebunden wird.');
-$GLOBALS['TL_LANG']['tl_additional_source']['layout']                   = array('Seitenlayout', 'Seitenlayouts können mit dem Modul "Themes" verwaltet werden.');
-$GLOBALS['TL_LANG']['tl_additional_source']['compress_yui']             = array('YUI Komprimieren', 'Datei mit dem YUI Compressor komprimieren. (siehe WIKI Details bei Problemen mit der Einrichtung)');
-$GLOBALS['TL_LANG']['tl_additional_source']['compress_gz']              = array('GZ Komprimieren', 'Datei mit GZ komprimieren.');
-$GLOBALS['TL_LANG']['tl_additional_source']['compress_outdir']          = array('Ausgabeverzeichnis', 'Hier kann ein Ausgabeverzeichnis definiert werden, wenn die komprimierte Datei nicht im gleichen Verzeichnis wie das Original abgelegt werden soll.');
 $GLOBALS['TL_LANG']['tl_additional_source']['editor_integration']       = array('WYSIWYG Editor Integration', 'Hier kann die Datei dem WYSIWYG Editor hinzugefügt werden. Lesen Sie hierzu die Hinweise im Handbuch.');
 $GLOBALS['TL_LANG']['tl_additional_source']['force_editor_integration'] = array('WYSIWYG Editor Integration erzwingen', 'Datei dem WYSIWYG Editor hinzugefügt auch wenn diese nicht dem Layout zugewiesen wurde.');
 
