@@ -292,9 +292,10 @@ class LayoutAdditionalSources extends Frontend
 					switch ($strType)
 					{
 					case 'css':
-						$strAdditionalSource = sprintf('<link type="%s" rel="%s" href="%s" />',
+						$strAdditionalSource = sprintf('<link type="%s" rel="%s" href="%s"%s />',
 							(isset($arrAdditionalSource['type']) ? $arrAdditionalSource['type'] : 'text/css'),
 							(isset($arrAdditionalSource['rel']) ? $arrAdditionalSource['rel'] : 'stylesheet'),
+							(isset($arrAdditionalSource['media']) ? sprintf(' media="%s"', $arrAdditionalSource['media']) : ''),
 							$arrAdditionalSource['src']);
 						break;
 					
