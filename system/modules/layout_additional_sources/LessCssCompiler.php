@@ -258,7 +258,6 @@ class LessCssCompiler extends CompilerBase {
 							break;
 						}
 					}
-					var_dump($arrData);
 					
 					// combine the css code
 					if (count($arrData))
