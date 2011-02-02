@@ -355,8 +355,9 @@ class LayoutAdditionalSources extends Frontend
 							{
 								$strContent = "\n<!--/*--><![CDATA[/*><!--*/" . $strContent . "/*]]>*/-->\n";
 							}
-							$strAdditionalSource = sprintf('<style type="%s">%s</style>',
+							$strAdditionalSource = sprintf('<style type="%s"%s>%s</style>',
 								(isset($arrAdditionalSource['type']) ? $arrAdditionalSource['type'] : 'text/css'),
+								(isset($arrAdditionalSource['media']) ? sprintf(' media="%s"', $arrAdditionalSource['media']) : ''),
 								$strContent);
 						}
 						break;
