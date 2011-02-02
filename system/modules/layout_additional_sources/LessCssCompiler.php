@@ -124,6 +124,11 @@ class LessCssCompiler extends CompilerBase {
 							$blnLess = true;
 							$arrTemp['rel'] = 'stylesheet/less';
 						}
+						$arrMedia = deserialize($arrSource['media'], true);
+						if (count($arrMedia))
+						{
+							$arrTemp['media'] = implode(',', $arrMedia);
+						}
 						$arrSources['css'][] = $arrTemp;
 					}
 				}

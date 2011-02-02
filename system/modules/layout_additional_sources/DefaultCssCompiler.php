@@ -64,7 +64,8 @@ class DefaultCssCompiler extends CompilerBase {
 						(
 							'src'      => $arrSource[$arrSource['type']],
 							'cc'       => $strCc != '-' ? $strCc : '',
-							'external' => $arrSource['external']
+							'external' => $arrSource['external'],
+							'media'    => implode(',', deserialize($arrSource['media'], true))
 						);
 					}
 					continue;
