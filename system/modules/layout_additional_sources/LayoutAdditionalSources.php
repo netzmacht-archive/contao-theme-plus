@@ -292,10 +292,10 @@ class LayoutAdditionalSources extends Frontend
 					switch ($strType)
 					{
 					case 'css':
-						$strAdditionalSource = sprintf('<link type="%s" rel="%s" href="%s"%s />',
+						$strAdditionalSource = sprintf('<link type="%s" rel="%s"%s href="%s" />',
 							(isset($arrAdditionalSource['type']) ? $arrAdditionalSource['type'] : 'text/css'),
 							(isset($arrAdditionalSource['rel']) ? $arrAdditionalSource['rel'] : 'stylesheet'),
-							(isset($arrAdditionalSource['media']) ? sprintf(' media="%s"', $arrAdditionalSource['media']) : ''),
+							(empty($arrAdditionalSource['media']) ? '' : sprintf(' media="%s"', $arrAdditionalSource['media'])),
 							$arrAdditionalSource['src']);
 						break;
 					
@@ -342,9 +342,10 @@ class LayoutAdditionalSources extends Frontend
 					case 'css':
 						if ($arrAdditionalSource['external'])
 						{
-							$strAdditionalSource = sprintf('<link type="%s" rel="%s" href="%s" />',
+							$strAdditionalSource = sprintf('<link type="%s" rel="%s"%s href="%s" />',
 								(isset($arrAdditionalSource['type']) ? $arrAdditionalSource['type'] : 'text/css'),
 								(isset($arrAdditionalSource['rel']) ? $arrAdditionalSource['rel'] : 'stylesheet'),
+								(empty($arrAdditionalSource['media']) ? '' : sprintf(' media="%s"', $arrAdditionalSource['media'])),
 								$arrAdditionalSource['src']);
 						}
 						else
@@ -357,7 +358,7 @@ class LayoutAdditionalSources extends Frontend
 							}
 							$strAdditionalSource = sprintf('<style type="%s"%s>%s</style>',
 								(isset($arrAdditionalSource['type']) ? $arrAdditionalSource['type'] : 'text/css'),
-								(isset($arrAdditionalSource['media']) ? sprintf(' media="%s"', $arrAdditionalSource['media']) : ''),
+								(empty($arrAdditionalSource['media']) ? '' : sprintf(' media="%s"', $arrAdditionalSource['media'])),
 								$strContent);
 						}
 						break;
