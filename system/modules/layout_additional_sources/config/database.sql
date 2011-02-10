@@ -50,3 +50,23 @@ CREATE TABLE `tl_layout` (
 CREATE TABLE `tl_page` (
   `additional_source` blob NULL,
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table `tl_content`
+-- 
+
+CREATE TABLE `tl_content` (
+  `script_source` blob NULL,
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table `tl_module`
+-- 
+
+CREATE TABLE `tl_module` (
+  `script_source` blob NULL,
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

@@ -1,9 +1,13 @@
 <?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
 
 /**
+ * Layout Additional Sources
+ * Copyright (C) 2011 Tristan Lins
+ *
+ * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- *
+ * 
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -21,10 +25,11 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
- * @copyright  InfinitySoft 2011
+ * @copyright  InfinitySoft 2010,2011
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Layout Additional Sources
- * @license    http://opensource.org/licenses/lgpl-3.0.html
+ * @license    LGPL
+ * @filesource
  */
 
 
@@ -52,25 +57,37 @@ class tl_page_additional_source extends Backend
 	public function getAdditionSources()
 	{
 		$objPage = $this->getPageDetails($this->Input->get('id'));
+		if (!$objPage->layout)
+		{
+			$objLayout = $this->Database->execute("SELECT * FROM tl_layout WHERE fallback='1'");
+			if ($objLayout->next())
+			{
+				$objPage->layout = $objLayout->id;
+			}
+			else 
+			{
+				return array();
+			}
+		}
 		
 		$arrAdditionalSource = array();
 		$objAdditionalSource = $this->Database->prepare("
 				SELECT
 					s.*
 				FROM
-					`tl_additional_source` s
+					tl_additional_source s
 				INNER JOIN
-					`tl_theme` t
+					tl_theme t
 				ON
-					t.`id`=s.`pid`
+					t.id=s.pid
 				INNER JOIN
-					`tl_layout` l
+					tl_layout l
 				ON
-					t.`id` = l.`pid`
+					t.id = l.pid
 				WHERE
-					l.`id`=?
+					l.id=?
 				ORDER BY
-					s.`sorting`")
+					s.sorting")
 		   ->execute($objPage->layout);
 		while ($objAdditionalSource->next())
 		{

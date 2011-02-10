@@ -1,9 +1,13 @@
 <?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
 
 /**
+ * Layout Additional Sources
+ * Copyright (C) 2011 Tristan Lins
+ *
+ * Extension for:
  * Contao Open Source CMS
  * Copyright (C) 2005-2010 Leo Feyer
- *
+ * 
  * Formerly known as TYPOlight Open Source CMS.
  *
  * This program is free software: you can redistribute it and/or
@@ -21,10 +25,11 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
- * @copyright  InfinitySoft 2011
+ * @copyright  InfinitySoft 2010,2011
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Layout Additional Sources
- * @license    http://opensource.org/licenses/lgpl-3.0.html
+ * @license    LGPL
+ * @filesource
  */
 
 
@@ -121,20 +126,20 @@ class LayoutAdditionalSourcesRunonce extends Frontend
 	{
 		if ($this->Database->tableExists('tl_additional_source') && !$this->Database->fieldExists('additional_source', 'tl_layout'))
 		{
-			$this->Database->execute('ALTER TABLE `tl_layout` ADD `additional_source` blob NULL');
+			$this->Database->execute('ALTER TABLE tl_layout ADD additional_source blob NULL');
 			
 			// go over all themes
-			$objTheme = $this->Database->execute("SELECT * FROM `tl_theme`");
+			$objTheme = $this->Database->execute("SELECT * FROM tl_theme");
 			while ($objTheme->next())
 			{
 				// list all additional sources
 				$objAdditionalSource = $this->Database->prepare("
-						SELECT * FROM `tl_additional_source` WHERE `pid`=?")
+						SELECT * FROM tl_additional_source WHERE pid=?")
 					->execute($objTheme->id);
 				
 				// go over all theme layouts
 				$objLayout = $this->Database->prepare("
-						SELECT * FROM `tl_layout` WHERE `pid`=?")
+						SELECT * FROM tl_layout WHERE pid=?")
 					->execute($objTheme->id);
 				while ($objLayout->next())
 				{
@@ -160,7 +165,7 @@ class LayoutAdditionalSourcesRunonce extends Frontend
 					}
 					
 					$this->Database->prepare("
-							UPDATE `tl_layout` SET `additional_source`=? WHERE `id`=?")
+							UPDATE tl_layout SET additional_source=? WHERE id=?")
 						->execute(serialize($arrAdditionalSource), $objLayout->id);
 				}
 			}

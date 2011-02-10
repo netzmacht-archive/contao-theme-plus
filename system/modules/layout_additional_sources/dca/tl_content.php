@@ -33,26 +33,43 @@
  */
 
 
-$GLOBALS['TL_DCA']['tl_layout']['palettes']['default'] = preg_replace(
-	'#({style_legend}.*);#U',
-	'$1,additional_source;',
-	$GLOBALS['TL_DCA']['tl_layout']['palettes']['default']);
-$GLOBALS['TL_DCA']['tl_layout']['fields']['additional_source'] = array
+$GLOBALS['TL_DCA']['tl_content']['palettes']['script_source'] = '{type_legend},type;{script_source_legend},script_source';
+$GLOBALS['TL_DCA']['tl_content']['fields']['script_source'] = array
 (
-	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['additional_source'],
+	'label'                   => &$GLOBALS['TL_LANG']['tl_content']['script_source'],
 	'inputType'               => 'checkbox',
-	'options_callback'        => array('tl_layout_additional_source', 'getAdditionSources'),
+	'options_callback'        => array('tl_content_additional_source', 'getAdditionSources'),
 	'eval'                    => array('multiple'=>true, 'tl_class'=>'clr')
 );
 
 /**
- * Class tl_layout_additional_source
+ * Class tl_content_additional_source
  *
  */
-class tl_layout_additional_source extends Backend
+class tl_content_additional_source extends Backend
 {
-	public function getAdditionSources()
+	public function getAdditionSources(DataContainer $dc)
 	{
+		$objArticle = $this->Database->prepare("SELECT * FROM tl_article WHERE id=?")->execute($dc->activeRecord->pid);
+		if (!$objArticle->next())
+		{
+			return array();
+		}
+		
+		$objPage = $this->getPageDetails($objArticle->pid);
+		if (!$objPage->layout)
+		{
+			$objLayout = $this->Database->execute("SELECT * FROM tl_layout WHERE fallback='1'");
+			if ($objLayout->next())
+			{
+				$objPage->layout = $objLayout->id;
+			}
+			else 
+			{
+				return array();
+			}
+		}
+		
 		$arrAdditionalSource = array();
 		$objAdditionalSource = $this->Database->prepare("
 				SELECT
@@ -69,13 +86,14 @@ class tl_layout_additional_source extends Backend
 					t.id = l.pid
 				WHERE
 					l.id=?
+				AND s.type IN ('js_file','js_url')
 				ORDER BY
 					s.sorting")
-		   ->execute($this->Input->get('id'));
+		   ->execute($objPage->layout);
 		while ($objAdditionalSource->next())
 		{
 			$strType = $objAdditionalSource->type;
-			$label = $objAdditionalSource->$strType;
+			$label = ' ' . $objAdditionalSource->$strType;
 			
 			if (strlen($objAdditionalSource->cc)) {
 				$label .= ' <span style="color: #B3B3B3;">[' . $objAdditionalSource->cc . ']</span>';
@@ -88,31 +106,7 @@ class tl_layout_additional_source extends Backend
 				}
 			}
 			
-			switch ($objAdditionalSource->type) {
-			case 'js_file': case 'js_url':
-				$image = 'iconJS.gif';
-				break;
-			
-			case 'css_file': case 'css_url':
-				$image = 'iconCSS.gif';
-				break;
-			
-			default:
-				$image = false;
-				if (isset($GLOBALS['TL_HOOKS']['getAdditionalSourceIconImage']) && is_array($GLOBALS['TL_HOOKS']['getAdditionalSourceIconImage']))
-				{
-					foreach ($GLOBALS['TL_HOOKS']['getAdditionalSourceIconImage'] as $callback)
-					{
-						$this->import($callback[0]);
-						$image = $this->$callback[0]->$callback[1]($row);
-						if ($image !== false) {
-							break;
-						}
-					}
-				}
-			}
-			
-			$arrAdditionalSource[$objAdditionalSource->id] = ($image ? $this->generateImage($image, $label, 'style="vertical-align:middle"') . ' ' : '') . $label;
+			$arrAdditionalSource[$objAdditionalSource->id] = $this->generateImage('iconJS.gif', $label, 'style="vertical-align:middle"') . $label;
 		}
 		return $arrAdditionalSource;
 	}

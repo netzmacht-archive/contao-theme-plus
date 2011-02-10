@@ -34,16 +34,14 @@
 
 
 /**
- * Back end modules
+ * Fields
  */
-$GLOBALS['TL_LANG']['MOD']['layout_additional_sources'] = array('Zusätzliche Layoutdateien', 'Weitere Dateien in die Frontend-Ausgabe hinzufügen.');
-$GLOBALS['TL_LANG']['MOD']['additional_source']         = array('Zusätzliche Layoutdateien', 'Weitere Dateien in die Frontend-Ausgabe hinzufügen.');
+$GLOBALS['TL_LANG']['tl_content']['script_source'] = array('JavaScript', 'Wählen Sie hier das einzufügende JavaScript aus.');
 
 
 /**
- * Front end modules
+ * Legends
  */
-$GLOBALS['TL_LANG']['FMD']['includes']      = 'Include-Elemente';
-$GLOBALS['TL_LANG']['FMD']['script_source'] = array('JavaScript', 'Fügt ein JavaScript in die Seite ein.');
+$GLOBALS['TL_LANG']['tl_content']['script_source_legend'] = 'JavaScript Quelle';
 
 ?>

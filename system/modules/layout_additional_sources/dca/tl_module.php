@@ -33,49 +33,45 @@
  */
 
 
-$GLOBALS['TL_DCA']['tl_layout']['palettes']['default'] = preg_replace(
-	'#({style_legend}.*);#U',
-	'$1,additional_source;',
-	$GLOBALS['TL_DCA']['tl_layout']['palettes']['default']);
-$GLOBALS['TL_DCA']['tl_layout']['fields']['additional_source'] = array
+$GLOBALS['TL_DCA']['tl_module']['palettes']['script_source'] = '{title_legend},name,type;{script_source_legend},script_source';
+$GLOBALS['TL_DCA']['tl_module']['fields']['script_source'] = array
 (
-	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['additional_source'],
+	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['script_source'],
 	'inputType'               => 'checkbox',
-	'options_callback'        => array('tl_layout_additional_source', 'getAdditionSources'),
+	'options_callback'        => array('tl_module_additional_source', 'getAdditionSources'),
 	'eval'                    => array('multiple'=>true, 'tl_class'=>'clr')
 );
 
 /**
- * Class tl_layout_additional_source
+ * Class tl_module_additional_source
  *
  */
-class tl_layout_additional_source extends Backend
+class tl_module_additional_source extends Backend
 {
-	public function getAdditionSources()
+	public function getAdditionSources(DataContainer $dc)
 	{
+		$objTheme = $this->Database->prepare("SELECT * FROM tl_theme WHERE id=?")->execute($dc->activeRecord->pid);
+		if (!$objTheme->next())
+		{
+			return array();
+		}
+		
 		$arrAdditionalSource = array();
 		$objAdditionalSource = $this->Database->prepare("
 				SELECT
 					s.*
 				FROM
 					tl_additional_source s
-				INNER JOIN
-					tl_theme t
-				ON
-					t.id=s.pid
-				INNER JOIN
-					tl_layout l
-				ON
-					t.id = l.pid
 				WHERE
-					l.id=?
+					s.pid=?
+				AND s.type IN ('js_file','js_url')
 				ORDER BY
 					s.sorting")
-		   ->execute($this->Input->get('id'));
+		   ->execute($objTheme->id);
 		while ($objAdditionalSource->next())
 		{
 			$strType = $objAdditionalSource->type;
-			$label = $objAdditionalSource->$strType;
+			$label = ' ' . $objAdditionalSource->$strType;
 			
 			if (strlen($objAdditionalSource->cc)) {
 				$label .= ' <span style="color: #B3B3B3;">[' . $objAdditionalSource->cc . ']</span>';
@@ -88,31 +84,7 @@ class tl_layout_additional_source extends Backend
 				}
 			}
 			
-			switch ($objAdditionalSource->type) {
-			case 'js_file': case 'js_url':
-				$image = 'iconJS.gif';
-				break;
-			
-			case 'css_file': case 'css_url':
-				$image = 'iconCSS.gif';
-				break;
-			
-			default:
-				$image = false;
-				if (isset($GLOBALS['TL_HOOKS']['getAdditionalSourceIconImage']) && is_array($GLOBALS['TL_HOOKS']['getAdditionalSourceIconImage']))
-				{
-					foreach ($GLOBALS['TL_HOOKS']['getAdditionalSourceIconImage'] as $callback)
-					{
-						$this->import($callback[0]);
-						$image = $this->$callback[0]->$callback[1]($row);
-						if ($image !== false) {
-							break;
-						}
-					}
-				}
-			}
-			
-			$arrAdditionalSource[$objAdditionalSource->id] = ($image ? $this->generateImage($image, $label, 'style="vertical-align:middle"') . ' ' : '') . $label;
+			$arrAdditionalSource[$objAdditionalSource->id] = $this->generateImage('iconJS.gif', $label, 'style="vertical-align:middle"') . $label;
 		}
 		return $arrAdditionalSource;
 	}
