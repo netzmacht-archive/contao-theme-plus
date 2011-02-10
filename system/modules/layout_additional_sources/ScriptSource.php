@@ -113,7 +113,7 @@ class ScriptSource extends Frontend
 						}
 					}
 					
-					$strBuffer = $this->generateImage('iconJS.gif', $label, 'style="vertical-align:middle"') . $label . '<br/>';
+					$strBuffer .= $this->generateImage('iconJS.gif', $label, 'style="vertical-align:middle"') . $label . '<br/>';
 				}
 				return $strBuffer;
 			}
