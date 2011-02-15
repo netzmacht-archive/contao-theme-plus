@@ -101,7 +101,7 @@ class CompilerBase extends Backend
 	 * 
 	 * @param mixed $varData
 	 */
-	protected function decompressGzip($varData) {
+	public function decompressGzip($varData) {
 		if (	$varData[0] == 31
 			&&	$varData[0] == 139
 			&&	$varData[0] == 8) {
@@ -115,7 +115,7 @@ class CompilerBase extends Backend
 	/**
 	 * Handle @charset and remove the rule.
 	 */
-	protected function handleCharset($strContent)
+	public function handleCharset($strContent)
 	{
 		if (preg_match('#\@charset\s+[\'"]([\w\-]+)[\'"]\;#Ui', $strContent, $arrMatch))
 		{

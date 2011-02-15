@@ -44,6 +44,14 @@
  */
 class LayoutAdditionalSources extends Frontend
 {
+	/**
+	 * Ignore the be logged in state.
+	 * 
+	 * @var bool
+	 */
+	protected $blnIgnoreLogin = false;
+	
+	
 	public function __construct() {
 		$this->import('Database');
 		$this->import('DomainLink');
@@ -58,6 +66,23 @@ class LayoutAdditionalSources extends Frontend
 		}
 		
 		$this->import('DefaultJsCompiler', 'JsCompiler');
+	}
+	
+	
+	/**
+	 * setter
+	 */
+	public function __set($strKey, $varValue)
+	{
+		switch ($strKey)
+		{
+		case 'productive':
+			$this->blnIgnoreLogin = $varValue ? true : false;
+			break;
+			
+		default:
+			$this->$strKey = $varValue;
+		}
 	}
 	
 	
@@ -175,6 +200,11 @@ class LayoutAdditionalSources extends Frontend
 	 */
 	protected function getBELoginStatus()
 	{
+		if ($this->blnIgnoreLogin)
+		{
+			return false;
+		}
+		
 		$this->import('Input');
 		$this->import('Environment');
 		
@@ -284,12 +314,12 @@ class LayoutAdditionalSources extends Frontend
 	 * @param array $arrLayoutAdditionalSources
 	 * @return array
 	 */
-	public function generateInsertHtml($arrLayoutAdditionalSources)
+	public function generateInsertHtml($arrLayoutAdditionalSources, $blnAbsolutizeUrls = false, $objAbsolutizePage = null)
 	{
 		$arrResult = array();
 		if (count($arrLayoutAdditionalSources))
 		{
-			$arrArrAdditionalSources = $this->getSources($arrLayoutAdditionalSources);
+			$arrArrAdditionalSources = $this->getSources($arrLayoutAdditionalSources, $blnAbsolutizeUrls, $objAbsolutizePage);
 			foreach ($arrArrAdditionalSources as $strType => $arrAdditionalSources)
 			{
 				foreach ($arrAdditionalSources as $arrAdditionalSource)
@@ -332,12 +362,14 @@ class LayoutAdditionalSources extends Frontend
 	 * @param array $arrLayoutAdditionalSources
 	 * @return array
 	 */
-	public function generateIncludeHtml($arrLayoutAdditionalSources)
+	public function generateIncludeHtml($arrLayoutAdditionalSources, $blnAbsolutizeUrls = false, $objAbsolutizePage = null)
 	{
 		$arrResult = array();
 		if (count($arrLayoutAdditionalSources))
 		{
-			$arrArrAdditionalSources = $this->getSources($arrLayoutAdditionalSources);
+			$this->import('CompilerBase');
+			
+			$arrArrAdditionalSources = $this->getSources($arrLayoutAdditionalSources, $blnAbsolutizeUrls, $objAbsolutizePage);
 			foreach ($arrArrAdditionalSources as $strType => $arrAdditionalSources)
 			{
 				foreach ($arrAdditionalSources as $arrAdditionalSource)
@@ -356,7 +388,7 @@ class LayoutAdditionalSources extends Frontend
 						else
 						{
 							$objFile = new File($arrAdditionalSource['src']);
-							$strContent = "\n" . $this->handleCharset($objFile->getContent()) . "\n";
+							$strContent = "\n" . $this->CompilerBase->handleCharset($objFile->getContent()) . "\n";
 							if (!strlen($strCc))
 							{
 								$strContent = "\n<!--/*--><![CDATA[/*><!--*/" . $strContent . "/*]]>*/-->\n";
