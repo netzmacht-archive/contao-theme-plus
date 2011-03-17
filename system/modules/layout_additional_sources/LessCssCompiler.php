@@ -142,12 +142,24 @@ class LessCssCompiler extends CompilerBase {
 		
 		if ($blnLess)
 		{
-			$arrSources['js'][] = array
-			(
-				'src'      => 'system/modules/lesscss/html/less-1.0.41.min.js',
-				'cc'       => '',
-				'external' => false
-			);
+			if ($blnUserLoggedIn)
+			{
+				$arrSources['js'][] = array
+				(
+					'src'      => 'system/modules/lesscss/html/less-1.0.41.min.development.js',
+					'cc'       => '',
+					'external' => false
+				);
+			}
+			else
+			{
+				$arrSources['js'][] = array
+				(
+					'src'      => 'system/modules/lesscss/html/less-1.0.41.min.js',
+					'cc'       => '',
+					'external' => false
+				);
+			}
 		}
 	}
 	
