@@ -42,7 +42,7 @@
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Layout Additional Sources
  */
-class LayoutAdditionalSourcesBackend extends Backend
+class LayoutAdditionalSourcesBackend extends System
 {
 	/**
 	 * Hook
