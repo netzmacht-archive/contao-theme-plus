@@ -6,7 +6,7 @@
  *
  * Extension for:
  * Contao Open Source CMS
- * Copyright (C) 2005-2010 Leo Feyer
+ * Copyright (C) 2005-2011 Leo Feyer
  * 
  * Formerly known as TYPOlight Open Source CMS.
  *
@@ -218,9 +218,9 @@ $GLOBALS['TL_DCA']['tl_additional_source'] = array
  * Class tl_additional_source
  *
  * Provide miscellaneous methods that are used by the data configuration array.
- * @copyright  Leo Feyer 2005-2010
- * @author     Leo Feyer <http://www.contao.org>
- * @package    Controller
+ * @copyright  InfinitySoft 2010,2011
+ * @author     Tristan Lins <tristan.lins@infinitysoft.de>
+ * @package    Layout Additional Sources
  */
 class tl_additional_source extends Backend
 {
