@@ -6,7 +6,7 @@
 /**
  * Back end modules
  */
-$GLOBALS['BE_MOD']['design']['themes']['tables'][] = 'tl_additional_source';
+$GLOBALS['BE_MOD']['design']['themes']['tables'][] = 'tl_theme_plus';
 
 
 /**
@@ -36,12 +36,12 @@ $GLOBALS['TL_CONFIG']['additional_sources_hide_jsmin_message']      = false;
 /**
  * HOOKs
  */
-$GLOBALS['TL_HOOKS']['generatePage'][] = array('LayoutAdditionalSources', 'generatePage');
-$GLOBALS['TL_HOOKS']['replaceInsertTags'][] = array('LayoutAdditionalSources', 'hookReplaceInsertTags');
+$GLOBALS['TL_HOOKS']['generatePage'][] = array('ThemePlus', 'generatePage');
+$GLOBALS['TL_HOOKS']['replaceInsertTags'][] = array('ThemePlus', 'hookReplaceInsertTags');
 if (	!$GLOBALS['TL_CONFIG']['additional_sources_hide_cssmin_message']
 	||	!$GLOBALS['TL_CONFIG']['additional_sources_hide_jsmin_message'])
 {
-	$GLOBALS['TL_HOOKS']['parseBackendTemplate'][] = array('LayoutAdditionalSourcesBackend', 'hookParseBackendTemplate');
+	$GLOBALS['TL_HOOKS']['parseBackendTemplate'][] = array('ThemePlusBackend', 'hookParseBackendTemplate');
 }
 
 
@@ -50,8 +50,8 @@ if (	!$GLOBALS['TL_CONFIG']['additional_sources_hide_cssmin_message']
  */
 $GLOBALS['TL_EASY_THEMES_MODULES']['additional_source'] = array
 (
-	'href_fragment' => 'table=tl_additional_source',
-	'icon'          => 'system/modules/layout_additional_sources/html/additional_source.png'
+	'href_fragment' => 'table=tl_theme_plus',
+	'icon'          => 'system/modules/layout_additional_sources/html/icon.png'
 );
 
 

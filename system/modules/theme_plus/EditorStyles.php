@@ -11,7 +11,7 @@
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Layout Additional Sources
  */
-class EditorStyles extends LayoutAdditionalSources {
+class EditorStyles extends ThemePlus {
 	public function __construct() {
 		parent::__construct();
 		$this->import('Input');
@@ -322,7 +322,7 @@ class EditorStyles extends LayoutAdditionalSources {
 			}
 		}
 		
-		$arrLayoutAdditionalSources = array_merge
+		$arrThemePlus = array_merge
 		(
 			array('0'),
 			deserialize($objLayout->additional_source, true),
@@ -336,7 +336,7 @@ class EditorStyles extends LayoutAdditionalSources {
 					tl_additional_source
 				WHERE
 						pid=?
-					AND	(	id IN (" . implode(',', array_map('intval', $arrLayoutAdditionalSources)) . ")
+					AND	(	id IN (" . implode(',', array_map('intval', $arrThemePlus)) . ")
 						OR	force_editor_integration='1')
 					AND (	type = 'css_url'
 						OR  type = 'css_file')
@@ -373,7 +373,7 @@ class EditorStyles extends LayoutAdditionalSources {
 	 * Overwrite be login status detection!
 	 * 
 	 * (non-PHPdoc)
-	 * @see LayoutAdditionalSources::getBELoginStatus()
+	 * @see ThemePlus::getBELoginStatus()
 	 */
 	protected function getBELoginStatus()
 	{

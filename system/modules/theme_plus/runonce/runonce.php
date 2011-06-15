@@ -4,14 +4,14 @@
 
 
 /**
- * Class LayoutAdditionalSourcesRunonce
+ * Class ThemePlusRunonce
  * 
  * 
  * @copyright  InfinitySoft 2011
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Layout Additional Sources
  */
-class LayoutAdditionalSourcesRunonce extends Frontend
+class ThemePlusRunonce extends Frontend
 {
 
 	/**
@@ -85,6 +85,7 @@ class LayoutAdditionalSourcesRunonce extends Frontend
 	{
 		$this->upgrade1_5();
 		$this->upgrade1_6();
+		$this->upgrade1_8();
 		$this->checkCompression();
 	}
 	
@@ -148,7 +149,6 @@ class LayoutAdditionalSourcesRunonce extends Frontend
 	
 	/**
 	 * Configuration upgrade to 1.6
-	 * Enter description here ...
 	 */
 	protected function upgrade1_6()
 	{
@@ -174,6 +174,15 @@ class LayoutAdditionalSourcesRunonce extends Frontend
 			$this->updateConfig('additional_sources_gz_compression_disabled', $GLOBALS['TL_CONFIG']['gz_compression_disabled']);
 			$this->deleteConfig('gz_compression_disabled');
 		}
+	}
+	
+	
+	/**
+	 * Configuration upgrade to 1.8
+	 */
+	protected function upgrade1_8()
+	{
+		
 	}
 	
 	
@@ -240,7 +249,7 @@ class LayoutAdditionalSourcesRunonce extends Frontend
 /**
  * Instantiate controller
  */
-$objLayoutAdditionalSourcesRunonce = new LayoutAdditionalSourcesRunonce();
-$objLayoutAdditionalSourcesRunonce->run();
+$objThemePlusRunonce = new ThemePlusRunonce();
+$objThemePlusRunonce->run();
 
 ?>

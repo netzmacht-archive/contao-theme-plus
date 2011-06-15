@@ -90,8 +90,8 @@ class ScriptSource extends Frontend
 			return $GLOBALS['TL_LANG']['MSC']['noResult'];
 		}
 		
-		$this->import('LayoutAdditionalSources');
-		return implode("\n", $this->LayoutAdditionalSources->generateIncludeHtml(deserialize($this->script_source, true))) . "\n";
+		$this->import('ThemePlus');
+		return implode("\n", $this->ThemePlus->generateIncludeHtml(deserialize($this->script_source, true))) . "\n";
 	}
 }
 

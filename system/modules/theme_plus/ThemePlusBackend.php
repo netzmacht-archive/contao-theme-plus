@@ -4,7 +4,7 @@
 
 
 /**
- * Class LayoutAdditionalSourcesBackend
+ * Class ThemePlusBackend
  * 
  * Adding additional sources to the page layout.
  * 
@@ -12,7 +12,7 @@
  * @author     Tristan Lins <tristan.lins@infinitysoft.de>
  * @package    Layout Additional Sources
  */
-class LayoutAdditionalSourcesBackend extends System
+class ThemePlusBackend extends System
 {
 	/**
 	 * Hook

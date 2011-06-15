@@ -6,52 +6,46 @@
 /**
  * System configuration
  */
-$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{additional_source_legend:hide},additional_sources_combination,additional_sources_css_compression,additional_sources_js_compression,additional_sources_gz_compression_disabled,additional_sources_hide_cssmin_message,additional_sources_hide_jsmin_message';
-$GLOBALS['TL_DCA']['tl_settings']['fields']['additional_sources_combination'] = array
+$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{theme_plus_legend:hide},theme_plus_combination,theme_plus_lesscss_mode,theme_plus_gz_compression_disabled,theme_plus_hide_cssmin_message,theme_plus_hide_jsmin_message';
+
+$GLOBALS['TL_DCA']['tl_settings']['fields']['theme_plus_aggregate_externals'] = array
 (
-	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['additional_sources_combination'],
-	'default'                 => 'combine_all',
-	'inputType'               => 'select',
-	'options'                 => array('combine_all', 'combine_local', 'combine_none'),
-	'reference'               => &$GLOBALS['TL_LANG']['tl_settings']['additional_sources_combinations'],
-	'eval'                    => array('mandatory'=>true, 'decodeEntities'=>true, 'tl_class'=>'long')
-);
-$GLOBALS['TL_DCA']['tl_settings']['fields']['additional_sources_css_compression'] = array
-(
-	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['additional_sources_css_compression'],
-	'default'                 => 'combine_all',
-	'inputType'               => 'select',
-	'options_callback'        => array('tl_settings_layout_additional_sources', 'getCssMinimizers'),
-	'eval'                    => array('decodeEntities'=>true, 'tl_class'=>'w50')
-);
-$GLOBALS['TL_DCA']['tl_settings']['fields']['additional_sources_js_compression'] = array
-(
-	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['additional_sources_js_compression'],
-	'default'                 => 'combine_all',
-	'inputType'               => 'select',
-	'options_callback'        => array('tl_settings_layout_additional_sources', 'getJsMinimizers'),
-	'eval'                    => array('decodeEntities'=>true, 'tl_class'=>'w50')
-);
-$GLOBALS['TL_DCA']['tl_settings']['fields']['additional_sources_gz_compression_disabled'] = array
-(
-	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['additional_sources_gz_compression_disabled'],
+	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['theme_plus_aggregate_externals'],
 	'inputType'               => 'checkbox',
-	'eval'                    => array('tl_class'=>'w50 m12')
+	'eval'                    => array('mandatory'=>true, 'decodeEntities'=>true)
 );
-$GLOBALS['TL_DCA']['tl_settings']['fields']['additional_sources_hide_cssmin_message'] = array
+
+$GLOBALS['TL_DCA']['tl_settings']['fields']['theme_plus_lesscss_mode'] = array
 (
-	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['additional_sources_hide_cssmin_message'],
-	'inputType'               => 'checkbox',
-	'eval'                    => array('tl_class'=>'clr w50 m12')
+	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['theme_plus_lesscss_mode'],
+	'default'                 => 'less.js',
+	'inputType'               => 'select',
+	'options_callback'        => array('tl_settings_theme_plus', 'getLessCssModes'),
+	'eval'                    => array('decodeEntities'=>true)
 );
-$GLOBALS['TL_DCA']['tl_settings']['fields']['additional_sources_hide_jsmin_message'] = array
+
+$GLOBALS['TL_DCA']['tl_settings']['fields']['theme_plus_gz_compression_disabled'] = array
 (
-	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['additional_sources_hide_jsmin_message'],
+	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['theme_plus_gz_compression_disabled'],
 	'inputType'               => 'checkbox',
 	'eval'                    => array('tl_class'=>'w50 m12')
 );
 
-class tl_settings_layout_additional_sources extends Backend
+$GLOBALS['TL_DCA']['tl_settings']['fields']['theme_plus_hide_cssmin_message'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['theme_plus_hide_cssmin_message'],
+	'inputType'               => 'checkbox',
+	'eval'                    => array('tl_class'=>'clr w50 m12')
+);
+
+$GLOBALS['TL_DCA']['tl_settings']['fields']['theme_plus_hide_jsmin_message'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['theme_plus_hide_jsmin_message'],
+	'inputType'               => 'checkbox',
+	'eval'                    => array('tl_class'=>'w50 m12')
+);
+
+class tl_settings_theme_plus extends Backend
 {
 	public function __construct()
 	{
@@ -60,28 +54,28 @@ class tl_settings_layout_additional_sources extends Backend
 	}
 	
 	
-	public function getCssMinimizers()
+	public function getLessCssModes()
 	{
-		$arrMinimizers = array_merge
-		(
-			array('' => $GLOBALS['TL_LANG']['tl_settings']['additional_sources_compression']['inherit']),
-			$this->Compression->getCssMinimizers()
-		);
+		$arrMinimizers = array();
 		
 		if (in_array('lesscss', $this->Config->getActiveModules()))
 		{
-			$arrMinimizers['less.js'] = $GLOBALS['TL_LANG']['tl_settings']['additional_sources_compression']['less.js'];
+			$arrMinimizers['less.js'] = $GLOBALS['TL_LANG']['tl_settings']['theme_plus_compression']['less.js'];
 			if ($this->tryNode())
 			{
-				$arrMinimizers['less.js+pre'] = $GLOBALS['TL_LANG']['tl_settings']['additional_sources_compression']['less.js+pre'];
+				$arrMinimizers['less.js+pre'] = $GLOBALS['TL_LANG']['tl_settings']['theme_plus_compression']['less.js+pre'];
 			}
 			foreach ($this->Compression->getCssMinimizers() as $strKey=>$strValue)
 			{
 				if ($strKey != 'none')
 				{
-					$arrMinimizers['less.js+' . $strKey] = $GLOBALS['TL_LANG']['tl_settings']['additional_sources_compression']['less.js'] . ' + ' . $strValue;
+					$arrMinimizers['less.js+' . $strKey] = $GLOBALS['TL_LANG']['tl_settings']['theme_plus_compression']['less.js'] . ' + ' . $strValue;
 				}
 			}
+		}
+		else
+		{
+			$arrMinimizers['-'] = ;
 		}
 		
 		return $arrMinimizers;
@@ -124,7 +118,7 @@ class tl_settings_layout_additional_sources extends Backend
 	{
 		$arrMinimizers = array_merge
 		(
-			array('' => $GLOBALS['TL_LANG']['tl_settings']['additional_sources_compression']['inherit']),
+			array('' => $GLOBALS['TL_LANG']['tl_settings']['theme_plus_compression']['inherit']),
 			$this->Compression->getJsMinimizers()
 		);
 		return $arrMinimizers;

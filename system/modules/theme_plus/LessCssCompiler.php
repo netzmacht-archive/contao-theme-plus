@@ -210,7 +210,7 @@ class LessCssCompiler extends CompilerBase {
 								{
 									$objCompilerFile->write($strContent);
 								}
-							
+								
 								// add media definition
 								$arrMedia = deserialize($arrSource['media'], true);
 								if (count($arrMedia))

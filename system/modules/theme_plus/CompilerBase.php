@@ -64,41 +64,6 @@ class CompilerBase extends Backend
 		}
 		return 'system/html/' . $strPrefix . '.' . substr(md5($strKey), 0, 8) . '.' . $strExtension;
 	}
-
-
-	/**
-	 * Detect gzip data end decode it.
-	 * 
-	 * @param mixed $varData
-	 */
-	public function decompressGzip($varData) {
-		if (	$varData[0] == 31
-			&&	$varData[0] == 139
-			&&	$varData[0] == 8) {
-			return gzdecode($varData);
-		} else {
-			return $varData;
-		}
-	}
-	
-	
-	/**
-	 * Handle @charset and remove the rule.
-	 */
-	public function handleCharset($strContent)
-	{
-		if (preg_match('#\@charset\s+[\'"]([\w\-]+)[\'"]\;#Ui', $strContent, $arrMatch))
-		{
-			// convert character encoding to utf-8
-			if (strtoupper($arrMatch[1]) != 'UTF-8')
-			{
-				$strContent = iconv(strtoupper($arrMatch[1]), 'UTF-8', $strContent);
-			}
-			// remove all @charset rules
-			$strContent = preg_replace('#\@charset\s+.*\;#Ui', '', $strContent);
-		}
-		return $strContent;
-	}
 }
 
 ?>
