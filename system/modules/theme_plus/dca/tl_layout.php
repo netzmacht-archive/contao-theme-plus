@@ -28,7 +28,7 @@ class tl_layout_additional_source extends Backend
 				SELECT
 					s.*
 				FROM
-					tl_additional_source s
+					tl_theme_plus_file s
 				INNER JOIN
 					tl_theme t
 				ON

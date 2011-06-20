@@ -3,21 +3,21 @@
 #copyright
 
 
-$GLOBALS['TL_DCA']['tl_theme']['config']['ctable'][] = 'tl_additional_source';
-$GLOBALS['TL_DCA']['tl_theme']['list']['operations']['additional_source'] = array
+$GLOBALS['TL_DCA']['tl_theme']['config']['ctable'][] = 'tl_theme_plus_file';
+$GLOBALS['TL_DCA']['tl_theme']['list']['operations']['theme_plus_file'] = array
 (
-	'label'               => &$GLOBALS['TL_LANG']['tl_theme']['additional_source'],
-	'href'                => 'table=tl_additional_source',
-	'icon'                => 'system/modules/layout_additional_sources/html/additional_source.png',
-	'button_callback'     => array('tl_theme_additional_source', 'editAdditionalSource')
+	'label'               => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_file'],
+	'href'                => 'table=tl_theme_plus_file',
+	'icon'                => 'system/modules/theme_plus/html/icon.png',
+	'button_callback'     => array('tl_theme_plus', 'editThemePlusFile')
 );
 
 
 /**
- * Class tl_theme_additional_source
+ * Class tl_theme_plus
  *
  */
-class tl_theme_additional_source extends Backend
+class tl_theme_plus extends Backend
 {
 
 	/**
@@ -30,9 +30,9 @@ class tl_theme_additional_source extends Backend
 	}
 	
 	
-	public function editAdditionalSource($row, $href, $label, $title, $icon, $attributes)
+	public function editThemePlusFile($row, $href, $label, $title, $icon, $attributes)
 	{
-		return ($this->User->isAdmin || $this->User->hasAccess('additional_source', 'themes')) ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ' : $this->generateImage(preg_replace('/\.png$/i', '_.png', $icon)).' ';
+		return ($this->User->isAdmin || $this->User->hasAccess('theme_plus', 'themes')) ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ' : $this->generateImage(preg_replace('/\.png$/i', '_.png', $icon)).' ';
 	}
 }
 ?>

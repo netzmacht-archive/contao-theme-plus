@@ -6,7 +6,7 @@
 /**
  * Back end modules
  */
-$GLOBALS['BE_MOD']['design']['themes']['tables'][] = 'tl_theme_plus';
+$GLOBALS['BE_MOD']['design']['themes']['tables'][] = 'tl_theme_plus_file';
 
 
 /**
@@ -24,34 +24,25 @@ $GLOBALS['TL_CTE']['includes']['script_source'] = 'ScriptSource';
 /**
  * Settings
  */
-$GLOBALS['TL_CONFIG']['additional_sources_combination']             = 'combine_local';
-$GLOBALS['TL_CONFIG']['additional_sources_css_compression']         = 'yui';
-$GLOBALS['TL_CONFIG']['additional_sources_js_compression']          = 'yui';
-$GLOBALS['TL_CONFIG']['additional_sources_yui_cmd']                 = 'yui-compressor';
-$GLOBALS['TL_CONFIG']['additional_sources_gz_compression_disabled'] = '';
-$GLOBALS['TL_CONFIG']['additional_sources_hide_cssmin_message']     = false;
-$GLOBALS['TL_CONFIG']['additional_sources_hide_jsmin_message']      = false;
+$GLOBALS['TL_CONFIG']['theme_plus_aggregate_externals']     = '';
+$GLOBALS['TL_CONFIG']['theme_plus_lesscss_mode']            = 'less.js';
+$GLOBALS['TL_CONFIG']['theme_plus_gz_compression_disabled'] = '';
 
 
 /**
  * HOOKs
  */
-$GLOBALS['TL_HOOKS']['generatePage'][] = array('ThemePlus', 'generatePage');
+$GLOBALS['TL_HOOKS']['generatePage'][]      = array('ThemePlus', 'generatePage');
 $GLOBALS['TL_HOOKS']['replaceInsertTags'][] = array('ThemePlus', 'hookReplaceInsertTags');
-if (	!$GLOBALS['TL_CONFIG']['additional_sources_hide_cssmin_message']
-	||	!$GLOBALS['TL_CONFIG']['additional_sources_hide_jsmin_message'])
-{
-	$GLOBALS['TL_HOOKS']['parseBackendTemplate'][] = array('ThemePlusBackend', 'hookParseBackendTemplate');
-}
 
 
 /**
  * easy_themes integration
  */
-$GLOBALS['TL_EASY_THEMES_MODULES']['additional_source'] = array
+$GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus'] = array
 (
 	'href_fragment' => 'table=tl_theme_plus',
-	'icon'          => 'system/modules/layout_additional_sources/html/icon.png'
+	'icon'          => 'system/modules/theme_plus/html/icon.png'
 );
 
 

@@ -31,7 +31,7 @@ class tl_module_additional_source extends Backend
 				SELECT
 					s.*
 				FROM
-					tl_additional_source s
+					tl_theme_plus_file s
 				WHERE
 					s.pid=?
 				AND s.type IN ('js_file','js_url')

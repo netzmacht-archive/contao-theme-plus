@@ -333,7 +333,7 @@ class EditorStyles extends ThemePlus {
 				SELECT
 					*
 				FROM
-					tl_additional_source
+					tl_theme_plus_file
 				WHERE
 						pid=?
 					AND	(	id IN (" . implode(',', array_map('intval', $arrThemePlus)) . ")

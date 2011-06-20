@@ -65,7 +65,7 @@ class ScriptSource extends Frontend
 			$arrScriptSource = deserialize($this->script_source);
 			if (count($arrScriptSource))
 			{
-				$objSource = $this->Database->execute("SELECT * FROM tl_additional_source WHERE id IN (" . implode(',', array_map('intval', $arrScriptSource)) . ")");
+				$objSource = $this->Database->execute("SELECT * FROM tl_theme_plus_file WHERE id IN (" . implode(',', array_map('intval', $arrScriptSource)) . ")");
 				$strBuffer = '';
 				while ($objSource->next())
 				{

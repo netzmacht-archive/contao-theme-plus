@@ -16,7 +16,7 @@ $GLOBALS['TL_LANG']['tl_settings']['theme_plus_hide_jsmin_message']       = arra
 /**
  * Reference
  */
-$GLOBALS['TL_LANG']['tl_settings']['theme_plus_compression']['inherit']        = 'Compression API Voreinstellung';
+$GLOBALS['TL_LANG']['tl_settings']['theme_plus_compression']['noless']         = '&raquo; Installieren Sie lesscss um dieses Feature zu aktivieren &laquo;';
 $GLOBALS['TL_LANG']['tl_settings']['theme_plus_compression']['less.js']        = 'less.js';
 $GLOBALS['TL_LANG']['tl_settings']['theme_plus_compression']['less.js+pre']    = 'less.js (Vorkompiliert)';
 
@@ -24,6 +24,6 @@ $GLOBALS['TL_LANG']['tl_settings']['theme_plus_compression']['less.js+pre']    =
 /**
  * Legend
  */
-$GLOBALS['TL_LANG']['tl_settings']['theme_plus_legend'] = 'Zusätzliche Layoutdateien Einstellungen';
+$GLOBALS['TL_LANG']['tl_settings']['theme_plus_legend'] = 'Theme+ Einstellungen';
 
 ?>

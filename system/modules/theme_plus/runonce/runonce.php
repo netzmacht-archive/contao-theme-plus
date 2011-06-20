@@ -95,7 +95,7 @@ class ThemePlusRunonce extends Frontend
 	 */
 	protected function upgrade1_5()
 	{
-		if ($this->Database->tableExists('tl_additional_source') && !$this->Database->fieldExists('additional_source', 'tl_layout'))
+		if ($this->Database->tableExists('tl_theme_plus_file') && !$this->Database->fieldExists('additional_source', 'tl_layout'))
 		{
 			$this->Database->execute('ALTER TABLE tl_layout ADD additional_source blob NULL');
 			
@@ -105,7 +105,7 @@ class ThemePlusRunonce extends Frontend
 			{
 				// list all additional sources
 				$objAdditionalSource = $this->Database->prepare("
-						SELECT * FROM tl_additional_source WHERE pid=?")
+						SELECT * FROM tl_theme_plus_file WHERE pid=?")
 					->execute($objTheme->id);
 				
 				// go over all theme layouts
@@ -141,8 +141,8 @@ class ThemePlusRunonce extends Frontend
 				}
 			}
 			
-			$this->loadLanguageFile('layout_additional_sources');
-			$_SESSION['TL_CONFIRM'][] = $GLOBALS['TL_LANG']['layout_additional_sources']['upgrade1.5'];
+			$this->loadLanguageFile('theme_plus');
+			$_SESSION['TL_CONFIRM'][] = $GLOBALS['TL_LANG']['theme_plus']['upgrade1.5'];
 		}
 	}
 	
