@@ -87,10 +87,6 @@ class CssFileAggregator extends ThemePlusFile {
 			{
 				$this->import('Compression');
 				
-				// import the css minimizer
-				$strCssMinimizerClass = $this->Compression->getDefaultCssMinimizerClass();
-				$this->import($strCssMinimizerClass, 'Minimizer');
-				
 				// import the gzip compressor
 				$strGzipCompressorClass = $this->Compression->getCompressorClass('gzip');
 				$this->import($strGzipCompressorClass, 'Compressor');
@@ -121,14 +117,10 @@ class CssFileAggregator extends ThemePlusFile {
 					$strContent .= "\n" . $strSubContent;
 				}
 				
-				// minify
-				if (!$this->Minimizer->minimizeToFile($strTemp, $strContent))
-				{
-					// write unminified code, if minify failed
-					$objTemp = new File($strTemp);
-					$objTemp->write($strContent);
-					$objTemp->close();
-				}
+				// write the file
+				$objTemp = new File($strTemp);
+				$objTemp->write($strContent);
+				$objTemp->close();
 				
 				// create the gzip compressed version
 				if (!$GLOBALS['TL_CONFIG']['theme_plus_gz_compression_disabled'])
