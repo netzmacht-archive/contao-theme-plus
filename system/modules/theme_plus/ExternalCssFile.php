@@ -5,24 +5,19 @@
 
 /**
  * Class ExternalCssFile
- * 
- * 
- * @copyright  InfinitySoft 2011
- * @author     Tristan Lins <tristan.lins@infinitysoft.de>
- * @package    Layout Additional Sources
  */
 class ExternalCssFile extends ExternalThemePlusFile {
 	
 	/**
 	 * The media selectors.
 	 */
-	protected $arrMedia;
+	protected $strMedia;
 	
 	
-	public function __construct($strUrl, $arrMedia)
+	public function __construct($strUrl, $strMedia)
 	{
 		parent::__construct($strUrl);
-		$this->arrMedia = $arrMedia;
+		$this->strMedia = $strMedia;
 	}
 
 
@@ -32,7 +27,7 @@ class ExternalCssFile extends ExternalThemePlusFile {
 		$strUrl = $this->getUrl();
 		
 		// return html code
-		return '<link type="text/css" rel="stylesheet" href="' . specialchars($strUrl) . '"' . (count($this->arrMedia) ? ' media="' . implode(',', $this->arrMedia) . '"' : '') . ' />';
+		return '<link type="text/css" rel="stylesheet" href="' . specialchars($strUrl) . '"' . (strlen($this->strMedia) ? ' media="' . $this->strMedia . '"' : '') . ' />';
 	}
 	
 }

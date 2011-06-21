@@ -5,14 +5,15 @@
 
 /**
  * Class ThemePlusFile
- * 
- * 
- * @copyright  InfinitySoft 2011
- * @author     Tristan Lins <tristan.lins@infinitysoft.de>
- * @package    Layout Additional Sources
  */
-abstract class ThemePlusFile {
+abstract class ThemePlusFile extends System {
 
+	/**
+	 * Get a code that is compatible with TL_CSS and TL_JAVASCRIPT
+	 */
+	public abstract function getGlobalVariableCode();
+	
+	
 	/**
 	 * Get embeded html code
 	 */
@@ -38,6 +39,9 @@ abstract class ThemePlusFile {
 	{
 		switch ($k)
 		{
+		case 'globalVariable':
+			return $this->getGlobalVariableCode();
+			
 		case 'embed':
 			return $this->getEmbededHtml();
 		

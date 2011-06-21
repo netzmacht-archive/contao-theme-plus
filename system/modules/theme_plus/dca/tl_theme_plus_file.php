@@ -26,7 +26,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 			'fields'                  => array('sorting'),
 			'panelLayout'             => 'filter;limit',
 			'headerFields'            => array('name', 'author', 'tstamp'),
-			'child_record_callback'   => array('tl_theme_plus_file', 'listAdditionalSource'),
+			'child_record_callback'   => array('tl_theme_plus_file', 'listFile'),
 			'child_record_class'      => 'no_padding'
 		),
 		'global_operations' => array
@@ -139,7 +139,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['media'],
 			'inputType'               => 'text',
 			'exclude'                 => true,
-			'eval'                    => array('multiple'=>true, 'tl_class'=>'clr')
+			'eval'                    => array('tl_class'=>'clr long')
 		),
 		'editor_integration' => array
 		(
@@ -163,9 +163,6 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
  * Class tl_theme_plus_file
  *
  * Provide miscellaneous methods that are used by the data configuration array.
- * @copyright  InfinitySoft 2010,2011
- * @author     Tristan Lins <tristan.lins@infinitysoft.de>
- * @package    Layout Additional Sources
  */
 class tl_theme_plus_file extends Backend
 {
@@ -186,10 +183,10 @@ class tl_theme_plus_file extends Backend
 			$intPid = $this->Input->get('id');
 			
 			if ($this->Input->get('act')) {
-				$objAdditionalSource = $this->Database->prepare("SELECT * FROM tl_theme_plus_file WHERE id=?")
+				$objThemePlusFile = $this->Database->prepare("SELECT * FROM tl_theme_plus_file WHERE id=?")
 													  ->execute($intPid);
-				if ($objAdditionalSource->next()) {
-					$intPid = $objAdditionalSource->pid;
+				if ($objThemePlusFile->next()) {
+					$intPid = $objThemePlusFile->pid;
 				} else {
 					$intPid = 0;
 				}
@@ -262,11 +259,11 @@ class tl_theme_plus_file extends Backend
 
 
 	/**
-	 * List an additional source
+	 * List an file
 	 * @param array
 	 * @return string
 	 */
-	public function listAdditionalSource($row)
+	public function listFile($row)
 	{
 		$label = $row[$row['type']];
 		
@@ -275,10 +272,7 @@ class tl_theme_plus_file extends Backend
 		}
 		
 		if (strlen($row['media'])) {
-			$row['media'] = unserialize($row['media']);
-			if (count($row['media'])) {
-				$label .= ' <span style="color: #B3B3B3;">[' . implode(', ', $row['media']) . ']</span>';
-			}
+			$label .= ' <span style="color: #B3B3B3;">[' . $row['media'] . ']</span>';
 		}
 		
 		switch ($row['type']) {
@@ -292,17 +286,6 @@ class tl_theme_plus_file extends Backend
 		
 		default:
 			$image = false;
-			if (isset($GLOBALS['TL_HOOKS']['getAdditionalSourceIconImage']) && is_array($GLOBALS['TL_HOOKS']['getAdditionalSourceIconImage']))
-			{
-				foreach ($GLOBALS['TL_HOOKS']['getAdditionalSourceIconImage'] as $callback)
-				{
-					$this->import($callback[0]);
-					$image = $this->$callback[0]->$callback[1]($row);
-					if ($image !== false) {
-						break;
-					}
-				}
-			}
 		}
 		
 		return '<div>' . ($image ? $this->generateImage($image, $label, 'style="vertical-align:middle"') . ' ' : '') . $label ."</div>\n";

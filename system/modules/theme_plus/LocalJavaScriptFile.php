@@ -5,20 +5,26 @@
 
 /**
  * Class LocalJavaScriptFile
- * 
- * 
- * @copyright  InfinitySoft 2011
- * @author     Tristan Lins <tristan.lins@infinitysoft.de>
- * @package    Layout Additional Sources
  */
 class LocalJavaScriptFile extends LocalThemePlusFile {
+	
+	
+	/**
+	 * The processed temporary file path.
+	 */
+	protected $strProcessedFile;
+	
 	
 	/**
 	 * Create a new javascript file object.
 	 */
-	public function __construct($strOriginFile)
+	public function __construct($strOriginFile, $objTheme = false)
 	{
-		parent::__construct($strOriginFile);
+		parent::__construct($strOriginFile, $objTheme);
+		$this->strProcessedFile = null;
+		
+		// import the Theme+ master class
+		$this->import('ThemePlus');
 	}
 
 
@@ -29,56 +35,57 @@ class LocalJavaScriptFile extends LocalThemePlusFile {
 	{
 		if ($this->strProcessedFile == null)
 		{
-			if (ThemePlus::getBELoginStatus())
+			$this->import('Compression');
+			
+			$strJsMinimizer = $this->ThemePlus->getBELoginStatus() ? 'none' : $this->Compression->getDefaultJsMinimizer();
+			
+			$objFile = new File($this->strOriginFile);
+			$strTemp = $objFile->basename
+					. '-' . $objFile->mtime
+					. '-' . $strJsMinimizer
+					. '-' . $this->ThemePlus->getVariablesHashByTheme($this->objTheme);
+			$strTemp = sprintf('system/html/%s-%s.js', $objFile->filename, substr(md5($strTemp), 0, 8));
+			
+			if (!file_exists(TL_ROOT . '/' . $strTemp))
 			{
-				$this->strProcessedFile = $this->strOriginFile;
-			}
-			else
-			{
-				$strJsMinimizer = $this->Compression->getDefaultJsMinimizer();
+				$this->import('Compression');
 				
-				$objFile = new File($this->strOriginFile);
-				$strTemp = sprintf("%s-%s-%s",
-						$objFile->basename,
-						$objFile->mtime,
-						$strJsMinimizer);
-				$strTemp = sprintf('system/modules/%s-%s.js', $objFile->filename, substr(md5($strTemp), 0, 8));
+				// import the Theme+ master class
+				$this->import('ThemePlus');
 				
-				if (!file_exists(TL_ROOT . '/' . $strTemp))
+				// import the javascript minimizer
+				$strJsMinimizerClass = $this->Compression->getJsMinimizerClass($strJsMinimizer);
+				$this->import($strJsMinimizerClass, 'Minimizer');
+				
+				// import the gzip compressor
+				$strGzipCompressorClass = $this->Compression->getCompressorClass('gzip');
+				$this->import($strGzipCompressorClass, 'Compressor');
+				
+				$strContent = $objFile->getContent();
+				
+				// detect and decompress gziped content
+				$strContent = $this->ThemePlus->decompressGzip($strContent);
+				
+				// replace variables
+				$strContent = $this->ThemePlus->replaceVariablesByTheme($strContent, $this->objTheme, $strTemp);
+				
+				// minify
+				if (!$this->Minimizer->minimizeToFile($strTemp, $strContent))
 				{
-					$this->import('Compression');
-					
-					// import the javascript minimizer
-					$strJsMinimizerClass = $this->Compression->getDefaultJsMinimizerClass();
-					$this->import($strJsMinimizerClass, 'Minimizer');
-					
-					// import the gzip compressor
-					$strGzipCompressorClass = $this->Compression->getCompressorClass('gzip');
-					$this->import($strGzipCompressorClass, 'Compressor');
-					
-					$strContent = $objFile->getContent();
-					
-					// detect and decompress gziped content
-					$strContent = ThemePlus::decompressGzip($strContent);
-					
-					// minify
-					if (!$this->Minimizer->minimizeToFile($strTemp, $strContent))
-					{
-						// write unminified code, if minify failed
-						$objTemp = new File($strTemp);
-						$objTemp->write($strContent);
-						$objTemp->close();
-					}
-					
-					// create the gzip compressed version
-					if (!$GLOBALS['TL_CONFIG']['theme_plus_gz_compression_disabled'])
-					{
-						$this->Compressor->compress($strTemp, $strTemp . '.gz');
-					}
+					// write unminified code, if minify failed
+					$objTemp = new File($strTemp);
+					$objTemp->write($strContent);
+					$objTemp->close();
 				}
 				
-				$this->strProcessedFile = $strTemp;
+				// create the gzip compressed version
+				if (!$GLOBALS['TL_CONFIG']['theme_plus_gz_compression_disabled'])
+				{
+					$this->Compressor->compress($strTemp, $strTemp . '.gz');
+				}
 			}
+			
+			$this->strProcessedFile = $strTemp;
 		}
 		
 		return $this->strProcessedFile;

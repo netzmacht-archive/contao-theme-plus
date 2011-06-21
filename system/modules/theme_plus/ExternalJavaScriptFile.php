@@ -5,11 +5,6 @@
 
 /**
  * Class ExternalJavaScriptFile
- * 
- * 
- * @copyright  InfinitySoft 2011
- * @author     Tristan Lins <tristan.lins@infinitysoft.de>
- * @package    Layout Additional Sources
  */
 class ExternalJavaScriptFile {
 	

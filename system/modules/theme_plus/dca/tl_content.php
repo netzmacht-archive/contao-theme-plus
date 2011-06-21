@@ -3,22 +3,30 @@
 #copyright
 
 
+/**
+ * Palettes
+ */
 $GLOBALS['TL_DCA']['tl_content']['palettes']['script_source'] = '{type_legend},type;{script_source_legend},script_source';
+
+
+/**
+ * Fields
+ */
 $GLOBALS['TL_DCA']['tl_content']['fields']['script_source'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_content']['script_source'],
 	'inputType'               => 'checkbox',
-	'options_callback'        => array('tl_content_additional_source', 'getAdditionSources'),
+	'options_callback'        => array('tl_content_theme_plus', 'getJavaScriptFiles'),
 	'eval'                    => array('multiple'=>true, 'tl_class'=>'clr')
 );
 
 /**
- * Class tl_content_additional_source
+ * Class tl_content_theme_plus
  *
  */
-class tl_content_additional_source extends Backend
+class tl_content_theme_plus extends Backend
 {
-	public function getAdditionSources(DataContainer $dc)
+	public function getJavaScriptFiles(DataContainer $dc)
 	{
 		$objArticle = $this->Database->prepare("SELECT * FROM tl_article WHERE id=?")->execute($dc->activeRecord->pid);
 		if (!$objArticle->next())
@@ -40,8 +48,8 @@ class tl_content_additional_source extends Backend
 			}
 		}
 		
-		$arrAdditionalSource = array();
-		$objAdditionalSource = $this->Database->prepare("
+		$arrJavaScriptFiles = array();
+		$objJavaScriptFiles = $this->Database->prepare("
 				SELECT
 					s.*
 				FROM
@@ -60,25 +68,14 @@ class tl_content_additional_source extends Backend
 				ORDER BY
 					s.sorting")
 		   ->execute($objPage->layout);
-		while ($objAdditionalSource->next())
+		while ($objJavaScriptFiles->next())
 		{
-			$strType = $objAdditionalSource->type;
-			$label = ' ' . $objAdditionalSource->$strType;
+			$strType = $objJavaScriptFiles->type;
+			$label = ' ' . $objJavaScriptFiles->$strType;
 			
-			if (strlen($objAdditionalSource->cc)) {
-				$label .= ' <span style="color: #B3B3B3;">[' . $objAdditionalSource->cc . ']</span>';
-			}
-			
-			if (strlen($objAdditionalSource->media)) {
-				$arrMedia = unserialize($objAdditionalSource->media);
-				if (count($arrMedia)) {
-					$label .= ' <span style="color: #B3B3B3;">[' . implode(', ', $arrMedia) . ']</span>';
-				}
-			}
-			
-			$arrAdditionalSource[$objAdditionalSource->id] = $this->generateImage('iconJS.gif', $label, 'style="vertical-align:middle"') . $label;
+			$arrJavaScriptFiles[$objJavaScriptFiles->id] = $this->generateImage('iconJS.gif', $label, 'style="vertical-align:middle"') . $label;
 		}
-		return $arrAdditionalSource;
+		return $arrJavaScriptFiles;
 	}
 }
 ?>

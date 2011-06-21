@@ -6,8 +6,7 @@
 /**
  * Back end modules
  */
-$GLOBALS['TL_LANG']['MOD']['theme_plus'] = array('Zusätzliche Layoutdateien', 'Weitere Dateien in die Frontend-Ausgabe hinzufügen.');
-$GLOBALS['TL_LANG']['MOD']['additional_source']         = array('Zusätzliche Layoutdateien', 'Weitere Dateien in die Frontend-Ausgabe hinzufügen.');
+$GLOBALS['TL_LANG']['MOD']['theme_plus'] = array('Theme+', 'Theme Erweiterung für Contao mit Unterstützung zum Einbinden, Minimieren, Komprimieren und Vereinigen von CSS und JavaScript Dateien.');
 
 
 /**

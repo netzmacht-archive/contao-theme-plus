@@ -5,11 +5,6 @@
 
 /**
  * Class EditorStyles
- * 
- * 
- * @copyright  InfinitySoft 2011
- * @author     Tristan Lins <tristan.lins@infinitysoft.de>
- * @package    Layout Additional Sources
  */
 class EditorStyles extends ThemePlus {
 	public function __construct() {
@@ -45,6 +40,11 @@ class EditorStyles extends ThemePlus {
 	 */
 	protected function _getEditorContentCSSArray($strEditor)
 	{
+		$this->import('ThemePlus');
+				
+		$blnDesignerMode = $this->ThemePlus->isDesignerMode();
+		$this->ThemePlus->setLiveMode();
+		
 		$objPage = false;
 		$intLayout = 0;
 		
@@ -325,11 +325,11 @@ class EditorStyles extends ThemePlus {
 		$arrThemePlus = array_merge
 		(
 			array('0'),
-			deserialize($objLayout->additional_source, true),
-			$objPage ? $this->inheritAdditionalSources($objPage) : array()
+			deserialize($objLayout->theme_plus_files, true),
+			$objPage ? $this->inheritFiles($objPage) : array()
 		);
 		
-		$objAdditionalSources = $this->Database->prepare("
+		$objThemePlusFile = $this->Database->prepare("
 				SELECT
 					*
 				FROM
@@ -344,40 +344,35 @@ class EditorStyles extends ThemePlus {
 					sorting")
 			->execute($objLayout->pid);
 		$arrIds = array();
-		while ($objAdditionalSources->next())
+		while ($objThemePlusFile->next())
 		{
-			if (	$objAdditionalSources->force_editor_integration
-				||	in_array($strEditor, deserialize($objAdditionalSources->editor_integration, true)))
+			if (	$objThemePlusFile->force_editor_integration
+				||	in_array($strEditor, deserialize($objThemePlusFile->editor_integration, true)))
 			{
-				$arrIds[] = $objAdditionalSources->id;
+				$arrIds[] = $objThemePlusFile->id;
 			}
 		}
 		
 		$arrSources = array();
 		if (count($arrIds) > 0)
 		{
-			$arrArrAdditionalSources = $this->getSources($arrIds);
-			foreach ($arrArrAdditionalSources as $strType => $arrAdditionalSources)
+			$arrArrThemePlusFile = $this->getSources($arrIds);
+			foreach ($arrArrThemePlusFile as $strType => $arrThemePlusFile)
 			{
-				foreach ($arrAdditionalSources as $arrAdditionalSource)
+				foreach ($arrThemePlusFile as $arrAdditionalSource)
 				{
 					$arrSources[] = $arrAdditionalSource['src'];
 				}
 			}
 		}
+		
+		// restore designer mode
+		if ($blnDesignerMode)
+		{
+			$this->ThemePlus->setDesignerMode();
+		}
+		
 		return $arrSources;
-	}
-	
-	
-	/**
-	 * Overwrite be login status detection!
-	 * 
-	 * (non-PHPdoc)
-	 * @see ThemePlus::getBELoginStatus()
-	 */
-	protected function getBELoginStatus()
-	{
-		return false;
 	}
 }
 

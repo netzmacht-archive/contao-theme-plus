@@ -5,13 +5,8 @@
 
 /**
  * Class JavaScriptFileAggregator
- * 
- * 
- * @copyright  InfinitySoft 2011
- * @author     Tristan Lins <tristan.lins@infinitysoft.de>
- * @package    Layout Additional Sources
  */
-class JavaScriptFileAggregator extends ThemePlusFile {
+class JavaScriptFileAggregator extends LocalThemePlusFile {
 	
 	/**
 	 * The files to aggregate.
@@ -72,6 +67,9 @@ class JavaScriptFileAggregator extends ThemePlusFile {
 			{
 				$this->import('Compression');
 				
+				// import the Theme+ master class
+				$this->import('ThemePlus');
+				
 				// import the gzip compressor
 				$strGzipCompressorClass = $this->Compression->getCompressorClass('gzip');
 				$this->import($strGzipCompressorClass, 'Compressor');
@@ -87,7 +85,7 @@ class JavaScriptFileAggregator extends ThemePlusFile {
 					$strSubContent = $objFile->getContent();
 					
 					// detect and decompress gziped content
-					$strSubContent = ThemePlus::decompressGzip($strSubContent);
+					$strSubContent = $this->ThemePlus->decompressGzip($strSubContent);
 					
 					// append to content
 					$strContent .= "\n" . $strSubContent;

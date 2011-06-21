@@ -5,11 +5,6 @@
 
 /**
  * Class ExternalThemePlusFile
- * 
- * 
- * @copyright  InfinitySoft 2011
- * @author     Tristan Lins <tristan.lins@infinitysoft.de>
- * @package    Layout Additional Sources
  */
 abstract class ExternalThemePlusFile extends ThemePlusFile {
 
@@ -34,6 +29,12 @@ abstract class ExternalThemePlusFile extends ThemePlusFile {
 	public function getUrl()
 	{
 		return $this->strUrl;
+	}
+	
+	
+	public function getGlobalVariableCode()
+	{
+		return $this->getUrl();
 	}
 	
 	

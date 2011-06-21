@@ -3,28 +3,29 @@
 #copyright
 
 
-$GLOBALS['TL_DCA']['tl_layout']['palettes']['default'] = preg_replace(
-	'#({style_legend}.*);#U',
-	'$1,additional_source;',
+$GLOBALS['TL_DCA']['tl_layout']['palettes']['default'] = str_replace(
+	'stylesheet',
+	'stylesheet,theme_plus_files',
 	$GLOBALS['TL_DCA']['tl_layout']['palettes']['default']);
-$GLOBALS['TL_DCA']['tl_layout']['fields']['additional_source'] = array
+
+$GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_files'] = array
 (
-	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['additional_source'],
+	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['theme_plus_files'],
 	'inputType'               => 'checkbox',
-	'options_callback'        => array('tl_layout_additional_source', 'getAdditionSources'),
+	'options_callback'        => array('tl_layout_theme_plus', 'getFiles'),
 	'eval'                    => array('multiple'=>true, 'tl_class'=>'clr')
 );
 
 /**
- * Class tl_layout_additional_source
+ * Class tl_layout_theme_plus
  *
  */
-class tl_layout_additional_source extends Backend
+class tl_layout_theme_plus extends Backend
 {
-	public function getAdditionSources()
+	public function getFiles()
 	{
-		$arrAdditionalSource = array();
-		$objAdditionalSource = $this->Database->prepare("
+		$arrFile = array();
+		$objFile = $this->Database->prepare("
 				SELECT
 					s.*
 				FROM
@@ -42,23 +43,16 @@ class tl_layout_additional_source extends Backend
 				ORDER BY
 					s.sorting")
 		   ->execute($this->Input->get('id'));
-		while ($objAdditionalSource->next())
+		while ($objFile->next())
 		{
-			$strType = $objAdditionalSource->type;
-			$label = $objAdditionalSource->$strType;
+			$strType = $objFile->type;
+			$label = $objFile->$strType;
 			
-			if (strlen($objAdditionalSource->cc)) {
-				$label .= ' <span style="color: #B3B3B3;">[' . $objAdditionalSource->cc . ']</span>';
+			if (strlen($objFile->media)) {
+				$label .= ' <span style="color: #B3B3B3;">[' . $objFile->media . ']</span>';
 			}
 			
-			if (strlen($objAdditionalSource->media)) {
-				$arrMedia = unserialize($objAdditionalSource->media);
-				if (count($arrMedia)) {
-					$label .= ' <span style="color: #B3B3B3;">[' . implode(', ', $arrMedia) . ']</span>';
-				}
-			}
-			
-			switch ($objAdditionalSource->type) {
+			switch ($objFile->type) {
 			case 'js_file': case 'js_url':
 				$image = 'iconJS.gif';
 				break;
@@ -69,22 +63,11 @@ class tl_layout_additional_source extends Backend
 			
 			default:
 				$image = false;
-				if (isset($GLOBALS['TL_HOOKS']['getAdditionalSourceIconImage']) && is_array($GLOBALS['TL_HOOKS']['getAdditionalSourceIconImage']))
-				{
-					foreach ($GLOBALS['TL_HOOKS']['getAdditionalSourceIconImage'] as $callback)
-					{
-						$this->import($callback[0]);
-						$image = $this->$callback[0]->$callback[1]($row);
-						if ($image !== false) {
-							break;
-						}
-					}
-				}
 			}
 			
-			$arrAdditionalSource[$objAdditionalSource->id] = ($image ? $this->generateImage($image, $label, 'style="vertical-align:middle"') . ' ' : '') . $label;
+			$arrFile[$objFile->id] = ($image ? $this->generateImage($image, $label, 'style="vertical-align:middle"') . ' ' : '') . $label;
 		}
-		return $arrAdditionalSource;
+		return $arrFile;
 	}
 }
 ?>

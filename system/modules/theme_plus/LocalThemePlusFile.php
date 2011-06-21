@@ -5,11 +5,6 @@
 
 /**
  * Class LocalThemePlusFile
- * 
- * 
- * @copyright  InfinitySoft 2011
- * @author     Tristan Lins <tristan.lins@infinitysoft.de>
- * @package    Layout Additional Sources
  */
 abstract class LocalThemePlusFile extends ThemePlusFile {
 
@@ -20,18 +15,23 @@ abstract class LocalThemePlusFile extends ThemePlusFile {
 	
 	
 	/**
-	 * The processed temporary file path.
+	 * The corresponding theme.
 	 */
-	protected $strProcessedFile;
+	protected $objTheme;
 	
 	
 	/**
 	 * Create a new local file object.
 	 */
-	public function __construct($strOriginFile)
+	public function __construct($strOriginFile, $objTheme = false)
 	{
+		if (!file_exists(TL_ROOT . '/' . $strOriginFile))
+		{
+			throw new Exception('File does not exists: ' . $this->strOriginFile);
+		}
+		
 		$this->strOriginFile = $strOriginFile;
-		$this->strProcessedFile = null;
+		$this->objTheme = $objTheme;
 	}
 	
 	
@@ -48,6 +48,12 @@ abstract class LocalThemePlusFile extends ThemePlusFile {
 	 * Get the file path relative to TL_ROOT
 	 */
 	public abstract function getFile();
+	
+	
+	public function getGlobalVariableCode()
+	{
+		return $this->getFile();
+	}
 	
 		
 	public function __get($k)

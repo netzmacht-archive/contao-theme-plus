@@ -5,11 +5,6 @@
 
 /**
  * Class ThemePlusRunonce
- * 
- * 
- * @copyright  InfinitySoft 2011
- * @author     Tristan Lins <tristan.lins@infinitysoft.de>
- * @package    Layout Additional Sources
  */
 class ThemePlusRunonce extends Frontend
 {
@@ -53,7 +48,7 @@ class ThemePlusRunonce extends Frontend
 	 */
 	protected function testYUI()
 	{
-		$strCmd = escapeshellcmd($GLOBALS['TL_CONFIG']['additional_sources_yui_cmd']);
+		$strCmd = escapeshellcmd('yui-compressor');
 		$proc = proc_open(
 			$strCmd,
 			array(
@@ -91,7 +86,7 @@ class ThemePlusRunonce extends Frontend
 	
 	
 	/**
-	 * Database upgrade to 1.5
+	 * Database upgrade to 1.5 [layout_additional_source]
 	 */
 	protected function upgrade1_5()
 	{
@@ -148,7 +143,7 @@ class ThemePlusRunonce extends Frontend
 	
 	
 	/**
-	 * Configuration upgrade to 1.6
+	 * Configuration upgrade to 1.6 [layout_additional_source]
 	 */
 	protected function upgrade1_6()
 	{
@@ -178,9 +173,9 @@ class ThemePlusRunonce extends Frontend
 	
 	
 	/**
-	 * Configuration upgrade to 1.8
+	 * Configuration upgrade to 2.0
 	 */
-	protected function upgrade1_8()
+	protected function upgrade2_0()
 	{
 		
 	}

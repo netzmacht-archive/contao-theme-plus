@@ -3,23 +3,55 @@
 #copyright
 
 
+/**
+ * Palettes
+ */
 foreach (array('regular', 'forward', 'redirect', 'root') as $strType)
 {
+	$GLOBALS['TL_DCA']['tl_page']['palettes']['__selector__'][] = 'theme_plus_include_files';
+	$GLOBALS['TL_DCA']['tl_page']['palettes']['__selector__'][] = 'theme_plus_include_files_noinherit';
+	
 	$GLOBALS['TL_DCA']['tl_page']['palettes'][$strType] = preg_replace(
 		'#({layout_legend:hide}.*);#U',
-		'$1,theme_plus_files;',
+		'$1,theme_plus_include_files,theme_plus_include_files_noinherit;',
 		$GLOBALS['TL_DCA']['tl_page']['palettes'][$strType]);
 }
+$GLOBALS['TL_DCA']['tl_page']['subpalettes']['theme_plus_include_files'] = 'theme_plus_files';
+$GLOBALS['TL_DCA']['tl_page']['subpalettes']['theme_plus_include_files_noinherit'] = 'theme_plus_files_noinherit';
+
+
+/**
+ * Fields
+ */
+$GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_include_files'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_page']['theme_plus_include_files'],
+	'inputType'               => 'checkbox',
+	'eval'                    => array('submitOnChange'=>true, 'tl_class'=>'long')
+);
 $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_files'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_page']['theme_plus_files'],
 	'inputType'               => 'checkbox',
 	'options_callback'        => array('tl_page_theme_plus', 'getFiles'),
-	'eval'                    => array('multiple'=>true, 'tl_class'=>'clr')
+	'eval'                    => array('mandatory'=>true, 'multiple'=>true, 'tl_class'=>'long')
+);
+$GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_include_files_noinherit'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_page']['theme_plus_include_files_noinherit'],
+	'inputType'               => 'checkbox',
+	'eval'                    => array('submitOnChange'=>true, 'tl_class'=>'long')
+);
+$GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_files_noinherit'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_page']['theme_plus_files_noinherit'],
+	'inputType'               => 'checkbox',
+	'options_callback'        => array('tl_page_theme_plus', 'getFiles'),
+	'eval'                    => array('mandatory'=>true, 'multiple'=>true, 'tl_class'=>'clr')
 );
 
 /**
- * Class tl_page_additional_source
+ * Class tl_page_theme_plus
  *
  */
 class tl_page_theme_plus extends Backend

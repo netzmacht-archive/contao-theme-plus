@@ -7,6 +7,7 @@
  * Back end modules
  */
 $GLOBALS['BE_MOD']['design']['themes']['tables'][] = 'tl_theme_plus_file';
+$GLOBALS['BE_MOD']['design']['themes']['tables'][] = 'tl_theme_plus_variable';
 
 
 /**
@@ -32,18 +33,31 @@ $GLOBALS['TL_CONFIG']['theme_plus_gz_compression_disabled'] = '';
 /**
  * HOOKs
  */
-$GLOBALS['TL_HOOKS']['generatePage'][]      = array('ThemePlus', 'generatePage');
+$GLOBALS['TL_HOOKS']['generatePage'][]      = array('ThemePlus', 'hookGeneratePage');
 $GLOBALS['TL_HOOKS']['replaceInsertTags'][] = array('ThemePlus', 'hookReplaceInsertTags');
 
 
 /**
  * easy_themes integration
  */
-$GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus'] = array
+$intOffset = array_search('css', array_keys($GLOBALS['TL_EASY_THEMES_MODULES'])) + 1;
+$GLOBALS['TL_EASY_THEMES_MODULES'] = array_merge
 (
-	'href_fragment' => 'table=tl_theme_plus',
-	'icon'          => 'system/modules/theme_plus/html/icon.png'
+	array_slice($GLOBALS['TL_EASY_THEMES_MODULES'], 0, $intOffset),
+	array
+	(
+		'theme_plus_file' => array
+		(
+			'href_fragment' => 'table=tl_theme_plus_file',
+			'icon'          => 'system/modules/theme_plus/html/icon.png'
+		),
+		'theme_plus_variable' => array
+		(
+			'href_fragment' => 'table=tl_theme_plus_variable',
+			'icon'          => 'system/modules/theme_plus/html/variable.png'
+		)
+	),
+	array_slice($GLOBALS['TL_EASY_THEMES_MODULES'], $intOffset)
 );
-
 
 ?>

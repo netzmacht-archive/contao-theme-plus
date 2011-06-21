@@ -6,9 +6,6 @@
  * Class ScriptSource
  *
  * Front end content element "script_source".
- * @copyright  InfinitySoft 2010,2011
- * @author     Tristan Lins <tristan.lins@infinitysoft.de>
- * @package    Layout Additional Sources
  */
 class ScriptSource extends Frontend
 {
@@ -71,17 +68,6 @@ class ScriptSource extends Frontend
 				{
 					$strType = $objSource->type;
 					$label = ' ' . $objSource->$strType;
-					
-					if (strlen($objSource->cc)) {
-						$label .= ' <span style="color: #B3B3B3;">[' . $objSource->cc . ']</span>';
-					}
-					
-					if (strlen($objSource->media)) {
-						$arrMedia = unserialize($objSource->media);
-						if (count($arrMedia)) {
-							$label .= ' <span style="color: #B3B3B3;">[' . implode(', ', $arrMedia) . ']</span>';
-						}
-					}
 					
 					$strBuffer .= $this->generateImage('iconJS.gif', $label, 'style="vertical-align:middle"') . $label . '<br/>';
 				}

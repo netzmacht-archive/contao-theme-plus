@@ -6,6 +6,6 @@
 /**
  * Buttons
  */
-$GLOBALS['TL_LANG']['tl_layout']['additional_source'] = array('Weitere Dateien', 'Weitere Dateien in das Layout einbinden');
+$GLOBALS['TL_LANG']['tl_layout']['theme_plus_files'] = array('Weitere Dateien', 'Weitere Dateien in das Layout einbinden');
 
 ?>

@@ -5,13 +5,8 @@
 
 /**
  * Class CssFileAggregator
- * 
- * 
- * @copyright  InfinitySoft 2011
- * @author     Tristan Lins <tristan.lins@infinitysoft.de>
- * @package    Layout Additional Sources
  */
-class CssFileAggregator extends ThemePlusFile {
+class CssFileAggregator extends LocalThemePlusFile {
 	
 	/**
 	 * The files to aggregate.
@@ -47,6 +42,9 @@ class CssFileAggregator extends ThemePlusFile {
 		}
 		$this->arrFiles = $args;
 		$this->strAggregatedFile = null;
+		
+		// import the Theme+ master class
+		$this->import('ThemePlus');
 	}
 	
 	
@@ -105,10 +103,10 @@ class CssFileAggregator extends ThemePlusFile {
 					$strSubContent = $objFile->getContent();
 					
 					// detect and decompress gziped content
-					$strSubContent = ThemePlus::decompressGzip($strSubContent);
+					$strSubContent = $this->ThemePlus->decompressGzip($strSubContent);
 					
 					// handle @charset
-					$strSubContent = $this->handleCharset($strSubContent);
+					$strSubContent = $this->ThemePlus->handleCharset($strSubContent);
 									
 					// remap url(..) entries
 					$strSubContent = $this->CssUrlRemapper->remapCode($strSubContent, $strFile, $strTemp, $this->objAbsolutizePage ? true : false, $this->objAbsolutizePage);
@@ -145,7 +143,7 @@ class CssFileAggregator extends ThemePlusFile {
 		$strContent = $objFile->getContent();
 		
 		// handle @charset
-		$strContent = $this->handleCharset($strContent);
+		$strContent = $this->ThemePlus->handleCharset($strContent);
 		
 		// return html code
 		return '<style type="text/css">' . $strContent . '</style>';

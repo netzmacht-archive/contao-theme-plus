@@ -5,27 +5,25 @@
 
 /**
  * Class ExternalLessCssFile
- * 
- * 
- * @copyright  InfinitySoft 2011
- * @author     Tristan Lins <tristan.lins@infinitysoft.de>
- * @package    Layout Additional Sources
  */
 class ExternalLessCssFile extends ExternalCssFile {
 	
 	/**
 	 * Create a new css file object.
 	 */
-	public function __construct($strUrl, $arrMedia)
+	public function __construct($strUrl, $strMedia)
 	{
-		parent::__construct($strUrl, $arrMedia);
+		parent::__construct($strUrl, $strMedia);
+		
+		// import the Theme+ master class
+		$this->import('ThemePlus');
 	}
 
 
 	public function getIncludeHtml()
 	{
 		// add client side javascript
-		if (ThemePlus::getBELoginStatus())
+		if ($this->ThemePlus->getBELoginStatus())
 		{
 			$GLOBALS['TL_JAVASCRIPT'][] = 'plugins/lesscss/less.min.development.js';
 		}
@@ -38,7 +36,7 @@ class ExternalLessCssFile extends ExternalCssFile {
 		$strUrl = $this->getUrl();
 		
 		// return html code
-		return '<link type="text/css" rel="stylesheet" href="' . specialchars($strUrl) . '"' . (count($this->arrMedia) ? ' media="' . implode(',', $this->arrMedia) . '"' : '') . ' />';
+		return '<link type="text/css" rel="stylesheet" href="' . specialchars($strUrl) . '"' . (strlen($this->strMedia) ? ' media="' . $this->strMedia . '"' : '') . ' />';
 	}
 	
 }
