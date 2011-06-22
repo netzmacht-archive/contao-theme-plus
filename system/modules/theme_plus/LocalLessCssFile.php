@@ -25,7 +25,17 @@ class LocalLessCssFile extends LocalCssFile {
 	 */
 	protected function isClientSideCompile()
 	{
-		return ($this->ThemePlus->getBELoginStatus() || $GLOBALS['TL_CONFIG']['theme_plus_lesscss_mode'] == 'less.js') ? true : false;
+		switch ($GLOBALS['TL_CONFIG']['theme_plus_lesscss_mode'])
+		{
+		case 'phpless':
+			return false;
+			
+		case 'less.js':
+			return true;
+		
+		case 'less.js+pre':
+			return $this->ThemePlus->getBELoginStatus();
+		}
 	}
 	
 	
@@ -95,7 +105,13 @@ class LocalLessCssFile extends LocalCssFile {
 			}
 			else
 			{
-				$strCssMinimizer = $this->Compression->getDefaultCssMinimizer();
+				$this->import('Compression');
+				
+				$strCssMinimizer = $this->ThemePlus->getBELoginStatus() ? false : $this->Compression->getDefaultCssMinimizer();
+				if (!$strCssMinimizer)
+				{
+					$strCssMinimizer = 'none';
+				}
 				
 				$objFile = new File($this->strOriginFile);
 				$strKey = $objFile->basename
@@ -112,6 +128,10 @@ class LocalLessCssFile extends LocalCssFile {
 					
 					// import the css minimizer
 					$strCssMinimizerClass = $this->Compression->getDefaultCssMinimizerClass();
+					if (!$strCssMinimizerClass)
+					{
+						$strCssMinimizerClass = $this->Compression->getCssMinimizerClass('none');
+					}
 					$this->import($strCssMinimizerClass, 'Minimizer');
 					
 					// import the gzip compressor
@@ -121,56 +141,51 @@ class LocalLessCssFile extends LocalCssFile {
 					// import the url remapper
 					$this->import('CssUrlRemapper');
 					
-					// compile the less code
-					$strCompilation = sprintf('system/html/%s-%s-compilation.less.css', $objFile->filename, substr(md5($strKey), 0, 8));
-					$objCompilation = new File($strCompilation);
-					
-					if (!file_exists(TL_ROOT . '/' . $strCompilation))
+					// import the less compiler
+					switch ($GLOBALS['TL_CONFIG']['theme_plus_lesscss_mode'])
 					{
-						// import the less compiler
+					case 'less.js+pre':
 						$this->import('LessCss', 'Compiler');
+						break;
 						
-						// create a temporary source file
-						$strSource = sprintf('system/html/%s-%s-precompilation.less', $objFile->filename, substr(md5($strKey), 0, 8));
-						$objSource = new File($strSource);
+					case 'phpless':
+						$this->import('PHPLessCss', 'Compiler');
+						break;
 						
-						// get the css code
-						$strContent = $objFile->getContent();
-						
-						// detect and decompress gziped content
-						$strContent = $this->ThemePlus->decompressGzip($strContent);
-						
-						// handle @charset
-						$strContent = $this->ThemePlus->handleCharset($strContent);
-
-						// replace variables
-						$strContent = $this->ThemePlus->replaceVariablesByTheme($strContent, $this->objTheme, $strTemp);
-						
-						// add media definition
-						if (strlen($this->strMedia))
-						{
-							$strContent = sprintf("@media %s\n{\n%s\n}\n", $this->strMedia, $strContent);
-						}
-						
-						// add @charset utf-8 rule
-						$strContent = '@charset "UTF-8";' . "\n" . $strContent;
-						
-						// remap url(..) entries
-						$strContent = $this->CssUrlRemapper->remapCode($strContent, $this->strOriginFile, $strSource, $this->objAbsolutizePage != null, $this->objAbsolutizePage);
-						
-						// compile with less
-						if (!$this->Compiler->minimize($strSource, $strCompilation))
-						{
-							$objCompilation->write($strContent);
-						}
+					default:
+						throw new Exception('Unsupported less mode!');
 					}
 					
 					// get the css code
-					$strContent = $objCompilation->getContent();
+					$strContent = $objFile->getContent();
+					
+					// detect and decompress gziped content
+					$strContent = $this->ThemePlus->decompressGzip($strContent);
 					
 					// handle @charset
 					$strContent = $this->ThemePlus->handleCharset($strContent);
 
+					// replace variables
+					$strContent = $this->ThemePlus->replaceVariablesByTheme($strContent, $this->objTheme, $strTemp);
+					
+					// remap url(..) entries
+					$strContent = $this->CssUrlRemapper->remapCode($strContent, $this->strOriginFile, $strSource, $this->objAbsolutizePage != null, $this->objAbsolutizePage);
+					
+					// compile with less
+					$strContent = $this->Compiler->minimizeCode($strContent);
+					
+					// if compile fails, return origin file
+					if ($strContent == false)
+					{
+						return $this->strOriginFile;
+					}
+					
+					// add media definition
+					if (strlen($this->strMedia))
+					{
+						$strContent = sprintf("@media %s\n{\n%s\n}\n", $this->strMedia, $strContent);
+					}
+					
 					// add @charset utf-8 rule
 					$strContent = '@charset "UTF-8";' . "\n" . $strContent;
 					
