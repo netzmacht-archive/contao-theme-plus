@@ -37,7 +37,11 @@ class LocalJavaScriptFile extends LocalThemePlusFile {
 		{
 			$this->import('Compression');
 			
-			$strJsMinimizer = $this->ThemePlus->getBELoginStatus() ? 'none' : $this->Compression->getDefaultJsMinimizer();
+			$strJsMinimizer = $this->ThemePlus->getBELoginStatus() ? false : $this->Compression->getDefaultJsMinimizer();
+			if (!$strJsMinimizer)
+			{
+				$strJsMinimizer = 'none';
+			}
 			
 			$objFile = new File($this->strOriginFile);
 			$strTemp = $objFile->basename
@@ -55,6 +59,10 @@ class LocalJavaScriptFile extends LocalThemePlusFile {
 				
 				// import the javascript minimizer
 				$strJsMinimizerClass = $this->Compression->getJsMinimizerClass($strJsMinimizer);
+				if (!$strJsMinimizerClass)
+				{
+					$strJsMinimizerClass = $this->Compression->getJsMinimizerClass('none');
+				}
 				$this->import($strJsMinimizerClass, 'Minimizer');
 				
 				// import the gzip compressor

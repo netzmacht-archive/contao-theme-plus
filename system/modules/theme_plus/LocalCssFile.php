@@ -47,7 +47,11 @@ class LocalCssFile extends LocalThemePlusFile {
 		{
 			$this->import('Compression');
 			
-			$strCssMinimizer = $this->ThemePlus->getBELoginStatus() ? 'none' : $this->Compression->getDefaultCssMinimizer();
+			$strCssMinimizer = $this->ThemePlus->getBELoginStatus() ? false : $this->Compression->getDefaultCssMinimizer();
+			if (!$strCssMinimizer)
+			{
+				$strCssMinimizer = 'none';
+			}
 			
 			$objFile = new File($this->strOriginFile);
 			$strKey = $objFile->basename
@@ -64,6 +68,10 @@ class LocalCssFile extends LocalThemePlusFile {
 				
 				// import the css minimizer
 				$strCssMinimizerClass = $this->Compression->getCssMinimizerClass($strCssMinimizer);
+				if (!$strCssMinimizerClass)
+				{
+					$strCssMinimizerClass = $this->Compression->getCssMinimizerClass('none');
+				}
 				$this->import($strCssMinimizerClass, 'Minimizer');
 				
 				// import the gzip compressor
