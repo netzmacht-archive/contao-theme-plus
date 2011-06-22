@@ -259,7 +259,7 @@ class ThemePlus extends Frontend
 			
 			$objVariable = $this->Database
 				->prepare("SELECT * FROM tl_theme_plus_variable WHERE pid=?")
-				->execute($objTheme->pid);
+				->execute($objTheme->id);
 			
 			while ($objVariable->next())
 			{
@@ -349,7 +349,7 @@ class ThemePlus extends Frontend
 		
 		$objTheme = $this->Database
 			->prepare("SELECT * FROM tl_theme WHERE id=?")
-			->execute(is_int($varTheme) ? $varTheme : (is_array($varTheme) ? $varTheme['pid'] : $varTheme->pid));
+			->execute(is_numeric($varTheme) ? intval($varTheme) : (is_array($varTheme) ? $varTheme['pid'] : $varTheme->pid));
 		if ($objTheme->next())
 		{
 			return $objTheme;
@@ -363,7 +363,7 @@ class ThemePlus extends Frontend
 	 */
 	public function findThemeByLayout($varLayout)
 	{
-		if (is_int($varLayout))
+		if (is_numeric($varLayout))
 		{
 			$strSql = "SELECT t.* FROM tl_theme t INNER JOIN tl_layout l ON p.id=l.pid WHERE l.id=?";
 		}
@@ -373,7 +373,7 @@ class ThemePlus extends Frontend
 		}
 		$objTheme = $this->Database
 			->prepare($strSql)
-			->execute(is_int($varLayout) ? $varLayout : (is_array($varLayout) ? $varLayout['pid'] : $varLayout->pid));
+			->execute(is_numeric($varLayout) ? intval($varLayout) : (is_array($varLayout) ? $varLayout['pid'] : $varLayout->pid));
 		if ($objTheme->next())
 		{
 			return $objTheme;
@@ -387,7 +387,7 @@ class ThemePlus extends Frontend
 	 */
 	public function findThemeByPage($varPage)
 	{
-		$objPage = $this->getPageDetails(is_int($varPage) ? $varPage : (is_array($varPage) ? $varPage['id'] : $varPage->id));
+		$objPage = $this->getPageDetails(is_numeric($varPage) ? intval($varPage) : (is_array($varPage) ? $varPage['id'] : $varPage->id));
 		return $this->findThemeByLayout($objPage->layout);
 	}
 	
@@ -534,13 +534,15 @@ class ThemePlus extends Frontend
 				break;
 				
 			case 'css_file':
+				$objTheme = $this->findTheme($objFile->pid);
+				
 				if (preg_match('#\.less$#i', $strValue))
 				{
-					$arrStylesheets[] = new LocalLessCssFile($strValue, $objFile->media, $blnAbsolutizeUrls ? $objAbsolutizePage : false);
+					$arrStylesheets[] = new LocalLessCssFile($strValue, $objFile->media, $objTheme, $blnAbsolutizeUrls ? $objAbsolutizePage : false);
 				}
 				else
 				{
-					$arrStylesheets[] = new LocalCssFile($strValue, $objFile->media, $blnAbsolutizeUrls ? $objAbsolutizePage : false);
+					$arrStylesheets[] = new LocalCssFile($strValue, $objFile->media, $objTheme, $blnAbsolutizeUrls ? $objAbsolutizePage : false);
 				}
 				break;
 			}
@@ -598,7 +600,9 @@ class ThemePlus extends Frontend
 				break;
 				
 			case 'js_file':
-				$arrJavaScripts[] = new LocalJavaScriptFile($strValue);
+				$objTheme = $this->findTheme($objFile->pid);
+				
+				$arrJavaScripts[] = new LocalJavaScriptFile($strValue, $objTheme);
 				break;
 			
 			default:
@@ -870,7 +874,7 @@ class VariableReplacer
 		{
 			return $this->variables[$m[1]];
 		}
-		return '/* missing variable $' . $m[1] . ' */';
+		return '<missing variable $' . $m[1] . '>';
 	}
 }
 
