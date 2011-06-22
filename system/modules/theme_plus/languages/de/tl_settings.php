@@ -19,6 +19,7 @@ $GLOBALS['TL_LANG']['tl_settings']['theme_plus_hide_jsmin_message']       = arra
 $GLOBALS['TL_LANG']['tl_settings']['theme_plus_compression']['noless']         = '&raquo; Installieren Sie lesscss um dieses Feature zu aktivieren &laquo;';
 $GLOBALS['TL_LANG']['tl_settings']['theme_plus_compression']['less.js']        = 'less.js';
 $GLOBALS['TL_LANG']['tl_settings']['theme_plus_compression']['less.js+pre']    = 'less.js (Vorkompiliert)';
+$GLOBALS['TL_LANG']['tl_settings']['theme_plus_compression']['phpless']        = 'phpless';
 
 
 /**

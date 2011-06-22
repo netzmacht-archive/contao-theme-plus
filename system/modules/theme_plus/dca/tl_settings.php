@@ -6,14 +6,7 @@
 /**
  * System configuration
  */
-$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{theme_plus_legend:hide},theme_plus_combination,theme_plus_lesscss_mode,theme_plus_gz_compression_disabled,theme_plus_hide_cssmin_message,theme_plus_hide_jsmin_message';
-
-$GLOBALS['TL_DCA']['tl_settings']['fields']['theme_plus_aggregate_externals'] = array
-(
-	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['theme_plus_aggregate_externals'],
-	'inputType'               => 'checkbox',
-	'eval'                    => array('mandatory'=>true, 'decodeEntities'=>true)
-);
+$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{theme_plus_legend:hide},theme_plus_lesscss_mode,theme_plus_gz_compression_disabled';
 
 $GLOBALS['TL_DCA']['tl_settings']['fields']['theme_plus_lesscss_mode'] = array
 (
@@ -46,20 +39,23 @@ class tl_settings_theme_plus extends Backend
 		
 		if (in_array('lesscss', $this->Config->getActiveModules()))
 		{
+			// add javascript less support
 			$arrMinimizers['less.js'] = $GLOBALS['TL_LANG']['tl_settings']['theme_plus_compression']['less.js'];
+			
 			if ($this->tryNode())
 			{
+				// add precompiled less support
 				$arrMinimizers['less.js+pre'] = $GLOBALS['TL_LANG']['tl_settings']['theme_plus_compression']['less.js+pre'];
 			}
-			foreach ($this->Compression->getCssMinimizers() as $strKey=>$strValue)
-			{
-				if ($strKey != 'none')
-				{
-					$arrMinimizers['less.js+' . $strKey] = $GLOBALS['TL_LANG']['tl_settings']['theme_plus_compression']['less.js+pre'] . ' + ' . $strValue;
-				}
-			}
 		}
-		else
+		
+		if (in_array('phpless', $this->Config->getActiveModules()))
+		{
+			// add php less support
+			$arrMinimizers['phpless'] = $GLOBALS['TL_LANG']['tl_settings']['theme_plus_compression']['phpless'];
+		}
+		
+		if (!count($arrMinimizers))
 		{
 			$arrMinimizers['-'] = $GLOBALS['TL_LANG']['tl_settings']['theme_plus_compression']['noless'];
 		}
