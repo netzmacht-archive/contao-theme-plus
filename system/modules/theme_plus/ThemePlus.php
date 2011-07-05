@@ -625,7 +625,7 @@ class ThemePlus extends Frontend
 	 * 
 	 * @param Database_Result $objPage
 	 */
-	protected function inheritFiles(Database_Result $objPage)
+	public function inheritFiles(Database_Result $objPage)
 	{
 		if ($objPage->theme_plus_include_files)
 		{
@@ -712,101 +712,6 @@ class ThemePlus extends Frontend
 			$arrResult[] = $objFile->getEmbededHtml();
 		}
 		return $arrResult;
-	}
-	
-	
-	/**
-	 * Hook
-	 * 
-	 * @param Database_Result $objPage
-	 * @param Database_Result $objLayout
-	 * @param PageRegular $objPageRegular
-	 */
-	public function hookGeneratePage(Database_Result $objPage, Database_Result $objLayout, PageRegular $objPageRegular)
-	{
-		// get all file ids
-		// + from layout
-		// + from this page
-		// + from parent pages
-		$arrFileIds = array_merge
-		(
-			deserialize($objLayout->theme_plus_files, true),
-			$this->inheritFiles($objPage),
-			($objPage->theme_plus_include_files_noinherit ? deserialize($objPage->theme_plus_files_noinherit, true) : array())
-		);
-		
-		// build stylesheets
-		$arrStylesheets = array();
-		
-		// collect internal stylesheets
-		if (is_array($GLOBALS['TL_CSS']) && count($GLOBALS['TL_CSS']))
-		{
-			foreach (array_unique($GLOBALS['TL_CSS']) as $stylesheet)
-			{
-				list($stylesheet, $media) = explode('|', $stylesheet);
-				$arrStylesheets[] = new LocalCssFile($stylesheet, $media);
-			}
-		}
-		$GLOBALS['TL_CSS'] = array();
-		
-		// add theme+ stylesheets
-		$arrStylesheets = array_merge
-		(
-			$arrStylesheets,
-			$this->getCssFiles($arrFileIds, false)
-		);
-		
-		// aggregate stylesheets
-		if ($this->getPageLayoutAggregateState())
-		{
-			$arrStylesheets = $this->aggregateFiles($arrStylesheets);
-		}
-		
-		// add them to the layout
-		foreach ($arrStylesheets as $objStylesheet)
-		{
-			$GLOBALS['TL_CSS'][] = $objStylesheet->getGlobalVariableCode();
-		}
-		
-		// build javascripts
-		$arrJavaScripts = array();
-		
-		// add mootools
-		if ($objLayout->mooSource != 'moo_googleapis')
-		{
-			$objPageRegular->Template->mooScripts = '';
-			$arrJavaScripts[] = new LocalJavaScriptFile('plugins/mootools/mootools-core.js');
-			$arrJavaScripts[] = new LocalJavaScriptFile('plugins/mootools/mootools-more.js');
-		}
-		
-		// collect internal javascripts
-		if (is_array($GLOBALS['TL_JAVASCRIPT']) && count($GLOBALS['TL_JAVASCRIPT']))
-		{
-			foreach (array_unique($GLOBALS['TL_JAVASCRIPT']) as $javascript)
-			{
-				$arrJavaScripts[] = new LocalJavaScriptFile($javascript);
-			}
-		}
-		$GLOBALS['TL_JAVASCRIPT'] = array();
-		
-		// add theme+ javascripts
-		$arrJavaScripts = array_merge
-		(
-			$arrJavaScripts,
-			$this->getJavaScriptFiles($arrFileIds)
-		);
-		
-		// aggregate javascripts
-		if ($this->getPageLayoutAggregateState())
-		{
-			$arrJavaScripts = $this->aggregateFiles($arrJavaScripts);
-		}
-		
-		// add them to the layout
-		foreach ($arrJavaScripts as $objJavaScript)
-		{
-			$GLOBALS['TL_JAVASCRIPT'][] = $objJavaScript->getGlobalVariableCode();
-		}
 	}
 	
 	

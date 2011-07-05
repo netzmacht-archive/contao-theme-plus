@@ -32,8 +32,13 @@ $GLOBALS['TL_CONFIG']['theme_plus_gz_compression_disabled'] = '';
 /**
  * HOOKs
  */
-$GLOBALS['TL_HOOKS']['generatePage'][]      = array('ThemePlus', 'hookGeneratePage');
 $GLOBALS['TL_HOOKS']['replaceInsertTags'][] = array('ThemePlus', 'hookReplaceInsertTags');
+
+
+/**
+ * Page types
+ */
+$GLOBALS['TL_PTY']['regular'] = 'ThemePlusPageRegular';
 
 
 /**
