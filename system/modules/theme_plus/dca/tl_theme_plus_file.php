@@ -104,35 +104,35 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 			'filter'                  => true,
 			'options'                 => array('js_file','js_url','css_file','css_url'),
 			'reference'               => &$GLOBALS['TL_LANG']['tl_theme_plus_file'],
-			'eval'                    => array('submitOnChange'=>true, 'tl_class'=>'w50')
+			'eval'                    => array('submitOnChange'=>true)
 		),
 		'js_file' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['js_file'],
 			'inputType'               => 'fileTree',
 			'exclude'                 => true,
-			'eval'                    => array('mandatory'=>true, 'fieldType'=>'radio', 'files'=>true, 'extensions'=>'js', 'path'=>$GLOBALS['TL_CONFIG']['uploadPath'], 'tl_class'=>'clr')
+			'eval'                    => array('mandatory'=>true, 'fieldType'=>'radio', 'files'=>true, 'extensions'=>'js', 'path'=>$GLOBALS['TL_CONFIG']['uploadPath'])
 		),
 		'js_url' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['js_url'],
 			'inputType'               => 'text',
 			'exclude'                 => true,
-			'eval'                    => array('mandatory'=>true, 'decodeEntities'=>true, 'tl_class'=>'clr long')
+			'eval'                    => array('mandatory'=>true, 'decodeEntities'=>true, 'tl_class'=>'long')
 		),
 		'css_file' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['css_file'],
 			'inputType'               => 'fileTree',
 			'exclude'                 => true,
-			'eval'                    => array('mandatory'=>true, 'fieldType'=>'radio', 'files'=>true, 'extensions'=>'css,less', 'path'=>$GLOBALS['TL_CONFIG']['uploadPath'], 'tl_class'=>'clr')
+			'eval'                    => array('mandatory'=>true, 'fieldType'=>'radio', 'files'=>true, 'extensions'=>'css,less', 'path'=>$GLOBALS['TL_CONFIG']['uploadPath'])
 		),
 		'css_url' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['css_url'],
 			'inputType'               => 'text',
 			'exclude'                 => true,
-			'eval'                    => array('mandatory'=>true, 'decodeEntities'=>true, 'tl_class'=>'clr long')
+			'eval'                    => array('mandatory'=>true, 'decodeEntities'=>true, 'tl_class'=>'long')
 		),
 		'media' => array
 		(
@@ -155,7 +155,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 			'inputType'               => 'checkbox',
 			'options'                 => array('default', 'newsletter', 'flash'),
 			'reference'               => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['editors'],
-			'eval'                    => array('multiple'=>true, 'tl_class'=>'clr')
+			'eval'                    => array('multiple'=>true)
 		),
 		'force_editor_integration' => array
 		(
