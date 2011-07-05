@@ -9,29 +9,63 @@
 abstract class ThemePlusFile extends System {
 
 	/**
+	 * The conditional comment.
+	 * 
+	 * @var string
+	 */
+	protected $strCc;
+	
+	
+	/**
+	 * Create a new Theme+ file
+	 */
+	public function __construct($strCc)
+	{
+		$this->strCc = trim($strCc);
+	}
+	
+	
+	/**
+	 * Return the conditional comment.
+	 */
+	public function getCc()
+	{
+		return $this->strCc;
+	}
+	
+	
+	/**
 	 * Get a code that is compatible with TL_CSS and TL_JAVASCRIPT
+	 * 
+	 * @return string
 	 */
 	public abstract function getGlobalVariableCode();
 	
 	
 	/**
 	 * Get embeded html code
+	 * 
+	 * @return string
 	 */
 	public abstract function getEmbededHtml();
 	
 	
 	/**
 	 * Get included html code
+	 * 
+	 * @return string
 	 */
 	public abstract function getIncludeHtml();
 	
 	
 	/**
 	 * Gives the information, if this file can be aggregated.
+	 * 
+	 * @return true
 	 */
 	public function isAggregateable()
 	{
-		return true;
+		return strlen($this->strCc) ? false : true;
 	}
 	
 	
@@ -39,6 +73,9 @@ abstract class ThemePlusFile extends System {
 	{
 		switch ($k)
 		{
+		case 'cc':
+			return $this->getCc();
+			
 		case 'globalVariable':
 			return $this->getGlobalVariableCode();
 			
@@ -53,6 +90,18 @@ abstract class ThemePlusFile extends System {
 		}
 	}
 	
+	
+	/**
+	 * Wrap the conditional comment arround.
+	 */
+	protected function wrapCc($strCode)
+	{
+		if (strlen($this->strCc))
+		{
+			return '<!--[' . $this->strCc . ']>' . $strCode . '<![endif]-->';
+		}
+		return $strCode;
+	}
 }
 
 ?>

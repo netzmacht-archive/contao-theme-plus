@@ -23,13 +23,14 @@ abstract class LocalThemePlusFile extends ThemePlusFile {
 	/**
 	 * Create a new local file object.
 	 */
-	public function __construct($strOriginFile, $objTheme = false)
+	public function __construct($strOriginFile, $strCc = '', $objTheme = false)
 	{
 		if (!file_exists(TL_ROOT . '/' . $strOriginFile))
 		{
 			throw new Exception('File does not exists: ' . $this->strOriginFile);
 		}
 		
+		parent::__construct($strCc);
 		$this->strOriginFile = $strOriginFile;
 		$this->objTheme = $objTheme;
 	}
@@ -52,7 +53,7 @@ abstract class LocalThemePlusFile extends ThemePlusFile {
 	
 	public function getGlobalVariableCode()
 	{
-		return $this->getFile();
+		return $this->getFile() . (strlen($this->strCc) ? '|' . $this->strCc : '');
 	}
 	
 		

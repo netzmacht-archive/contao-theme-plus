@@ -17,8 +17,9 @@ abstract class ExternalThemePlusFile extends ThemePlusFile {
 	/**
 	 * Create a new local file object.
 	 */
-	public function __construct($strUrl)
+	public function __construct($strUrl, $strCc = '')
 	{
+		parent::__construct($strCc);
 		$this->strUrl = $strUrl;
 	}
 	
@@ -34,7 +35,7 @@ abstract class ExternalThemePlusFile extends ThemePlusFile {
 	
 	public function getGlobalVariableCode()
 	{
-		return $this->getUrl();
+		return $this->getUrl() . (strlen($this->strCc) ? '|' . $this->strCc : '');
 	}
 	
 	

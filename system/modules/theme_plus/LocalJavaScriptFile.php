@@ -18,9 +18,9 @@ class LocalJavaScriptFile extends LocalThemePlusFile {
 	/**
 	 * Create a new javascript file object.
 	 */
-	public function __construct($strOriginFile, $objTheme = false)
+	public function __construct($strOriginFile, $strCc = '', $objTheme = false)
 	{
-		parent::__construct($strOriginFile, $objTheme);
+		parent::__construct($strOriginFile, $strCc, $objTheme);
 		$this->strProcessedFile = null;
 		
 		// import the Theme+ master class
@@ -113,7 +113,7 @@ class LocalJavaScriptFile extends LocalThemePlusFile {
 		$strContent = $objFile->getContent();
 		
 		// return html code
-		return '<script type="text/javascript">' . $strContent . '</script>';
+		return $this->wrapCc('<script type="text/javascript">' . $strContent . '</script>');
 	}
 	
 	
@@ -126,7 +126,7 @@ class LocalJavaScriptFile extends LocalThemePlusFile {
 		$strFile = $this->getFile();
 		
 		// return html code
-		return '<script type="text/javascript" src="' . specialchars($strFile) . '"></script>';
+		return $this->wrapCc('<script type="text/javascript" src="' . specialchars($strFile) . '"></script>');
 	}
 	
 }

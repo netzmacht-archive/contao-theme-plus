@@ -22,6 +22,7 @@ CREATE TABLE `tl_theme_plus_file` (
   `css_file` blob NULL,
   `css_url` blob NULL,
   `media` blob NULL,
+  `cc` blob NULL,
   `editor_integration` blob NULL,
   `force_editor_integration` char(1) NOT NULL default '',
   PRIMARY KEY  (`id`),

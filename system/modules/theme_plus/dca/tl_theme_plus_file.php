@@ -139,7 +139,14 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['media'],
 			'inputType'               => 'text',
 			'exclude'                 => true,
-			'eval'                    => array('tl_class'=>'clr long')
+			'eval'                    => array('tl_class'=>'long')
+		),
+		'cc' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['cc'],
+			'inputType'               => 'text',
+			'exclude'                 => true,
+			'eval'                    => array('tl_class'=>'long')
 		),
 		'editor_integration' => array
 		(

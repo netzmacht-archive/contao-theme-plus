@@ -11,9 +11,9 @@ class LocalLessCssFile extends LocalCssFile {
 	/**
 	 * Create a new css file object.
 	 */
-	public function __construct($strOriginFile, $strMedia, $objTheme = false, $objAbsolutizePage = false)
+	public function __construct($strOriginFile, $strMedia = '', $strCc = '', $objTheme = false, $objAbsolutizePage = false)
 	{
-		parent::__construct($strOriginFile, $strMedia, $objTheme, $objAbsolutizePage);
+		parent::__construct($strOriginFile, $strMedia, $strCc, $objTheme, $objAbsolutizePage);
 		
 		// import the Theme+ master class
 		$this->import('ThemePlus');
@@ -231,7 +231,7 @@ class LocalLessCssFile extends LocalCssFile {
 	
 	public function isAggregateable()
 	{
-		return $this->isClientSideCompile() ? false : true;
+		return $this->isClientSideCompile() || strlen($this->strCc) ? false : true;
 	}
 	
 	
@@ -244,7 +244,7 @@ class LocalLessCssFile extends LocalCssFile {
 		$strFile = $this->getFile();
 		
 		// return html code
-		return '<link type="text/css" rel="' . (preg_match('#\.less$#i', $strFile) ? 'stylesheet/less' : 'stylesheet') . '" href="' . specialchars($strFile) . '" />';
+		return $this->wrapCc('<link type="text/css" rel="' . (preg_match('#\.less$#i', $strFile) ? 'stylesheet/less' : 'stylesheet') . '" href="' . specialchars($strFile) . '" />');
 	}
 	
 }

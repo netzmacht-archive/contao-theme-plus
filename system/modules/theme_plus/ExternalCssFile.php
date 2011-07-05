@@ -14,10 +14,16 @@ class ExternalCssFile extends ExternalThemePlusFile {
 	protected $strMedia;
 	
 	
-	public function __construct($strUrl, $strMedia)
+	public function __construct($strUrl, $strMedia = '', $strCc = '')
 	{
-		parent::__construct($strUrl);
+		parent::__construct($strUrl, $strCc);
 		$this->strMedia = $strMedia;
+	}
+	
+	
+	public function getGlobalVariableCode()
+	{
+		return $this->getUrl() . (strlen($this->strMedia) ? '|' . $this->strMedia : '') . (strlen($this->strCc) ? '|' . $this->strCc : '');
 	}
 
 
@@ -27,7 +33,7 @@ class ExternalCssFile extends ExternalThemePlusFile {
 		$strUrl = $this->getUrl();
 		
 		// return html code
-		return '<link type="text/css" rel="stylesheet" href="' . specialchars($strUrl) . '"' . (strlen($this->strMedia) ? ' media="' . $this->strMedia . '"' : '') . ' />';
+		return $this->wrapCc('<link type="text/css" rel="stylesheet" href="' . specialchars($strUrl) . '"' . (strlen($this->strMedia) ? ' media="' . $this->strMedia . '"' : '') . ' />');
 	}
 	
 }

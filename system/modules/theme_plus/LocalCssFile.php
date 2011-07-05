@@ -29,9 +29,9 @@ class LocalCssFile extends LocalThemePlusFile {
 	/**
 	 * Create a new css file object.
 	 */
-	public function __construct($strOriginFile, $strMedia, $objTheme = false, $objAbsolutizePage = false)
+	public function __construct($strOriginFile, $strMedia = '', $strCc = '', $objTheme = false, $objAbsolutizePage = false)
 	{
-		parent::__construct($strOriginFile, $objTheme);
+		parent::__construct($strOriginFile, $strCc, $objTheme);
 		$this->strMedia = $strMedia;
 		$this->objAbsolutizePage = $objAbsolutizePage;
 		$this->strProcessedFile = null;
@@ -130,7 +130,7 @@ class LocalCssFile extends LocalThemePlusFile {
 	
 	public function getGlobalVariableCode()
 	{
-		return $this->getFile() . (strlen($this->strMedia) ? '|' . $this->strMedia : '');
+		return $this->getFile() . (strlen($this->strMedia) ? '|' . $this->strMedia : '') . (strlen($this->strCc) ? '|' . $this->strCc : '');
 	}
 	
 	
@@ -147,7 +147,7 @@ class LocalCssFile extends LocalThemePlusFile {
 		$strContent = $this->ThemePlus->handleCharset($strContent);
 		
 		// return html code
-		return '<style type="text/css">' . $strContent . '</style>';
+		return $this->wrapCc('<style type="text/css">' . $strContent . '</style>');
 	}
 	
 	
@@ -157,7 +157,7 @@ class LocalCssFile extends LocalThemePlusFile {
 		$strFile = $this->getFile();
 		
 		// return html code
-		return '<link type="text/css" rel="stylesheet" href="' . specialchars($strFile) . '" />';
+		return $this->wrapCc('<link type="text/css" rel="stylesheet" href="' . specialchars($strFile) . '" />');
 	}
 }
 

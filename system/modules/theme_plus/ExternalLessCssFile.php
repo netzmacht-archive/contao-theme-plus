@@ -11,9 +11,9 @@ class ExternalLessCssFile extends ExternalCssFile {
 	/**
 	 * Create a new css file object.
 	 */
-	public function __construct($strUrl, $strMedia)
+	public function __construct($strUrl, $strMedia = '', $strCc = '')
 	{
-		parent::__construct($strUrl, $strMedia);
+		parent::__construct($strUrl, $strMedia, $strCc);
 		
 		// import the Theme+ master class
 		$this->import('ThemePlus');
@@ -36,7 +36,7 @@ class ExternalLessCssFile extends ExternalCssFile {
 		$strUrl = $this->getUrl();
 		
 		// return html code
-		return '<link type="text/css" rel="stylesheet" href="' . specialchars($strUrl) . '"' . (strlen($this->strMedia) ? ' media="' . $this->strMedia . '"' : '') . ' />';
+		return $this->wrapCc('<link type="text/css" rel="stylesheet" href="' . specialchars($strUrl) . '"' . (strlen($this->strMedia) ? ' media="' . $this->strMedia . '"' : '') . ' />');
 	}
 	
 }

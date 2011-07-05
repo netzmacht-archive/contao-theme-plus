@@ -6,11 +6,11 @@
 /**
  * Class ExternalJavaScriptFile
  */
-class ExternalJavaScriptFile {
+class ExternalJavaScriptFile extends ExternalThemePlusFile {
 	
-	public function __construct($strUrl)
+	public function __construct($strUrl, $strCc = '')
 	{
-		parent::__construct($strUrl);
+		parent::__construct($strUrl, $strCc);
 	}
 
 
@@ -20,7 +20,7 @@ class ExternalJavaScriptFile {
 		$strFile = $this->getFile();
 		
 		// return html code
-		return '<link type="text/css" rel="stylesheet" href="' . specialchars($strFile) . '" />';
+		return $this->wrapCc('<link type="text/css" rel="stylesheet" href="' . specialchars($strFile) . '" />');
 	}
 	
 }
