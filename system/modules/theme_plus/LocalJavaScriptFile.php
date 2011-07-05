@@ -48,7 +48,7 @@ class LocalJavaScriptFile extends LocalThemePlusFile {
 					. '-' . $objFile->mtime
 					. '-' . $strJsMinimizer
 					. '-' . $this->ThemePlus->getVariablesHashByTheme($this->objTheme);
-			$strTemp = sprintf('system/html/%s-%s.js', $objFile->filename, substr(md5($strTemp), 0, 8));
+			$strTemp = sprintf('system/scripts/%s-%s.js', $objFile->filename, substr(md5($strTemp), 0, 8));
 			
 			if (!file_exists(TL_ROOT . '/' . $strTemp))
 			{

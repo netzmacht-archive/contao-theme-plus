@@ -79,7 +79,7 @@ class CssFileAggregator extends LocalThemePlusFile {
 				throw new Exception('Could not aggreagate the file: ' . $objFile);
 			}
 			
-			$strTemp = 'system/html/stylesheet-' . substr(md5($strKey), 0, 8) . '.css';
+			$strTemp = 'system/scripts/stylesheet-' . substr(md5($strKey), 0, 8) . '.css';
 			
 			if (!file_exists(TL_ROOT . '/' . $strTemp))
 			{

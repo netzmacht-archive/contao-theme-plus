@@ -64,7 +64,7 @@ class LocalLessCssFile extends LocalCssFile {
 						. '-' . $this->objAbsolutizePage != null ? 'absolute' : 'relative' 
 						. '-' . $objFile->mtime
 						. '-' . $this->ThemePlus->getVariablesHashByTheme($this->objTheme);
-				$strTemp = sprintf('system/html/%s-%s.less', $objFile->filename, substr(md5($strKey), 0, 8));
+				$strTemp = sprintf('system/scripts/%s-%s.less', $objFile->filename, substr(md5($strKey), 0, 8));
 				
 				if (!file_exists(TL_ROOT . '/' . $strTemp))
 				{
@@ -120,7 +120,7 @@ class LocalLessCssFile extends LocalCssFile {
 						. '-' . $objFile->mtime
 						. '-' . $strCssMinimizer
 						. '-' . $this->ThemePlus->getVariablesHashByTheme($this->objTheme);
-				$strTemp = sprintf('system/html/%s-%s.less.css', $objFile->filename, substr(md5($strKey), 0, 8));
+				$strTemp = sprintf('system/scripts/%s-%s.less.css', $objFile->filename, substr(md5($strKey), 0, 8));
 				
 				if (!file_exists(TL_ROOT . '/' . $strTemp))
 				{

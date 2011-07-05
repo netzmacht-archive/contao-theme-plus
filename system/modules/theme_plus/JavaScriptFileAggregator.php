@@ -61,7 +61,7 @@ class JavaScriptFileAggregator extends LocalThemePlusFile {
 				throw new Exception('Could not aggreagate the file: ' . $objFile);
 			}
 			
-			$strTemp = 'system/html/javascript-' . substr(md5($strKey), 0, 8) . '.css';
+			$strTemp = 'system/scripts/javascript-' . substr(md5($strKey), 0, 8) . '.css';
 			
 			if (!file_exists(TL_ROOT . '/' . $strTemp))
 			{

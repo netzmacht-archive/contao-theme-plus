@@ -60,7 +60,7 @@ class LocalCssFile extends LocalThemePlusFile {
 					. '-' . $objFile->mtime
 					. '-' . $strCssMinimizer
 					. '-' . $this->ThemePlus->getVariablesHashByTheme($this->objTheme);
-			$strTemp = sprintf('system/html/%s-%s.css', $objFile->filename, substr(md5($strKey), 0, 8));
+			$strTemp = sprintf('system/scripts/%s-%s.css', $objFile->filename, substr(md5($strKey), 0, 8));
 			
 			if (!file_exists(TL_ROOT . '/' . $strTemp))
 			{
