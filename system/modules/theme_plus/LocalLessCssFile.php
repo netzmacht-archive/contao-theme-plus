@@ -93,7 +93,7 @@ class LocalLessCssFile extends LocalCssFile {
 					$strContent = '@charset "UTF-8";' . "\n" . $strContent;
 					
 					// remap url(..) entries
-					$strContent = $this->CssUrlRemapper->remapCode($strContent, $this->strOriginFile, $strSource, $this->objAbsolutizePage != null, $this->objAbsolutizePage);
+					$strContent = $this->CssUrlRemapper->remapCode($strContent, $this->strOriginFile, $strTemp, $this->objAbsolutizePage != null, $this->objAbsolutizePage);
 					
 					// write unminified code, if minify failed
 					$objTemp = new File($strTemp);
@@ -170,7 +170,7 @@ class LocalLessCssFile extends LocalCssFile {
 					$strContent = $this->ThemePlus->replaceVariablesByTheme($strContent, $this->objTheme, $strTemp);
 					
 					// remap url(..) entries
-					$strContent = $this->CssUrlRemapper->remapCode($strContent, $this->strOriginFile, $strSource, $this->objAbsolutizePage != null, $this->objAbsolutizePage);
+					$strContent = $this->CssUrlRemapper->remapCode($strContent, $this->strOriginFile, $strTemp, $this->objAbsolutizePage != null, $this->objAbsolutizePage);
 					
 					// compile with less
 					$strContent = $this->Compiler->minimizeCode($strContent);
