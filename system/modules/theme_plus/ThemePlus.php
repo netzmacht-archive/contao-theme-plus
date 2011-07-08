@@ -538,11 +538,11 @@ class ThemePlus extends Frontend
 				
 				if (preg_match('#\.less$#i', $strValue))
 				{
-					$arrStylesheets[] = new LocalLessCssFile($strValue, $objFile->media, $objTheme, $blnAbsolutizeUrls ? $objAbsolutizePage : false);
+					$arrStylesheets[] = new LocalLessCssFile($strValue, $objFile->media, $objFile->cc, $objTheme, $blnAbsolutizeUrls ? $objAbsolutizePage : false);
 				}
 				else
 				{
-					$arrStylesheets[] = new LocalCssFile($strValue, $objFile->media, $objTheme, $blnAbsolutizeUrls ? $objAbsolutizePage : false);
+					$arrStylesheets[] = new LocalCssFile($strValue, $objFile->media, $objFile->cc, $objTheme, $blnAbsolutizeUrls ? $objAbsolutizePage : false);
 				}
 				break;
 			}
@@ -596,13 +596,13 @@ class ThemePlus extends Frontend
 			switch ($strType)
 			{
 			case 'js_url':
-				$arrJavaScripts[] = new ExternalJavaScriptFile($strValue);
+				$arrJavaScripts[] = new ExternalJavaScriptFile($strValue, $objFile->cc);
 				break;
 				
 			case 'js_file':
 				$objTheme = $this->findTheme($objFile->pid);
 				
-				$arrJavaScripts[] = new LocalJavaScriptFile($strValue, $objTheme);
+				$arrJavaScripts[] = new LocalJavaScriptFile($strValue, $objFile->cc, $objTheme);
 				break;
 			
 			default:
