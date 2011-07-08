@@ -33,7 +33,7 @@ class ThemePlusPageRegular extends PageRegular
 			$GLOBALS['TL_CSS'] = array();
 		}
 		
-		if (!$GLOBALS['TL_CONFIG']['theme_plus_exclude_contaocss'])
+		if (!$objLayout->theme_plus_exclude_contaocss)
 		{
 			array_unshift($GLOBALS['TL_CSS'], 'system/contao.css');
 		}
@@ -150,22 +150,23 @@ class ThemePlusPageRegular extends PageRegular
 		array_unshift($GLOBALS['TL_CSS'], $strFile);
 		
 		// MooTools scripts
-		if (!$GLOBALS['TL_CONFIG']['theme_plus_exclude_mootools'])
+		if ($objLayout->mooSource == 'moo_googleapis')
 		{
-			if ($objLayout->mooSource == 'moo_googleapis')
-			{
-				$protocol = $this->Environment->ssl ? 'https://' : 'http://';
-	
-				$this->Template->mooScripts  = '<script' . (($objPage->outputFormat == 'xhtml') ? ' type="text/javascript"' : '') . ' src="' . $protocol . 'ajax.googleapis.com/ajax/libs/mootools/' . MOOTOOLS . '/mootools-yui-compressed.js"></script>' . "\n";
-				$this->Template->mooScripts .= '<script' . (($objPage->outputFormat == 'xhtml') ? ' type="text/javascript"' : '') . ' src="' . TL_PLUGINS_URL . 'plugins/mootools/' . MOOTOOLS . '/mootools-more.js"></script>' . "\n";
-			}
-			else
-			{
-				$this->Template->mooScripts = '';
-				
-				array_unshift($GLOBALS['TL_JAVASCRIPT'], 'plugins/mootools/' . MOOTOOLS . '/mootools-core.js');
-				array_unshift($GLOBALS['TL_JAVASCRIPT'], 'plugins/mootools/' . MOOTOOLS . '/mootools-more.js');
-			}
+			$protocol = $this->Environment->ssl ? 'https://' : 'http://';
+
+			$this->Template->mooScripts  = '<script' . (($objPage->outputFormat == 'xhtml') ? ' type="text/javascript"' : '') . ' src="' . $protocol . 'ajax.googleapis.com/ajax/libs/mootools/' . MOOTOOLS . '/mootools-yui-compressed.js"></script>' . "\n";
+			$this->Template->mooScripts .= '<script' . (($objPage->outputFormat == 'xhtml') ? ' type="text/javascript"' : '') . ' src="' . TL_PLUGINS_URL . 'plugins/mootools/' . MOOTOOLS . '/mootools-more.js"></script>' . "\n";
+		}
+		else if ($objLayout->mooSource == 'moo_local')
+		{
+			$this->Template->mooScripts = '';
+			
+			array_unshift($GLOBALS['TL_JAVASCRIPT'], 'plugins/mootools/' . MOOTOOLS . '/mootools-core.js');
+			array_unshift($GLOBALS['TL_JAVASCRIPT'], 'plugins/mootools/' . MOOTOOLS . '/mootools-more.js');
+		}
+		else
+		{
+			$this->Template->mooScripts = '';
 		}
 	}
 

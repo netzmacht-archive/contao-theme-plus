@@ -5,8 +5,15 @@
 
 $GLOBALS['TL_DCA']['tl_layout']['palettes']['default'] = str_replace(
 	'stylesheet',
-	'stylesheet,theme_plus_files',
+	'theme_plus_exclude_contaocss,stylesheet,theme_plus_files',
 	$GLOBALS['TL_DCA']['tl_layout']['palettes']['default']);
+
+$GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_exclude_contaocss'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['theme_plus_exclude_contaocss'],
+	'inputType'               => 'checkbox',
+	'eval'                    => array('tl_class'=>'m12')
+);
 
 $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_files'] = array
 (
@@ -15,6 +22,8 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_files'] = array
 	'options_callback'        => array('tl_layout_theme_plus', 'getFiles'),
 	'eval'                    => array('multiple'=>true, 'tl_class'=>'clr')
 );
+
+$GLOBALS['TL_DCA']['tl_layout']['fields']['mooSource']['eval']['includeBlankOption'] = true;
 
 /**
  * Class tl_layout_theme_plus

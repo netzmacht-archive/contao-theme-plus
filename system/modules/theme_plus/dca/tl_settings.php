@@ -6,21 +6,7 @@
 /**
  * System configuration
  */
-$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{theme_plus_legend:hide},theme_plus_exclude_contaocss,theme_plus_exclude_mootools,theme_plus_lesscss_mode';
-
-$GLOBALS['TL_DCA']['tl_settings']['fields']['theme_plus_exclude_contaocss'] = array
-(
-	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['theme_plus_exclude_contaocss'],
-	'inputType'               => 'checkbox',
-	'eval'                    => array('tl_class'=>'w50 m12')
-);
-
-$GLOBALS['TL_DCA']['tl_settings']['fields']['theme_plus_exclude_mootools'] = array
-(
-	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['theme_plus_exclude_mootools'],
-	'inputType'               => 'checkbox',
-	'eval'                    => array('tl_class'=>'w50 m12')
-);
+$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{theme_plus_legend:hide},theme_plus_lesscss_mode';
 
 $GLOBALS['TL_DCA']['tl_settings']['fields']['theme_plus_lesscss_mode'] = array
 (
