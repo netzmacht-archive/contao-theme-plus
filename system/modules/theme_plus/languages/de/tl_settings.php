@@ -6,7 +6,8 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_settings']['theme_plus_aggregate_externals']      = array('Externe Dateien zusammenfassen', 'Beim zusammenfassen von Dateien auch externe Dateien berücksichtigen.');
+$GLOBALS['TL_LANG']['tl_settings']['theme_plus_exclude_contaocss']        = array('Contao Core CSS nicht einbinden', 'Deaktiviert die Contao Core CSS (nicht die über das Theme definierten CSS Dateien).');
+$GLOBALS['TL_LANG']['tl_settings']['theme_plus_exclude_mootools']         = array('MooTools nicht einbinden', 'Deaktiviert die mit Contao ausgelieferte MooTools Version.');
 $GLOBALS['TL_LANG']['tl_settings']['theme_plus_lesscss_mode']             = array('LessCSS Betriebsmodus', 'Wählen Sie hier aus, wie LessCSS genutzt werden soll.');
 
 

@@ -105,6 +105,8 @@ class LocalJavaScriptFile extends LocalThemePlusFile {
 	 */
 	public function getEmbededHtml()
 	{
+		global $objPage;
+		
 		// get the file
 		$strFile = $this->getFile();
 		$objFile = new File($strFile);
@@ -113,7 +115,7 @@ class LocalJavaScriptFile extends LocalThemePlusFile {
 		$strContent = $objFile->getContent();
 		
 		// return html code
-		return $this->wrapCc('<script type="text/javascript">' . $strContent . '</script>');
+		return $this->wrapCc('<script' . (($objPage->outputFormat == 'xhtml') ? ' type="text/javascript"' : '') . '>' . TL_SCRIPT_URL . $strContent . '</script>');
 	}
 	
 	
@@ -122,11 +124,13 @@ class LocalJavaScriptFile extends LocalThemePlusFile {
 	 */
 	public function getIncludeHtml()
 	{
+		global $objPage;
+		
 		// get the file
 		$strFile = $this->getFile();
 		
 		// return html code
-		return $this->wrapCc('<script type="text/javascript" src="' . specialchars($strFile) . '"></script>');
+		return $this->wrapCc('<script' . (($objPage->outputFormat == 'xhtml') ? ' type="text/javascript"' : '') . ' src="' . TL_SCRIPT_URL . specialchars($strFile) . '"></script>');
 	}
 	
 }

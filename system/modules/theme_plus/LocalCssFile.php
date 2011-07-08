@@ -136,6 +136,8 @@ class LocalCssFile extends LocalThemePlusFile {
 	
 	public function getEmbededHtml()
 	{
+		global $objPage;
+		
 		// get the file
 		$strFile = $this->getFile();
 		$objFile = new File($strFile);
@@ -147,17 +149,19 @@ class LocalCssFile extends LocalThemePlusFile {
 		$strContent = $this->ThemePlus->handleCharset($strContent);
 		
 		// return html code
-		return $this->wrapCc('<style type="text/css">' . $strContent . '</style>');
+		return $this->wrapCc('<style' . (($objPage->outputFormat == 'xhtml') ? ' type="text/css"' : '') . '>' . TL_SCRIPT_URL . $strContent . '</style>');
 	}
 	
 	
 	public function getIncludeHtml()
 	{
+		global $objPage;
+		
 		// get the file
 		$strFile = $this->getFile();
 		
 		// return html code
-		return $this->wrapCc('<link type="text/css" rel="stylesheet" href="' . specialchars($strFile) . '" />');
+		return $this->wrapCc('<link' . (($objPage->outputFormat == 'xhtml') ? ' type="text/css"' : '') . ' rel="stylesheet" href="' . TL_SCRIPT_URL . specialchars($strFile) . '" />');
 	}
 }
 

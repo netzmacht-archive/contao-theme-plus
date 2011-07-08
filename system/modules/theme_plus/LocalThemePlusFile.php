@@ -27,7 +27,7 @@ abstract class LocalThemePlusFile extends ThemePlusFile {
 	{
 		if (!file_exists(TL_ROOT . '/' . $strOriginFile))
 		{
-			throw new Exception('File does not exists: ' . $this->strOriginFile);
+			throw new Exception('File does not exists: ' . $strOriginFile);
 		}
 		
 		parent::__construct($strCc);

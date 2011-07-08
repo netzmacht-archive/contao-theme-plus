@@ -240,11 +240,13 @@ class LocalLessCssFile extends LocalCssFile {
 	 */
 	public function getIncludeHtml()
 	{
+		global $objPage;
+		
 		// get the file
 		$strFile = $this->getFile();
 		
 		// return html code
-		return $this->wrapCc('<link type="text/css" rel="' . (preg_match('#\.less$#i', $strFile) ? 'stylesheet/less' : 'stylesheet') . '" href="' . specialchars($strFile) . '" />');
+		return $this->wrapCc('<link' . (($objPage->outputFormat == 'xhtml') ? ' type="text/css"' : '') . ' rel="' . (preg_match('#\.less$#i', $strFile) ? 'stylesheet/less' : 'stylesheet') . '" href="' . TL_SCRIPT_URL . specialchars($strFile) . '" />');
 	}
 	
 }
