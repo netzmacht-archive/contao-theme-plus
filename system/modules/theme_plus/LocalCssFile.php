@@ -115,7 +115,7 @@ class LocalCssFile extends LocalThemePlusFile {
 				}
 				
 				// create the gzip compressed version
-				if (!$GLOBALS['TL_CONFIG']['theme_plus_gz_compression_disabled'])
+				if ($GLOBALS['TL_CONFIG']['gzipScripts'])
 				{
 					$this->Compressor->compress($strTemp, $strTemp . '.gz');
 				}

@@ -26,7 +26,6 @@ $GLOBALS['TL_CTE']['includes']['script_source'] = 'ScriptSource';
  * Settings
  */
 $GLOBALS['TL_CONFIG']['theme_plus_lesscss_mode']            = 'less.js';
-$GLOBALS['TL_CONFIG']['theme_plus_gz_compression_disabled'] = '';
 
 
 /**

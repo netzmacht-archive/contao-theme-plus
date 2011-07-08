@@ -223,9 +223,9 @@ class ThemePlusRunonce extends Frontend
 			}
 			
 			# update gzip disable mode
-			if (isset($GLOBALS['TL_CONFIG']['additional_sources_gz_compression_disabled']) && $GLOBALS['TL_CONFIG']['additional_sources_gz_compression_disabled'])
+			if (isset($GLOBALS['TL_CONFIG']['additional_sources_gz_compression_disabled']) && !$GLOBALS['TL_CONFIG']['additional_sources_gz_compression_disabled'])
 			{
-				$this->updateConfig('theme_plus_gz_compression_disabled', 1);
+				$this->updateConfig('gzipScripts', 1);
 			}
 			
 			# delete outdated settings
