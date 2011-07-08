@@ -81,10 +81,10 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 	(
 		'__selector__'                => array('type', 'restrictLayout'),
 		'default'                     => '{source_legend},type',
-		'js_file'                     => '{source_legend},type,js_file',
-		'js_url'                      => '{source_legend},type,js_url,js_url_real_path',
-		'css_file'                    => '{source_legend},type,css_file,media;{editor_legend:hide},editor_integration,force_editor_integration',
-		'css_url'                     => '{source_legend},type,css_url,css_url_real_path,media;{editor_legend:hide},editor_integration,force_editor_integration'
+		'js_file'                     => '{source_legend},type,js_file,cc',
+		'js_url'                      => '{source_legend},type,js_url,cc',
+		'css_file'                    => '{source_legend},type,css_file,media,cc;{editor_legend:hide},editor_integration,force_editor_integration',
+		'css_url'                     => '{source_legend},type,css_url,media,cc;{editor_legend:hide},editor_integration,force_editor_integration'
 	),
 
 	// Subpalettes
