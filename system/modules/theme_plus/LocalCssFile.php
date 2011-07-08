@@ -56,7 +56,7 @@ class LocalCssFile extends LocalThemePlusFile {
 			$objFile = new File($this->strOriginFile);
 			$strKey = $objFile->basename
 					. '-' . $this->strMedia
-					. '-' . $this->objAbsolutizePage != null ? 'absolute' : 'relative' 
+					. '-' . ($this->objAbsolutizePage != null ? 'absolute' : 'relative')
 					. '-' . $objFile->mtime
 					. '-' . $strCssMinimizer
 					. '-' . $this->ThemePlus->getVariablesHashByTheme($this->objTheme);

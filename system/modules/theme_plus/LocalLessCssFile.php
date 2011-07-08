@@ -61,7 +61,7 @@ class LocalLessCssFile extends LocalCssFile {
 				$objFile = new File($this->strOriginFile);
 				$strKey = $objFile->basename
 						. '-' . $this->strMedia
-						. '-' . $this->objAbsolutizePage != null ? 'absolute' : 'relative' 
+						. '-' . ($this->objAbsolutizePage != null ? 'absolute' : 'relative')
 						. '-' . $objFile->mtime
 						. '-' . $this->ThemePlus->getVariablesHashByTheme($this->objTheme);
 				$strTemp = sprintf('system/scripts/%s-%s.less', $objFile->filename, substr(md5($strKey), 0, 8));
@@ -116,7 +116,7 @@ class LocalLessCssFile extends LocalCssFile {
 				$objFile = new File($this->strOriginFile);
 				$strKey = $objFile->basename
 						. '-' . $this->strMedia
-						. '-' . $this->objAbsolutizePage != null ? 'absolute' : 'relative' 
+						. '-' . ($this->objAbsolutizePage != null ? 'absolute' : 'relative')
 						. '-' . $objFile->mtime
 						. '-' . $strCssMinimizer
 						. '-' . $this->ThemePlus->getVariablesHashByTheme($this->objTheme);
