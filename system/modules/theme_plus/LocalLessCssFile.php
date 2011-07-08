@@ -150,6 +150,7 @@ class LocalLessCssFile extends LocalCssFile {
 						
 					case 'phpless':
 						$this->import('PHPLessCss', 'Compiler');
+						$this->Compiler->setImportDir(dirname($objFile->value));
 						break;
 						
 					default:
