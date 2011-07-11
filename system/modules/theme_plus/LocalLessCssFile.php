@@ -120,7 +120,7 @@ class LocalLessCssFile extends LocalCssFile {
 						. '-' . $objFile->mtime
 						. '-' . $strCssMinimizer
 						. '-' . $this->ThemePlus->getVariablesHashByTheme($this->objTheme);
-				$strTemp = sprintf('system/scripts/%s-%s.less.css', $objFile->filename, substr(md5($strKey), 0, 8));
+				$strTemp = sprintf('system/scripts/%s-%s.css', $objFile->filename, substr(md5($strKey), 0, 8));
 				
 				if (!file_exists(TL_ROOT . '/' . $strTemp))
 				{
@@ -172,11 +172,16 @@ class LocalLessCssFile extends LocalCssFile {
 					// remap url(..) entries
 					$strContent = $this->CssUrlRemapper->remapCode($strContent, $this->strOriginFile, $strTemp, $this->objAbsolutizePage != null, $this->objAbsolutizePage);
 					
+					// write temporary source file
+					$objSource = new File(sprintf('system/scripts/%s-%s.less', $objFile->filename, substr(md5($strKey), 0, 8)));
+					$objSource->write($strContent);
+					$objSource->close();
+					
 					// compile with less
-					$strContent = $this->Compiler->minimizeCode($strContent);
+					$strContent = $this->Compiler->minimizeFromFile($objSource->value);
 					
 					// if compile fails, return origin file
-					if ($strContent == false)
+					if ($strContent === false)
 					{
 						return $this->strOriginFile;
 					}
