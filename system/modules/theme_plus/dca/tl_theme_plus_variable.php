@@ -23,7 +23,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_variable'] = array
 		'sorting' => array
 		(
 			'mode'                    => 4,
-			'flag'                    => 4,
+			'flag'                    => 1,
 			'fields'                  => array('name'),
 			'panelLayout'             => 'filter;limit',
 			'headerFields'            => array('name', 'author', 'tstamp'),
