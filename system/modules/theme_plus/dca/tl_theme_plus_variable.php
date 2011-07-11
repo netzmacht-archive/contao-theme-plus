@@ -23,7 +23,8 @@ $GLOBALS['TL_DCA']['tl_theme_plus_variable'] = array
 		'sorting' => array
 		(
 			'mode'                    => 4,
-			'fields'                  => array('type', 'name'),
+			'flag'                    => 4,
+			'fields'                  => array('name'),
 			'panelLayout'             => 'filter;limit',
 			'headerFields'            => array('name', 'author', 'tstamp'),
 			'child_record_callback'   => array('tl_theme_plus_variable', 'listVariables'),
