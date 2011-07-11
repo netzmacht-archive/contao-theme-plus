@@ -46,7 +46,7 @@ $GLOBALS['TL_CTE']['includes']['script_source'] = 'ScriptSource';
  */
 $GLOBALS['TL_CONFIG']['theme_plus_exclude_contaocss']       = '';
 $GLOBALS['TL_CONFIG']['theme_plus_exclude_mootools']        = '';
-$GLOBALS['TL_CONFIG']['theme_plus_lesscss_mode']            = 'less.js';
+$GLOBALS['TL_CONFIG']['theme_plus_lesscss_mode']            = 'phpless';
 
 
 /**
@@ -64,24 +64,15 @@ $GLOBALS['TL_PTY']['regular'] = 'ThemePlusPageRegular';
 /**
  * easy_themes integration
  */
-$intOffset = array_search('css', array_keys($GLOBALS['TL_EASY_THEMES_MODULES'])) + 1;
-$GLOBALS['TL_EASY_THEMES_MODULES'] = array_merge
+$GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus_file'] = array
 (
-	array_slice($GLOBALS['TL_EASY_THEMES_MODULES'], 0, $intOffset),
-	array
-	(
-		'theme_plus_file' => array
-		(
-			'href_fragment' => 'table=tl_theme_plus_file',
-			'icon'          => 'system/modules/theme_plus/html/icon.png'
-		),
-		'theme_plus_variable' => array
-		(
-			'href_fragment' => 'table=tl_theme_plus_variable',
-			'icon'          => 'system/modules/theme_plus/html/variable.png'
-		)
-	),
-	array_slice($GLOBALS['TL_EASY_THEMES_MODULES'], $intOffset)
+	'href_fragment' => 'table=tl_theme_plus_file',
+	'icon'          => 'system/modules/theme_plus/html/icon.png'
 );
+$GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus_variable'] = array
+(
+	'href_fragment' => 'table=tl_theme_plus_variable',
+	'icon'          => 'system/modules/theme_plus/html/variable.png'
+)
 
 ?>
