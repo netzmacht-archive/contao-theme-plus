@@ -192,7 +192,21 @@ class ThemePlus extends Frontend
 		{
 			$arrRow = $varArg;
 		}
-		
+
+		// HOOK: create framework code
+		if (isset($GLOBALS['TL_HOOKS']['renderVariable']) && is_array($GLOBALS['TL_HOOKS']['renderVariable']))
+		{
+			foreach ($GLOBALS['TL_HOOKS']['renderVariable'] as $callback)
+			{
+				$this->import($callback[0]);
+				$varResult = $this->$callback[0]->$callback[1]($arrRow);
+				if ($varResult)
+				{
+					return $varResult;
+				}
+			}
+		}
+
 		switch ($arrRow['type'])
 		{
 		case 'text':
@@ -281,7 +295,7 @@ class ThemePlus extends Frontend
 			$arrVariables = $this->getVariables(false, $strPath);
 		}
 		$objVariableReplace = new VariableReplacer($arrVariables);
-		return preg_replace_callback('#\$([[:alnum:]\-]+)#', array(&$objVariableReplace, 'replace'), $strCode);
+		return preg_replace_callback('#\$([[:alnum:]_\-]+)#', array(&$objVariableReplace, 'replace'), $strCode);
 	}
 	
 	
@@ -291,7 +305,7 @@ class ThemePlus extends Frontend
 	public function replaceVariablesByTheme($strCode, $varTheme, $strPath = false)
 	{
 		$objVariableReplace = new VariableReplacer($this->getVariables($varTheme, $strPath));
-		return preg_replace_callback('#\$([[:alnum:]\-]+)#', array(&$objVariableReplace, 'replace'), $strCode);
+		return preg_replace_callback('#\$([[:alnum:]_\-]+)#', array(&$objVariableReplace, 'replace'), $strCode);
 	}
 	
 	
@@ -301,7 +315,7 @@ class ThemePlus extends Frontend
 	public function replaceVariablesByLayout($strCode, $varLayout, $strPath = false)
 	{
 		$objVariableReplace = new VariableReplacer($this->getVariables($this->findThemeByLayout($varLayout), $strPath));
-		return preg_replace_callback('#\$([[:alnum:]\-]+)#', array(&$objVariableReplace, 'replace'), $strCode);
+		return preg_replace_callback('#\$([[:alnum:]_\-]+)#', array(&$objVariableReplace, 'replace'), $strCode);
 	}
 	
 	
@@ -751,7 +765,7 @@ class ThemePlus extends Frontend
 /**
  * A little helper class that work as callback for preg_replace_callback.
  */
-class VariableReplacer
+class VariableReplacer extends System
 {
 	/**
 	 * The variables and there values.
@@ -779,7 +793,22 @@ class VariableReplacer
 		{
 			return $this->variables[$m[1]];
 		}
-		return '<missing variable $' . $m[1] . '>';
+
+		// HOOK: replace undefined variable
+		if (isset($GLOBALS['TL_HOOKS']['replaceUndefinedVariable']) && is_array($GLOBALS['TL_HOOKS']['replaceUndefinedVariable']))
+		{
+			foreach ($GLOBALS['TL_HOOKS']['replaceUndefinedVariable'] as $callback)
+			{
+				$this->import($callback[0]);
+				$varResult = $this->$callback[0]->$callback[1]($m[1]);
+				if ($varResult)
+				{
+					return $varResult;
+				}
+			}
+		}
+
+		return $m[0];
 	}
 }
 
