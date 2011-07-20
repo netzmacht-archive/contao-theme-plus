@@ -5,7 +5,7 @@
 
 /**
  * Class ThemePlus
- * 
+ *
  * Adding files to the page layout.
  */
 class ThemePlusPageRegular extends PageRegular
@@ -18,8 +18,8 @@ class ThemePlusPageRegular extends PageRegular
 		parent::__construct();
 		$this->import('ThemePlus');
 	}
-	
-	
+
+
 	/**
 	 * Create a new template
 	 * @param object
@@ -32,27 +32,19 @@ class ThemePlusPageRegular extends PageRegular
 		{
 			$GLOBALS['TL_CSS'] = array();
 		}
-		
+
 		if (!$objLayout->theme_plus_exclude_contaocss)
 		{
 			array_unshift($GLOBALS['TL_CSS'], 'system/contao.css');
 		}
-		
+
 		// setup the TL_JAVASCRIPT array
 		if (!is_array($GLOBALS['TL_JAVASCRIPT']))
 		{
 			$GLOBALS['TL_JAVASCRIPT'] = array();
 		}
-		
+
 		parent::createTemplate($objPage, $objLayout);
-		
-		// Initialize margin
-		$arrMargin = array
-		(
-			'left'   => '0 auto 0 0',
-			'center' => '0 auto',
-			'right'  => '0 0 0 auto'
-		);
 
 		$strFramework = false;
 
@@ -72,61 +64,71 @@ class ThemePlusPageRegular extends PageRegular
 
 		if ($strFramework === false)
 		{
+			$strFramework = '';
+
+			// Initialize margin
+			$arrMargin = array
+			(
+				'left'   => '0 auto 0 0',
+				'center' => '0 auto',
+				'right'  => '0 0 0 auto'
+			);
+
 			// Wrapper
 			if ($objLayout->static)
 			{
 				$arrSize = deserialize($objLayout->width);
 				$strFramework .= sprintf('#wrapper{width:%s;margin:%s;}', $arrSize['value'] . $arrSize['unit'], $arrMargin[$objLayout->align]) . "\n";
 			}
-	
+
 			// Header
 			if ($objLayout->header)
 			{
 				$arrSize = deserialize($objLayout->headerHeight);
-	
+
 				if ($arrSize['value'] != '' && $arrSize['value'] >= 0)
 				{
 					$strFramework .= sprintf('#header{height:%s;}', $arrSize['value'] . $arrSize['unit']) . "\n";
 				}
 			}
-	
+
 			$strMain = '';
-	
+
 			// Left column
 			if ($objLayout->cols == '2cll' || $objLayout->cols == '3cl')
 			{
 				$arrSize = deserialize($objLayout->widthLeft);
-	
+
 				if ($arrSize['value'] != '' && $arrSize['value'] >= 0)
 				{
 					$strFramework .= sprintf('#left{width:%s;}', $arrSize['value'] . $arrSize['unit']) . "\n";
 					$strMain .= sprintf('margin-left:%s;', $arrSize['value'] . $arrSize['unit']);
 				}
 			}
-	
+
 			// Right column
 			if ($objLayout->cols == '2clr' || $objLayout->cols == '3cl')
 			{
 				$arrSize = deserialize($objLayout->widthRight);
-	
+
 				if ($arrSize['value'] != '' && $arrSize['value'] >= 0)
 				{
 					$strFramework .= sprintf('#right{width:%s;}', $arrSize['value'] . $arrSize['unit']) . "\n";
 					$strMain .= sprintf('margin-right:%s;', $arrSize['value'] . $arrSize['unit']);
 				}
 			}
-	
+
 			// Main column
 			if (strlen($strMain))
 			{
 				$strFramework .= sprintf('#main{%s}', $strMain) . "\n";
 			}
-	
+
 			// Footer
 			if ($objLayout->footer)
 			{
 				$arrSize = deserialize($objLayout->footerHeight);
-	
+
 				if ($arrSize['value'] != '' && $arrSize['value'] >= 0)
 				{
 					$strFramework .= sprintf('#footer{height:%s;}', $arrSize['value'] . $arrSize['unit']) . "\n";
@@ -138,17 +140,17 @@ class ThemePlusPageRegular extends PageRegular
 
 		$strKey = substr(md5($strFramework), 0, 8);
 		$strFile = 'system/scripts/framework-' . $strKey . '.css';
-		
+
 		if (!file_exists(TL_ROOT . '/' . $strFile))
 		{
 			$objFile = new File($strFile);
 			$objFile->write($strFramework);
 			$objFile->close();
 		}
-		
+
 		// Add the framework css file to css list
 		array_unshift($GLOBALS['TL_CSS'], $strFile);
-		
+
 		// MooTools scripts
 		if ($objLayout->mooSource == 'moo_googleapis')
 		{
@@ -160,9 +162,9 @@ class ThemePlusPageRegular extends PageRegular
 		else if ($objLayout->mooSource == 'moo_local')
 		{
 			$this->Template->mooScripts = '';
-			
-			array_unshift($GLOBALS['TL_JAVASCRIPT'], 'plugins/mootools/' . MOOTOOLS . '/mootools-core.js');
+
 			array_unshift($GLOBALS['TL_JAVASCRIPT'], 'plugins/mootools/' . MOOTOOLS . '/mootools-more.js');
+			array_unshift($GLOBALS['TL_JAVASCRIPT'], 'plugins/mootools/' . MOOTOOLS . '/mootools-core.js');
 		}
 		else
 		{
@@ -193,10 +195,10 @@ class ThemePlusPageRegular extends PageRegular
 			$this->ThemePlus->inheritFiles($objPage),
 			($objPage->theme_plus_include_files_noinherit ? deserialize($objPage->theme_plus_files_noinherit, true) : array())
 		);
-		
+
 		// build stylesheets
 		$arrStylesheets = array();
-		
+
 		// collect internal stylesheets
 		if (is_array($GLOBALS['TL_CSS']) && count($GLOBALS['TL_CSS']))
 		{
@@ -209,11 +211,11 @@ class ThemePlusPageRegular extends PageRegular
 				else
 				{
 					list($stylesheet, $media, $cc) = explode('|', $stylesheet);
-					$arrStylesheets[] = new LocalCssFile($stylesheet, $media, $cc);
+					$arrStylesheets[] = preg_match('#\.less$#i', $stylesheet) ? new LocalLessCssFile($stylesheet, $media, $cc) : new LocalCssFile($stylesheet, $media, $cc);
 				}
 			}
 		}
-		
+
 		// User style sheets
 		if (is_array($arrStyleSheets) && strlen($arrStyleSheets[0]))
 		{
@@ -233,32 +235,32 @@ class ThemePlusPageRegular extends PageRegular
 				$arrStylesheets[] = new LocalCssFile('system/scripts/' . $objStylesheets->name . '.css', $media, $objStylesheets->cc);
 			}
 		}
-		
+
 		// Default TinyMCE style sheet
 		if (!$objLayout->skipTinymce && file_exists(TL_ROOT . '/' . $GLOBALS['TL_CONFIG']['uploadPath'] . '/tinymce.css'))
 		{
 			$arrStylesheets[] = new LocalCssFile($GLOBALS['TL_CONFIG']['uploadPath'] . '/tinymce.css');
 		}
-		
+
 		// Theme+ stylesheets
 		$arrStylesheets = array_merge
 		(
 			$arrStylesheets,
 			$this->ThemePlus->getCssFiles($arrFileIds, false)
 		);
-		
+
 		// aggregate stylesheets
 		if (!$this->ThemePlus->getBELoginStatus())
 		{
 			$arrStylesheets = $this->ThemePlus->aggregateFiles($arrStylesheets);
 		}
-		
+
 		// generate html and add to template
 		foreach ($arrStylesheets as $objStylesheet)
 		{
 			$strStyleSheets .= $objStylesheet->getIncludeHtml() . "\n";
 		}
-		
+
 		// feeds ---------------------------------------------------------------
 		$newsfeeds = deserialize($objLayout->newsfeeds);
 		$calendarfeeds = deserialize($objLayout->calendarfeeds);
@@ -290,7 +292,7 @@ class ThemePlusPageRegular extends PageRegular
 		// javascripts ---------------------------------------------------------
 		$strHeadTags = '';
 		$arrJavaScripts = array();
-		
+
 		// collect internal javascripts
 		if (is_array($GLOBALS['TL_JAVASCRIPT']) && count($GLOBALS['TL_JAVASCRIPT']))
 		{
@@ -299,26 +301,26 @@ class ThemePlusPageRegular extends PageRegular
 				$arrJavaScripts[] = new LocalJavaScriptFile($javascript);
 			}
 		}
-		
+
 		// add theme+ javascripts
 		$arrJavaScripts = array_merge
 		(
 			$arrJavaScripts,
 			$this->ThemePlus->getJavaScriptFiles($arrFileIds)
 		);
-		
+
 		// aggregate javascripts
 		if (!$this->ThemePlus->getBELoginStatus())
 		{
 			$arrJavaScripts = $this->ThemePlus->aggregateFiles($arrJavaScripts);
 		}
-		
+
 		// add them to the layout
 		foreach ($arrJavaScripts as $objJavaScript)
 		{
 			$strHeadTags .= $objJavaScript->getIncludeHtml() . "\n";
 		}
-		
+
 		// Add internal <head> tags
 		if (is_array($GLOBALS['TL_HEAD']) && count($GLOBALS['TL_HEAD']))
 		{
