@@ -356,13 +356,10 @@ class EditorStyles extends ThemePlus {
 		$arrSources = array();
 		if (count($arrIds) > 0)
 		{
-			$arrArrThemePlusFile = $this->getSources($arrIds);
-			foreach ($arrArrThemePlusFile as $strType => $arrThemePlusFile)
+			$arrThemePlusFile = $this->getCssFiles($arrIds);
+			foreach ($arrThemePlusFile as $objThemePlusFile)
 			{
-				foreach ($arrThemePlusFile as $arrAdditionalSource)
-				{
-					$arrSources[] = $arrAdditionalSource['src'];
-				}
+				$arrSources[] = $objThemePlusFile->getFile();
 			}
 		}
 		
