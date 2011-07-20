@@ -77,7 +77,7 @@ class ScriptSource extends Frontend
 		}
 		
 		$this->import('ThemePlus');
-		return implode("\n", $this->ThemePlus->generateIncludeHtml(deserialize($this->script_source, true))) . "\n";
+		return implode("\n", $this->ThemePlus->includeFiles(deserialize($this->script_source, true))) . "\n";
 	}
 }
 
