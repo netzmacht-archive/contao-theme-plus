@@ -17,7 +17,7 @@ class ExternalJavaScriptFile extends ExternalThemePlusFile {
 	public function getIncludeHtml()
 	{
 		// get the file
-		$strFile = $this->getFile();
+		$strFile = $this->getUrl();
 		
 		// return html code
 		return $this->wrapCc('<link type="text/css" rel="stylesheet" href="' . specialchars($strFile) . '" />');
