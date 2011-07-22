@@ -30,6 +30,3 @@ $GLOBALS['TL_LANG']['tl_theme_plus_variable']['edit']        = array('Variable b
 $GLOBALS['TL_LANG']['tl_theme_plus_variable']['delete']      = array('Variable löschen', 'Variable ID %s löschen');
 $GLOBALS['TL_LANG']['tl_theme_plus_variable']['cut']         = array('Variable verschieben ', 'Variable ID %s verschieben');
 $GLOBALS['TL_LANG']['tl_theme_plus_variable']['copy']        = array('Variable duplizieren', 'Variable ID %s duplizieren');
-$GLOBALS['TL_LANG']['tl_theme_plus_variable']['delete']      = array('Variable löschen', 'Variable ID %s löschen');
-
-?>

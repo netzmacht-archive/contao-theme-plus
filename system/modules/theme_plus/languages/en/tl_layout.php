@@ -6,6 +6,7 @@
 /**
  * Buttons
  */
-$GLOBALS['TL_LANG']['tl_layout']['additional_source'] = array('Weitere Dateien', 'Weitere Dateien in das Layout einbinden');
+$GLOBALS['TL_LANG']['tl_layout']['theme_plus_exclude_contaocss']  = array('Remove Contao Core CSS', 'Remove the Contao Core CSS (contao.css) from this layout.');
+$GLOBALS['TL_LANG']['tl_layout']['theme_plus_files']              = array('Additional files', 'Choose additional files to add to this layout.');
 
 ?>
