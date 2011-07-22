@@ -6,7 +6,8 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_settings']['theme_plus_lesscss_mode']             = array('LessCSS Betriebsmodus', 'Wählen Sie hier aus, wie LessCSS genutzt werden soll.');
+$GLOBALS['TL_LANG']['tl_settings']['theme_plus_lesscss_mode'] = array('LessCSS Betriebsmodus', 'Wählen Sie hier aus, wie LessCSS genutzt werden soll.');
+$GLOBALS['TL_LANG']['tl_settings']['theme_plus_force_less']   = array('Alle CSS Dateien mit LessCSS verarbeiten', 'Wählen Sie diese Option werden auch Dateien mit der Endung .css als LessCSS Dateien behandelt.');
 
 
 /**

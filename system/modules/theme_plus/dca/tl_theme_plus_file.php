@@ -152,7 +152,8 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['filter'],
 			'inputType'               => 'checkbox',
-			'exclude'                 => true
+			'exclude'                 => true,
+			'eval'                    => array('submitOnChange'=>true)
 		),
 		'filterRule' => array
 		(
@@ -176,11 +177,25 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 				'Browser' => array
 				(
 					'browser-ie'           => 'InternetExplorer',
+					'browser-ie-6'         => 'InternetExplorer 6',
+					'browser-ie-7'         => 'InternetExplorer 7',
+					'browser-ie-8'         => 'InternetExplorer 8',
+					'browser-ie-9'         => 'InternetExplorer 9',
+					'browser-ie-10'        => 'InternetExplorer 10',
 					'browser-ie-mobile'    => 'InternetExplorer Mobile',
 					'browser-firefox'      => 'Firefox',
+					'browser-firefox-3'    => 'Firefox-3',
+					'browser-firefox-4'    => 'Firefox-4',
+					'browser-firefox-5'    => 'Firefox-5',
+					'browser-firefox-6'    => 'Firefox-6',
 					'browser-chrome'       => 'Chrome',
+					'browser-chrome-10'    => 'Chrome-10',
+					'browser-chrome-11'    => 'Chrome-11',
+					'browser-chrome-12'    => 'Chrome-12',
 					'browser-omniweb'      => 'OmniWeb',
 					'browser-safari'       => 'Safari',
+					'browser-safari-4'     => 'Safari 4',
+					'browser-safari-5'     => 'Safari 5',
 					'browser-opera'        => 'Opera',
 					'browser-opera-mini'   => 'Opera Mini',
 					'browser-opera-mobile' => 'Opera Mobile',

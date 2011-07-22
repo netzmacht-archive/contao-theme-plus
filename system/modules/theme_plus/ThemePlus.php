@@ -34,6 +34,7 @@ class ThemePlus extends Frontend
 	 */
 	protected function __construct() {
 		$this->import('Database');
+		$this->import('Environment');
 	}
 	
 	
@@ -504,9 +505,10 @@ class ThemePlus extends Frontend
 	 */
 	public function getCssFiles($arrIds, $blnAggregate = null, $blnAbsolutizeUrls = false, $objAbsolutizePage = null)
 	{
-		// return if there are no ids
-		$arrIds = array_map('intval', $arrIds);
-		if (empty($arrIds))
+		// return if there are no ids or file paths
+		$arrFiles = array_filter($arrIds, array(&$this, 'filter_string'));
+		$arrIds   = array_filter($arrIds, array(&$this, 'filter_int'));
+		if (empty($arrIds) && empty($arrFiles))
 		{
 			return array();
 		}
@@ -519,51 +521,60 @@ class ThemePlus extends Frontend
 		$arrStylesheets = array();
 		
 		// collect css and js files into $arrSourcesMap, depending of the conditional comment
-		$objFile = $this->Database->execute("
-				SELECT
-					*
-				FROM
-					tl_theme_plus_file
-				WHERE
-					id IN (" . implode(',', $arrIds) . ")
-				AND
-					(type = 'css_url' OR type = 'css_file')
-				ORDER BY
-					sorting");
-		while ($objFile->next())
+		if (count($arrIds))
 		{
-			if ($this->filter($objFile))
+			$objFile = $this->Database->execute("
+					SELECT
+						*
+					FROM
+						tl_theme_plus_file
+					WHERE
+						id IN (" . implode(',', $arrIds) . ")
+					AND
+						(type = 'css_url' OR type = 'css_file')
+					ORDER BY
+						sorting");
+			while ($objFile->next())
 			{
-				continue;
+				if ($this->filter($objFile))
+				{
+					continue;
+				}
+				
+				$strType = $objFile->type;
+				$strValue = $objFile->$strType;
+				switch ($strType)
+				{
+				case 'css_url':
+					if (preg_match('#\.less$#i', $strValue))
+					{
+						$arrStylesheets[] = new ExternalLessCssFile($varValue, $objFile->media);
+					}
+					else
+					{
+						$arrStylesheets[] = new ExternalCssFile($strValue, $objFile->media);
+					}
+					break;
+					
+				case 'css_file':
+					$objTheme = $this->findTheme($objFile->pid);
+					
+					$arrStylesheets[] = LocalThemePlusFile::create($strValue, $objFile->media, $objFile->cc, $objTheme, $blnAbsolutizeUrls ? $objAbsolutizePage : false);
+					break;
+				}
 			}
-			
-			$strType = $objFile->type;
-			$strValue = $objFile->$strType;
-			switch ($strType)
+		}
+		
+		// add files by path
+		if (count($arrFiles))
+		{
+			foreach ($arrFiles as $strFile)
 			{
-			case 'css_url':
-				if (preg_match('#\.less$#i', $strValue))
+				$objFile = LocalThemePlusFile::create($strFile);
+				if ($objFile && $objFile instanceof LocalCssFile)
 				{
-					$arrStylesheets[] = new ExternalLessCssFile($varValue, $objFile->media);
+					$arrStylesheets[] = $objFile;
 				}
-				else
-				{
-					$arrStylesheets[] = new ExternalCssFile($strValue, $objFile->media);
-				}
-				break;
-				
-			case 'css_file':
-				$objTheme = $this->findTheme($objFile->pid);
-				
-				if (preg_match('#\.less$#i', $strValue))
-				{
-					$arrStylesheets[] = new LocalLessCssFile($strValue, $objFile->media, $objFile->cc, $objTheme, $blnAbsolutizeUrls ? $objAbsolutizePage : false);
-				}
-				else
-				{
-					$arrStylesheets[] = new LocalCssFile($strValue, $objFile->media, $objFile->cc, $objTheme, $blnAbsolutizeUrls ? $objAbsolutizePage : false);
-				}
-				break;
 			}
 		}
 		
@@ -582,9 +593,10 @@ class ThemePlus extends Frontend
 	 */
 	public function getJavaScriptFiles($arrIds, $blnAggregate = null)
 	{
-		// return if there are no ids
-		$arrIds = array_map('intval', $arrIds);
-		if (empty($arrIds))
+		// return if there are no ids or file paths
+		$arrFiles = array_filter($arrIds, array(&$this, 'filter_string'));
+		$arrIds   = array_filter($arrIds, array(&$this, 'filter_int'));
+		if (empty($arrIds) && empty($arrFiles))
 		{
 			return array();
 		}
@@ -597,40 +609,56 @@ class ThemePlus extends Frontend
 		$arrJavaScripts = array();
 		
 		// collect css and js files into $arrSourcesMap, depending of the conditional comment
-		$objFile = $this->Database->execute("
-				SELECT
-					*
-				FROM
-					tl_theme_plus_file
-				WHERE
-					id IN (" . implode(',', $arrIds) . ")
-				AND
-					(type = 'js_url' OR type = 'js_file')
-				ORDER BY
-					sorting");
-		while ($objFile->next())
+		if (count($arrIds))
 		{
-			if ($this->filter($objFile))
+			$objFile = $this->Database->execute("
+					SELECT
+						*
+					FROM
+						tl_theme_plus_file
+					WHERE
+						id IN (" . implode(',', $arrIds) . ")
+					AND
+						(type = 'js_url' OR type = 'js_file')
+					ORDER BY
+						sorting");
+			while ($objFile->next())
 			{
-				continue;
+				if ($this->filter($objFile))
+				{
+					continue;
+				}
+				
+				$strType = $objFile->type;
+				$strValue = $objFile->$strType;
+				switch ($strType)
+				{
+				case 'js_url':
+					$arrJavaScripts[] = new ExternalJavaScriptFile($strValue, $objFile->cc);
+					break;
+					
+				case 'js_file':
+					$objTheme = $this->findTheme($objFile->pid);
+					
+					$arrJavaScripts[] = new LocalJavaScriptFile($strValue, $objFile->cc, $objTheme);
+					break;
+				
+				default:
+					continue;
+				}
 			}
-			
-			$strType = $objFile->type;
-			$strValue = $objFile->$strType;
-			switch ($strType)
+		}
+		
+		// add files by path
+		if (count($arrFiles))
+		{
+			foreach ($arrFiles as $strFile)
 			{
-			case 'js_url':
-				$arrJavaScripts[] = new ExternalJavaScriptFile($strValue, $objFile->cc);
-				break;
-				
-			case 'js_file':
-				$objTheme = $this->findTheme($objFile->pid);
-				
-				$arrJavaScripts[] = new LocalJavaScriptFile($strValue, $objFile->cc, $objTheme);
-				break;
-			
-			default:
-				continue;
+				$objFile = LocalThemePlusFile::create($strFile);
+				if ($objFile && $objFile instanceof LocalJavaScriptFile)
+				{
+					$arrJavaScripts[] = $objFile;
+				}
 			}
 		}
 		
@@ -664,9 +692,9 @@ class ThemePlus extends Frontend
 						return $objFile->filterInvert ? true : false;
 					}
 				}
-				else if (preg_match('#^browser-(.*)$#', $strRule, $m))
+				else if (preg_match('#^browser-(.*?)(?:-(\d+))?$#', $strRule, $m))
 				{
-					if ($ua->browser == $m[1])
+					if ($ua->browser == $m[1] && (empty($m[2]) || $ua->version == floatval($m[2])))
 					{
 						return $objFile->filterInvert ? true : false;
 					}
@@ -790,26 +818,51 @@ class ThemePlus extends Frontend
 	public function hookReplaceInsertTags($strTag)
 	{
 		$arrParts = explode('::', $strTag);
+		$arrIds = explode(',', $arrParts[1]);
 		switch ($arrParts[0])
 		{
 		case 'include_theme_file':
-			return implode("\n", $this->includeFiles(explode(',', $arrParts[1]))) . "\n";
-			break;
+			return implode("\n", $this->includeFiles($arrIds)) . "\n";
 			
 		case 'embed_theme_file':
-			return implode("\n", $this->embedFiles(explode(',', $arrParts[1]))) . "\n";
-			break;
+			return implode("\n", $this->embedFiles($arrIds)) . "\n";
 			
 		// @deprecated
 		case 'insert_additional_sources':
-			return implode("\n", $this->includeFiles(explode(',', $arrParts[1]))) . "\n";
+			return implode("\n", $this->includeFiles($arrIds)) . "\n";
 			
 		// @deprecated
 		case 'include_additional_sources':
-			return implode("\n", $this->embedFiles(explode(',', $arrParts[1]))) . "\n";
+			return implode("\n", $this->embedFiles($arrIds)) . "\n";
 		}
 		 
 		return false;
+	}
+	
+	
+	/**
+	 * Helper function that filter out all non integer values.
+	 */
+	public function filter_int($string)
+	{
+		if (is_numeric($string))
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	
+	/**
+	 * Helper function that filter out all integer values.
+	 */
+	public function filter_string($string)
+	{
+		if (is_numeric($string))
+		{
+			return false;
+		}
+		return true;
 	}
 }
 

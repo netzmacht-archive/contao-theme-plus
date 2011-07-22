@@ -211,7 +211,7 @@ class ThemePlusPageRegular extends PageRegular
 				else
 				{
 					list($stylesheet, $media, $cc) = explode('|', $stylesheet);
-					$arrStylesheets[] = preg_match('#\.less$#i', $stylesheet) ? new LocalLessCssFile($stylesheet, $media, $cc) : new LocalCssFile($stylesheet, $media, $cc);
+					$arrStylesheets[] = LocalThemePlusFile::create($stylesheet, $media, $cc);
 				}
 			}
 		}
@@ -239,7 +239,7 @@ class ThemePlusPageRegular extends PageRegular
 		// Default TinyMCE style sheet
 		if (!$objLayout->skipTinymce && file_exists(TL_ROOT . '/' . $GLOBALS['TL_CONFIG']['uploadPath'] . '/tinymce.css'))
 		{
-			$arrStylesheets[] = new LocalCssFile($GLOBALS['TL_CONFIG']['uploadPath'] . '/tinymce.css');
+			$arrStylesheets[] = LocalThemePlusFile::create($GLOBALS['TL_CONFIG']['uploadPath'] . '/tinymce.css');
 		}
 
 		// Theme+ stylesheets

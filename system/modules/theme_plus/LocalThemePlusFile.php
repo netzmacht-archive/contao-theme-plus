@@ -6,7 +6,36 @@
 /**
  * Class LocalThemePlusFile
  */
-abstract class LocalThemePlusFile extends ThemePlusFile {
+abstract class LocalThemePlusFile extends ThemePlusFile
+{
+	/**
+	 * Get a file from path. 
+	 */
+	public static function create()
+	{
+		$args = func_get_args();
+		$strFile = $args[0];
+		if (file_exists(TL_ROOT . '/' . $strFile))
+		{
+			$objFile = new File($strFile);
+			switch ($objFile->extension)
+			{
+				case 'js':
+					return new LocalJavaScriptFile($strFile, isset($args[1]) ? $args[1] : '', isset($args[2]) ? $args[2] : false);
+				
+				case 'css':
+					if (!$GLOBALS['TL_CONFIG']['theme_plus_force_less'])
+					{
+						return new LocalCssFile($strFile, isset($args[1]) ? $args[1] : '', isset($args[2]) ? $args[2] : '', isset($args[3]) ? $args[3] : false, isset($args[4]) ? $args[4] : false);
+					}
+					
+				case 'less':
+					return new LocalLessCssFile($strFile, isset($args[1]) ? $args[1] : '', isset($args[2]) ? $args[2] : '', isset($args[3]) ? $args[3] : false, isset($args[4]) ? $args[4] : false);
+			}
+		}
+		return false;
+	}
+	
 
 	/**
 	 * The origin file path.

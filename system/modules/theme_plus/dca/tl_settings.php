@@ -6,7 +6,7 @@
 /**
  * System configuration
  */
-$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{theme_plus_legend:hide},theme_plus_lesscss_mode';
+$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{theme_plus_legend:hide},theme_plus_lesscss_mode,theme_plus_force_less';
 
 $GLOBALS['TL_DCA']['tl_settings']['fields']['theme_plus_lesscss_mode'] = array
 (
@@ -15,6 +15,12 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['theme_plus_lesscss_mode'] = array
 	'inputType'               => 'select',
 	'options_callback'        => array('tl_settings_theme_plus', 'getLessCssModes'),
 	'eval'                    => array('decodeEntities'=>true, 'tl_class'=>'w50')
+);
+$GLOBALS['TL_DCA']['tl_settings']['fields']['theme_plus_force_less'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['theme_plus_force_less'],
+	'inputType'               => 'checkbox',
+	'eval'                    => array('tl_class'=>'m12 w50')
 );
 
 class tl_settings_theme_plus extends Backend

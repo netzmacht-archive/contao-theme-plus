@@ -6,8 +6,8 @@
 /**
  * Class ThemePlusFile
  */
-abstract class ThemePlusFile extends System {
-
+abstract class ThemePlusFile extends System
+{
 	/**
 	 * The conditional comment.
 	 * 
