@@ -532,6 +532,11 @@ class ThemePlus extends Frontend
 					sorting");
 		while ($objFile->next())
 		{
+			if ($this->filter($objFile))
+			{
+				continue;
+			}
+			
 			$strType = $objFile->type;
 			$strValue = $objFile->$strType;
 			switch ($strType)
@@ -605,6 +610,11 @@ class ThemePlus extends Frontend
 					sorting");
 		while ($objFile->next())
 		{
+			if ($this->filter($objFile))
+			{
+				continue;
+			}
+			
 			$strType = $objFile->type;
 			$strValue = $objFile->$strType;
 			switch ($strType)
@@ -631,6 +641,48 @@ class ThemePlus extends Frontend
 		}
 		
 		return $arrJavaScripts;
+	}
+	
+	
+	/**
+	 * Check the file filter.
+	 * 
+	 * @return Return true if the file filter NOT match, otherwise false.
+	 */
+	public function filter($objFile)
+	{
+		if ($objFile->filter)
+		{
+			$ua = $this->Environment->agent;
+			$arrRule = deserialize($objFile->filterRule);
+			foreach ($arrRule as $strRule)
+			{
+				if (preg_match('#^os-(.*)$#', $strRule, $m))
+				{
+					if ($ua->os == $m[1])
+					{
+						return $objFile->filterInvert ? true : false;
+					}
+				}
+				else if (preg_match('#^browser-(.*)$#', $strRule, $m))
+				{
+					if ($ua->browser == $m[1])
+					{
+						return $objFile->filterInvert ? true : false;
+					}
+				}
+				else if ($strRule == '@mobile')
+				{
+					if ($ua->mobile)
+					{
+						return $objFile->filterInvert ? true : false;
+					}
+				}
+			}
+			
+			return $objFile->filterInvert ? false : true;
+		}
+		return false;
 	}
 	
 	

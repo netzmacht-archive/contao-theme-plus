@@ -13,6 +13,9 @@ $GLOBALS['TL_LANG']['tl_theme_plus_file']['css_file']                 = array('C
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['css_url']                  = array('CSS url', 'Please enter the css url.');
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['media']                    = array('Mediatype', 'Here you can add a mediatype query.');
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['cc']                       = array('Conditional Comment', 'Here you can add a conditional comment.');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['filter']                   = array('Apply filter', 'Here you can activate the server site filter logik. (Warning: This feature does not work with the page cache! A modification to make this possible is allready requested.)');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['filterRule']               = array('Filter', 'Please choose the server side filters.');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['filterInvert']             = array('Invert filter', 'Invert the filter logik.');
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['editor_integration']       = array('WYSIWYG editor integration', 'Add this file to the wysiwyg editor.');
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['force_editor_integration'] = array('Force WYSIWYG editor integration', 'Force adding this file to the wysiwyg editor.');
 

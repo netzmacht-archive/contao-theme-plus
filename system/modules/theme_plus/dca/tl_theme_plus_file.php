@@ -79,18 +79,18 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'__selector__'                => array('type', 'restrictLayout'),
+		'__selector__'                => array('type', 'filter'),
 		'default'                     => '{source_legend},type',
 		'js_file'                     => '{source_legend},type,js_file,cc',
 		'js_url'                      => '{source_legend},type,js_url,cc',
-		'css_file'                    => '{source_legend},type,css_file,media,cc;{editor_legend:hide},editor_integration,force_editor_integration',
-		'css_url'                     => '{source_legend},type,css_url,media,cc;{editor_legend:hide},editor_integration,force_editor_integration'
+		'css_file'                    => '{source_legend},type,css_file,media,cc,filter;{editor_legend:hide},editor_integration,force_editor_integration',
+		'css_url'                     => '{source_legend},type,css_url,media,cc,filter;{editor_legend:hide},editor_integration,force_editor_integration'
 	),
 
 	// Subpalettes
 	'subpalettes' => array
 	(
-		'restrictLayout'              => 'layout'
+		'filter'                      => 'filterRule,filterInvert'
 	),
 	
 	// Fields
@@ -147,6 +147,59 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 			'inputType'               => 'text',
 			'exclude'                 => true,
 			'eval'                    => array('tl_class'=>'long')
+		),
+		'filter' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['filter'],
+			'inputType'               => 'checkbox',
+			'exclude'                 => true
+		),
+		'filterRule' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['filterRule'],
+			'inputType'               => 'checkbox',
+			'exclude'                 => true,
+			'options'                 => array
+			(
+				'OS' => array
+				(
+					'os-win'        => 'Windows',
+					'os-win-ce'     => 'Windows CE / Phone',
+					'os-mac'        => 'Macintosh',
+					'os-unix'       => 'UNIX (Linux, FreeBSD, OpenBSD, NetBSD)',
+					'os-ios'        => 'iOS (iPad, iPhone, iPod)',
+					'os-android'    => 'Android',
+					'os-blackberry' => 'Blackberry',
+					'os-symbian'    => 'Symbian',
+					'os-webos'      => 'WebOS'
+				),
+				'Browser' => array
+				(
+					'browser-ie'           => 'InternetExplorer',
+					'browser-ie-mobile'    => 'InternetExplorer Mobile',
+					'browser-firefox'      => 'Firefox',
+					'browser-chrome'       => 'Chrome',
+					'browser-omniweb'      => 'OmniWeb',
+					'browser-safari'       => 'Safari',
+					'browser-opera'        => 'Opera',
+					'browser-opera-mini'   => 'Opera Mini',
+					'browser-opera-mobile' => 'Opera Mobile',
+					'browser-camino'       => 'Camino',
+					'browser-konqueror'    => 'Konqueror',
+					'browser-other'        => 'Other'
+				),
+				'Other' => array
+				(
+					'@mobile' => 'Mobile Client'
+				)
+			),
+			'eval'                    => array('multiple'=>true)
+		),
+		'filterInvert' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['filterInvert'],
+			'inputType'               => 'checkbox',
+			'exclude'                 => true
 		),
 		'editor_integration' => array
 		(

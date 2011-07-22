@@ -13,6 +13,9 @@ $GLOBALS['TL_LANG']['tl_theme_plus_file']['css_file']                 = array('C
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['css_url']                  = array('CSS URL', 'Bitte geben Sie die URL zur CSS Datei an.');
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['media']                    = array('Medientypen', 'Bitte wählen Sie die Medientypen aus, für die die CSS Datei gültig ist.');
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['cc']                       = array('Conditional Comment', 'Conditional Comments ermöglichen das Einbinden Internet Explorer-spezifischer Dateien.');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['filter']                   = array('Filter anwenden', 'Wählen Sie diese Option, können Sie verschiedene Serverseitige Filter anwenden. (Achtung: Dieses Feature ist inkompatibel zum Seitencache! Eine entsprechende Änderung an Contao wurde bereits beantragt.)');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['filterRule']               = array('Filter', 'Wählen Sie hier die Serverseitigen Filter aus.');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['filterInvert']             = array('Filter umkehren', 'Hiermit können Sie die Filterlogik umkehren.');
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['editor_integration']       = array('WYSIWYG Editor Integration', 'Hier kann die Datei dem WYSIWYG Editor hinzugefügt werden. Lesen Sie hierzu die Hinweise im Handbuch.');
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['force_editor_integration'] = array('WYSIWYG Editor Integration erzwingen', 'Datei dem WYSIWYG Editor hinzugefügt auch wenn diese nicht dem Layout zugewiesen wurde.');
 
