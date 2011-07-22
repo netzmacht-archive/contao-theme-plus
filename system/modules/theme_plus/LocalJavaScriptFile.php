@@ -115,7 +115,7 @@ class LocalJavaScriptFile extends LocalThemePlusFile {
 		$strContent = $objFile->getContent();
 		
 		// return html code
-		return $this->wrapCc('<script' . (($objPage->outputFormat == 'xhtml') ? ' type="text/javascript"' : '') . '>' . TL_SCRIPT_URL . $strContent . '</script>');
+		return $this->wrapCc('<script' . (($objPage->outputFormat == 'xhtml') ? ' type="text/javascript"' : '') . '>' . $strContent . '</script>');
 	}
 	
 	

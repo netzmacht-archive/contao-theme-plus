@@ -156,7 +156,7 @@ class CssFileAggregator extends LocalThemePlusFile {
 		$strFile = $this->getFile();
 		
 		// return html code
-		return '<link type="text/css" rel="stylesheet" href="' . specialchars($strFile) . '" />';
+		return '<link type="text/css" rel="stylesheet" href="' . TL_SCRIPT_URL . specialchars($strFile) . '" />';
 	}
 }
 

@@ -149,7 +149,7 @@ class LocalCssFile extends LocalThemePlusFile {
 		$strContent = $this->ThemePlus->handleCharset($strContent);
 		
 		// return html code
-		return $this->wrapCc('<style' . (($objPage->outputFormat == 'xhtml') ? ' type="text/css"' : '') . '>' . TL_SCRIPT_URL . $strContent . '</style>');
+		return $this->wrapCc('<style' . (($objPage->outputFormat == 'xhtml') ? ' type="text/css"' : '') . '>' . $strContent . '</style>');
 	}
 	
 	
