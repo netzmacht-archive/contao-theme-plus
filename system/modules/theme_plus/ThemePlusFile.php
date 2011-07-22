@@ -98,7 +98,7 @@ abstract class ThemePlusFile extends System
 	{
 		if (strlen($this->strCc))
 		{
-			return '<!--[' . $this->strCc . ']>' . $strCode . '<![endif]-->';
+			return '<!--[if ' . $this->strCc . ']>' . $strCode . '<![endif]-->';
 		}
 		return $strCode;
 	}
