@@ -54,14 +54,14 @@ class JavaScriptFileAggregator extends LocalThemePlusFile {
 						$strFile = $objThemePlusFile->getFile();
 						$objFile = new File($strFile);
 						$arrFiles[] = $strFile;
-						$strKey .= sprintf(':%s-%d', basename($strFile, '.css'), $objFile->mtime);
+						$strKey .= sprintf(':%s-%d', basename($strFile, '.js'), $objFile->mtime);
 						continue;
 					}
 				}
 				throw new Exception('Could not aggreagate the file: ' . $objFile);
 			}
 			
-			$strTemp = 'system/scripts/javascript-' . substr(md5($strKey), 0, 8) . '.css';
+			$strTemp = 'system/scripts/javascript-' . substr(md5($strKey), 0, 8) . '.js';
 			
 			if (!file_exists(TL_ROOT . '/' . $strTemp))
 			{
