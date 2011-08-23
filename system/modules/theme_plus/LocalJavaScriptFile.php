@@ -88,54 +88,62 @@ class LocalJavaScriptFile extends LocalThemePlusFile {
 					$objTemp->write($strContent);
 					$objTemp->close();
 				}
-				
+
 				// create the gzip compressed version
 				if ($GLOBALS['TL_CONFIG']['gzipScripts'])
 				{
 					$this->Compressor->compress($strTemp, $strTemp . '.gz');
 				}
 			}
-			
+
 			$this->strProcessedFile = $strTemp;
 		}
-		
+
 		return $this->strProcessedFile;
 	}
-	
-	
+
+
 	/**
 	 * Get embeded html code
 	 */
 	public function getEmbededHtml()
 	{
 		global $objPage;
-		
+
 		// get the file
 		$strFile = $this->getFile();
 		$objFile = new File($strFile);
-		
+
 		// get the css code
 		$strContent = $objFile->getContent();
-		
+
 		// return html code
 		return $this->wrapCc('<script' . (($objPage->outputFormat == 'xhtml') ? ' type="text/javascript"' : '') . '>' . $strContent . '</script>');
 	}
-	
-	
+
+
 	/**
 	 * Get included html code
 	 */
 	public function getIncludeHtml()
 	{
 		global $objPage;
-		
+
 		// get the file
 		$strFile = $this->getFile();
-		
+
 		// return html code
 		return $this->wrapCc('<script' . (($objPage->outputFormat == 'xhtml') ? ' type="text/javascript"' : '') . ' src="' . TL_SCRIPT_URL . specialchars($strFile) . '"></script>');
 	}
-	
+
+
+	/**
+	 * Convert into a string.
+	 */
+	public function __toString()
+	{
+		return $this->getOriginFile() . '|' . $this->getCc();
+	}
 }
 
 ?>
