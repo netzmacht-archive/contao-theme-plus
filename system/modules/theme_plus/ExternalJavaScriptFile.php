@@ -7,7 +7,7 @@
  * Class ExternalJavaScriptFile
  */
 class ExternalJavaScriptFile extends ExternalThemePlusFile {
-	
+
 	public function __construct($strUrl, $strCc = '')
 	{
 		parent::__construct($strUrl, $strCc);
@@ -18,11 +18,19 @@ class ExternalJavaScriptFile extends ExternalThemePlusFile {
 	{
 		// get the file
 		$strFile = $this->getUrl();
-		
+
 		// return html code
 		return $this->wrapCc('<link type="text/css" rel="stylesheet" href="' . specialchars($strFile) . '" />');
 	}
-	
+
+
+	/**
+	 * Convert into a string.
+	 */
+	public function __toString()
+	{
+		return $this->getUrl() . '|' . $this->getCc();
+	}
 }
 
 ?>
