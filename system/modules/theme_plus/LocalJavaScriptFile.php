@@ -7,14 +7,14 @@
  * Class LocalJavaScriptFile
  */
 class LocalJavaScriptFile extends LocalThemePlusFile {
-	
-	
+
+
 	/**
 	 * The processed temporary file path.
 	 */
 	protected $strProcessedFile;
-	
-	
+
+
 	/**
 	 * Create a new javascript file object.
 	 */
@@ -22,7 +22,7 @@ class LocalJavaScriptFile extends LocalThemePlusFile {
 	{
 		parent::__construct($strOriginFile, $strCc, $objTheme);
 		$this->strProcessedFile = null;
-		
+
 		// import the Theme+ master class
 		$this->import('ThemePlus');
 	}
@@ -36,27 +36,27 @@ class LocalJavaScriptFile extends LocalThemePlusFile {
 		if ($this->strProcessedFile == null)
 		{
 			$this->import('Compression');
-			
+
 			$strJsMinimizer = $this->ThemePlus->getBELoginStatus() ? false : $this->Compression->getDefaultJsMinimizer();
 			if (!$strJsMinimizer)
 			{
 				$strJsMinimizer = 'none';
 			}
-			
+
 			$objFile = new File($this->strOriginFile);
 			$strTemp = $objFile->basename
 					. '-' . $objFile->mtime
 					. '-' . $strJsMinimizer
 					. '-' . $this->ThemePlus->getVariablesHashByTheme($this->objTheme);
 			$strTemp = sprintf('system/scripts/%s-%s.js', $objFile->filename, substr(md5($strTemp), 0, 8));
-			
+
 			if (!file_exists(TL_ROOT . '/' . $strTemp))
 			{
 				$this->import('Compression');
-				
+
 				// import the Theme+ master class
 				$this->import('ThemePlus');
-				
+
 				// import the javascript minimizer
 				$strJsMinimizerClass = $this->Compression->getJsMinimizerClass($strJsMinimizer);
 				if (!$strJsMinimizerClass)
@@ -64,19 +64,22 @@ class LocalJavaScriptFile extends LocalThemePlusFile {
 					$strJsMinimizerClass = $this->Compression->getJsMinimizerClass('none');
 				}
 				$this->import($strJsMinimizerClass, 'Minimizer');
-				
+
 				// import the gzip compressor
 				$strGzipCompressorClass = $this->Compression->getCompressorClass('gzip');
 				$this->import($strGzipCompressorClass, 'Compressor');
-				
+
 				$strContent = $objFile->getContent();
-				
+
 				// detect and decompress gziped content
 				$strContent = $this->ThemePlus->decompressGzip($strContent);
-				
+
 				// replace variables
 				$strContent = $this->ThemePlus->replaceVariablesByTheme($strContent, $this->objTheme, $strTemp);
-				
+
+				// replace insert tags
+				$strContent = $this->replaceInsertTags($strContent);
+
 				// minify
 				if (!$this->Minimizer->minimizeToFile($strTemp, $strContent))
 				{

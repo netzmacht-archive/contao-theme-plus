@@ -79,38 +79,41 @@ class LocalCssFile extends LocalThemePlusFile {
 					$strCssMinimizerClass = $this->Compression->getCssMinimizerClass('none');
 				}
 				$this->import($strCssMinimizerClass, 'Minimizer');
-				
+
 				// import the gzip compressor
 				$strGzipCompressorClass = $this->Compression->getCompressorClass('gzip');
 				$this->import($strGzipCompressorClass, 'Compressor');
-				
+
 				// import the url remapper
 				$this->import('CssUrlRemapper');
-				
+
 				// get the css code
 				$strContent = $objFile->getContent();
-				
+
 				// detect and decompress gziped content
 				$strContent = $this->ThemePlus->decompressGzip($strContent);
-				
+
 				// handle @charset
 				$strContent = $this->ThemePlus->handleCharset($strContent);
 
 				// replace variables
 				$strContent = $this->ThemePlus->replaceVariablesByTheme($strContent, $this->objTheme, $strTemp);
-				
+
 				// add media definition
 				if (strlen($this->strMedia))
 				{
 					$strContent = sprintf("@media %s\n{\n%s\n}\n", $this->strMedia, $strContent);
 				}
-				
+
 				// add @charset utf-8 rule
 				$strContent = '@charset "UTF-8";' . "\n" . $strContent;
-									
+
 				// remap url(..) entries
 				$strContent = $this->CssUrlRemapper->remapCode($strContent, $this->strOriginFile, $strTemp, $this->objAbsolutizePage ? true : false, $this->objAbsolutizePage);
-				
+
+				// replace insert tags
+				$strContent = $this->replaceInsertTags($strContent);
+
 				// minify
 				if (!$this->Minimizer->minimizeToFile($strTemp, $strContent))
 				{
