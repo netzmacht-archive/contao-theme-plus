@@ -298,7 +298,15 @@ class ThemePlusPageRegular extends PageRegular
 		{
 			foreach (array_unique($GLOBALS['TL_JAVASCRIPT']) as $javascript)
 			{
-				$arrJavaScripts[] = new LocalJavaScriptFile($javascript);
+				if ($javascript instanceof ThemePlusFile)
+				{
+					$arrJavaScripts[] = $javascript;
+				}
+				else
+				{
+					list($javascript, $cc) = explode('|', $javascript);
+					$arrJavaScripts[] = new LocalJavaScriptFile($javascript, $cc);
+				}
 			}
 		}
 
