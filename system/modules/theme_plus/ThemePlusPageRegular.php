@@ -256,7 +256,7 @@ class ThemePlusPageRegular extends PageRegular
 				// fallback, use as external url, without checks
 				if (!$objFile)
 				{
-					$objFile = new ExternalCssFile($javascript, $cc);
+					$objFile = new ExternalCssFile($stylesheet, $cc);
 				}
 
 				// only add, if its a css file object
