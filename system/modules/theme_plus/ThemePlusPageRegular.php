@@ -294,6 +294,12 @@ class ThemePlusPageRegular extends PageRegular
 		// generate html and add to template
 		foreach ($arrStylesheets as $objStylesheet)
 		{
+			if (is_array($GLOBALS['TL_THEME_EXCLUDE']) &&
+				in_array($objStylesheet instanceof LocalThemePlusFile ? $objStylesheet->getOriginFile() : $objStylesheet->getUrl(), $GLOBALS['TL_THEME_EXCLUDE']))
+			{
+				// skip excluded files
+				continue;
+			}
 			$strStyleSheets .= $objStylesheet->getIncludeHtml() . "\n";
 		}
 
@@ -394,6 +400,12 @@ class ThemePlusPageRegular extends PageRegular
 		// add them to the layout
 		foreach ($arrJavaScripts as $objJavaScript)
 		{
+			if (is_array($GLOBALS['TL_THEME_EXCLUDE']) &&
+				in_array($objJavaScript instanceof LocalThemePlusFile ? $objJavaScript->getOriginFile() : $objJavaScript->getUrl(), $GLOBALS['TL_THEME_EXCLUDE']))
+			{
+				// skip excluded files
+				continue;
+			}
 			$strHeadTags .= $objJavaScript->getIncludeHtml() . "\n";
 		}
 
