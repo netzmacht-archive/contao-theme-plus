@@ -26,6 +26,12 @@ abstract class ThemePlusFile extends Controller
 
 
 	/**
+	 * Get a debug comment string
+	 */
+	protected abstract function getDebugComment();
+
+
+	/**
 	 * Return the conditional comment.
 	 */
 	public function getCc()

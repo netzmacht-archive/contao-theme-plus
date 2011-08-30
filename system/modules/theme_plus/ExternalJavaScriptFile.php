@@ -20,7 +20,7 @@ class ExternalJavaScriptFile extends ExternalThemePlusFile {
 		$strFile = $this->getUrl();
 
 		// return html code
-		return $this->wrapCc('<link type="text/css" rel="stylesheet" href="' . specialchars($strFile) . '" />');
+		return $this->getDebugComment() . $this->wrapCc('<link type="text/css" rel="stylesheet" href="' . specialchars($strFile) . '" />');
 	}
 
 

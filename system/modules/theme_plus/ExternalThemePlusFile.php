@@ -25,6 +25,20 @@ abstract class ExternalThemePlusFile extends ThemePlusFile {
 	
 	
 	/**
+	 * Get a debug comment string
+	 */
+	protected function getDebugComment()
+	{
+		$this->import('ThemePlus');
+		if ($this->ThemePlus->getBELoginStatus())
+		{
+			return '<!-- external url: ' . $this->getUrl() . ' -->' . "\n";
+		}
+		return '';
+	}
+	
+	
+	/**
 	 * Get the url.
 	 */
 	public function getUrl()

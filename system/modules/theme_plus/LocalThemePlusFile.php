@@ -66,6 +66,20 @@ abstract class LocalThemePlusFile extends ThemePlusFile
 	
 	
 	/**
+	 * Get a debug comment string
+	 */
+	protected function getDebugComment()
+	{
+		$this->import('ThemePlus');
+		if ($this->ThemePlus->getBELoginStatus())
+		{
+			return '<!-- local file: ' . $this->getOriginFile() . ' -->' . "\n";
+		}
+		return '';
+	}
+	
+	
+	/**
 	 * Get the original file path relative to TL_ROOT.
 	 */
 	public function getOriginFile()

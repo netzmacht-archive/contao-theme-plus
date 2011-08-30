@@ -232,7 +232,7 @@ class LocalLessCssFile extends LocalCssFile {
 	{
 		if ($this->isClientSideCompile())
 		{
-			return $this->getIncludeHtml();
+			return $this->getDebugComment() . $this->getIncludeHtml();
 		}
 		else
 		{
@@ -258,7 +258,7 @@ class LocalLessCssFile extends LocalCssFile {
 		$strFile = $this->getFile();
 
 		// return html code
-		return $this->wrapCc('<link' . (($objPage->outputFormat == 'xhtml') ? ' type="text/css"' : '') . ' rel="' . (preg_match('#\.less$#i', $strFile) ? 'stylesheet/less' : 'stylesheet') . '" href="' . TL_SCRIPT_URL . specialchars($strFile) . '" />');
+		return $this->getDebugComment() . $this->wrapCc('<link' . (($objPage->outputFormat == 'xhtml') ? ' type="text/css"' : '') . ' rel="' . (preg_match('#\.less$#i', $strFile) ? 'stylesheet/less' : 'stylesheet') . '" href="' . TL_SCRIPT_URL . specialchars($strFile) . '" />');
 	}
 
 }
