@@ -130,12 +130,7 @@ class LocalLessCssFile extends LocalCssFile {
 					$this->import('Compression');
 
 					// import the css minimizer
-					$strCssMinimizerClass = $this->Compression->getCssMinimizerClass($strCssMinimizer);
-					if (!$strCssMinimizerClass)
-					{
-						$strCssMinimizerClass = $this->Compression->getCssMinimizerClass('none');
-					}
-					$this->import($strCssMinimizerClass, 'Minimizer');
+					$this->Minimizer = $this->Compression->getCssMinimizer($strCssMinimizer);
 
 					// import the gzip compressor
 					$strGzipCompressorClass = $this->Compression->getCompressorClass('gzip');

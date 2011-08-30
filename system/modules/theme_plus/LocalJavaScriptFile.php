@@ -58,12 +58,7 @@ class LocalJavaScriptFile extends LocalThemePlusFile {
 				$this->import('ThemePlus');
 
 				// import the javascript minimizer
-				$strJsMinimizerClass = $this->Compression->getJsMinimizerClass($strJsMinimizer);
-				if (!$strJsMinimizerClass)
-				{
-					$strJsMinimizerClass = $this->Compression->getJsMinimizerClass('none');
-				}
-				$this->import($strJsMinimizerClass, 'Minimizer');
+				$this->Minimizer = $this->Compression->getJsMinimizer($strJsMinimizer);
 
 				// import the gzip compressor
 				$strGzipCompressorClass = $this->Compression->getCompressorClass('gzip');
