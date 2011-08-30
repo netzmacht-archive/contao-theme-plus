@@ -207,14 +207,47 @@ class ThemePlusPageRegular extends PageRegular
 		{
 			foreach (array_unique($GLOBALS['TL_CSS']) as $stylesheet)
 			{
-				if ($stylesheet instanceof ThemePlusFile)
+				$objFile = false;
+
+				// split path/url, media and cc
+				if (is_string($stylesheet))
 				{
-					$arrStylesheets[] = $stylesheet;
+					list($stylesheet, $media, $cc) = explode('|', $stylesheet);
 				}
 				else
 				{
-					list($stylesheet, $media, $cc) = explode('|', $stylesheet);
-					$arrStylesheets[] = LocalThemePlusFile::create($stylesheet, $media, $cc);
+					$media = '';
+					$cc = '';
+				}
+
+				// add unmodified if its a ThemePlusFile object
+				if ($stylesheet instanceof ThemePlusFile)
+				{
+					$objFile = $stylesheet;
+				}
+
+				// use as external url
+				else if (preg_match('#^\w://#', $stylesheet))
+				{
+					$objFile = ExternalThemePlusFile::create($stylesheet, $media, $cc);
+				}
+
+				// use as local path
+				else
+				{
+					$objFile = LocalThemePlusFile::create($stylesheet, $media, $cc);
+				}
+
+				// fallback, use as external url, without checks
+				if (!$objFile)
+				{
+					$objFile = new ExternalCssFile($javascript, $cc);
+				}
+
+				// only add, if its a css file object
+				if ($objFile && ($objFile instanceof LocalCSSFile || $objFile instanceof ExternalCSSFile))
+				{
+					$arrStylesheets[] = $objFile;
 				}
 			}
 		}
@@ -301,14 +334,46 @@ class ThemePlusPageRegular extends PageRegular
 		{
 			foreach (array_unique($GLOBALS['TL_JAVASCRIPT']) as $javascript)
 			{
-				if ($javascript instanceof ThemePlusFile)
+				$objFile = false;
+
+				// split path/url and cc
+				if (is_string($javascript))
 				{
-					$arrJavaScripts[] = $javascript;
+					list($javascript, $cc) = explode('|', $javascript);
 				}
 				else
 				{
-					list($javascript, $cc) = explode('|', $javascript);
-					$arrJavaScripts[] = new LocalJavaScriptFile($javascript, $cc);
+					$cc = '';
+				}
+
+				// add unmodified if its a ThemePlusFile object
+				if ($javascript instanceof ThemePlusFile)
+				{
+					$objFile = $javascript;
+				}
+
+				// use as external url
+				else if (preg_match('#^\w://#', $javascript))
+				{
+					$objFile = ExternalThemePlusFile::create($javascript, $cc);
+				}
+
+				// use as local path
+				else
+				{
+					$objFile = LocalThemePlusFile::create($javascript, $cc);
+				}
+
+				// fallback, use as external url, without checks
+				if (!$objFile)
+				{
+					$objFile = new ExternalJavaScriptFile($javascript, $cc);
+				}
+
+				// only add, if its a javascript file object
+				if ($objFile && ($objFile instanceof LocalJavaScriptFile || $objFile instanceof ExternalJavaScriptFile))
+				{
+					$arrJavaScripts[] = $objFile;
 				}
 			}
 		}
