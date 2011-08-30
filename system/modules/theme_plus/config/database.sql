@@ -61,7 +61,9 @@ CREATE TABLE `tl_theme_plus_variable` (
 
 CREATE TABLE `tl_layout` (
   `theme_plus_exclude_contaocss` char(1) NOT NULL default '',
+  `theme_plus_exclude_frameworkcss` char(1) NOT NULL default '',
   `theme_plus_files` blob NULL,
+  `theme_plus_exclude_files` blob NULL,
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------

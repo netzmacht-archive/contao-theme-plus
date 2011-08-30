@@ -5,7 +5,7 @@
 
 $GLOBALS['TL_DCA']['tl_layout']['palettes']['default'] = str_replace(
 	'stylesheet',
-	'theme_plus_exclude_contaocss,theme_plus_exclude_frameworkcss,stylesheet,theme_plus_files',
+	'theme_plus_exclude_contaocss,theme_plus_exclude_frameworkcss,stylesheet,theme_plus_files,theme_plus_exclude_files',
 	$GLOBALS['TL_DCA']['tl_layout']['palettes']['default']);
 
 $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_exclude_contaocss'] = array
@@ -20,6 +20,24 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_exclude_frameworkcss'] = a
 	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['theme_plus_exclude_frameworkcss'],
 	'inputType'               => 'checkbox',
 	'eval'                    => array('tl_class'=>'w50 m12')
+);
+
+$GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_exclude_files'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['theme_plus_exclude_files'],
+	'inputType'               => 'multitextWizard',
+	'eval'                    => array
+	(
+		'style'   => 'width:100%;',
+		'columns' => array
+		(
+			array
+			(
+				'label'     => &$GLOBALS['TL_LANG']['tl_layout']['theme_plus_exclude_files'][2],
+				'width'     => '600px'
+			)
+		)
+	)
 );
 
 $GLOBALS['TL_DCA']['tl_layout']['fields']['stylesheets']['eval']['tl_class'] .= ' clr';

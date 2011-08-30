@@ -183,6 +183,21 @@ class ThemePlusPageRegular extends PageRegular
 	 */
 	protected function createHeaderScripts(Database_Result $objPage, Database_Result $objLayout)
 	{
+		if (!is_array($objLayout->theme_plus_exclude_files))
+		{
+			$objLayout->theme_plus_exclude_files = deserialize($objLayout->theme_plus_exclude_files, true);
+		}
+		if (count($objLayout->theme_plus_exclude_files)>0)
+		{
+			foreach ($objLayout->theme_plus_exclude_files as $v)
+			{
+				if ($v[0])
+				{
+					$GLOBALS['TL_THEME_EXCLUDE'][] = $v[0];
+				}
+			}
+		}
+
 		// stylesheets ---------------------------------------------------------
 		$strStyleSheets = '';
 		$arrStyleSheets = deserialize($objLayout->stylesheet);
