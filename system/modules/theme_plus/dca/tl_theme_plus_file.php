@@ -81,8 +81,8 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 	(
 		'__selector__'                => array('type', 'filter'),
 		'default'                     => '{source_legend},type',
-		'js_file'                     => '{source_legend},type,js_file,cc',
-		'js_url'                      => '{source_legend},type,js_url,cc',
+		'js_file'                     => '{source_legend},type,js_file,cc,filter',
+		'js_url'                      => '{source_legend},type,js_url,cc,filter',
 		'css_file'                    => '{source_legend},type,css_file,media,cc,filter;{editor_legend:hide},editor_integration,force_editor_integration',
 		'css_url'                     => '{source_legend},type,css_url,media,cc,filter;{editor_legend:hide},editor_integration,force_editor_integration'
 	),
@@ -92,7 +92,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 	(
 		'filter'                      => 'filterRule,filterInvert'
 	),
-	
+
 	// Fields
 	'fields' => array
 	(
@@ -242,7 +242,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 class tl_theme_plus_file extends Backend
 {
 	private static $objTheme = false;
-	
+
 	/**
 	 * Import the back end user object
 	 */
@@ -256,7 +256,7 @@ class tl_theme_plus_file extends Backend
 	public function detectTheme() {
 		if (self::$objTheme === false) {
 			$intPid = $this->Input->get('id');
-			
+
 			if ($this->Input->get('act')) {
 				$objThemePlusFile = $this->Database->prepare("SELECT * FROM tl_theme_plus_file WHERE id=?")
 													  ->execute($intPid);
@@ -266,7 +266,7 @@ class tl_theme_plus_file extends Backend
 					$intPid = 0;
 				}
 			}
-			
+
 			$objTheme = $this->Database->prepare("SELECT * FROM tl_theme WHERE id=?")
 									   ->execute($intPid);
 			if ($objTheme->next()) {
@@ -275,8 +275,8 @@ class tl_theme_plus_file extends Backend
 		}
 		return self::$objTheme;
 	}
-	
-	
+
+
 	/**
 	 * Return all page layouts grouped by theme
 	 * @return array
@@ -284,7 +284,7 @@ class tl_theme_plus_file extends Backend
 	public function getPageLayouts()
 	{
 		$objTheme = $this->detectTheme();
-		
+
 		$stmtLayout = $this->Database->prepare("SELECT
 				l.id, l.name, t.name AS theme
 			FROM
@@ -313,7 +313,7 @@ class tl_theme_plus_file extends Backend
 
 		return $return;
 	}
-	
+
 
 	/**
 	 * Check permissions to edit the table
@@ -341,30 +341,30 @@ class tl_theme_plus_file extends Backend
 	public function listFile($row)
 	{
 		$label = $row[$row['type']];
-		
+
 		if (strlen($row['cc'])) {
 			$label .= ' <span style="color: #B3B3B3;">[' . $row['cc'] . ']</span>';
 		}
-		
+
 		if (strlen($row['media'])) {
 			$label .= ' <span style="color: #B3B3B3;">[' . $row['media'] . ']</span>';
 		}
-		
+
 		switch ($row['type']) {
 		case 'js_file': case 'js_url':
 			$image = 'iconJS.gif';
 			break;
-		
+
 		case 'css_file': case 'css_url':
 			$image = 'iconCSS.gif';
 			break;
-		
+
 		default:
 			$image = false;
 		}
-		
+
 		return '<div>' . ($image ? $this->generateImage($image, $label, 'style="vertical-align:middle"') . ' ' : '') . $label ."</div>\n";
-		
+
 	}
 
 
