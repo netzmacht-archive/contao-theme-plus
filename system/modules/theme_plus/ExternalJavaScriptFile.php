@@ -16,11 +16,13 @@ class ExternalJavaScriptFile extends ExternalThemePlusFile
 
 	public function getIncludeHtml()
 	{
+		global $objPage;
+
 		// get the file
 		$strFile = $this->getUrl();
 
 		// return html code
-		return $this->getDebugComment() . $this->wrapCc('<link type="text/css" rel="stylesheet" href="' . specialchars($strFile) . '" />');
+		return $this->getDebugComment() . $this->wrapCc('<script' . (($objPage->outputFormat == 'xhtml') ? ' type="text/javascript"' : '') . ' src="' . specialchars($strFile) . '"></script>');
 	}
 
 

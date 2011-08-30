@@ -35,11 +35,13 @@ class ExternalCssFile extends ExternalThemePlusFile {
 
 	public function getIncludeHtml()
 	{
+		global $objPage;
+
 		// get the file
 		$strUrl = $this->getUrl();
 
 		// return html code
-		return $this->getDebugComment() . $this->wrapCc('<link type="text/css" rel="stylesheet" href="' . specialchars($strUrl) . '"' . (strlen($this->strMedia) ? ' media="' . $this->strMedia . '"' : '') . ' />');
+		return $this->getDebugComment() . $this->wrapCc('<link' . (($objPage->outputFormat == 'xhtml') ? ' type="text/css"' : '') . ' rel="stylesheet" href="' . specialchars($strUrl) . '"' . (strlen($this->strMedia) ? ' media="' . $this->strMedia . '"' : '') . ' />');
 	}
 
 

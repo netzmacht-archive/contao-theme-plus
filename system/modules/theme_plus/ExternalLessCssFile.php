@@ -7,14 +7,14 @@
  * Class ExternalLessCssFile
  */
 class ExternalLessCssFile extends ExternalCssFile {
-	
+
 	/**
 	 * Create a new css file object.
 	 */
 	public function __construct($strUrl, $strMedia = '', $strCc = '')
 	{
 		parent::__construct($strUrl, $strMedia, $strCc);
-		
+
 		// import the Theme+ master class
 		$this->import('ThemePlus');
 	}
@@ -22,6 +22,8 @@ class ExternalLessCssFile extends ExternalCssFile {
 
 	public function getIncludeHtml()
 	{
+		global $objPage;
+
 		// add client side javascript
 		if ($this->ThemePlus->getBELoginStatus())
 		{
@@ -31,14 +33,14 @@ class ExternalLessCssFile extends ExternalCssFile {
 		{
 			$GLOBALS['TL_JAVASCRIPT'][] = 'plugins/lesscss/less.min.js';
 		}
-		
+
 		// get the file
 		$strUrl = $this->getUrl();
-		
+
 		// return html code
-		return $this->getDebugComment() . $this->wrapCc('<link type="text/css" rel="stylesheet" href="' . specialchars($strUrl) . '"' . (strlen($this->strMedia) ? ' media="' . $this->strMedia . '"' : '') . ' />');
+		return $this->getDebugComment() . $this->wrapCc('<link' . (($objPage->outputFormat == 'xhtml') ? ' type="text/css"' : '') . ' rel="stylesheet" href="' . specialchars($strUrl) . '"' . (strlen($this->strMedia) ? ' media="' . $this->strMedia . '"' : '') . ' />');
 	}
-	
+
 }
 
 ?>
