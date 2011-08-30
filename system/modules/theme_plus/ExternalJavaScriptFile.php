@@ -6,8 +6,8 @@
 /**
  * Class ExternalJavaScriptFile
  */
-class ExternalJavaScriptFile extends ExternalThemePlusFile {
-
+class ExternalJavaScriptFile extends ExternalThemePlusFile
+{
 	public function __construct($strUrl, $strCc = '')
 	{
 		parent::__construct($strUrl, $strCc);

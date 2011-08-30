@@ -6,7 +6,37 @@
 /**
  * Class ExternalThemePlusFile
  */
-abstract class ExternalThemePlusFile extends ThemePlusFile {
+abstract class ExternalThemePlusFile extends ThemePlusFile
+{
+	/**
+	 * Get a file from path. 
+	 */
+	public static function create()
+	{
+		$args = func_get_args();
+		$strUrl = $args[0];
+		$strFile = parse_url($strUrl, PHP_URL_PATH);
+		$strExtension = preg_replace('#.*\.(\w+)$#', '$1', $strFile);
+		if ($strExtension)
+		{
+			switch (strtolower($strExtension))
+			{
+				case 'js':
+					return new ExternalJavaScriptFile($strFile, isset($args[1]) ? $args[1] : '', isset($args[2]) ? $args[2] : false);
+				
+				case 'css':
+					if (!$GLOBALS['TL_CONFIG']['theme_plus_force_less'])
+					{
+						return new ExternalCssFile($strFile, isset($args[1]) ? $args[1] : '', isset($args[2]) ? $args[2] : '', isset($args[3]) ? $args[3] : false, isset($args[4]) ? $args[4] : false);
+					}
+					
+				case 'less':
+					return new ExternalLessCssFile($strFile, isset($args[1]) ? $args[1] : '', isset($args[2]) ? $args[2] : '', isset($args[3]) ? $args[3] : false, isset($args[4]) ? $args[4] : false);
+			}
+		}
+		return false;
+	}
+
 
 	/**
 	 * The origin file path.
