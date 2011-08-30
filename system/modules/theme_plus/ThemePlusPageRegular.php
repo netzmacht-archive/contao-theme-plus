@@ -46,110 +46,113 @@ class ThemePlusPageRegular extends PageRegular
 
 		parent::createTemplate($objPage, $objLayout);
 
-		$strFramework = false;
-
-		// HOOK: create framework code
-		if (isset($GLOBALS['TL_HOOKS']['generateFrameworkCss']) && is_array($GLOBALS['TL_HOOKS']['generateFrameworkCss']))
+		if (!$objLayout->theme_plus_exclude_frameworkcss)
 		{
-			foreach ($GLOBALS['TL_HOOKS']['generateFrameworkCss'] as $callback)
+			$strFramework = false;
+
+			// HOOK: create framework code
+			if (isset($GLOBALS['TL_HOOKS']['generateFrameworkCss']) && is_array($GLOBALS['TL_HOOKS']['generateFrameworkCss']))
 			{
-				$this->import($callback[0]);
-				$strFramework = $this->$callback[0]->$callback[1]($objPage, $objLayout, $this);
-				if ($strFramework !== false)
+				foreach ($GLOBALS['TL_HOOKS']['generateFrameworkCss'] as $callback)
 				{
-					break;
+					$this->import($callback[0]);
+					$strFramework = $this->$callback[0]->$callback[1]($objPage, $objLayout, $this);
+					if ($strFramework !== false)
+					{
+						break;
+					}
 				}
 			}
+
+			if ($strFramework === false)
+			{
+				$strFramework = '';
+
+				// Initialize margin
+				$arrMargin = array
+				(
+					'left'   => '0 auto 0 0',
+					'center' => '0 auto',
+					'right'  => '0 0 0 auto'
+				);
+
+				// Wrapper
+				if ($objLayout->static)
+				{
+					$arrSize = deserialize($objLayout->width);
+					$strFramework .= sprintf('#wrapper{width:%s;margin:%s;}', $arrSize['value'] . $arrSize['unit'], $arrMargin[$objLayout->align]) . "\n";
+				}
+
+				// Header
+				if ($objLayout->header)
+				{
+					$arrSize = deserialize($objLayout->headerHeight);
+
+					if ($arrSize['value'] != '' && $arrSize['value'] >= 0)
+					{
+						$strFramework .= sprintf('#header{height:%s;}', $arrSize['value'] . $arrSize['unit']) . "\n";
+					}
+				}
+
+				$strMain = '';
+
+				// Left column
+				if ($objLayout->cols == '2cll' || $objLayout->cols == '3cl')
+				{
+					$arrSize = deserialize($objLayout->widthLeft);
+
+					if ($arrSize['value'] != '' && $arrSize['value'] >= 0)
+					{
+						$strFramework .= sprintf('#left{width:%s;}', $arrSize['value'] . $arrSize['unit']) . "\n";
+						$strMain .= sprintf('margin-left:%s;', $arrSize['value'] . $arrSize['unit']);
+					}
+				}
+
+				// Right column
+				if ($objLayout->cols == '2clr' || $objLayout->cols == '3cl')
+				{
+					$arrSize = deserialize($objLayout->widthRight);
+
+					if ($arrSize['value'] != '' && $arrSize['value'] >= 0)
+					{
+						$strFramework .= sprintf('#right{width:%s;}', $arrSize['value'] . $arrSize['unit']) . "\n";
+						$strMain .= sprintf('margin-right:%s;', $arrSize['value'] . $arrSize['unit']);
+					}
+				}
+
+				// Main column
+				if (strlen($strMain))
+				{
+					$strFramework .= sprintf('#main{%s}', $strMain) . "\n";
+				}
+
+				// Footer
+				if ($objLayout->footer)
+				{
+					$arrSize = deserialize($objLayout->footerHeight);
+
+					if ($arrSize['value'] != '' && $arrSize['value'] >= 0)
+					{
+						$strFramework .= sprintf('#footer{height:%s;}', $arrSize['value'] . $arrSize['unit']) . "\n";
+					}
+				}
+			}
+
+			$this->Template->framework = '';
+
+			$strKey = substr(md5($strFramework), 0, 8);
+			$strFile = 'system/scripts/framework-' . $strKey . '.css';
+
+			if (!file_exists(TL_ROOT . '/' . $strFile))
+			{
+				$objFile = new File($strFile);
+				$objFile->write($strFramework);
+				$objFile->close();
+			}
+
+			// Add the framework css file to css list
+			array_unshift($GLOBALS['TL_CSS'], $strFile);
 		}
-
-		if ($strFramework === false)
-		{
-			$strFramework = '';
-
-			// Initialize margin
-			$arrMargin = array
-			(
-				'left'   => '0 auto 0 0',
-				'center' => '0 auto',
-				'right'  => '0 0 0 auto'
-			);
-
-			// Wrapper
-			if ($objLayout->static)
-			{
-				$arrSize = deserialize($objLayout->width);
-				$strFramework .= sprintf('#wrapper{width:%s;margin:%s;}', $arrSize['value'] . $arrSize['unit'], $arrMargin[$objLayout->align]) . "\n";
-			}
-
-			// Header
-			if ($objLayout->header)
-			{
-				$arrSize = deserialize($objLayout->headerHeight);
-
-				if ($arrSize['value'] != '' && $arrSize['value'] >= 0)
-				{
-					$strFramework .= sprintf('#header{height:%s;}', $arrSize['value'] . $arrSize['unit']) . "\n";
-				}
-			}
-
-			$strMain = '';
-
-			// Left column
-			if ($objLayout->cols == '2cll' || $objLayout->cols == '3cl')
-			{
-				$arrSize = deserialize($objLayout->widthLeft);
-
-				if ($arrSize['value'] != '' && $arrSize['value'] >= 0)
-				{
-					$strFramework .= sprintf('#left{width:%s;}', $arrSize['value'] . $arrSize['unit']) . "\n";
-					$strMain .= sprintf('margin-left:%s;', $arrSize['value'] . $arrSize['unit']);
-				}
-			}
-
-			// Right column
-			if ($objLayout->cols == '2clr' || $objLayout->cols == '3cl')
-			{
-				$arrSize = deserialize($objLayout->widthRight);
-
-				if ($arrSize['value'] != '' && $arrSize['value'] >= 0)
-				{
-					$strFramework .= sprintf('#right{width:%s;}', $arrSize['value'] . $arrSize['unit']) . "\n";
-					$strMain .= sprintf('margin-right:%s;', $arrSize['value'] . $arrSize['unit']);
-				}
-			}
-
-			// Main column
-			if (strlen($strMain))
-			{
-				$strFramework .= sprintf('#main{%s}', $strMain) . "\n";
-			}
-
-			// Footer
-			if ($objLayout->footer)
-			{
-				$arrSize = deserialize($objLayout->footerHeight);
-
-				if ($arrSize['value'] != '' && $arrSize['value'] >= 0)
-				{
-					$strFramework .= sprintf('#footer{height:%s;}', $arrSize['value'] . $arrSize['unit']) . "\n";
-				}
-			}
-		}
-
-		$this->Template->framework = '';
-
-		$strKey = substr(md5($strFramework), 0, 8);
-		$strFile = 'system/scripts/framework-' . $strKey . '.css';
-
-		if (!file_exists(TL_ROOT . '/' . $strFile))
-		{
-			$objFile = new File($strFile);
-			$objFile->write($strFramework);
-			$objFile->close();
-		}
-
-		// Add the framework css file to css list
-		array_unshift($GLOBALS['TL_CSS'], $strFile);
 
 		// MooTools scripts
 		if ($objLayout->mooSource == 'moo_googleapis')
