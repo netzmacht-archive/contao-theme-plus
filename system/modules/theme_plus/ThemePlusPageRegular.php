@@ -138,8 +138,6 @@ class ThemePlusPageRegular extends PageRegular
 				}
 			}
 
-			$this->Template->framework = '';
-
 			$strKey = substr(md5($strFramework), 0, 8);
 			$strFile = 'system/scripts/framework-' . $strKey . '.css';
 
@@ -153,6 +151,8 @@ class ThemePlusPageRegular extends PageRegular
 			// Add the framework css file to css list
 			array_unshift($GLOBALS['TL_CSS'], $strFile);
 		}
+
+		$this->Template->framework = '';
 
 		// MooTools scripts
 		if ($objLayout->mooSource == 'moo_googleapis')
