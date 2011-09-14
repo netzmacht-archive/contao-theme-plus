@@ -28,8 +28,9 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_exclude_files'] = array
 	'inputType'               => 'multitextWizard',
 	'eval'                    => array
 	(
-		'style'   => 'width:100%;',
-		'columns' => array
+		'tl_class' => 'clr',
+		'style'    => 'width:100%;',
+		'columns'  => array
 		(
 			array
 			(
