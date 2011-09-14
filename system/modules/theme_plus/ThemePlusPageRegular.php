@@ -228,6 +228,9 @@ class ThemePlusPageRegular extends PageRegular
 				if (is_string($stylesheet))
 				{
 					list($stylesheet, $media, $cc) = explode('|', $stylesheet);
+
+					// strip the static urls
+					$stylesheet = $this->stripStaticURL($stylesheet);
 				}
 				else
 				{
@@ -361,6 +364,9 @@ class ThemePlusPageRegular extends PageRegular
 				if (is_string($javascript))
 				{
 					list($javascript, $cc) = explode('|', $javascript);
+
+					// strip the static urls
+					$javascript = $this->stripStaticURL($javascript);
 				}
 				else
 				{
@@ -441,6 +447,27 @@ class ThemePlusPageRegular extends PageRegular
 
 		$this->Template->stylesheets = $strStyleSheets;
 		$this->Template->head = $strHeadTags;
+	}
+
+
+	/**
+	 * Strip static urls.
+	 */
+	protected function stripStaticURL($strUrl)
+	{
+		if (defined('TL_FILES_URL') && strlen(TL_FILES_URL) > 0 && strpos($strUrl, TL_FILES_URL) === 0)
+		{
+			return substr($strUrl, strlen(TL_FILES_URL));
+		}
+		if (defined('TL_SCRIPT_URL') && strlen(TL_SCRIPT_URL) > 0 && strpos($strUrl, TL_SCRIPT_URL) === 0)
+		{
+			return substr($strUrl, strlen(TL_SCRIPT_URL));
+		}
+		if (defined('TL_PLUGINS_URL') && strlen(TL_PLUGINS_URL) > 0 && strpos($strUrl, TL_PLUGINS_URL) === 0)
+		{
+			return substr($strUrl, strlen(TL_PLUGINS_URL));
+		}
+		return $strUrl;
 	}
 }
 
