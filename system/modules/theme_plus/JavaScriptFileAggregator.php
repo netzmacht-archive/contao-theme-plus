@@ -141,7 +141,7 @@ class JavaScriptFileAggregator extends LocalThemePlusFile {
 		$strFile = $this->getFile();
 
 		// return html code
-		return '<script type="text/javascript" src="' . specialchars($strFile) . '"></script>';
+		return '<script type="text/javascript" src="' . TL_SCRIPT_URL . specialchars($strFile) . '"></script>';
 	}
 }
 
