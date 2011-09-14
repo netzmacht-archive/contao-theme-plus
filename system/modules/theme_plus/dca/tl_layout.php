@@ -41,7 +41,7 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_exclude_files'] = array
 	)
 );
 
-$GLOBALS['TL_DCA']['tl_layout']['fields']['stylesheets']['eval']['tl_class'] .= ' clr';
+$GLOBALS['TL_DCA']['tl_layout']['fields']['stylesheet']['eval']['tl_class'] .= ' clr';
 
 $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_files'] = array
 (
