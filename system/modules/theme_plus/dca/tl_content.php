@@ -33,7 +33,7 @@ class tl_content_theme_plus extends Backend
 		{
 			return array();
 		}
-		
+
 		$objPage = $this->getPageDetails($objArticle->pid);
 		if (!$objPage->layout)
 		{
@@ -42,12 +42,12 @@ class tl_content_theme_plus extends Backend
 			{
 				$objPage->layout = $objLayout->id;
 			}
-			else 
+			else
 			{
 				return array();
 			}
 		}
-		
+
 		$arrJavaScriptFiles = array();
 		$objJavaScriptFiles = $this->Database->prepare("
 				SELECT
@@ -72,10 +72,9 @@ class tl_content_theme_plus extends Backend
 		{
 			$strType = $objJavaScriptFiles->type;
 			$label = ' ' . $objJavaScriptFiles->$strType;
-			
+
 			$arrJavaScriptFiles[$objJavaScriptFiles->id] = $this->generateImage('iconJS.gif', $label, 'style="vertical-align:middle"') . $label;
 		}
 		return $arrJavaScriptFiles;
 	}
 }
-?>

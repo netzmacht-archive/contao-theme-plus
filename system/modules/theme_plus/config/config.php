@@ -74,5 +74,3 @@ $GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus_variable'] = array
 	'href_fragment' => 'table=tl_theme_plus_variable',
 	'icon'          => 'system/modules/theme_plus/html/variable.png'
 )
-
-?>
