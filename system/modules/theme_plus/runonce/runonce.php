@@ -82,6 +82,7 @@ class ThemePlusRunonce extends Frontend
 		$this->upgrade1_5();
 		$this->upgrade1_6();
 		$this->upgrade2_0();
+		$this->upgrade2_2();
 		$this->checkCompression();
 	}
 	
@@ -262,7 +263,7 @@ class ThemePlusRunonce extends Frontend
 					$blnTableThemePlusFileExists = true;
 				} catch(Exception $e) {
 					try {
-						$this->log($e->getMessage(), 'ThemePlusRunonce::upgrade2_0', TL_ERROR);
+						$this->log($e->getMessage() . "\n" . $e->getTraceAsString(), 'ThemePlusRunonce::upgrade2_0', TL_ERROR);
 					} catch(Exception $e) {}
 				}
 			}
@@ -289,7 +290,7 @@ class ThemePlusRunonce extends Frontend
 					}
 				} catch(Exception $e) {
 					try {
-						$this->log($e->getMessage(), 'ThemePlusRunonce::upgrade2_0', TL_ERROR);
+						$this->log($e->getMessage() . "\n" . $e->getTraceAsString(), 'ThemePlusRunonce::upgrade2_0', TL_ERROR);
 					} catch(Exception $e) {}
 				}
 			}
@@ -301,7 +302,7 @@ class ThemePlusRunonce extends Frontend
 					$this->Database->executeUncached("DROP TABLE tl_additional_source");
 				} catch(Exception $e) {
 					try {
-						$this->log($e->getMessage(), 'ThemePlusRunonce::upgrade2_0', TL_ERROR);
+						$this->log($e->getMessage() . "\n" . $e->getTraceAsString(), 'ThemePlusRunonce::upgrade2_0', TL_ERROR);
 					} catch(Exception $e) {}
 				}
 			}
@@ -313,7 +314,7 @@ class ThemePlusRunonce extends Frontend
 					$this->Database->executeUncached("ALTER TABLE tl_layout CHANGE additional_source theme_plus_files blob NULL");
 				} catch(Exception $e) {
 					try {
-						$this->log($e->getMessage(), 'ThemePlusRunonce::upgrade2_0', TL_ERROR);
+						$this->log($e->getMessage() . "\n" . $e->getTraceAsString(), 'ThemePlusRunonce::upgrade2_0', TL_ERROR);
 					} catch(Exception $e) {}
 				}
 			}
@@ -327,7 +328,7 @@ class ThemePlusRunonce extends Frontend
 					$blnFieldThemePlusFilesTLPageExists = true;
 				} catch(Exception $e) {
 					try {
-						$this->log($e->getMessage(), 'ThemePlusRunonce::upgrade2_0', TL_ERROR);
+						$this->log($e->getMessage() . "\n" . $e->getTraceAsString(), 'ThemePlusRunonce::upgrade2_0', TL_ERROR);
 					} catch(Exception $e) {}
 				}
 			}
@@ -341,7 +342,7 @@ class ThemePlusRunonce extends Frontend
 					$blnFieldThemePlusIncludeFilesTLPageExists = true;
 				} catch(Exception $e) {
 					try {
-						$this->log($e->getMessage(), 'ThemePlusRunonce::upgrade2_0', TL_ERROR);
+						$this->log($e->getMessage() . "\n" . $e->getTraceAsString(), 'ThemePlusRunonce::upgrade2_0', TL_ERROR);
 					} catch(Exception $e) {}
 				}
 			}
@@ -366,7 +367,7 @@ class ThemePlusRunonce extends Frontend
 					}
 				} catch(Exception $e) {
 					try {
-						$this->log($e->getMessage(), 'ThemePlusRunonce::upgrade2_0', TL_ERROR);
+						$this->log($e->getMessage() . "\n" . $e->getTraceAsString(), 'ThemePlusRunonce::upgrade2_0', TL_ERROR);
 					} catch(Exception $e) {}
 				}
 			}
@@ -384,7 +385,7 @@ class ThemePlusRunonce extends Frontend
 				}
 			} catch(Exception $e) {
 				try {
-					$this->log($e->getMessage(), 'ThemePlusRunonce::upgrade2_0', TL_ERROR);
+					$this->log($e->getMessage() . "\n" . $e->getTraceAsString(), 'ThemePlusRunonce::upgrade2_0', TL_ERROR);
 				} catch(Exception $e) {}
 			}
 			
@@ -396,7 +397,7 @@ class ThemePlusRunonce extends Frontend
 					$this->Files->rrdir('system/modules/layout_additional_sources');
 				} catch(Exception $e) {
 					try {
-						$this->log($e->getMessage(), 'ThemePlusRunonce::upgrade2_0', TL_ERROR);
+						$this->log($e->getMessage() . "\n" . $e->getTraceAsString(), 'ThemePlusRunonce::upgrade2_0', TL_ERROR);
 					} catch(Exception $e) {}
 				}
 			}
@@ -444,6 +445,80 @@ class ThemePlusRunonce extends Frontend
 			
 			# add backend message
 			$GLOBALS['TL_HOOKS']['parseBackendTemplate'][] = array('ThemePlusRunonce', 'addUpgrade2dot0Message');
+		}
+	}
+	
+	
+	/**
+	 * Configuration and database upgrade to 2.2
+	 */
+	protected function upgrade2_2()
+	{
+		$this->updateThemePlusFilesField('tl_layout');
+		$this->updateThemePlusFilesField('tl_page');
+		$this->updateThemePlusFilesField('tl_page', '_noinherit');
+	}
+	
+	
+	/**
+	 * Remove the theme_plus_files field and replace it with theme_plus_stylesheets and theme_plus_javascripts in the specific table.
+	 */
+	protected function updateThemePlusFilesField($strTable, $strSuffix = '')
+	{
+		# add new theme_plus_stylesheets field
+		if (!$this->Database->fieldExists('theme_plus_stylesheets' . $strSuffix,  $strTable, true))
+		{
+			try {
+				$this->Database->executeUncached("ALTER TABLE " . $strTable . " ADD theme_plus_stylesheets" . $strSuffix . " blob NULL");
+			} catch(Exception $e) {
+				try {
+					$this->log($e->getMessage() . "\n" . $e->getTraceAsString(), 'ThemePlusRunonce::upgrade2_2', TL_ERROR);
+				} catch(Exception $e) {}
+			}
+		}
+		
+		# add new theme_plus_javascripts field
+		if (!$this->Database->fieldExists('theme_plus_javascripts' . $strSuffix, $strTable, true))
+		{
+			try {
+				$this->Database->executeUncached("ALTER TABLE " . $strTable . " ADD theme_plus_javascripts" . $strSuffix . " blob NULL");
+			} catch(Exception $e) {
+				try {
+					$this->log($e->getMessage() . "\n" . $e->getTraceAsString(), 'ThemePlusRunonce::upgrade2_2', TL_ERROR);
+				} catch(Exception $e) {}
+			}
+		}
+		
+		# convert theme_plus_files field
+		if ($this->Database->fieldExists('theme_plus_files' . $strSuffix, $strTable, true))
+		{
+			try {
+				$objTable = $this->Database->executeUncached("SELECT * FROM " . $strTable);
+				while ($objTable->next())
+				{
+					$arrRow = $objTable->row();
+					$arrIds = deserialize($arrRow['theme_plus_files' . $strSuffix], true);
+					
+					if (count($arrIds) > 0)
+					{
+						$objFile = $this->Database->executeUncached("SELECT id FROM tl_theme_plus_file WHERE id IN (" . implode(',', $arrIds) . ") AND (type='css_url' OR type='css_file') ORDER BY sorting");
+						$arrStylesheets = $objFile->fetchEach('id');
+						
+						$objFile = $this->Database->executeUncached("SELECT id FROM tl_theme_plus_file WHERE id IN (" . implode(',', $arrIds) . ") AND (type='js_url' OR type='js_file') ORDER BY sorting");
+						$arrJavaScripts = $objFile->fetchEach('id');
+						
+						$this->Database
+							->prepare("UPDATE " . $strTable . " SET theme_plus_stylesheets" . $strSuffix . "=?, theme_plus_javascripts" . $strSuffix . "=? WHERE id=?")
+							->execute(serialize($arrStylesheets), serialize($arrJavaScripts), $objTable->id);
+					}
+				}
+				
+				$this->Database->executeUncached("ALTER TABLE " . $strTable . " DROP theme_plus_files" . $strSuffix);
+			} catch(Exception $e) {
+				try {
+					$this->log($e->getMessage() . "\n" . $e->getTraceAsString(), 'ThemePlusRunonce::upgrade2_2', TL_ERROR);
+				} catch(Exception $e) {}
+			}
 		}
 	}
 	

@@ -62,7 +62,8 @@ CREATE TABLE `tl_theme_plus_variable` (
 CREATE TABLE `tl_layout` (
   `theme_plus_exclude_contaocss` char(1) NOT NULL default '',
   `theme_plus_exclude_frameworkcss` char(1) NOT NULL default '',
-  `theme_plus_files` blob NULL,
+  `theme_plus_stylesheets` blob NULL,
+  `theme_plus_javascripts` blob NULL,
   `theme_plus_exclude_files` blob NULL,
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -74,9 +75,11 @@ CREATE TABLE `tl_layout` (
 
 CREATE TABLE `tl_page` (
   `theme_plus_include_files` char(1) NOT NULL default '',
-  `theme_plus_files` blob NULL,
+  `theme_plus_stylesheets` blob NULL,
+  `theme_plus_javascripts` blob NULL,
   `theme_plus_include_files_noinherit` char(1) NOT NULL default '',
-  `theme_plus_files_noinherit` blob NULL,
+  `theme_plus_stylesheets_noinherit` blob NULL,
+  `theme_plus_javascripts_noinherit` blob NULL,
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------

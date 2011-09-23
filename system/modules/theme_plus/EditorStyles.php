@@ -325,8 +325,8 @@ class EditorStyles extends ThemePlus {
 		$arrThemePlus = array_merge
 		(
 			array('0'),
-			deserialize($objLayout->theme_plus_files, true),
-			$objPage ? $this->inheritFiles($objPage) : array()
+			deserialize($objLayout->theme_plus_stylesheets, true),
+			$objPage ? $this->inheritFiles($objPage, 'stylesheets') : array()
 		);
 		
 		$objThemePlusFile = $this->Database->prepare("

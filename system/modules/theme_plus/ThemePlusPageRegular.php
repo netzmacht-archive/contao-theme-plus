@@ -203,17 +203,6 @@ class ThemePlusPageRegular extends PageRegular
 		$arrStyleSheets = deserialize($objLayout->stylesheet);
 		$strTagEnding = ($objPage->outputFormat == 'xhtml') ? ' />' : '>';
 
-		// get all file ids
-		// + from layout
-		// + from this page
-		// + from parent pages
-		$arrFileIds = array_merge
-		(
-			deserialize($objLayout->theme_plus_files, true),
-			$this->ThemePlus->inheritFiles($objPage),
-			($objPage->theme_plus_include_files_noinherit ? deserialize($objPage->theme_plus_files_noinherit, true) : array())
-		);
-
 		// build stylesheets
 		$arrStylesheets = array();
 
@@ -296,11 +285,22 @@ class ThemePlusPageRegular extends PageRegular
 			$arrStylesheets[] = LocalThemePlusFile::create($GLOBALS['TL_CONFIG']['uploadPath'] . '/tinymce.css');
 		}
 
+		// get all stylesheet ids
+		// + from layout
+		// + from this page
+		// + from parent pages
+		$arrStylesheetIds = array_merge
+		(
+			deserialize($objLayout->theme_plus_stylesheets, true),
+			$this->ThemePlus->inheritFiles($objPage, 'stylesheets'),
+			($objPage->theme_plus_include_stylesheets_noinherit ? deserialize($objPage->theme_plus_stylesheets_noinherit, true) : array())
+		);
+
 		// Theme+ stylesheets
 		$arrStylesheets = array_merge
 		(
 			$arrStylesheets,
-			$this->ThemePlus->getCssFiles($arrFileIds, false)
+			$this->ThemePlus->getCssFiles($arrStylesheetIds, false)
 		);
 
 		// aggregate stylesheets
@@ -405,11 +405,22 @@ class ThemePlusPageRegular extends PageRegular
 			}
 		}
 
+		// get all javascript ids
+		// + from layout
+		// + from this page
+		// + from parent pages
+		$arrJavaScriptIds = array_merge
+		(
+			deserialize($objLayout->theme_plus_javascripts, true),
+			$this->ThemePlus->inheritFiles($objPage, 'javascripts'),
+			($objPage->theme_plus_include_javascripts_noinherit ? deserialize($objPage->theme_plus_javascripts_noinherit, true) : array())
+		);
+
 		// add theme+ javascripts
 		$arrJavaScripts = array_merge
 		(
 			$arrJavaScripts,
-			$this->ThemePlus->getJavaScriptFiles($arrFileIds)
+			$this->ThemePlus->getJavaScriptFiles($arrJavaScriptIds)
 		);
 
 		// aggregate javascripts
