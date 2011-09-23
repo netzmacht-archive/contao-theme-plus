@@ -93,7 +93,7 @@ class JavaScriptFileAggregator extends LocalThemePlusFile {
 					// append to content
 					if (strlen($strSubContent)>0)
 					{
-						$strContent .= $strSubContent . "\n";
+						$strContent .= $strSubContent . ";\n";
 					}
 				}
 
@@ -145,4 +145,3 @@ class JavaScriptFileAggregator extends LocalThemePlusFile {
 	}
 }
 
-?>
