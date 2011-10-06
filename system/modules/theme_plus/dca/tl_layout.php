@@ -31,6 +31,7 @@
  * @license    LGPL
  */
 
+$GLOBALS['TL_DCA']['tl_layout']['config']['onload_callback'][] = array('tl_layout_theme_plus', 'onload');
 
 $GLOBALS['TL_DCA']['tl_layout']['palettes']['default'] = str_replace(
 	'stylesheet',
@@ -48,7 +49,7 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_exclude_frameworkcss'] = a
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['theme_plus_exclude_frameworkcss'],
 	'inputType'               => 'checkbox',
-	'eval'                    => array('tl_class'=>'w50 m12')
+	'eval'                    => array('tl_class'=>'w50 m12', 'submitOnChange'=>true)
 );
 
 $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_exclude_files'] = array
@@ -96,20 +97,49 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['mooSource']['eval']['includeBlankOpti
  */
 class tl_layout_theme_plus extends Backend
 {
+	public function onload($dc)
+	{
+		if ($dc) {
+			$objLayout = $this->Database->prepare("SELECT * FROM tl_layout WHERE id=?")->execute($dc->id);
+			if ($objLayout->next() && $objLayout->theme_plus_exclude_frameworkcss)
+			{
+				$GLOBALS['TL_DCA']['tl_layout']['palettes']['default'] = str_replace(
+					';{static_legend},static',
+					'',
+					$GLOBALS['TL_DCA']['tl_layout']['palettes']['default']);
+				$GLOBALS['TL_DCA']['tl_layout']['subpalettes']['header'] = str_replace(
+					'headerHeight', '',
+					$GLOBALS['TL_DCA']['tl_layout']['subpalettes']['header']);
+				$GLOBALS['TL_DCA']['tl_layout']['subpalettes']['footer'] = str_replace(
+					'footerHeight', '',
+					$GLOBALS['TL_DCA']['tl_layout']['subpalettes']['footer']);
+				$GLOBALS['TL_DCA']['tl_layout']['subpalettes']['cols_2cll'] = str_replace(
+					'widthLeft', '',
+					$GLOBALS['TL_DCA']['tl_layout']['subpalettes']['cold_2cll']);
+				$GLOBALS['TL_DCA']['tl_layout']['subpalettes']['cols_2clr'] = str_replace(
+					'widthRight', '',
+					$GLOBALS['TL_DCA']['tl_layout']['subpalettes']['cols_2clr']);
+				$GLOBALS['TL_DCA']['tl_layout']['subpalettes']['cols_3cl'] = str_replace(
+					array('widthLeft', 'widthRight'), '',
+					$GLOBALS['TL_DCA']['tl_layout']['subpalettes']['cols_3cl']);
+			}
+		}
+	}
+	
 	public function getStylesheets()
 	{
 		return $this->getFiles('css');
 	}
-
+	
 	public function getJavaScripts()
 	{
 		return $this->getFiles('js');
 	}
-
+	
 	public function getFiles($strTypePrefix)
 	{
 		$arrFile = array();
-
+		
 		$objTheme = $this->Database
 			->execute("SELECT * FROM tl_theme ORDER BY name");
 		while ($objTheme->next())

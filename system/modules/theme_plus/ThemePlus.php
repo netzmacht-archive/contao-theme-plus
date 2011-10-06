@@ -902,6 +902,28 @@ class ThemePlus extends Frontend
 		}
 		return true;
 	}
+	
+	
+	/**
+	 * Add mootools from googleapis
+	 */
+	public function addMooGoogleAPIs($objPage, $objLayout, $objPageRegular)
+	{
+		$protocol = $this->Environment->ssl ? 'https://' : 'http://';
+		
+		array_unshift($GLOBALS['TL_JAVASCRIPT'], 'plugins/mootools/' . MOOTOOLS . '/mootools-more.js');
+		array_unshift($GLOBALS['TL_JAVASCRIPT'], $protocol . 'ajax.googleapis.com/ajax/libs/mootools/' . MOOTOOLS . '/mootools-yui-compressed.js');
+	}
+	
+	
+	/**
+	 * Add local mootools
+	 */
+	public function addMooLocal($objPage, $objLayout, $objPageRegular)
+	{
+		array_unshift($GLOBALS['TL_JAVASCRIPT'], 'plugins/mootools/' . MOOTOOLS . '/mootools-more.js');
+		array_unshift($GLOBALS['TL_JAVASCRIPT'], 'plugins/mootools/' . MOOTOOLS . '/mootools-core.js');
+	}
 }
 
 

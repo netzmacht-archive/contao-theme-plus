@@ -182,25 +182,31 @@ class ThemePlusPageRegular extends PageRegular
 		}
 
 		$this->Template->framework = '';
+		$this->Template->mooScripts = '';
 
-		// MooTools scripts
-		if ($objLayout->mooSource == 'moo_googleapis')
+		// JavaScript framework
+		foreach ($GLOBALS['TL_SCRIPT_FRAMEWORKS'] as $k=>$v)
 		{
-			$protocol = $this->Environment->ssl ? 'https://' : 'http://';
-
-			$this->Template->mooScripts  = '<script' . (($objPage->outputFormat == 'xhtml') ? ' type="text/javascript"' : '') . ' src="' . $protocol . 'ajax.googleapis.com/ajax/libs/mootools/' . MOOTOOLS . '/mootools-yui-compressed.js"></script>' . "\n";
-			$this->Template->mooScripts .= '<script' . (($objPage->outputFormat == 'xhtml') ? ' type="text/javascript"' : '') . ' src="' . TL_PLUGINS_URL . 'plugins/mootools/' . MOOTOOLS . '/mootools-more.js"></script>' . "\n";
-		}
-		else if ($objLayout->mooSource == 'moo_local')
-		{
-			$this->Template->mooScripts = '';
-
-			array_unshift($GLOBALS['TL_JAVASCRIPT'], 'plugins/mootools/' . MOOTOOLS . '/mootools-more.js');
-			array_unshift($GLOBALS['TL_JAVASCRIPT'], 'plugins/mootools/' . MOOTOOLS . '/mootools-core.js');
-		}
-		else
-		{
-			$this->Template->mooScripts = '';
+			// check if there is an on/off trigger
+			if (isset($v['__trigger__']))
+			{
+				// name of the trigger
+				$t = $v['__trigger__'];
+				
+				// skip if trigger is not active
+				if (!$objLayout->$t)
+				{
+					continue;
+				}
+			}
+			
+			if (isset($v[$objLayout->$k]))
+			{
+				// call the callback
+				$callback = $v[$objLayout->$k];
+				$this->import($callback[0]);
+				$this->$callback[0]->$callback[1]($objPage, $objLayout, $this);
+			}
 		}
 	}
 
