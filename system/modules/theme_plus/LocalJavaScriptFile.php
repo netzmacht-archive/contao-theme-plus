@@ -35,30 +35,85 @@
 /**
  * Class LocalJavaScriptFile
  */
-class LocalJavaScriptFile extends LocalThemePlusFile {
+class LocalJavaScriptFile extends LocalThemePlusFile implements JavaScriptFile
+{
+	/**
+	 * The include position
+	 *
+	 * @var string
+	 */
+	protected $strPosition;
 
 
 	/**
 	 * The processed temporary file path.
+	 *
+	 * @var string
 	 */
 	protected $strProcessedFile;
 
 
 	/**
 	 * Create a new javascript file object.
+	 *
+	 * @param string $strOriginFile
 	 */
-	public function __construct($strOriginFile, $strCc = '', $objTheme = false)
+	public function __construct($strOriginFile)
 	{
-		parent::__construct($strOriginFile, $strCc, $objTheme);
-		$this->strProcessedFile = null;
-
-		// import the Theme+ master class
-		$this->import('ThemePlus');
+		if ($strOriginFile[0] == '!')
+		{
+			$this->strProcessedFile = $strOriginFile = substr($strOriginFile, 1);
+		}
+		else
+		{
+			$this->strProcessedFile = null;
+		}
+		
+		parent::__construct($strOriginFile);
 	}
 
 
 	/**
-	 * Get the file path relative to TL_ROOT
+	 * Set the include position.
+	 *
+	 * @param string $strPosition
+	 * @return void
+	 */
+	public function setPosition($strPosition)
+	{
+		$this->strPosition = $strPosition;
+	}
+
+
+	/**
+	 * Get the include position.
+	 *
+	 * @return string
+	 */
+	public function getPosition()
+	{
+		return $this->strPosition;
+	}
+
+
+	/**
+	 * @see ThemePlusFile::getDebugComment
+	 * @return string
+	 */
+	protected function getDebugComment()
+	{
+		$this->import('ThemePlus');
+		if ($GLOBALS['TL_CONFIG']['debugMode'] || $this->ThemePlus->getBELoginStatus())
+		{
+			return '<!-- local file: ' . $this->getOriginFile() . ', position: ' . $this->getPosition() . ', aggregation: ' . $this->getAggregation() . ', scope: ' . $this->getAggregationScope() . ' -->' . "\n";
+		}
+		return '';
+	}
+
+
+	/**
+	 * @see LocalThemePlusFile::getFile
+	 * @return string
 	 */
 	public function getFile()
 	{
@@ -128,9 +183,10 @@ class LocalJavaScriptFile extends LocalThemePlusFile {
 
 
 	/**
-	 * Get embeded html code
+	 * @see ThemePlusFile::getEmbeddedHtml
+	 * @return string
 	 */
-	public function getEmbededHtml()
+	public function getEmbeddedHtml($blnLazy = false)
 	{
 		global $objPage;
 
@@ -142,14 +198,22 @@ class LocalJavaScriptFile extends LocalThemePlusFile {
 		$strContent = $objFile->getContent();
 
 		// return html code
-		return $this->getDebugComment() . $this->wrapCc('<script' . (($objPage->outputFormat == 'xhtml') ? ' type="text/javascript"' : '') . '>' . $strContent . '</script>');
+		if ($blnLazy)
+		{
+			return $this->getDebugComment() . $this->wrapCc('<script' . (($objPage->outputFormat == 'xhtml') ? ' type="text/javascript"' : '') . '>' . "\n" . $this->ThemePlus->wrapJavaScriptLazyEmbedded($strContent) . "\n" . '</script>');
+		}
+		else
+		{
+			return $this->getDebugComment() . $this->wrapCc('<script' . (($objPage->outputFormat == 'xhtml') ? ' type="text/javascript"' : '') . '>' . "\n" . $strContent . "\n" . '</script>');
+		}
 	}
 
 
 	/**
-	 * Get included html code
+	 * @see ThemePlusFile::getIncludeHtml
+	 * @return string
 	 */
-	public function getIncludeHtml()
+	public function getIncludeHtml($blnLazy = false)
 	{
 		global $objPage;
 
@@ -157,16 +221,25 @@ class LocalJavaScriptFile extends LocalThemePlusFile {
 		$strFile = $this->getFile();
 
 		// return html code
-		return $this->getDebugComment() . $this->wrapCc('<script' . (($objPage->outputFormat == 'xhtml') ? ' type="text/javascript"' : '') . ' src="' . TL_SCRIPT_URL . specialchars($strFile) . '"></script>');
+		if ($blnLazy)
+		{
+			return $this->getDebugComment() . $this->wrapCc('<script' . (($objPage->outputFormat == 'xhtml') ? ' type="text/javascript"' : '') . '>' . "\n" . $this->ThemePlus->wrapJavaScriptLazyInclude(TL_SCRIPT_URL . $strFile) . "\n" . '</script>');
+		}
+		else
+		{
+			return $this->getDebugComment() . $this->wrapCc('<script' . (($objPage->outputFormat == 'xhtml') ? ' type="text/javascript"' : '') . ' src="' . TL_SCRIPT_URL . specialchars($strFile) . '"></script>');
+		}
 	}
 
 
 	/**
 	 * Convert into a string.
+	 *
+	 * @return string
 	 */
 	public function __toString()
 	{
-		return $this->getOriginFile() . '|' . $this->getCc();
+		return $this->getOriginFile() . '|' . $this->getCc() . '|' . $this->getPosition();
 	}
 }
 

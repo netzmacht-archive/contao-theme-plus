@@ -64,6 +64,7 @@ class ThemePlus extends Frontend
 	protected function __construct() {
 		$this->import('Database');
 		$this->import('Environment');
+		$this->import('Input');
 	}
 	
 	
@@ -484,16 +485,20 @@ class ThemePlus extends Frontend
 		// walk over all files
 		foreach ($arrFiles as $objFile)
 		{
+			$strScope = method_exists($objFile, 'getAggregation') ? ($objFile->getAggregation() == 'theme' ? $objFile->getAggregationScope() : $objFile->getAggregation()) : '';
+
 			// if file is a local css file and it can be aggregated, combine them
 			if ($objFile instanceof LocalCssFile && $objFile->isAggregateable())
 			{
 				// if there is no aggregator or a wrong aggregator then create one
-				if ($objAggregator == null || !($objAggregator instanceof CssFileAggregator))
+				if (    $objAggregator == null
+				    ||  !($objAggregator instanceof CssFileAggregator)
+					||  $objAggregator->getScope() != $strScope)
 				{
-					$objAggregator = new CssFileAggregator();
+					$objAggregator = new CssFileAggregator($strScope);
 					$arrAggregatedFiles[] = $objAggregator;
 				}
-				
+
 				// add file to aggregator
 				$objAggregator->add($objFile);
 			}
@@ -502,9 +507,11 @@ class ThemePlus extends Frontend
 			else if ($objFile instanceof LocalJavaScriptFile && $objFile->isAggregateable())
 			{
 				// if there is no aggregator, create one
-				if ($objAggregator == null || !($objAggregator instanceof JavaScriptFileAggregator))
+				if (    $objAggregator == null
+				    ||  !($objAggregator instanceof JavaScriptFileAggregator)
+					||  $objAggregator->getScope() != $strScope)
 				{
-					$objAggregator = new JavaScriptFileAggregator();
+					$objAggregator = new JavaScriptFileAggregator($strScope);
 					$arrAggregatedFiles[] = $objAggregator;
 				}
 				
@@ -524,7 +531,7 @@ class ThemePlus extends Frontend
 				$arrAggregatedFiles[] = $objFile;
 			}
 		}
-		
+
 		return $arrAggregatedFiles;
 	}
 	
@@ -535,8 +542,8 @@ class ThemePlus extends Frontend
 	public function getCssFiles($arrSortedIds, $blnAggregate = null, $blnAbsolutizeUrls = false, $objAbsolutizePage = null)
 	{
 		// return if there are no ids or file paths
-		$arrFiles = array_filter($arrSortedIds, array(&$this, 'filter_string'));
-		$arrIds   = array_filter($arrSortedIds, array(&$this, 'filter_int'));
+		$arrFiles = array_filter($arrSortedIds, array($this, 'filter_string'));
+		$arrIds   = array_filter($arrSortedIds, array($this, 'filter_int'));
 		if (empty($arrIds) && empty($arrFiles))
 		{
 			return array();
@@ -560,9 +567,7 @@ class ThemePlus extends Frontend
 					WHERE
 						id IN (" . implode(',', $arrIds) . ")
 					AND
-						(type = 'css_url' OR type = 'css_file')
-					ORDER BY
-						sorting");
+						(type = 'css_url' OR type = 'css_file')");
 			while ($objFile->next())
 			{
 				if ($this->filter($objFile))
@@ -577,20 +582,30 @@ class ThemePlus extends Frontend
 				case 'css_url':
 					if (preg_match('#\.less$#i', $strValue))
 					{
-						$arrStylesheets[$objFile->id] = new ExternalLessCssFile($varValue, $objFile->media);
+						$arrStylesheets[$objFile->id] = new ExternalLessCssFile($strValue);
 					}
 					else
 					{
-						$arrStylesheets[$objFile->id] = new ExternalCssFile($strValue, $objFile->media);
+						$arrStylesheets[$objFile->id] = new ExternalCssFile($strValue);
 					}
 					break;
 					
 				case 'css_file':
 					$objTheme = $this->findTheme($objFile->pid);
 					
-					$arrStylesheets[$objFile->id] = LocalThemePlusFile::create($strValue, $objFile->media, $objFile->cc, $objTheme, $blnAbsolutizeUrls ? $objAbsolutizePage : false);
+					$arrStylesheets[$objFile->id] = LocalThemePlusFile::create($strValue);
+					$arrStylesheets[$objFile->id]->setTheme($objTheme);
+					$arrStylesheets[$objFile->id]->setAbsolutizePage($blnAbsolutizeUrls ? $objAbsolutizePage : false);
+					$arrStylesheets[$objFile->id]->setAggregation($objFile->aggregation);
 					break;
+
+				default:
+					continue;
 				}
+
+				$arrStylesheets[$objFile->id]->setMedia($objFile->media);
+				$arrStylesheets[$objFile->id]->setCc($objFile->cc);
+
 			}
 		}
 		
@@ -606,7 +621,7 @@ class ThemePlus extends Frontend
 				}
 			}
 		}
-		
+
 		// sort array
 		$objSortingHelper = new SortingHelper($arrSortedIds);
 		uksort($arrStylesheets, array($objSortingHelper, 'cmp'));
@@ -624,7 +639,7 @@ class ThemePlus extends Frontend
 	/**
 	 * Get javascript files by id.
 	 */
-	public function getJavaScriptFiles($arrSortedIds, $blnAggregate = null)
+	public function getJavaScriptFiles($arrSortedIds, $strPosition = false, $blnAggregate = null)
 	{
 		// return if there are no ids or file paths
 		$arrFiles = array_filter($arrSortedIds, array(&$this, 'filter_string'));
@@ -644,17 +659,28 @@ class ThemePlus extends Frontend
 		// collect css and js files into $arrSourcesMap, depending of the conditional comment
 		if (count($arrIds))
 		{
-			$objFile = $this->Database->execute("
-					SELECT
+			$objFile = $this->Database
+				->prepare("SELECT
 						*
 					FROM
 						tl_theme_plus_file
 					WHERE
 						id IN (" . implode(',', $arrIds) . ")
+					" . ($strPosition ? "
 					AND
-						(type = 'js_url' OR type = 'js_file')
-					ORDER BY
-						sorting");
+						position = ?
+					" : "") . "
+					AND
+						(type = 'js_url' OR type = 'js_file')");
+			if ($strPosition)
+			{
+				$objFile = $objFile->execute($strPosition);
+			}
+			else
+			{
+				$objFile = $objFile->execute();
+			}
+			
 			while ($objFile->next())
 			{
 				if ($this->filter($objFile))
@@ -667,18 +693,22 @@ class ThemePlus extends Frontend
 				switch ($strType)
 				{
 				case 'js_url':
-					$arrJavaScripts[$objFile->id] = new ExternalJavaScriptFile($strValue, $objFile->cc);
+					$arrJavaScripts[$objFile->id] = new ExternalJavaScriptFile($strValue);
 					break;
 					
 				case 'js_file':
 					$objTheme = $this->findTheme($objFile->pid);
 					
-					$arrJavaScripts[$objFile->id] = new LocalJavaScriptFile($strValue, $objFile->cc, $objTheme);
+					$arrJavaScripts[$objFile->id] = new LocalJavaScriptFile($strValue);
+					$arrJavaScripts[$objFile->id]->setTheme($objTheme);
+					$arrJavaScripts[$objFile->id]->setAggregation($objFile->aggregation);
 					break;
 				
 				default:
 					continue;
 				}
+
+				$arrJavaScripts[$objFile->id]->setCc($objFile->cc);
 			}
 		}
 		
@@ -749,6 +779,36 @@ class ThemePlus extends Frontend
 		}
 		return false;
 	}
+
+
+	/**
+	 * Wrap a javascript src for lazy include.
+	 *
+	 * @return string
+	 */
+	public function wrapJavaScriptLazyInclude($strSrc)
+	{
+		return 'loadAsync(' . json_encode($strSrc) . ');';
+	}
+
+
+	/**
+	 * Wrap a javascript src for lazy embedding.
+	 *
+	 * @return string
+	 */
+	public function wrapJavaScriptLazyEmbedded($strSource)
+	{
+		$strBuffer  = 'var f=(function(){';
+		$strBuffer .= $strSource;
+		$strBuffer .= '});';
+		$strBuffer .= 'if (window.attachEvent){';
+		$strBuffer .= 'window.attachEvent("onload",f);';
+		$strBuffer .= '}else{';
+		$strBuffer .= 'window.addEventListener("load",f,false);';
+		$strBuffer .= '}';
+		return $strBuffer;
+	}
 	
 	
 	/**
@@ -756,12 +816,21 @@ class ThemePlus extends Frontend
 	 * 
 	 * @param Database_Result $objPage
 	 */
-	public function inheritFiles(Database_Result $objPage, $strType)
+	public function inheritFiles(Database_Result $objPage, $strType, $strPosition = false)
 	{
 		$strField = 'theme_plus_' . $strType;
 		if ($objPage->theme_plus_include_files)
 		{
 			$arrTemp = deserialize($objPage->$strField, true);
+
+			// filter entries by position
+			if ($strPosition && count($arrTemp))
+			{
+				$objFile = $this->Database
+					->prepare("SELECT * FROM tl_theme_plus_file WHERE id IN " . implode(',', $arrTemp) . " AND position=? ORDER BY id=" . implode(',id=', $arrTemp))
+					->execute($strPosition);
+				$arrTemp = $objFile->fetchEach('id');
+			}
 		}
 		else
 		{
@@ -876,7 +945,22 @@ class ThemePlus extends Frontend
 		 
 		return false;
 	}
-	
+
+
+	/**
+	 * Hook
+	 */
+	public function hookOutputBackendTemplate($strContent, $strTemplate)
+	{
+		if ($strTemplate == 'be_main' && $this->Input->get('table') == 'tl_theme_plus_file')
+		{
+			$strContent = str_replace('</head>', '<link rel="stylesheet" href="system/modules/theme_plus/html/be.css"></head>', $strContent);
+			$strContent = preg_replace('@<a href="contao/main\.php\?do=themes&amp;table=tl_theme_plus_file&amp;id=\d+&amp;act=create&amp;.*".*">.*</a> &#160; :: &#160; @U', '', $strContent);
+		}
+
+		return $strContent;
+	}
+
 	
 	/**
 	 * Helper function that filter out all non integer values.
@@ -911,8 +995,8 @@ class ThemePlus extends Frontend
 	{
 		$protocol = $this->Environment->ssl ? 'https://' : 'http://';
 		
-		array_unshift($GLOBALS['TL_JAVASCRIPT'], 'plugins/mootools/' . MOOTOOLS . '/mootools-more.js');
-		array_unshift($GLOBALS['TL_JAVASCRIPT'], $protocol . 'ajax.googleapis.com/ajax/libs/mootools/' . MOOTOOLS . '/mootools-yui-compressed.js');
+		$GLOBALS['TL_JAVASCRIPT_FRAMEWORK']['mootools-core'] = $protocol . 'ajax.googleapis.com/ajax/libs/mootools/' . MOOTOOLS . '/mootools-yui-compressed.js';
+		$GLOBALS['TL_JAVASCRIPT_FRAMEWORK']['mootools-more'] = 'plugins/mootools/' . MOOTOOLS . '/mootools-more.js';
 	}
 	
 	
@@ -921,8 +1005,8 @@ class ThemePlus extends Frontend
 	 */
 	public function addMooLocal($objPage, $objLayout, $objPageRegular)
 	{
-		array_unshift($GLOBALS['TL_JAVASCRIPT'], 'plugins/mootools/' . MOOTOOLS . '/mootools-more.js');
-		array_unshift($GLOBALS['TL_JAVASCRIPT'], 'plugins/mootools/' . MOOTOOLS . '/mootools-core.js');
+		$GLOBALS['TL_JAVASCRIPT_FRAMEWORK']['mootools-core'] = 'plugins/mootools/' . MOOTOOLS . '/mootools-core.js';
+		$GLOBALS['TL_JAVASCRIPT_FRAMEWORK']['mootools-more'] = 'plugins/mootools/' . MOOTOOLS . '/mootools-more.js';
 	}
 }
 
@@ -954,7 +1038,7 @@ class SortingHelper
 	{
 		$a = array_search($a, $this->arrSortedIds);
 		$b = array_search($b, $this->arrSortedIds);
-		
+
 		// both are equals or not found
 		if ($a === $b)
 		{

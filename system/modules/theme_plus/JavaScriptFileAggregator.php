@@ -35,32 +35,40 @@
 /**
  * Class JavaScriptFileAggregator
  */
-class JavaScriptFileAggregator extends LocalThemePlusFile {
-
+class JavaScriptFileAggregator extends FileAggregator
+{
 	/**
 	 * The files to aggregate.
+	 *
+	 * @var array
 	 */
-	protected $arrFiles;
+	protected $arrFiles = array();
 
 
 	/**
 	 * The aggregated file.
+	 *
+	 * @var string
 	 */
-	protected $strAggregatedFile;
+	protected $strAggregatedFile = null;
 
 
 	/**
 	 * Create a new css file object.
+	 *
+	 * @param string $strScope
 	 */
-	public function __construct()
+	public function __construct($strScope)
 	{
-		$this->arrFiles = func_get_args();
-		$this->strAggregatedFile = null;
+		parent::__construct($strScope);
 	}
 
 
 	/**
 	 * Add a file.
+	 *
+	 * @param LocalJavaScriptFile $objFile
+	 * @return void
 	 */
 	public function add(LocalJavaScriptFile $objFile)
 	{
@@ -68,6 +76,11 @@ class JavaScriptFileAggregator extends LocalThemePlusFile {
 	}
 
 
+	/**
+	 * @see LocalThemePlusFile::getFile
+	 * @throws Exception
+	 * @return string
+	 */
 	public function getFile()
 	{
 		if ($this->strAggregatedFile == null)
@@ -122,7 +135,7 @@ class JavaScriptFileAggregator extends LocalThemePlusFile {
 					// append to content
 					if (strlen($strSubContent)>0)
 					{
-						$strContent .= $strSubContent . ";\n";
+						$strContent .= $strSubContent . "\n";
 					}
 				}
 
@@ -145,10 +158,13 @@ class JavaScriptFileAggregator extends LocalThemePlusFile {
 
 
 	/**
-	 * Get embeded html code
+	 * @see ThemePlusFile::getEmbeddedHtml
+	 * @return string
 	 */
-	public function getEmbededHtml()
+	public function getEmbeddedHtml($blnLazy = false)
 	{
+		global $objPage;
+
 		// get the file
 		$strFile = $this->getFile();
 		$objFile = new File($strFile);
@@ -157,20 +173,38 @@ class JavaScriptFileAggregator extends LocalThemePlusFile {
 		$strContent = $objFile->getContent();
 
 		// return html code
-		return '<script type="text/javascript">' . $strContent . '</script>';
+		if ($blnLazy)
+		{
+			return $this->getDebugComment() . '<script' . (($objPage->outputFormat == 'xhtml') ? ' type="text/javascript"' : '') . '>' . $this->ThemePlus->wrapJavaScriptLazyEmbedded($strContent) . '</script>';
+		}
+		else
+		{
+			return $this->getDebugComment() . '<script' . (($objPage->outputFormat == 'xhtml') ? ' type="text/javascript"' : '') . '>' . $strContent . '</script>';
+		}
 	}
 
 
 	/**
-	 * Get included html code
+	 * @see ThemePlusFile::getIncludeHtml
+	 * @return string
 	 */
-	public function getIncludeHtml()
+	public function getIncludeHtml($blnLazy = false)
 	{
+		global $objPage;
+
 		// get the file
 		$strFile = $this->getFile();
 
 		// return html code
-		return '<script type="text/javascript" src="' . TL_SCRIPT_URL . specialchars($strFile) . '"></script>';
+		if ($blnLazy)
+		{
+			return $this->getDebugComment() . '<script' . (($objPage->outputFormat == 'xhtml') ? ' type="text/javascript"' : '') . '>' . $this->ThemePlus->wrapJavaScriptLazyInclude(TL_SCRIPT_URL . $strFile) . '</script>';
+		}
+		else
+		{
+			return $this->getDebugComment() . '<script' . (($objPage->outputFormat == 'xhtml') ? ' type="text/javascript"' : '') . ' src="' . TL_SCRIPT_URL . specialchars($strFile) . '"></script>';
+		}
 	}
 }
 
+?>

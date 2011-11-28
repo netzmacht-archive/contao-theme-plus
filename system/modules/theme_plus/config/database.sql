@@ -20,6 +20,8 @@ CREATE TABLE `tl_theme_plus_file` (
   `js_url` blob NULL,
   `css_file` blob NULL,
   `css_url` blob NULL,
+  `aggregation` varchar(6) NOT NULL default 'global',
+  `position` char(4) NOT NULL default 'head',
   `media` blob NULL,
   `cc` blob NULL,
   `filter` char(1) NOT NULL default '',
@@ -62,7 +64,9 @@ CREATE TABLE `tl_layout` (
   `theme_plus_exclude_contaocss` char(1) NOT NULL default '',
   `theme_plus_exclude_frameworkcss` char(1) NOT NULL default '',
   `theme_plus_stylesheets` blob NULL,
+  `theme_plus_javascript_lazy_load` char(1) NOT NULL default '',
   `theme_plus_javascripts` blob NULL,
+  `theme_plus_default_javascript_position` char(9) NOT NULL default 'head',
   `theme_plus_exclude_files` blob NULL,
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

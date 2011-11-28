@@ -35,15 +35,70 @@
 /**
  * Class ExternalJavaScriptFile
  */
-class ExternalJavaScriptFile extends ExternalThemePlusFile
+class ExternalJavaScriptFile extends ExternalThemePlusFile implements JavaScriptFile
 {
-	public function __construct($strUrl, $strCc = '')
+	/**
+	 * The include position
+	 *
+	 * @var string
+	 */
+	protected $strPosition = '';
+	
+
+	/**
+	 * Create a new external javascript
+	 *
+	 * @param string $strUrl
+	 */
+	public function __construct($strUrl)
 	{
-		parent::__construct($strUrl, $strCc);
+		parent::__construct($strUrl);
 	}
 
 
-	public function getIncludeHtml()
+	/**
+	 * Set the include position.
+	 *
+	 * @param string
+	 * @return void
+	 */
+	public function setPosition($strPosition)
+	{
+		$this->strPosition = $strPosition;
+	}
+
+
+	/**
+	 * Get the include position.
+	 *
+	 * @return string
+	 */
+	public function getPosition()
+	{
+		return $this->strPosition;
+	}
+
+
+	/**
+	 * @see ThemePlusFile::getDebugComment
+	 * @return string
+	 */
+	protected function getDebugComment()
+	{
+		$this->import('ThemePlus');
+		if ($GLOBALS['TL_CONFIG']['debugMode'] || $this->ThemePlus->getBELoginStatus())
+		{
+			return '<!-- external url: ' . $this->getUrl() . ', position: ' . $this->getPosition() . ' -->' . "\n";
+		}
+		return '';
+	}
+
+
+	/**
+	 * @see ThemePlusFile::getIncludeHtml
+	 * @return string
+	 */
+	public function getIncludeHtml($blnLazy = false)
 	{
 		global $objPage;
 
@@ -51,16 +106,25 @@ class ExternalJavaScriptFile extends ExternalThemePlusFile
 		$strFile = $this->getUrl();
 
 		// return html code
-		return $this->getDebugComment() . $this->wrapCc('<script' . (($objPage->outputFormat == 'xhtml') ? ' type="text/javascript"' : '') . ' src="' . specialchars($strFile) . '"></script>');
+		if ($blnLazy)
+		{
+			return $this->getDebugComment() . $this->wrapCc('<script' . (($objPage->outputFormat == 'xhtml') ? ' type="text/javascript"' : '') . '">' . $this->ThemePlus->wrapJavaScriptLazyInclude() . '</script>');
+		}
+		else
+		{
+			return $this->getDebugComment() . $this->wrapCc('<script' . (($objPage->outputFormat == 'xhtml') ? ' type="text/javascript"' : '') . ' src="' . specialchars($strFile) . '"></script>');
+		}
 	}
 
 
 	/**
 	 * Convert into a string.
+	 *
+	 * @return string
 	 */
 	public function __toString()
 	{
-		return $this->getUrl() . '|' . $this->getCc();
+		return $this->getUrl() . '|' . $this->getCc() . '|' . $this->getPosition();
 	}
 }
 

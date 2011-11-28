@@ -35,7 +35,7 @@
 /**
  * System configuration
  */
-$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{theme_plus_legend:hide},theme_plus_lesscss_mode,theme_plus_force_less';
+$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] .= ';{theme_plus_legend:hide},theme_plus_lesscss_mode,theme_plus_force_less,css_embed_images';
 
 $GLOBALS['TL_DCA']['tl_settings']['fields']['theme_plus_lesscss_mode'] = array
 (
@@ -50,6 +50,27 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['theme_plus_force_less'] = array
 	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['theme_plus_force_less'],
 	'inputType'               => 'checkbox',
 	'eval'                    => array('tl_class'=>'m12 w50')
+);
+$GLOBALS['TL_DCA']['tl_settings']['fields']['css_embed_images'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['css_embed_images'],
+	'inputType'               => 'select',
+	'options'                 => array
+	(
+		0       => '-',
+		1024    => '1 KiB',
+		2048    => '2 KiB',
+		4069    => '4 KiB',
+		8192    => '8 KiB',
+		16384   => '16 KiB',
+		32768   => '32 KiB',
+		65536   => '64 KiB',
+		131072  => '128 KiB',
+		262144  => '256 KiB',
+		524288  => '512 KiB',
+		1048576 => '1 MiB'
+	),
+	'eval'                    => array('tl_class'=>'w50')
 );
 
 class tl_settings_theme_plus extends Backend

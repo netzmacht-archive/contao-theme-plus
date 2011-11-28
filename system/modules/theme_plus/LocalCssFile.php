@@ -35,22 +35,28 @@
 /**
  * Class LocalCssFile
  */
-class LocalCssFile extends LocalThemePlusFile {
+class LocalCssFile extends LocalThemePlusFile implements CssFile {
 
 	/**
 	 * The media selectors.
+	 *
+	 * @var string
 	 */
 	protected $strMedia;
 
 
 	/**
 	 * The absolutize page.
+	 *
+	 * @var bool
 	 */
 	protected $objAbsolutizePage;
 
 
 	/**
 	 * The processed temporary file path.
+	 *
+	 * @var string
 	 */
 	protected $strProcessedFile;
 
@@ -58,24 +64,71 @@ class LocalCssFile extends LocalThemePlusFile {
 	/**
 	 * Create a new css file object.
 	 */
-	public function __construct($strOriginFile, $strMedia = '', $strCc = '', $objTheme = false, $objAbsolutizePage = false)
+	public function __construct($strOriginFile)
 	{
-		parent::__construct($strOriginFile, $strCc, $objTheme);
-		$this->strMedia = $strMedia;
-		$this->objAbsolutizePage = $objAbsolutizePage;
-		$this->strProcessedFile = null;
+		if ($strOriginFile[0] == '!')
+		{
+			$this->strProcessedFile = $strOriginFile = substr($strOriginFile, 1);
+		}
+		else
+		{
+			$this->strProcessedFile = null;
+		}
+		
+		parent::__construct($strOriginFile);
 
 		// import the Theme+ master class
 		$this->import('ThemePlus');
 	}
 
 
+	/**
+	 * @see CssFile::setMedia
+	 * @param string $strMedia
+	 */
+	public function setMedia($strMedia)
+	{
+		$this->strMedia = $strMedia;
+	}
+
+	
+	/**
+	 * @see CssFile::getMedia
+	 * @return string
+	 */
 	public function getMedia()
 	{
 		return $this->strMedia;
 	}
 
 
+	/**
+	 * Set if urls should be absolutized.
+	 *
+	 * @param bool $objAbsolutizePage
+	 * @return void
+	 */
+	public function setAbsolutizePage($objAbsolutizePage)
+	{
+		$this->objAbsolutizePage = $objAbsolutizePage;
+	}
+
+
+	/**
+	 * Get if urls should be absolutized.
+	 *
+	 * @return bool
+	 */
+	public function getAbsolutizePage()
+	{
+		return $this->objAbsolutizePage;
+	}
+
+
+	/**
+	 * @see LocalThemePlusFile::getFile
+	 * @return string
+	 */
 	public function getFile()
 	{
 		if ($this->strProcessedFile == null)
@@ -123,6 +176,19 @@ class LocalCssFile extends LocalThemePlusFile {
 				// replace variables
 				$strContent = $this->ThemePlus->replaceVariablesByTheme($strContent, $this->objTheme, $strTemp);
 
+				// replace insert tags
+				$strContent = $this->replaceInsertTags($strContent);
+
+				// embed images
+				if ($GLOBALS['TL_CONFIG']['css_embed_images'] > 0)
+				{
+					$this->import('CssInlineImages');
+					$strContent = $this->CssInlineImages->embedCode($strContent, $objFile, $GLOBALS['TL_CONFIG']['css_embed_images']);
+				}
+
+				// remap url(..) entries
+				$strContent = $this->CssUrlRemapper->remapCode($strContent, $this->strOriginFile, $strTemp, $this->objAbsolutizePage ? true : false, $this->objAbsolutizePage);
+
 				// add media definition
 				if (strlen($this->strMedia))
 				{
@@ -131,12 +197,6 @@ class LocalCssFile extends LocalThemePlusFile {
 
 				// add @charset utf-8 rule
 				$strContent = '@charset "UTF-8";' . "\n" . $strContent;
-
-				// remap url(..) entries
-				$strContent = $this->CssUrlRemapper->remapCode($strContent, $this->strOriginFile, $strTemp, $this->objAbsolutizePage ? true : false, $this->objAbsolutizePage);
-
-				// replace insert tags
-				$strContent = $this->replaceInsertTags($strContent);
 
 				// minify
 				if (!$this->Minimizer->minimizeToFile($strTemp, $strContent))
@@ -161,13 +221,21 @@ class LocalCssFile extends LocalThemePlusFile {
 	}
 
 
+	/**
+	 * @see ThemePlusFile::getGlobalVariableCode
+	 * @return string
+	 */
 	public function getGlobalVariableCode()
 	{
 		return $this->getFile() . (strlen($this->strMedia) ? '|' . $this->strMedia : '') . (strlen($this->strCc) ? '|' . $this->strCc : '');
 	}
 
 
-	public function getEmbededHtml()
+	/**
+	 * @see ThemePlusFile::getEmbeddedHtml
+	 * @return string
+	 */
+	public function getEmbeddedHtml($blnLazy = false)
 	{
 		global $objPage;
 
@@ -186,7 +254,11 @@ class LocalCssFile extends LocalThemePlusFile {
 	}
 
 
-	public function getIncludeHtml()
+	/**
+	 * @see ThemePlusFile::getIncludeHtml
+	 * @return string
+	 */
+	public function getIncludeHtml($blnLazy = false)
 	{
 		global $objPage;
 
@@ -200,11 +272,11 @@ class LocalCssFile extends LocalThemePlusFile {
 
 	/**
 	 * Convert into a string.
+	 *
+	 * @return string
 	 */
 	public function __toString()
 	{
 		return $this->getOriginFile() . '|' . $this->getMedia() . '|' . $this->getCc();
 	}
 }
-
-?>

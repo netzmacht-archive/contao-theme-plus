@@ -52,6 +52,12 @@ if (VERSION == 2.10 && BUILD == 'RC1' && file_exists(TL_ROOT . '/system/modules/
 
 
 /**
+ * Form fields
+ */
+$GLOBALS['BE_FFL']['fancyCheckboxWizard'] = 'FancyCheckBoxWizard';
+
+
+/**
  * Back end modules
  */
 $GLOBALS['BE_MOD']['design']['themes']['tables'][] = 'tl_theme_plus_file';
@@ -73,15 +79,17 @@ $GLOBALS['TL_CTE']['includes']['script_source'] = 'ScriptSource';
 /**
  * Settings
  */
-$GLOBALS['TL_CONFIG']['theme_plus_exclude_contaocss']       = '';
-$GLOBALS['TL_CONFIG']['theme_plus_exclude_mootools']        = '';
-$GLOBALS['TL_CONFIG']['theme_plus_lesscss_mode']            = 'phpless';
+$GLOBALS['TL_CONFIG']['theme_plus_exclude_contaocss'] = '';
+$GLOBALS['TL_CONFIG']['theme_plus_exclude_mootools']  = '';
+$GLOBALS['TL_CONFIG']['theme_plus_lesscss_mode']      = 'phpless';
+$GLOBALS['TL_CONFIG']['css_embed_images']             = 16384;
 
 
 /**
  * HOOKs
  */
-$GLOBALS['TL_HOOKS']['replaceInsertTags'][] = array('ThemePlus', 'hookReplaceInsertTags');
+$GLOBALS['TL_HOOKS']['replaceInsertTags'][]     = array('ThemePlus', 'hookReplaceInsertTags');
+$GLOBALS['TL_HOOKS']['outputBackendTemplate'][] = array('ThemePlus', 'hookOutputBackendTemplate');
 
 
 /**
@@ -108,5 +116,33 @@ $GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus_variable'] = array
 /**
  * Script frameworks
  */
-$GLOBALS['TL_SCRIPT_FRAMEWORKS']['mooSource']['moo_googleapis'] = array('ThemePlus', 'addMooGoogle');
+$GLOBALS['TL_SCRIPT_FRAMEWORKS']['mooSource']['moo_googleapis'] = array('ThemePlus', 'addMooGoogleAPIs');
 $GLOBALS['TL_SCRIPT_FRAMEWORKS']['mooSource']['moo_local']      = array('ThemePlus', 'addMooLocal');
+
+
+/**
+ * Mime types
+ */
+$GLOBALS['TL_MIME']['less'] = array('text/css', 'iconCSS.gif');
+
+
+/**
+ * Helper function
+ */
+if (!function_exists('array_concat'))
+{
+	function array_concat()
+	{
+		$args = func_get_args();
+		$array = array_shift($args);
+		while (count($args))
+		{
+			$temp = array_shift($args);
+			foreach ($temp as $v)
+			{
+				$array[] = $v;
+			}
+		}
+		return $array;
+	}
+}

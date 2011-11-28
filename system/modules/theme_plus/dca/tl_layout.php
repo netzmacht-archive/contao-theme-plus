@@ -31,13 +31,27 @@
  * @license    LGPL
  */
 
+
+// add onload callback
 $GLOBALS['TL_DCA']['tl_layout']['config']['onload_callback'][] = array('tl_layout_theme_plus', 'onload');
 
-$GLOBALS['TL_DCA']['tl_layout']['palettes']['default'] = str_replace(
-	'stylesheet',
-	'theme_plus_exclude_contaocss,theme_plus_exclude_frameworkcss,stylesheet,theme_plus_stylesheets,theme_plus_javascripts,theme_plus_exclude_files',
+
+// extend the palette
+$GLOBALS['TL_DCA']['tl_layout']['palettes']['default'] = preg_replace(
+	array(
+	    '#stylesheet#',
+		'#mootools#',
+		'#(\{expert_legend:hide\}.*);#U'
+	),
+	array(
+		'theme_plus_exclude_contaocss,theme_plus_exclude_frameworkcss,stylesheet,theme_plus_stylesheets',
+		'theme_plus_javascript_lazy_load,theme_plus_default_javascript_position,theme_plus_javascripts,mootools',
+		'$1,theme_plus_exclude_files;'
+	),
 	$GLOBALS['TL_DCA']['tl_layout']['palettes']['default']);
 
+
+// add field theme_plus_exclude_contaocss
 $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_exclude_contaocss'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['theme_plus_exclude_contaocss'],
@@ -45,6 +59,8 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_exclude_contaocss'] = arra
 	'eval'                    => array('tl_class'=>'w50 m12')
 );
 
+
+// add field theme_plus_exclude_frameworkcss
 $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_exclude_frameworkcss'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['theme_plus_exclude_frameworkcss'],
@@ -52,6 +68,56 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_exclude_frameworkcss'] = a
 	'eval'                    => array('tl_class'=>'w50 m12', 'submitOnChange'=>true)
 );
 
+
+// clear float with stylesheet field
+$GLOBALS['TL_DCA']['tl_layout']['fields']['stylesheet']['eval']['tl_class'] .= ' clr';
+
+
+// add field theme_plus_stylesheets
+$GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_stylesheets'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['theme_plus_stylesheets'],
+	'inputType'               => 'fancyCheckboxWizard',
+	'options_callback'        => array('tl_layout_theme_plus', 'getStylesheets'),
+	'eval'                    => array('multiple'=>true, 'tl_class'=>'clr')
+);
+
+
+// add field theme_plus_javascript_lazy_load
+$GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_javascript_lazy_load'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['theme_plus_javascript_lazy_load'],
+	'inputType'               => 'checkbox',
+	'eval'                    => array('tl_class'=>'w50 m12')
+);
+
+
+// add field theme_plus_default_files_position
+$GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_default_javascript_position'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['theme_plus_default_javascript_position'],
+	'inputType'               => 'select',
+	'options'                 => array('head', 'head+body', 'body'),
+	'reference'               => &$GLOBALS['TL_LANG']['tl_layout']['positions'],
+	'eval'                    => array('tl_class'=>'w50')
+);
+
+
+// add field theme_plus_javascripts
+$GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_javascripts'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['theme_plus_javascripts'],
+	'inputType'               => 'fancyCheckboxWizard',
+	'options_callback'        => array('tl_layout_theme_plus', 'getJavaScripts'),
+	'eval'                    => array('multiple'=>true, 'tl_class'=>'clr')
+);
+
+
+// add empty option to mootools source
+$GLOBALS['TL_DCA']['tl_layout']['fields']['mooSource']['eval']['includeBlankOption'] = true;
+
+
+// add field theme_plus_exclude_files
 $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_exclude_files'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['theme_plus_exclude_files'],
@@ -71,29 +137,9 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_exclude_files'] = array
 	)
 );
 
-$GLOBALS['TL_DCA']['tl_layout']['fields']['stylesheet']['eval']['tl_class'] .= ' clr';
-
-$GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_stylesheets'] = array
-(
-	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['theme_plus_stylesheets'],
-	'inputType'               => 'checkboxWizard',
-	'options_callback'        => array('tl_layout_theme_plus', 'getStylesheets'),
-	'eval'                    => array('multiple'=>true, 'tl_class'=>'clr')
-);
-
-$GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_javascripts'] = array
-(
-	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['theme_plus_javascripts'],
-	'inputType'               => 'checkboxWizard',
-	'options_callback'        => array('tl_layout_theme_plus', 'getJavaScripts'),
-	'eval'                    => array('multiple'=>true, 'tl_class'=>'clr')
-);
-
-$GLOBALS['TL_DCA']['tl_layout']['fields']['mooSource']['eval']['includeBlankOption'] = true;
 
 /**
  * Class tl_layout_theme_plus
- *
  */
 class tl_layout_theme_plus extends Backend
 {
@@ -103,6 +149,7 @@ class tl_layout_theme_plus extends Backend
 			$objLayout = $this->Database->prepare("SELECT * FROM tl_layout WHERE id=?")->execute($dc->id);
 			if ($objLayout->next() && $objLayout->theme_plus_exclude_frameworkcss)
 			{
+				// remove framework css related fields
 				$GLOBALS['TL_DCA']['tl_layout']['palettes']['default'] = str_replace(
 					';{static_legend},static',
 					'',
@@ -126,26 +173,29 @@ class tl_layout_theme_plus extends Backend
 		}
 	}
 	
+	
 	public function getStylesheets()
 	{
 		return $this->getFiles('css');
 	}
+	
 	
 	public function getJavaScripts()
 	{
 		return $this->getFiles('js');
 	}
 	
-	public function getFiles($strTypePrefix)
+	
+	public function getFiles($strTypePrefix, $arrInheritedFiles = false)
 	{
-		$arrFile = array();
+		$arrFiles = array();
 		
 		$objTheme = $this->Database
 			->execute("SELECT * FROM tl_theme ORDER BY name");
 		while ($objTheme->next())
 		{
 			$objFile = $this->Database
-				->prepare("SELECT * FROM tl_theme_plus_file WHERE pid=? AND (type=? OR type=?) ORDER BY sorting")
+				->prepare("SELECT * FROM tl_theme_plus_file WHERE pid=? AND (type=? OR type=?) ORDER BY {$strTypePrefix}_file, {$strTypePrefix}_url")
 				->execute($objTheme->id, $strTypePrefix . '_file', $strTypePrefix . '_url');
 			while ($objFile->next())
 			{
@@ -155,6 +205,7 @@ class tl_layout_theme_plus extends Backend
 				switch ($objFile->type) {
 				case 'js_file': case 'js_url':
 					$image = 'iconJS.gif';
+					$label = '[' . $objTheme->position . '] ' . $label;
 					break;
 
 				case 'css_file': case 'css_url':
@@ -165,9 +216,21 @@ class tl_layout_theme_plus extends Backend
 					$image = false;
 				}
 
-				$arrFile[$objFile->id] = ($image ? $this->generateImage($image, $label, 'style="vertical-align:middle"') . ' ' : '') . '[' . $objTheme->name . '] ' . $label;
+				$arrFile = array
+				(
+					'value' => $objFile->id,
+					'label' => ($image ? $this->generateImage($image, $label, 'style="vertical-align:middle"') . ' ' : '') . '[' . $objTheme->name . '] ' . $label
+				);
+				
+				if ($arrInheritedFiles && in_array($objFile->id, $arrInheritedFiles))
+				{
+					$arrFile['checked']  = true;
+					$arrFile['disabled'] = true;
+				}
+				
+				$arrFiles[] = $arrFile;
 			}
 		}
-		return $arrFile;
+		return $arrFiles;
 	}
 }

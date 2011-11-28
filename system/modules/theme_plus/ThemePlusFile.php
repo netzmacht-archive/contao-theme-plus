@@ -38,30 +38,55 @@
 abstract class ThemePlusFile extends Controller
 {
 	/**
+	 * The ThemePlus object
+	 *
+	 * @var ThemePlus
+	 */
+	protected $ThemePlus;
+
+
+	/**
 	 * The conditional comment.
 	 *
 	 * @var string
 	 */
-	protected $strCc;
+	protected $strCc = '';
 
 
 	/**
 	 * Create a new Theme+ file
+	 *
+	 * @param string $strCc
 	 */
-	public function __construct($strCc)
+	public function __construct()
 	{
-		$this->strCc = trim($strCc);
+		$this->import('ThemePlus');
 	}
 
 
 	/**
 	 * Get a debug comment string
+	 *
+	 * @return string
 	 */
 	protected abstract function getDebugComment();
 
 
 	/**
+	 * Set the conditional comment.
+	 *
+	 * @param string $strCc
+	 */
+	public function setCc($strCc)
+	{
+		$this->strCc = $strCc;
+	}
+	
+
+	/**
 	 * Return the conditional comment.
+	 *
+	 * @return string
 	 */
 	public function getCc()
 	{
@@ -78,11 +103,11 @@ abstract class ThemePlusFile extends Controller
 
 
 	/**
-	 * Get embeded html code
+	 * Get embedded html code
 	 *
 	 * @return string
 	 */
-	public abstract function getEmbededHtml();
+	public abstract function getEmbeddedHtml($blnLazy = false);
 
 
 	/**
@@ -90,7 +115,7 @@ abstract class ThemePlusFile extends Controller
 	 *
 	 * @return string
 	 */
-	public abstract function getIncludeHtml();
+	public abstract function getIncludeHtml($blnLazy = false);
 
 
 	/**
@@ -104,6 +129,12 @@ abstract class ThemePlusFile extends Controller
 	}
 
 
+	/**
+	 * Magic getter
+	 *
+	 * @param string $k
+	 * @return mixed
+	 */
 	public function __get($k)
 	{
 		switch ($k)
@@ -128,6 +159,9 @@ abstract class ThemePlusFile extends Controller
 
 	/**
 	 * Wrap the conditional comment arround.
+	 *
+	 * @param string $strCode
+	 * @return string
 	 */
 	protected function wrapCc($strCode)
 	{

@@ -61,6 +61,34 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 		),
 		'global_operations' => array
 		(
+			'newJsUrl' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['newJsUrl'],
+				'href'                => 'act=create&mode=2&pid=' . $this->Input->get('id') . '&type=js_url',
+				'class'               => 'header_create_js_url',
+				'attributes'          => 'onclick="Backend.getScrollOffset();"'
+			),
+			'newJsFile' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['newJsFile'],
+				'href'                => 'act=create&mode=2&pid=' . $this->Input->get('id') . '&type=js_file',
+				'class'               => 'header_create_js_file',
+				'attributes'          => 'onclick="Backend.getScrollOffset();" accesskey="j"'
+			),
+			'newCssUrl' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['newCssUrl'],
+				'href'                => 'act=create&mode=2&pid=' . $this->Input->get('id') . '&type=css_url',
+				'class'               => 'header_create_css_url',
+				'attributes'          => 'onclick="Backend.getScrollOffset();"'
+			),
+			'newCssFile' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['newCssFile'],
+				'href'                => 'act=create&mode=2&pid=' . $this->Input->get('id') . '&type=css_file',
+				'class'               => 'header_create_css_file',
+				'attributes'          => 'onclick="Backend.getScrollOffset();" accesskey="c"'
+			),
 			'all' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['MSC']['all'],
@@ -111,10 +139,10 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 	(
 		'__selector__'                => array('type', 'filter'),
 		'default'                     => '{source_legend},type',
-		'js_file'                     => '{source_legend},type,js_file,cc,filter',
-		'js_url'                      => '{source_legend},type,js_url,cc,filter',
-		'css_file'                    => '{source_legend},type,css_file,media,cc,filter;{editor_legend:hide},editor_integration,force_editor_integration',
-		'css_url'                     => '{source_legend},type,css_url,media,cc,filter;{editor_legend:hide},editor_integration,force_editor_integration'
+		'js_file'                     => '{source_legend},js_file,cc,filter;{expert_legend},aggregation,position',
+		'js_url'                      => '{source_legend},js_url,cc,filter;{expert_legend},aggregation,position',
+		'css_file'                    => '{source_legend},css_file,media,cc,filter;{editor_legend:hide},editor_integration,force_editor_integration;{expert_legend},aggregation',
+		'css_url'                     => '{source_legend},css_url,media,cc,filter;{editor_legend:hide},editor_integration,force_editor_integration;{expert_legend},aggregation'
 	),
 
 	// Subpalettes
@@ -129,7 +157,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 		'type' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['type'],
-			'default'                 => 'css_file',
+			'default'                 => $this->Input->get('type'),
 			'inputType'               => 'select',
 			'filter'                  => true,
 			'options'                 => array('js_file','js_url','css_file','css_url'),
@@ -163,6 +191,24 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 			'inputType'               => 'text',
 			'exclude'                 => true,
 			'eval'                    => array('mandatory'=>true, 'decodeEntities'=>true, 'tl_class'=>'long')
+		),
+		'aggregation' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['aggregation'],
+			'default'                 => 'global',
+			'exclude'                 => true,
+			'inputType'               => 'select',
+			'options'                 => array('global', 'theme', 'pages', 'page', 'never'),
+			'reference'               => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['aggregations']
+		),
+		'position' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['position'],
+			'default'                 => 'head',
+			'exclude'                 => true,
+			'inputType'               => 'select',
+			'options'                 => array('head', 'body'),
+			'reference'               => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['positions']
 		),
 		'media' => array
 		(
@@ -383,6 +429,7 @@ class tl_theme_plus_file extends Backend
 		switch ($row['type']) {
 		case 'js_file': case 'js_url':
 			$image = 'iconJS.gif';
+			$label = '[' . $row['position'] . '] ' . $label;
 			break;
 
 		case 'css_file': case 'css_url':
@@ -393,7 +440,7 @@ class tl_theme_plus_file extends Backend
 			$image = false;
 		}
 
-		return '<div>' . ($image ? $this->generateImage($image, $label, 'style="vertical-align:middle"') . ' ' : '') . $label ."</div>\n";
+		return '<div>' . ($image ? $this->generateImage($image, $label, 'style="vertical-align:middle"') . ' ' : '') . $label . "</div>\n";
 
 	}
 

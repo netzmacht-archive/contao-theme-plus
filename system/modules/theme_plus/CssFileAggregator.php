@@ -35,42 +35,40 @@
 /**
  * Class CssFileAggregator
  */
-class CssFileAggregator extends LocalThemePlusFile {
-
+class CssFileAggregator extends FileAggregator
+{
 	/**
 	 * The files to aggregate.
+	 *
+	 * @var array
 	 */
-	protected $arrFiles;
+	protected $arrFiles = array();
 
 
 	/**
 	 * The absolutize page.
+	 *
+	 * @var Database_Result
 	 */
-	protected $objAbsolutizePage;
+	protected $objAbsolutizePage = null;
 
 
 	/**
 	 * The aggregated file.
+	 *
+	 * @var string
 	 */
-	protected $strAggregatedFile;
+	protected $strAggregatedFile = null;
 
 
 	/**
 	 * Create a new css file object.
+	 *
+	 * @param string $strScope
 	 */
-	public function __construct()
+	public function __construct($strScope)
 	{
-		$args = func_get_args();
-		if (!($args[count($args)-1] instanceof ThemePlusFile))
-		{
-			$this->objAbsolutizePage = array_pop($args);
-		}
-		else
-		{
-			$this->objAbsolutizePage = false;
-		}
-		$this->arrFiles = $args;
-		$this->strAggregatedFile = null;
+		parent::__construct($strScope);
 
 		// import the Theme+ master class
 		$this->import('ThemePlus');
@@ -79,6 +77,9 @@ class CssFileAggregator extends LocalThemePlusFile {
 
 	/**
 	 * Add a file.
+	 *
+	 * @param LocalCssFile $objFile
+	 * @return void
 	 */
 	public function add(LocalCssFile $objFile)
 	{
@@ -86,6 +87,11 @@ class CssFileAggregator extends LocalThemePlusFile {
 	}
 
 
+	/**
+	 * @see LocalThemePlusFile::getFile
+	 * @throws Exception
+	 * @return string
+	 */
 	public function getFile()
 	{
 		if ($this->strAggregatedFile == null)
@@ -168,7 +174,11 @@ class CssFileAggregator extends LocalThemePlusFile {
 	}
 
 
-	public function getEmbededHtml()
+	/**
+	 * @see ThemePlusFile::getEmbeddedHtml
+	 * @return string
+	 */
+	public function getEmbeddedHtml($blnLazy = false)
 	{
 		// get the file
 		$strFile = $this->getFile();
@@ -181,17 +191,21 @@ class CssFileAggregator extends LocalThemePlusFile {
 		$strContent = $this->ThemePlus->handleCharset($strContent);
 
 		// return html code
-		return '<style type="text/css">' . $strContent . '</style>';
+		return $this->getDebugComment() . '<style type="text/css">' . $strContent . '</style>';
 	}
 
 
-	public function getIncludeHtml()
+	/**
+	 * @see ThemePlusFile::getIncludeHtml
+	 * @return string
+	 */
+	public function getIncludeHtml($blnLazy = false)
 	{
 		// get the file
 		$strFile = $this->getFile();
 
 		// return html code
-		return '<link type="text/css" rel="stylesheet" href="' . TL_SCRIPT_URL . specialchars($strFile) . '" />';
+		return $this->getDebugComment() . '<link type="text/css" rel="stylesheet" href="' . TL_SCRIPT_URL . specialchars($strFile) . '" />';
 	}
 }
 

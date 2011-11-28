@@ -37,6 +37,7 @@
  */
 $GLOBALS['TL_LANG']['tl_settings']['theme_plus_lesscss_mode'] = array('LessCSS mode', 'Choose the LessCSS compiler mode.');
 $GLOBALS['TL_LANG']['tl_settings']['theme_plus_force_less']   = array('Compile all css files with LessCSS', 'Choose this option to handle .css files as LessCSS files.');
+$GLOBALS['TL_LANG']['tl_settings']['css_embed_images']        = array('Embed images into css', 'Please choose the size of images that are embedded into the css.');
 
 
 /**

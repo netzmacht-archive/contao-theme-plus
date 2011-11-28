@@ -33,49 +33,72 @@
 
 
 /**
- * Class ExternalLessCssFile
+ * Class CssFile
  */
-class ExternalLessCssFile extends ExternalCssFile {
+class CssCode extends LocalCssFile
+{
+	/**
+	 * The javascript code
+	 *
+	 * @var string
+	 */
+	protected $strCode;
+
 
 	/**
-	 * Create a new css file object.
+	 * A reference to identify
 	 *
-	 * @param string $strUrl
+	 * @var string
 	 */
-	public function __construct($strUrl)
-	{
-		parent::__construct($strUrl);
+	protected $strReference;
 
-		// import the Theme+ master class
-		$this->import('ThemePlus');
+
+	/**
+	 * Create a new javascript code object.
+	 *
+	 * @param string $strCode
+	 */
+	public function __construct($strCode, $strReference = 'undefined')
+	{
+		$this->strCode = $strCode;
+		$this->strReference = $strReference;
+
+		$strHash = md5($strCode);
+		$strFile = 'system/scripts/stylesheet-' . $strReference . '-' . substr($strHash, 0, 8) . '.js';
+
+		if (!file_exists(TL_ROOT . '/' . $strFile))
+		{
+			$objFile = new File($strFile);
+			$objFile->write($strCode);
+			$objFile->close();
+		}
+
+		parent::__construct($strFile);
 	}
 
 
 	/**
-	 * @see ThemePlusFile::getIncludeHtml
+	 * Get the javascript code.
+	 *
 	 * @return string
 	 */
-	public function getIncludeHtml($blnLazy = false)
+	public function getCode()
 	{
-		global $objPage;
-
-		// add client side javascript
-		if ($this->ThemePlus->getBELoginStatus())
-		{
-			$GLOBALS['TL_JAVASCRIPT'][] = 'plugins/lesscss/less.min.development.js';
-		}
-		else
-		{
-			$GLOBALS['TL_JAVASCRIPT'][] = 'plugins/lesscss/less.min.js';
-		}
-
-		// get the file
-		$strUrl = $this->getUrl();
-
-		// return html code
-		return $this->getDebugComment() . $this->wrapCc('<link' . (($objPage->outputFormat == 'xhtml') ? ' type="text/css"' : '') . ' rel="stylesheet" href="' . specialchars($strUrl) . '"' . (strlen($this->strMedia) ? ' media="' . $this->strMedia . '"' : '') . ' />');
+		return $this->strCode;
 	}
 
-}
 
-?>
+	/**
+	 * @see ThemePlusFile::getDebugComment
+	 * @return string
+	 */
+	protected function getDebugComment()
+	{
+		$this->import('ThemePlus');
+		if ($GLOBALS['TL_CONFIG']['debugMode'] || $this->ThemePlus->getBELoginStatus())
+		{
+			return '<!-- css code: ' . $this->strReference . ', aggregation: ' . $this->getAggregation() . ', scope: ' . $this->getAggregationScope() . ' -->' . "\n";
+		}
+		return '';
+	}
+}

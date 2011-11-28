@@ -368,9 +368,7 @@ class EditorStyles extends ThemePlus {
 					AND	(	id IN (" . implode(',', array_map('intval', $arrThemePlus)) . ")
 						OR	force_editor_integration='1')
 					AND (	type = 'css_url'
-						OR  type = 'css_file')
-				ORDER BY
-					sorting")
+						OR  type = 'css_file')")
 			->execute($objLayout->pid);
 		$arrIds = array();
 		while ($objThemePlusFile->next())

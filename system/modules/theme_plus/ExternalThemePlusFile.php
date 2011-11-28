@@ -38,12 +38,12 @@
 abstract class ExternalThemePlusFile extends ThemePlusFile
 {
 	/**
-	 * Get a file from path. 
+	 * Get a file from path.
+	 *
+	 * @return ExternalJavaScriptFile|ExternalCssFile|ExternalLessCssFile|false
 	 */
-	public static function create()
+	public static function create($strUrl)
 	{
-		$args = func_get_args();
-		$strUrl = $args[0];
 		$strFile = parse_url($strUrl, PHP_URL_PATH);
 		$strExtension = preg_replace('#.*\.(\w+)$#', '$1', $strFile);
 		if ($strExtension)
@@ -51,16 +51,16 @@ abstract class ExternalThemePlusFile extends ThemePlusFile
 			switch (strtolower($strExtension))
 			{
 				case 'js':
-					return new ExternalJavaScriptFile($strFile, isset($args[1]) ? $args[1] : '', isset($args[2]) ? $args[2] : false);
+					return new ExternalJavaScriptFile($strFile);
 				
 				case 'css':
 					if (!$GLOBALS['TL_CONFIG']['theme_plus_force_less'])
 					{
-						return new ExternalCssFile($strFile, isset($args[1]) ? $args[1] : '', isset($args[2]) ? $args[2] : '', isset($args[3]) ? $args[3] : false, isset($args[4]) ? $args[4] : false);
+						return new ExternalCssFile($strFile);
 					}
 					
 				case 'less':
-					return new ExternalLessCssFile($strFile, isset($args[1]) ? $args[1] : '', isset($args[2]) ? $args[2] : '', isset($args[3]) ? $args[3] : false, isset($args[4]) ? $args[4] : false);
+					return new ExternalLessCssFile($strFile);
 			}
 		}
 		return false;
@@ -75,21 +75,24 @@ abstract class ExternalThemePlusFile extends ThemePlusFile
 	
 	/**
 	 * Create a new local file object.
+	 *
+	 * @param string $strUrl
 	 */
-	public function __construct($strUrl, $strCc = '')
+	public function __construct($strUrl)
 	{
-		parent::__construct($strCc);
+		parent::__construct();
 		$this->strUrl = $strUrl;
 	}
 	
 	
 	/**
-	 * Get a debug comment string
+	 * @see ThemePlusFile::getDebugComment
+	 * @return string
 	 */
 	protected function getDebugComment()
 	{
 		$this->import('ThemePlus');
-		if ($this->ThemePlus->getBELoginStatus())
+		if ($GLOBALS['TL_CONFIG']['debugMode'] || $this->ThemePlus->getBELoginStatus())
 		{
 			return '<!-- external url: ' . $this->getUrl() . ' -->' . "\n";
 		}
@@ -99,31 +102,51 @@ abstract class ExternalThemePlusFile extends ThemePlusFile
 	
 	/**
 	 * Get the url.
+	 *
+	 * @return string
 	 */
 	public function getUrl()
 	{
 		return $this->strUrl;
 	}
 	
-	
+
+	/**
+	 * @see ThemePlusFile::getGlobalVariableCode
+	 * @return string
+	 */
 	public function getGlobalVariableCode()
 	{
 		return $this->getUrl() . (strlen($this->strCc) ? '|' . $this->strCc : '');
 	}
 	
-	
-	public function getEmbededHtml()
+
+	/**
+	 * @see ThemePlusFile::getEmbeddedHtml
+	 * @return string
+	 */
+	public function getEmbeddedHtml($blnLazy = false)
 	{
-		return $this->getIncludeHtml();
+		return $this->getIncludeHtml($blnLazy);
 	}
 	
-	
+
+	/**
+	 * @see ThemePlusFile::isAggregateable
+	 * @return bool
+	 */
 	public function isAggregateable()
 	{
 		return false;
 	}
 	
-	
+
+	/**
+	 * Magic getter
+	 *
+	 * @param string $k
+	 * @return mixed
+	 */
 	public function __get($k)
 	{
 		switch ($k)
@@ -135,7 +158,4 @@ abstract class ExternalThemePlusFile extends ThemePlusFile
 			return parent::__get($k);
 		}
 	}
-	
 }
-
-?>

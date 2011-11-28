@@ -39,18 +39,23 @@ class LocalLessCssFile extends LocalCssFile {
 
 	/**
 	 * Create a new css file object.
+	 *
+	 * @param string $strOriginFile
+	 * @param string $strMedia
+	 * @param string $strCc
+	 * @param Database_Result $objTheme
+	 * @param Database_Result $objAbsolutizePage
 	 */
-	public function __construct($strOriginFile, $strMedia = '', $strCc = '', $objTheme = false, $objAbsolutizePage = false)
+	public function __construct($strOriginFile)
 	{
-		parent::__construct($strOriginFile, $strMedia, $strCc, $objTheme, $objAbsolutizePage);
-
-		// import the Theme+ master class
-		$this->import('ThemePlus');
+		parent::__construct($strOriginFile);
 	}
 
 
 	/**
 	 * Check for client side compilation.
+	 *
+	 * @return bool
 	 */
 	protected function isClientSideCompile()
 	{
@@ -70,6 +75,8 @@ class LocalLessCssFile extends LocalCssFile {
 
 	/**
 	 * Get the file path relative to TL_ROOT
+	 *
+	 * @return string
 	 */
 	public function getFile()
 	{
@@ -112,6 +119,19 @@ class LocalLessCssFile extends LocalCssFile {
 					// replace variables
 					$strContent = $this->ThemePlus->replaceVariablesByTheme($strContent, $this->objTheme, $strTemp);
 
+					// replace insert tags
+					$strContent = $this->replaceInsertTags($strContent);
+
+					// embed images
+					if ($GLOBALS['TL_CONFIG']['css_embed_images'] > 0)
+					{
+						$this->import('CssInlineImages');
+						$strContent = $this->CssInlineImages->embedCode($strContent, $objFile, $GLOBALS['TL_CONFIG']['css_embed_images']);
+					}
+
+					// remap url(..) entries
+					$strContent = $this->CssUrlRemapper->remapCode($strContent, $this->strOriginFile, $strTemp, $this->objAbsolutizePage != null, $this->objAbsolutizePage);
+
 					// add media definition
 					if (strlen($this->strMedia))
 					{
@@ -120,12 +140,6 @@ class LocalLessCssFile extends LocalCssFile {
 
 					// add @charset utf-8 rule
 					$strContent = '@charset "UTF-8";' . "\n" . $strContent;
-
-					// remap url(..) entries
-					$strContent = $this->CssUrlRemapper->remapCode($strContent, $this->strOriginFile, $strTemp, $this->objAbsolutizePage != null, $this->objAbsolutizePage);
-
-					// replace insert tags
-					$strContent = $this->replaceInsertTags($strContent);
 
 					// write code
 					$objTemp = new File($strTemp);
@@ -196,6 +210,16 @@ class LocalLessCssFile extends LocalCssFile {
 					// replace variables
 					$strContent = $this->ThemePlus->replaceVariablesByTheme($strContent, $this->objTheme, $strTemp);
 
+					// replace insert tags
+					$strContent = $this->replaceInsertTags($strContent);
+
+					// embed images
+					if ($GLOBALS['TL_CONFIG']['css_embed_images'] > 0)
+					{
+						$this->import('CssInlineImages');
+						$strContent = $this->CssInlineImages->embedCode($strContent, $objFile, $GLOBALS['TL_CONFIG']['css_embed_images']);
+					}
+
 					// remap url(..) entries
 					$strContent = $this->CssUrlRemapper->remapCode($strContent, $this->strOriginFile, $strTemp, $this->objAbsolutizePage != null, $this->objAbsolutizePage);
 
@@ -222,9 +246,6 @@ class LocalLessCssFile extends LocalCssFile {
 					// add @charset utf-8 rule
 					$strContent = '@charset "UTF-8";' . "\n" . $strContent;
 
-					// replace insert tags
-					$strContent = $this->replaceInsertTags($strContent);
-
 					// minify
 					if (!$this->Minimizer->minimizeToFile($strTemp, $strContent))
 					{
@@ -250,31 +271,27 @@ class LocalLessCssFile extends LocalCssFile {
 
 
 	/**
-	 * Get embeded html code
+	 * @see ThemePlusFile::getEmbeddedHtml
+	 * @return string
 	 */
-	public function getEmbededHtml()
+	public function getEmbeddedHtml($blnLazy = false)
 	{
 		if ($this->isClientSideCompile())
 		{
-			return $this->getDebugComment() . $this->getIncludeHtml();
+			return $this->getDebugComment() . $this->getIncludeHtml($blnLazy);
 		}
 		else
 		{
-			return parent::getEmbededHtml();
+			return parent::getEmbededHtml($blnLazy);
 		}
-	}
-
-
-	public function isAggregateable()
-	{
-		return $this->isClientSideCompile() || strlen($this->strCc) ? false : true;
 	}
 
 
 	/**
-	 * Get included html code
+	 * @see ThemePlusFile::getIncludeHtml
+	 * @return string
 	 */
-	public function getIncludeHtml()
+	public function getIncludeHtml($blnLazy = false)
 	{
 		global $objPage;
 
@@ -285,6 +302,15 @@ class LocalLessCssFile extends LocalCssFile {
 		return $this->getDebugComment() . $this->wrapCc('<link' . (($objPage->outputFormat == 'xhtml') ? ' type="text/css"' : '') . ' rel="' . (preg_match('#\.less$#i', $strFile) ? 'stylesheet/less' : 'stylesheet') . '" href="' . TL_SCRIPT_URL . specialchars($strFile) . '" />');
 	}
 
+
+	/**
+	 * @see ThemePlusFile::isAggregateable
+	 * @return bool
+	 */
+	public function isAggregateable()
+	{
+		return $this->isClientSideCompile() || strlen($this->strCc) ? false : true;
+	}
 }
 
 ?>

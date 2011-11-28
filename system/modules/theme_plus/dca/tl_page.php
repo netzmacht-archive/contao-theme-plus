@@ -31,6 +31,7 @@
  * @license    LGPL
  */
 
+
 $this->loadDataContainer('tl_layout');
 
 /**
@@ -62,16 +63,18 @@ $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_include_files'] = array
 $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_stylesheets'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_page']['theme_plus_stylesheets'],
-	'inputType'               => 'checkboxWizard',
-	'options_callback'        => array('tl_layout_theme_plus', 'getStylesheets'),
-	'eval'                    => array('mandatory'=>true, 'multiple'=>true, 'tl_class'=>'long')
+	'inputType'               => 'fancyCheckboxWizard',
+	'options_callback'        => array('tl_page_theme_plus', 'getStylesheets'),
+	'mixin_value_callback'    => array('tl_page_theme_plus', 'inheritStylesheets'),
+	'eval'                    => array('multiple'=>true, 'tl_class'=>'long')
 );
 $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_javascripts'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_page']['theme_plus_javascripts'],
-	'inputType'               => 'checkboxWizard',
-	'options_callback'        => array('tl_layout_theme_plus', 'getJavaScripts'),
-	'eval'                    => array('mandatory'=>true, 'multiple'=>true, 'tl_class'=>'long')
+	'inputType'               => 'fancyCheckboxWizard',
+	'options_callback'        => array('tl_page_theme_plus', 'getJavaScripts'),
+	'mixin_value_callback'    => array('tl_page_theme_plus', 'inheritJavaScripts'),
+	'eval'                    => array('multiple'=>true, 'tl_class'=>'long')
 );
 $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_include_files_noinherit'] = array
 (
@@ -82,14 +85,84 @@ $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_include_files_noinherit'] = 
 $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_stylesheets_noinherit'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_page']['theme_plus_stylesheets_noinherit'],
-	'inputType'               => 'checkboxWizard',
-	'options_callback'        => array('tl_layout_theme_plus', 'getStylesheets'),
-	'eval'                    => array('mandatory'=>true, 'multiple'=>true, 'tl_class'=>'clr')
+	'inputType'               => 'fancyCheckboxWizard',
+	'options_callback'        => array('tl_page_theme_plus', 'getStylesheets'),
+	'mixin_value_callback'    => array('tl_page_theme_plus', 'inheritStylesheets'),
+	'eval'                    => array('multiple'=>true, 'tl_class'=>'clr')
 );
 $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_javascripts_noinherit'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_page']['theme_plus_javascripts_noinherit'],
-	'inputType'               => 'checkboxWizard',
-	'options_callback'        => array('tl_layout_theme_plus', 'getJavaScripts'),
-	'eval'                    => array('mandatory'=>true, 'multiple'=>true, 'tl_class'=>'clr')
+	'inputType'               => 'fancyCheckboxWizard',
+	'options_callback'        => array('tl_page_theme_plus', 'getJavaScripts'),
+	'mixin_value_callback'    => array('tl_page_theme_plus', 'inheritJavaScripts'),
+	'eval'                    => array('multiple'=>true, 'tl_class'=>'clr')
 );
+
+
+/**
+ * Class tl_page_theme_plus
+ *
+ */
+class tl_page_theme_plus extends tl_layout_theme_plus
+{
+	public function getStylesheets()
+	{
+		return $this->getFiles('css', $this->inheritStylesheets($this->Input->get('id')));
+	}
+	
+	
+	public function getJavaScripts()
+	{
+		return $this->getFiles('js', $this->inheritJavaScripts($this->Input->get('id')));
+	}
+	
+	
+	public function inheritStylesheets()
+	{
+		return $this->inheritFiles('stylesheets');
+	}
+	
+	
+	public function inheritJavaScripts()
+	{
+		return $this->inheritFiles('javascripts');
+	}
+	
+	
+	public function inheritFiles($strType)
+	{
+		$arrFiles = array();
+		
+		$objPage = $this->getPageDetails($this->Input->get('id'));
+		
+		$objLayout = $this->Database
+			->prepare("SELECT * FROM tl_layout WHERE id=?")
+			->execute($objPage->layout);
+		if ($objLayout->next())
+		{
+			$key = 'theme_plus_' . $strType;
+			$arrFiles = array_merge(
+				$arrFiles,
+				deserialize($objLayout->$key, true)
+			);
+		}
+		
+		while ($objPage->pid > 0)
+		{
+			$objPage = $this->Database
+				->prepare("SELECT * FROM tl_page WHERE id=?")
+				->execute($objPage->pid);
+			if ($objPage->next() && $objPage->theme_plus_include_files)
+			{
+				$key = 'theme_plus_' . $strType;
+				$arrFiles = array_merge(
+					$arrFiles,
+					deserialize($objPage->$key, true)
+				);
+			}
+		}
+		
+		return $arrFiles;
+	}
+}

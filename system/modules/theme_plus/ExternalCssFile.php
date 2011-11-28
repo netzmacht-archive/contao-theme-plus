@@ -35,34 +35,61 @@
 /**
  * Class ExternalCssFile
  */
-class ExternalCssFile extends ExternalThemePlusFile {
-
+class ExternalCssFile extends ExternalThemePlusFile implements CssFile
+{
 	/**
 	 * The media selectors.
+	 * @var string
 	 */
-	protected $strMedia;
+	protected $strMedia = '';
 
 
-	public function __construct($strUrl, $strMedia = '', $strCc = '')
+	/**
+	 * Create new external css file.
+	 * @param string $strUrl
+	 * @param string $strMedia
+	 * @param string $strCc
+	 */
+	public function __construct($strUrl)
 	{
-		parent::__construct($strUrl, $strCc);
+		parent::__construct($strUrl);
+	}
+
+
+	/**
+	 * @see CssFile::setMedia
+	 */
+	public function setMedia($strMedia)
+	{
 		$this->strMedia = $strMedia;
 	}
 
 
+	/**
+	 * @see CssFile::getMedia
+	 * @return string
+	 */
 	public function getMedia()
 	{
 		return $this->strMedia;
 	}
 
 
+	/**
+	 * @see ThemePlusFile::getGlobalVariableCode
+	 * @return string
+	 */
 	public function getGlobalVariableCode()
 	{
 		return $this->getUrl() . (strlen($this->strMedia) ? '|' . $this->strMedia : '') . (strlen($this->strCc) ? '|' . $this->strCc : '');
 	}
 
 
-	public function getIncludeHtml()
+	/**
+	 * @see ThemePlusFile::getIncludeHtml
+	 * @return string
+	 */
+	public function getIncludeHtml($blnLazy = false)
 	{
 		global $objPage;
 
@@ -76,6 +103,8 @@ class ExternalCssFile extends ExternalThemePlusFile {
 
 	/**
 	 * Convert into a string.
+	 * 
+	 * @return string
 	 */
 	public function __toString()
 	{
