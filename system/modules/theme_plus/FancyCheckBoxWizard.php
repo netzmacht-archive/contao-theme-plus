@@ -246,7 +246,7 @@ class FancyCheckBoxWizard extends CheckBoxWizard
 				li.getElement("img.cut_").setStyle("display", "");
 				sortable.removeItems(li);
 				var items = $$("ul#ctrl_' . $this->strId . '_unchecked li input[type=\'checkbox\']");
-				for (var i = sorted.indexOf(e.value.test(/^\d+/) ? parseInt(e.value) : e.value)+1; i<sorted.length; sorted++) {
+				for (var i = sorted.indexOf(e.value.test(/^\d+/) ? parseInt(e.value) : e.value)+1; i<sorted.length; i++) {
 					var item = $$("ul#ctrl_' . $this->strId . '_unchecked li input[value=\'" + sorted[i] + "\']");
 					if (item.length) {
 						li.inject(item[0].getParent("li"), "before");
