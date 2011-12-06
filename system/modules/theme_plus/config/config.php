@@ -39,7 +39,12 @@ if (TL_MODE == 'BE')
 {
 	$objEnvironment = Environment::getInstance();
 	if (   !$GLOBALS['TL_CONFIG']['theme_plus_alpha_mode']
-		&& strpos($objEnvironment->requestUri, 'system/modules/theme_plus/AlphaController.php') === false)
+		// The alpha controller itself
+		&& strpos($objEnvironment->requestUri, 'system/modules/theme_plus/AlphaController.php') === false
+		// Backend login
+		&& strpos($objEnvironment->requestUri, 'contao/index.php') === false
+		// Install Tool
+		&& strpos($objEnvironment->requestUri, 'contao/install.php') === false)
 	{
 		$objInput = Input::getInstance();
 		$blnInstallStable = $objInput->post('repository_action') == 'install'
