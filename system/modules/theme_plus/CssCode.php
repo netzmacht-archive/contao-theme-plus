@@ -64,7 +64,7 @@ class CssCode extends LocalCssFile
 		$this->strReference = $strReference;
 
 		$strHash = md5($strCode);
-		$strFile = 'system/scripts/stylesheet-' . $strReference . '-' . substr($strHash, 0, 8) . '.js';
+		$strFile = 'system/scripts/stylesheet-' . $strReference . '-' . substr($strHash, 0, 8) . '.css';
 
 		if (!file_exists(TL_ROOT . '/' . $strFile))
 		{
