@@ -215,7 +215,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['media'],
 			'inputType'               => 'text',
 			'exclude'                 => true,
-			'eval'                    => array('tl_class'=>'long')
+			'eval'                    => array('tl_class'=>'long', 'decodeEntities'=>true)
 		),
 		'cc' => array
 		(
