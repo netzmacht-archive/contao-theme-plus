@@ -8,9 +8,6 @@
 	$objCombiner = new Combiner();
 	$objCombiner->add('system/themes/'. $this->theme .'/basic.css');
 	$objCombiner->add('system/themes/'. $this->theme .'/main.css');
-	if ($this->be27) {
-		$objCombiner->add('system/themes/'. $this->theme .'/be27.css');
-	}
 	$objCombiner->add('system/modules/theme_plus/html/alphaController.css');
 	echo $objCombiner->getCombinedFile();
 ?>" media="all">

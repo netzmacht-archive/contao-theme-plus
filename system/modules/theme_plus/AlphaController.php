@@ -80,7 +80,6 @@ class AlphaController extends Backend
 		$objTemplate->charset = $GLOBALS['TL_CONFIG']['characterSet'];
 		$objTemplate->request = ampersand($this->Environment->request);
 		$objTemplate->top = $GLOBALS['TL_LANG']['MSC']['backToTop'];
-		$objTemplate->be27 = !$GLOBALS['TL_CONFIG']['oldBeTheme'];
 		$objTemplate->output();
 	}
 }
