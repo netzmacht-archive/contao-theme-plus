@@ -416,16 +416,21 @@ class tl_theme_plus_file extends Backend
 	 */
 	public function listFile($row)
 	{
+
 		$label = $row[$row['type']];
 
 		if (strlen($row['cc'])) {
-			$label .= ' <span style="color: #B3B3B3;">[' . $row['cc'] . ']</span>';
+			$label .= ' <span style="padding-left: 3px; color: #B3B3B3;">[' . $row['cc'] . ']</span>';
 		}
 
 		if (strlen($row['media'])) {
-			$label .= ' <span style="color: #B3B3B3;">[' . $row['media'] . ']</span>';
+			$label .= ' <span style="padding-left: 3px; color: #B3B3B3;">[' . $row['media'] . ']</span>';
 		}
 
+        if (strlen($row['filter'])) {
+			$label .= ' <span style="padding-left: 3px; color: #B3B3B3;">'.(($row['filterInvert'])? '!':'').'[' . implode(',',deserialize($row['filterRule'])) . ']</span>';
+		}
+                
 		switch ($row['type']) {
 		case 'js_file': case 'js_url':
 			$image = 'iconJS.gif';
