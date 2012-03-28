@@ -27,12 +27,14 @@ $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_include_files'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_page']['theme_plus_include_files'],
 	'inputType'               => 'checkbox',
+	'exclude'		  => true,
 	'eval'                    => array('submitOnChange'=>true, 'tl_class'=>'long')
 );
 $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_files'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_page']['theme_plus_files'],
 	'inputType'               => 'checkbox',
+	'exclude'		  => true,
 	'options_callback'        => array('tl_page_theme_plus', 'getFiles'),
 	'eval'                    => array('mandatory'=>true, 'multiple'=>true, 'tl_class'=>'long')
 );
@@ -40,12 +42,14 @@ $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_include_files_noinherit'] = 
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_page']['theme_plus_include_files_noinherit'],
 	'inputType'               => 'checkbox',
+	'exclude'		  => true,
 	'eval'                    => array('submitOnChange'=>true, 'tl_class'=>'long')
 );
 $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_files_noinherit'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_page']['theme_plus_files_noinherit'],
 	'inputType'               => 'checkbox',
+	'exclude'		  => true,
 	'options_callback'        => array('tl_page_theme_plus', 'getFiles'),
 	'eval'                    => array('mandatory'=>true, 'multiple'=>true, 'tl_class'=>'clr')
 );
