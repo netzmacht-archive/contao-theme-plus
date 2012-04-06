@@ -654,7 +654,20 @@ class ThemePlusPageRegular extends PageRegular
 				// split path/url and cc
 				if (is_string($javascript))
 				{
-					list($javascript, $cc, $position) = explode('|', $javascript);
+					list($javascript, $cc, $position, $static) = explode('|', $javascript);
+
+					// if $cc contains 'static', switch $cc and $static contents
+					if ($cc == 'static') {
+						$tmp = $static;
+						$static = $cc;
+						$cc = $tmp;
+					}
+					// if $position contains 'static', switch $position and $static contents
+					else if ($position == 'static') {
+						$tmp = $static;
+						$static = $position;
+						$position = $cc;
+					}
 
 					// check if no cc is set
 					if ($cc == 'head' || $cc == 'body')
@@ -670,7 +683,10 @@ class ThemePlusPageRegular extends PageRegular
 				{
 					$cc = false;
 					$position = false;
+					$static = '';
 				}
+
+				// $static is not supported in this version!!!
 
 				if (!$position)
 				{
