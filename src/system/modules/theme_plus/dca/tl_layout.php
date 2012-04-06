@@ -44,7 +44,7 @@ $GLOBALS['TL_DCA']['tl_layout']['palettes']['default'] = preg_replace(
 		'#(\{expert_legend:hide\}.*);#U'
 	),
 	array(
-		'theme_plus_exclude_contaocss,theme_plus_exclude_frameworkcss,stylesheet,theme_plus_stylesheets',
+		'theme_plus_exclude_contaocss,' . (version_compare(VERSION, '2.11', '<') ? 'theme_plus_exclude_frameworkcss,' : '') . 'stylesheet,theme_plus_stylesheets',
 		'theme_plus_javascript_lazy_load,theme_plus_default_javascript_position,theme_plus_javascripts,mootools',
 		'$1,theme_plus_exclude_files;'
 	),

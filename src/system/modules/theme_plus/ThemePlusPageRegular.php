@@ -83,7 +83,7 @@ class ThemePlusPageRegular extends PageRegular
 
 		parent::createTemplate($objPage, $objLayout);
 
-		if (!$objLayout->theme_plus_exclude_frameworkcss)
+		if (version_compare(VERSION, '2.11', '<') ? !$objLayout->theme_plus_exclude_frameworkcss : !$objLayout->skipFramework)
 		{
 			$strFramework = false;
 
