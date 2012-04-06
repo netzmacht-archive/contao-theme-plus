@@ -205,15 +205,15 @@ class FancyCheckBoxWizard extends CheckBoxWizard
 		// generate the options
 		foreach ($arrDisabledCheckedOptions as $i=>$arrOption)
 		{
-			$arrDisabledCheckedOptions[$i] = $this->generateCheckbox($arrOption, $n++);
+			$arrDisabledCheckedOptions[$i] = $this->generateFancyCheckbox($arrOption, $n++);
 		}
 		foreach ($arrCheckedOptions as $i=>$arrOption)
 		{
-			$arrCheckedOptions[$i] = $this->generateCheckbox($arrOption, $n++);
+			$arrCheckedOptions[$i] = $this->generateFancyCheckbox($arrOption, $n++);
 		}
 		foreach ($arrUncheckedOptions as $i=>$arrOption)
 		{
-			$arrUncheckedOptions[$i] = $this->generateCheckbox($arrOption, $n++);
+			$arrUncheckedOptions[$i] = $this->generateFancyCheckbox($arrOption, $n++);
 		}
 
         return sprintf('<fieldset id="ctrl_%s" class="tl_checkbox_container tl_fanzy_checkbox_wizard%s"><legend>%s%s%s%s</legend>%s<ul id="ctrl_%s_checked" class="sortable">%s</ul><hr><ul id="ctrl_%s_unchecked" class="sortable">%s</ul></fieldset>%s%s',
@@ -269,7 +269,7 @@ class FancyCheckBoxWizard extends CheckBoxWizard
 	 * @param string
 	 * @return string
 	 */
-	protected function generateCheckbox($arrOption, $i)
+	protected function generateFancyCheckbox($arrOption, $i)
 	{
 		return sprintf('<li style="cursor:auto;">%s%s&nbsp;<input type="checkbox" name="%s" id="opt_%s" class="tl_checkbox" value="%s"%s%s%s onfocus="Backend.getScrollOffset();"> <label for="opt_%s">%s</label></li>',
 						$this->generateImage('cut_.gif', '', 'class="cut_" style="vertical-align: middle;' . ($arrOption['checked'] && !$arrOption['disabled'] ? ' display:none;' : '') . '"'),
