@@ -191,7 +191,7 @@ class ThemePlusPageRegular extends PageRegular
 				// split path/url, media and cc
 				if (is_string($stylesheet))
 				{
-					list($stylesheet, $media, $cc) = explode('|', $stylesheet);
+					list($stylesheet, $media, $cc, $static) = explode('|', $stylesheet);
 
 					// strip the static urls
 					$stylesheet = $this->stripStaticURL($stylesheet);
@@ -202,7 +202,17 @@ class ThemePlusPageRegular extends PageRegular
 					$media = false;
 					$cc = false;
 					$theme = false;
+					$static = '';
 				}
+
+				// if $cc contains 'static', switch $cc and $static contents
+				if ($cc == 'static') {
+					$tmp = $static;
+					$static = $cc;
+					$cc = $tmp;
+				}
+
+				// $static is not supported in this version!!!
 
 				// add unmodified if its a ThemePlusFile object
 				if ($stylesheet instanceof ThemePlusFile)
