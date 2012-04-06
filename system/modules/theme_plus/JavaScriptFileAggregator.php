@@ -135,7 +135,7 @@ class JavaScriptFileAggregator extends FileAggregator
 					// append to content
 					if (strlen($strSubContent)>0)
 					{
-						$strContent .= $strSubContent . "\n";
+						$strContent .= $strSubContent . ";\n";
 					}
 				}
 
