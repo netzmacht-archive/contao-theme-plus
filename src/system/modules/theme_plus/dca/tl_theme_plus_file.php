@@ -64,6 +64,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 		),
 		'global_operations' => array
 		(
+			/*
 			'newJsUrl'   => array
 			(
 				'label'      => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['newJsUrl'],
@@ -76,6 +77,13 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 				'label'      => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['newJsFile'],
 				'href'       => 'act=create&mode=2&pid=' . $this->Input->get('id') . '&type=js_file',
 				'class'      => 'header_create_js_file',
+				'attributes' => 'onclick="Backend.getScrollOffset();" accesskey="j"'
+			),
+			'newJsCode'  => array
+			(
+				'label'      => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['newJsCode'],
+				'href'       => 'act=create&mode=2&pid=' . $this->Input->get('id') . '&type=js_code',
+				'class'      => 'header_create_js_code',
 				'attributes' => 'onclick="Backend.getScrollOffset();" accesskey="j"'
 			),
 			'newCssUrl'  => array
@@ -92,6 +100,13 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 				'class'      => 'header_create_css_file',
 				'attributes' => 'onclick="Backend.getScrollOffset();" accesskey="c"'
 			),
+			'newCssCode' => array
+			(
+				'label'      => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['newCssCode'],
+				'href'       => 'act=create&mode=2&pid=' . $this->Input->get('id') . '&type=css_code',
+				'class'      => 'header_create_css_code',
+				'attributes' => 'onclick="Backend.getScrollOffset();" accesskey="c"'
+			), */
 			'all'        => array
 			(
 				'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
@@ -154,31 +169,46 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 		(
 			'source' => array('type'),
 			'file'   => array('js_file'),
-			'filter' => array('cc', 'filter'),
-			'expert' => array('aggregation', 'position')
+			'filter' => array(':hide', 'cc', 'filter'),
+			'expert' => array(':hide', 'aggregation', 'position')
 		),
 		'js_url'   => array
 		(
 			'source' => array('type'),
 			'file'   => array('js_url'),
-			'filter' => array('cc', 'filter'),
-			'expert' => array('position')
+			'filter' => array(':hide', 'cc', 'filter'),
+			'expert' => array(':hide', 'position')
+		),
+		'js_code'  => array
+		(
+			'source' => array('type', 'code_snippet_title'),
+			'file'   => array('js_code'),
+			'filter' => array(':hide', 'cc', 'filter'),
+			'expert' => array(':hide', 'aggregation', 'position')
 		),
 		'css_file' => array
 		(
 			'source' => array('type'),
 			'file'   => array('css_file'),
-			'filter' => array('media', 'cc', 'filter'),
-			'editor' => array('editor_integration', 'force_editor_integration'),
-			'expert' => array('aggregation')
+			'filter' => array(':hide', 'media', 'cc', 'filter'),
+			'editor' => array(':hide', 'editor_integration', 'force_editor_integration'),
+			'expert' => array(':hide', 'aggregation')
 		),
 		'css_url'  => array
 		(
 			'source' => array('type'),
 			'file'   => array('css_url'),
-			'filter' => array('media', 'cc', 'filter'),
-			'editor' => array('editor_integration', 'force_editor_integration'),
-			'expert' => array()
+			'filter' => array(':hide', 'media', 'cc', 'filter'),
+			'editor' => array(':hide', 'editor_integration', 'force_editor_integration'),
+			'expert' => array(':hide')
+		),
+		'css_code' => array
+		(
+			'source' => array('type', 'code_snippet_title'),
+			'file'   => array('css_code'),
+			'filter' => array(':hide', 'media', 'cc', 'filter'),
+			'editor' => array(':hide', 'editor_integration', 'force_editor_integration'),
+			'expert' => array(':hide', 'aggregation')
 		)
 	),
 
@@ -191,17 +221,27 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 	// Fields
 	'fields'          => array
 	(
-		'type'                     => array
+		'type'                                  => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['type'],
 			'default'   => ($this->Input->get('type') ? $this->Input->get('type') : $_SESSION['theme_plus_last_file_type']),
 			'inputType' => 'select',
 			'filter'    => true,
-			'options'   => array('js_file', 'js_url', 'css_file', 'css_url'),
+			'options'   => array('js_file', 'js_url', 'js_code', 'css_file', 'css_url', 'css_code'),
 			'reference' => &$GLOBALS['TL_LANG']['tl_theme_plus_file'],
-			'eval'      => array('submitOnChange'=> true)
+			'eval'      => array('submitOnChange'=> true,
+			                     'tl_class'      => 'w50')
 		),
-		'js_file'                  => array
+		'code_snippet_title'                    => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['code_snippet_title'],
+			'inputType' => 'text',
+			'exclude'   => true,
+			'eval'      => array('mandatory'     => true,
+			                     'maxlength'     => 255,
+			                     'tl_class'      => 'w50')
+		),
+		'js_file'                               => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['js_file'],
 			'inputType' => 'fileTree',
@@ -212,7 +252,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 			                     'extensions'=> 'js',
 			                     'path'      => $GLOBALS['TL_CONFIG']['uploadPath'])
 		),
-		'js_url'                   => array
+		'js_url'                                => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['js_url'],
 			'inputType' => 'text',
@@ -221,7 +261,18 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 			                     'decodeEntities'=> true,
 			                     'tl_class'      => 'long')
 		),
-		'css_file'                 => array
+		'js_code'                               => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['js_code'],
+			'inputType' => 'textarea',
+			'exclude'   => true,
+			'eval'      => array('mandatory' => true,
+			                     'allowHtml' => true,
+			                     'class'     => 'monospace',
+			                     'rte'       => 'codeMirror|javascript',
+			                     'helpwizard'=> true)
+		),
+		'css_file'                              => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['css_file'],
 			'inputType' => 'fileTree',
@@ -232,7 +283,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 			                     'extensions'=> 'css,less',
 			                     'path'      => $GLOBALS['TL_CONFIG']['uploadPath'])
 		),
-		'css_url'                  => array
+		'css_url'                               => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['css_url'],
 			'inputType' => 'text',
@@ -241,7 +292,18 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 			                     'decodeEntities'=> true,
 			                     'tl_class'      => 'long')
 		),
-		'aggregation'              => array
+		'css_code'                              => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['css_code'],
+			'inputType' => 'textarea',
+			'exclude'   => true,
+			'eval'      => array('mandatory' => true,
+			                     'allowHtml' => true,
+			                     'class'     => 'monospace',
+			                     'rte'       => 'codeMirror|css',
+			                     'helpwizard'=> true)
+		),
+		'aggregation'                           => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['aggregation'],
 			'default'   => 'global',
@@ -250,7 +312,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 			'options'   => array('global', 'theme', 'pages', 'page', 'never'),
 			'reference' => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['aggregations']
 		),
-		'position'                 => array
+		'position'                              => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['position'],
 			'default'   => 'head',
@@ -259,7 +321,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 			'options'   => array('head', 'body'),
 			'reference' => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['positions']
 		),
-		'media'                    => array
+		'media'                                 => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['media'],
 			'inputType' => 'text',
@@ -267,21 +329,21 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 			'eval'      => array('tl_class'      => 'long',
 			                     'decodeEntities'=> true)
 		),
-		'cc'                       => array
+		'cc'                                    => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['cc'],
 			'inputType' => 'text',
 			'exclude'   => true,
 			'eval'      => array('tl_class'=> 'long')
 		),
-		'filter'                   => array
+		'filter'                                => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['filter'],
 			'inputType' => 'checkbox',
 			'exclude'   => true,
 			'eval'      => array('submitOnChange'=> true)
 		),
-		'filterRule'               => array
+		'filterRule'                            => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['filterRule'],
 			'inputType' => 'checkbox',
@@ -336,13 +398,13 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 			),
 			'eval'      => array('multiple'=> true)
 		),
-		'filterInvert'             => array
+		'filterInvert'                          => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['filterInvert'],
 			'inputType' => 'checkbox',
 			'exclude'   => true
 		),
-		'editor_integration'       => array
+		'editor_integration'                    => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['editor_integration'],
 			'exclude'   => true,
@@ -351,7 +413,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 			'reference' => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['editors'],
 			'eval'      => array('multiple'=> true)
 		),
-		'force_editor_integration' => array
+		'force_editor_integration'              => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['force_editor_integration'],
 			'exclude'   => true,
@@ -473,8 +535,14 @@ class tl_theme_plus_file extends Backend
 	 */
 	public function listFile($row)
 	{
-
-		$label = $row[$row['type']];
+		switch ($row['type']) {
+			case 'js_code':
+			case 'css_code':
+				$label = $row['code_snippet_title'];
+				break;
+			default:
+				$label = $row[$row['type']];
+		}
 
 		if (strlen($row['cc'])) {
 			$label .= ' <span style="padding-left: 3px; color: #B3B3B3;">[' . $row['cc'] . ']</span>';
@@ -491,12 +559,14 @@ class tl_theme_plus_file extends Backend
 		switch ($row['type']) {
 			case 'js_file':
 			case 'js_url':
+			case 'js_code':
 				$image = 'iconJS.gif';
 				$label = '[' . $row['position'] . '] ' . $label;
 				break;
 
 			case 'css_file':
 			case 'css_url':
+			case 'css_code':
 				$image = 'iconCSS.gif';
 				break;
 

@@ -36,10 +36,13 @@
  * Fields
  */
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['type']                     = array('Dateityp', 'Bitte wählen Sie hier den Typ der Datei.');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['code_snippet_title']       = array('Code-Snippet Title', 'Bitte geben Sie einen Titel zu dem Code-Snippet ein.');
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['js_file']                  = array('JavaScript Datei', 'Bitte wählen Sie hier die JavaScript Datei aus.');
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['js_url']                   = array('JavaScript URL', 'Bitte geben Sie die URL zur JavaScript Datei an.');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['js_code']                  = array('JavaScript Code-Snippet', 'Bitte geben Sie hier Ihr JavaScript Code-Snippet ein.');
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['css_file']                 = array('CSS Datei', 'Bitte wählen Sie hier die CSS Datei aus.');
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['css_url']                  = array('CSS URL', 'Bitte geben Sie die URL zur CSS Datei an.');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['css_code']                 = array('CSS Code-Snippet', 'Bitte geben Sie Ihr CSS Code-Snippet ein.');
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['position']                 = array('Positionierung im HTML', 'Bitte wählen Sie hier, ob das JavaScript im &lt;head&gt; oder am Ende des &lt;body&gt; eingebunden werden soll.');
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['aggregation']              = array('Zusammenfassung', 'Bitte wählen Sie hier, wie diese Datei mit anderen zusammengefasst werden darf.');
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['media']                    = array('Medientypen', 'Bitte wählen Sie die Medientypen aus, für die die CSS Datei gültig ist.');
@@ -54,8 +57,11 @@ $GLOBALS['TL_LANG']['tl_theme_plus_file']['force_editor_integration'] = array('W
 /**
  * References
  */
-$GLOBALS['TL_LANG']['tl_theme_plus_file']['source_legend']          = 'Datei';
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['source_legend']          = 'Dateityp';
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['file_legend']            = 'Dateiquelle';
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['filter_legend']          = 'Filter-Einstellungen';
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['editor_legend']          = 'WYSIWYG Editor Integration';
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['expert_legend']          = 'Experten-Einstellungen';
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['editors']['default']     = 'Standard Editor';
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['editors']['newsletter']  = 'Newsletter Editor';
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['editors']['flash']       = 'Flash Editor';
@@ -72,10 +78,12 @@ $GLOBALS['TL_LANG']['tl_theme_plus_file']['aggregations']['never']  = 'Niemals';
  * Buttons
  */
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['new']         = array('Neue Datei', 'Eine neue Datei anlegen');
-$GLOBALS['TL_LANG']['tl_theme_plus_file']['newJsUrl']    = array('Neue URL', 'Eine neue JavaScript URL anlegen');
-$GLOBALS['TL_LANG']['tl_theme_plus_file']['newJsFile']   = array('Neue Datei', 'Eine neue JavaScript Datei anlegen');
-$GLOBALS['TL_LANG']['tl_theme_plus_file']['newCssUrl']   = array('Neue URL', 'Eine neue CSS URL anlegen');
-$GLOBALS['TL_LANG']['tl_theme_plus_file']['newCssFile']  = array('Neue Datei', 'Eine neue CSS Datei anlegen');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['newJsUrl']    = array('URL', 'Eine neue JavaScript URL anlegen');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['newJsFile']   = array('Datei', 'Eine neue JavaScript Datei anlegen');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['newJsCode']   = array('Code', 'Eine neue JavaScript Code-Snippet anlegen');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['newCssUrl']   = array('URL', 'Eine neue CSS URL anlegen');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['newCssFile']  = array('Datei', 'Eine neue CSS Datei anlegen');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['newCssCode']  = array('Code', 'Eine neue CSS Code-Snippet anlegen');
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['show']        = array('Details', 'Details der Datei ID %s anzeigen');
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['edit']        = array('Datei bearbeiten', 'Datei ID %s bearbeiten');
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['delete']      = array('Datei löschen', 'Datei ID %s löschen');

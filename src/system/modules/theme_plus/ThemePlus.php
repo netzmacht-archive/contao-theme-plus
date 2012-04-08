@@ -952,11 +952,13 @@ class ThemePlus extends Frontend
 	 */
 	public function hookOutputBackendTemplate($strContent, $strTemplate)
 	{
+		/*
 		if ($strTemplate == 'be_main' && $this->Input->get('table') == 'tl_theme_plus_file')
 		{
 			$strContent = str_replace('</head>', '<link rel="stylesheet" href="system/modules/theme_plus/html/be.css"></head>', $strContent);
 			$strContent = preg_replace('@<a href="contao/main\.php\?do=themes&amp;table=tl_theme_plus_file&amp;id=\d+&amp;act=create&amp;.*".*">.*</a> &#160; :: &#160; @U', '', $strContent);
 		}
+		*/
 
 		return $strContent;
 	}

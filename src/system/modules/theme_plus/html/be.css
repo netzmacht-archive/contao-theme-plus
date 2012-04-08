@@ -1,13 +1,15 @@
 @charset "utf-8";
 
 .header_create_js_url,
-.header_create_js_file {
+.header_create_js_file,
+.header_create_js_code {
 	padding:  2px 0 3px 20px;
 	background: url(../../../themes/default/images/iconJS.gif) no-repeat left center;
 }
 
 .header_create_css_url,
-.header_create_css_file {
+.header_create_css_file,
+.header_create_css_code {
 	padding:  2px 0 3px 20px;
 	background: url(../../../themes/default/images/iconCSS.gif) no-repeat left center;
 }
