@@ -83,12 +83,6 @@ if (VERSION == 2.10 && BUILD == 'RC1' && file_exists(TL_ROOT . '/system/modules/
 
 
 /**
- * Form fields
- */
-$GLOBALS['BE_FFL']['fancyCheckboxWizard'] = 'FancyCheckBoxWizard';
-
-
-/**
  * Back end modules
  */
 $GLOBALS['BE_MOD']['design']['themes']['tables'][] = 'tl_theme_plus_file';
