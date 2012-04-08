@@ -140,18 +140,52 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'__selector__'                => array('type', 'filter'),
-		'default'                     => '{source_legend},type',
-		'js_file'                     => '{source_legend},type;{file_legend},js_file;{filter_legend},cc,filter;{expert_legend},aggregation,position',
-		'js_url'                      => '{source_legend},type;{file_legend},js_url;{filter_legend},cc,filter;{expert_legend},aggregation,position',
-		'css_file'                    => '{source_legend},type;{file_legend},css_file;{filter_legend},media,cc,filter;{editor_legend:hide},editor_integration,force_editor_integration;{expert_legend},aggregation',
-		'css_url'                     => '{source_legend},type;{file_legend},css_url;{filter_legend},media,cc,filter;{editor_legend:hide},editor_integration,force_editor_integration;{expert_legend},aggregation'
+		'__selector__'                => array('type', 'filter')
 	),
 
-	// Subpalettes
-	'subpalettes' => array
+	// MetaPalettes
+	'metapalettes' => array
 	(
-		'filter'                      => 'filterRule,filterInvert'
+		'default'  => array
+		(
+			'source' => array('type')
+		),
+		'js_file'  => array
+		(
+			'source' => array('type'),
+			'file'   => array('js_file'),
+			'filter' => array('cc', 'filter'),
+			'expert' => array('aggregation', 'position')
+		),
+		'js_url'   => array
+		(
+			'source' => array('type'),
+			'file'   => array('js_url'),
+			'filter' => array('cc', 'filter'),
+			'expert' => array('position')
+		),
+		'css_file' => array
+		(
+			'source' => array('type'),
+			'file'   => array('css_file'),
+			'filter' => array('media', 'cc', 'filter'),
+			'editor' => array('editor_integration', 'force_editor_integration'),
+			'expert' => array('aggregation')
+		),
+		'css_url'  => array
+		(
+			'source' => array('type'),
+			'file'   => array('css_url'),
+			'filter' => array('media', 'cc', 'filter'),
+			'editor' => array('editor_integration', 'force_editor_integration'),
+			'expert' => array()
+		)
+	),
+
+	// MetaSubpalettes
+	'metasubpalettes' => array
+	(
+		'filter' => array('filterRule', 'filterInvert')
 	),
 
 	// Fields
