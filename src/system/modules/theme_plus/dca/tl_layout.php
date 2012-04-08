@@ -172,21 +172,18 @@ class tl_layout_theme_plus extends Backend
 			}
 		}
 	}
-	
-	
+
 	public function getStylesheets()
 	{
 		return $this->getFiles('css');
 	}
-	
-	
+
 	public function getJavaScripts()
 	{
 		return $this->getFiles('js');
 	}
-	
-	
-	public function getFiles($strTypePrefix, $arrInheritedFiles = false)
+
+	public function getFiles($strTypePrefix)
 	{
 		$arrFiles = array();
 		
@@ -195,7 +192,11 @@ class tl_layout_theme_plus extends Backend
 		while ($objTheme->next())
 		{
 			$objFile = $this->Database
-				->prepare("SELECT * FROM tl_theme_plus_file WHERE pid=? AND (type=? OR type=?) ORDER BY {$strTypePrefix}_file, {$strTypePrefix}_url")
+				->prepare("SELECT *
+						   FROM tl_theme_plus_file
+						   WHERE pid=?
+						   AND (type=? OR type=?)
+						   ORDER BY {$strTypePrefix}_file, {$strTypePrefix}_url")
 				->execute($objTheme->id, $strTypePrefix . '_file', $strTypePrefix . '_url');
 			while ($objFile->next())
 			{
@@ -216,19 +217,7 @@ class tl_layout_theme_plus extends Backend
 					$image = false;
 				}
 
-				$arrFile = array
-				(
-					'value' => $objFile->id,
-					'label' => ($image ? $this->generateImage($image, $label, 'style="vertical-align:middle"') . ' ' : '') . '[' . $objTheme->name . '] ' . $label
-				);
-				
-				if ($arrInheritedFiles && in_array($objFile->id, $arrInheritedFiles))
-				{
-					$arrFile['checked']  = true;
-					$arrFile['disabled'] = true;
-				}
-				
-				$arrFiles[] = $arrFile;
+				$arrFiles[$objFile->id] = ($image ? $this->generateImage($image, $label, 'style="vertical-align:middle"') . ' ' : '') . '[' . $objTheme->name . '] ' . $label;
 			}
 		}
 		return $arrFiles;
