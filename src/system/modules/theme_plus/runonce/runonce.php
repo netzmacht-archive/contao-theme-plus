@@ -6,7 +6,7 @@
 /**
  * Class ThemePlusRunonce
  */
-class ThemePlusRunonce extends Frotend
+class ThemePlusRunonce extends Frontend
 {
 
 	/**
