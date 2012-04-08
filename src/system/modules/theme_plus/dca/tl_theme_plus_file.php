@@ -142,10 +142,10 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 	(
 		'__selector__'                => array('type', 'filter'),
 		'default'                     => '{source_legend},type',
-		'js_file'                     => '{source_legend},js_file,cc,filter;{expert_legend},aggregation,position',
-		'js_url'                      => '{source_legend},js_url,cc,filter;{expert_legend},aggregation,position',
-		'css_file'                    => '{source_legend},css_file,media,cc,filter;{editor_legend:hide},editor_integration,force_editor_integration;{expert_legend},aggregation',
-		'css_url'                     => '{source_legend},css_url,media,cc,filter;{editor_legend:hide},editor_integration,force_editor_integration;{expert_legend},aggregation'
+		'js_file'                     => '{source_legend},type;{file_legend},js_file;{filter_legend},cc,filter;{expert_legend},aggregation,position',
+		'js_url'                      => '{source_legend},type;{file_legend},js_url;{filter_legend},cc,filter;{expert_legend},aggregation,position',
+		'css_file'                    => '{source_legend},type;{file_legend},css_file;{filter_legend},media,cc,filter;{editor_legend:hide},editor_integration,force_editor_integration;{expert_legend},aggregation',
+		'css_url'                     => '{source_legend},type;{file_legend},css_url;{filter_legend},media,cc,filter;{editor_legend:hide},editor_integration,force_editor_integration;{expert_legend},aggregation'
 	),
 
 	// Subpalettes
