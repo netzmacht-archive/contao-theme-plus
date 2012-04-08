@@ -43,7 +43,10 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 	(
 		'dataContainer'               => 'Table',
 		'ptable'                      => 'tl_theme',
-		'enableVersioning'            => true
+		'enableVersioning'            => true,
+		'onload_callback'             => array(
+			array('tl_theme_plus_file', 'rememberFileType')
+		)
 	),
 
 	// List
@@ -157,7 +160,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 		'type' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['type'],
-			'default'                 => $this->Input->get('type'),
+			'default'                 => ($this->Input->get('type') ? $this->Input->get('type') : $_SESSION['theme_plus_last_file_type']),
 			'inputType'               => 'select',
 			'filter'                  => true,
 			'options'                 => array('js_file','js_url','css_file','css_url'),
@@ -328,6 +331,13 @@ class tl_theme_plus_file extends Backend
 		$this->import('BackendUser', 'User');
 	}
 
+	public function rememberFileType($dc)
+	{
+		$objFile = $this->Database
+			->prepare("SELECT * FROM tl_theme_plus_file WHERE id=?")
+			->execute($dc->id);
+		$_SESSION['theme_plus_last_file_type'] = $objFile->type;
+	}
 
 	public function detectTheme() {
 		if (self::$objTheme === false) {
