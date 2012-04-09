@@ -57,6 +57,7 @@ $GLOBALS['TL_DCA']['tl_page']['subpalettes']['theme_plus_include_files_noinherit
 $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_include_files']           = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_page']['theme_plus_include_files'],
+	'exclude'                 => true,
 	'inputType'               => 'checkbox',
 	'eval'                    => array('submitOnChange'=> true,
 	                                   'tl_class'      => 'long')
@@ -64,6 +65,7 @@ $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_include_files']           = 
 $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_stylesheets']             = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_page']['theme_plus_stylesheets'],
+	'exclude'                 => true,
 	'inputType'               => 'fancyCheckboxWizard',
 	'options_callback'        => array('tl_page_theme_plus', 'getStylesheets'),
 	'eval'                    => array('checked_options_callback' => array('tl_page_theme_plus', 'getStylesheetsCheckedState'),
@@ -75,6 +77,7 @@ $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_stylesheets']             = 
 $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_javascripts']             = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_page']['theme_plus_javascripts'],
+	'exclude'                 => true,
 	'inputType'               => 'fancyCheckboxWizard',
 	'options_callback'        => array('tl_page_theme_plus', 'getJavaScripts'),
 	'eval'                    => array('checked_options_callback' => array('tl_page_theme_plus', 'getJavaScriptsCheckedState'),
@@ -86,6 +89,7 @@ $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_javascripts']             = 
 $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_include_files_noinherit'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_page']['theme_plus_include_files_noinherit'],
+	'exclude'                 => true,
 	'inputType'               => 'checkbox',
 	'eval'                    => array('submitOnChange'=> true,
 	                                   'tl_class'      => 'long')
@@ -93,6 +97,7 @@ $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_include_files_noinherit'] = 
 $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_stylesheets_noinherit']   = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_page']['theme_plus_stylesheets_noinherit'],
+	'exclude'                 => true,
 	'inputType'               => 'fancyCheckboxWizard',
 	'options_callback'        => array('tl_page_theme_plus', 'getStylesheets'),
 	'eval'                    => array('checked_options_callback' => array('tl_page_theme_plus', 'getStylesheetsCheckedState'),
@@ -104,6 +109,7 @@ $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_stylesheets_noinherit']   = 
 $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_javascripts_noinherit']   = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_page']['theme_plus_javascripts_noinherit'],
+	'exclude'                 => true,
 	'inputType'               => 'fancyCheckboxWizard',
 	'options_callback'        => array('tl_page_theme_plus', 'getJavaScripts'),
 	'eval'                    => array('checked_options_callback' => array('tl_page_theme_plus', 'getJavaScriptsCheckedState'),

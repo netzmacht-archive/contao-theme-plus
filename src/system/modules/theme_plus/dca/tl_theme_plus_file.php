@@ -236,7 +236,6 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['code_snippet_title'],
 			'inputType' => 'text',
-			'exclude'   => true,
 			'eval'      => array('mandatory'     => true,
 			                     'maxlength'     => 255,
 			                     'tl_class'      => 'w50')
@@ -245,7 +244,6 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['js_file'],
 			'inputType' => 'fileTree',
-			'exclude'   => true,
 			'eval'      => array('mandatory' => true,
 			                     'fieldType' => 'radio',
 			                     'files'     => true,
@@ -256,7 +254,6 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['js_url'],
 			'inputType' => 'text',
-			'exclude'   => true,
 			'eval'      => array('mandatory'     => true,
 			                     'decodeEntities'=> true,
 			                     'tl_class'      => 'long')
@@ -265,7 +262,6 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['js_code'],
 			'inputType' => 'textarea',
-			'exclude'   => true,
 			'eval'      => array('mandatory' => true,
 			                     'allowHtml' => true,
 			                     'class'     => 'monospace',
@@ -276,7 +272,6 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['css_file'],
 			'inputType' => 'fileTree',
-			'exclude'   => true,
 			'eval'      => array('mandatory' => true,
 			                     'fieldType' => 'radio',
 			                     'files'     => true,
@@ -287,7 +282,6 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['css_url'],
 			'inputType' => 'text',
-			'exclude'   => true,
 			'eval'      => array('mandatory'     => true,
 			                     'decodeEntities'=> true,
 			                     'tl_class'      => 'long')
@@ -296,7 +290,6 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['css_code'],
 			'inputType' => 'textarea',
-			'exclude'   => true,
 			'eval'      => array('mandatory' => true,
 			                     'allowHtml' => true,
 			                     'class'     => 'monospace',
@@ -324,30 +317,30 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 		'media'                                 => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['media'],
-			'inputType' => 'text',
 			'exclude'   => true,
+			'inputType' => 'text',
 			'eval'      => array('tl_class'      => 'long',
 			                     'decodeEntities'=> true)
 		),
 		'cc'                                    => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['cc'],
-			'inputType' => 'text',
 			'exclude'   => true,
+			'inputType' => 'text',
 			'eval'      => array('tl_class'=> 'long')
 		),
 		'filter'                                => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['filter'],
-			'inputType' => 'checkbox',
 			'exclude'   => true,
+			'filter'    => true,
+			'inputType' => 'checkbox',
 			'eval'      => array('submitOnChange'=> true)
 		),
 		'filterRule'                            => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['filterRule'],
 			'inputType' => 'checkbox',
-			'exclude'   => true,
 			'options'   => array
 			(
 				'OS'      => array
@@ -401,8 +394,8 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 		'filterInvert'                          => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['filterInvert'],
-			'inputType' => 'checkbox',
-			'exclude'   => true
+			'exclude'   => true,
+			'inputType' => 'checkbox'
 		),
 		'editor_integration'                    => array
 		(

@@ -55,6 +55,7 @@ $GLOBALS['TL_DCA']['tl_layout']['palettes']['default'] = preg_replace(
 $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_exclude_contaocss'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['theme_plus_exclude_contaocss'],
+	'exclude'                 => true,
 	'inputType'               => 'checkbox',
 	'eval'                    => array('tl_class'=> 'w50 m12')
 );
@@ -64,6 +65,7 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_exclude_contaocss'] = arra
 $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_exclude_frameworkcss'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['theme_plus_exclude_frameworkcss'],
+	'exclude'                 => true,
 	'inputType'               => 'checkbox',
 	'eval'                    => array('tl_class'      => 'w50 m12',
 	                                   'submitOnChange'=> true)
@@ -78,6 +80,7 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['stylesheet']['eval']['tl_class'] .= '
 $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_stylesheets'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['theme_plus_stylesheets'],
+	'exclude'                 => true,
 	'inputType'               => 'fancyCheckboxWizard',
 	'options_callback'        => array('tl_layout_theme_plus', 'getStylesheets'),
 	'eval'                    => array('multiple'=> true,
@@ -89,6 +92,7 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_stylesheets'] = array
 $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_javascript_lazy_load'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['theme_plus_javascript_lazy_load'],
+	'exclude'                 => true,
 	'inputType'               => 'checkbox',
 	'eval'                    => array('tl_class'=> 'w50 m12')
 );
@@ -98,6 +102,7 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_javascript_lazy_load'] = a
 $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_default_javascript_position'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['theme_plus_default_javascript_position'],
+	'exclude'                 => true,
 	'inputType'               => 'select',
 	'options'                 => array('head', 'head+body', 'body'),
 	'reference'               => &$GLOBALS['TL_LANG']['tl_layout']['positions'],
@@ -109,6 +114,7 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_default_javascript_positio
 $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_javascripts'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['theme_plus_javascripts'],
+	'exclude'                 => true,
 	'inputType'               => 'fancyCheckboxWizard',
 	'options_callback'        => array('tl_layout_theme_plus', 'getJavaScripts'),
 	'eval'                    => array('multiple'=> true,
@@ -124,6 +130,7 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['mooSource']['eval']['includeBlankOpti
 $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_exclude_files'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['theme_plus_exclude_files'],
+	'exclude'                 => true,
 	'inputType'               => 'multitextWizard',
 	'eval'                    => array
 	(

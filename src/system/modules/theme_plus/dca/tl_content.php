@@ -44,6 +44,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['script_source'] = '{type_legend},t
 $GLOBALS['TL_DCA']['tl_content']['fields']['script_source'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_content']['script_source'],
+	'exclude'                 => true,
 	'inputType'               => 'checkbox',
 	'options_callback'        => array('tl_content_theme_plus', 'getJavaScriptFiles'),
 	'eval'                    => array('multiple'=> true,
