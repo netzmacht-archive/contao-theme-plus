@@ -102,11 +102,6 @@ $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_javascripts_noinherit'] = ar
  */
 class tl_page_theme_plus extends tl_layout_theme_plus
 {
-	public function getStylesheets()
-	{
-		return $this->getFiles('css');
-	}
-
 	public function getStylesheetsCheckedState()
 	{
 		return $this->getCheckedState('css', $this->inheritStylesheets($this->Input->get('id')));
@@ -115,11 +110,6 @@ class tl_page_theme_plus extends tl_layout_theme_plus
 	public function getStylesheetsDisabledState()
 	{
 		return $this->getDisabledState('css', $this->inheritStylesheets($this->Input->get('id')));
-	}
-
-	public function getJavaScripts()
-	{
-		return $this->getFiles('js');
 	}
 
 	public function getJavaScriptsCheckedState()
