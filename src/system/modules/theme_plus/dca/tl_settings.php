@@ -43,15 +43,16 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['theme_plus_lesscss_mode'] = array
 	'default'                 => 'less.js',
 	'inputType'               => 'select',
 	'options_callback'        => array('tl_settings_theme_plus', 'getLessCssModes'),
-	'eval'                    => array('decodeEntities'=>true, 'tl_class'=>'w50')
+	'eval'                    => array('decodeEntities'=> true,
+	                                   'tl_class'      => 'w50')
 );
-$GLOBALS['TL_DCA']['tl_settings']['fields']['theme_plus_force_less'] = array
+$GLOBALS['TL_DCA']['tl_settings']['fields']['theme_plus_force_less']   = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['theme_plus_force_less'],
 	'inputType'               => 'checkbox',
-	'eval'                    => array('tl_class'=>'m12 w50')
+	'eval'                    => array('tl_class'=> 'm12 w50')
 );
-$GLOBALS['TL_DCA']['tl_settings']['fields']['css_embed_images'] = array
+$GLOBALS['TL_DCA']['tl_settings']['fields']['css_embed_images']        = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['css_embed_images'],
 	'inputType'               => 'select',
@@ -70,7 +71,7 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['css_embed_images'] = array
 		524288  => '512 KiB',
 		1048576 => '1 MiB'
 	),
-	'eval'                    => array('tl_class'=>'w50')
+	'eval'                    => array('tl_class'=> 'w50')
 );
 
 class tl_settings_theme_plus extends Backend
@@ -80,39 +81,35 @@ class tl_settings_theme_plus extends Backend
 		$this->import('Compression');
 		$this->import('Config');
 	}
-	
-	
+
+
 	public function getLessCssModes()
 	{
 		$arrMinimizers = array();
-		
-		if (in_array('lesscss', $this->Config->getActiveModules()))
-		{
+
+		if (in_array('lesscss', $this->Config->getActiveModules())) {
 			// add javascript less support
 			$arrMinimizers['less.js'] = $GLOBALS['TL_LANG']['tl_settings']['theme_plus_compression']['less.js'];
-			
-			if ($this->tryNode())
-			{
+
+			if ($this->tryNode()) {
 				// add precompiled less support
 				$arrMinimizers['less.js+pre'] = $GLOBALS['TL_LANG']['tl_settings']['theme_plus_compression']['less.js+pre'];
 			}
 		}
-		
-		if (in_array('phpless', $this->Config->getActiveModules()))
-		{
+
+		if (in_array('phpless', $this->Config->getActiveModules())) {
 			// add php less support
 			$arrMinimizers['phpless'] = $GLOBALS['TL_LANG']['tl_settings']['theme_plus_compression']['phpless'];
 		}
-		
-		if (!count($arrMinimizers))
-		{
+
+		if (!count($arrMinimizers)) {
 			$arrMinimizers['-'] = $GLOBALS['TL_LANG']['tl_settings']['theme_plus_compression']['noless'];
 		}
-		
+
 		return $arrMinimizers;
 	}
-	
-	
+
+
 	protected function tryNode()
 	{
 		// execute lessc
@@ -124,8 +121,7 @@ class tl_settings_theme_plus extends Backend
 				2 => array("pipe", "w")
 			),
 			$arrPipes);
-		if ($procLessC === false)
-		{
+		if ($procLessC === false) {
 			return false;
 		}
 		// close stdin
@@ -137,8 +133,7 @@ class tl_settings_theme_plus extends Backend
 		fclose($arrPipes[2]);
 		// wait until yui-compressor terminates
 		$intCode = proc_close($procLessC);
-		if ($intCode != 0 || strlen($strErr))
-		{
+		if ($intCode != 0 || strlen($strErr)) {
 			return false;
 		}
 		return true;

@@ -50,4 +50,5 @@ class NoneMinimizer extends AbstractMinimizer
 		return $strCode;
 	}
 }
+
 ?>

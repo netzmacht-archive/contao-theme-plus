@@ -35,7 +35,8 @@
 /**
  * Class LocalLessCssFile
  */
-class LocalLessCssFile extends LocalCssFile {
+class LocalLessCssFile extends LocalCssFile
+{
 
 	/**
 	 * Create a new css file object.
@@ -61,14 +62,14 @@ class LocalLessCssFile extends LocalCssFile {
 	{
 		switch ($GLOBALS['TL_CONFIG']['theme_plus_lesscss_mode'])
 		{
-		case 'phpless':
-			return false;
+			case 'phpless':
+				return false;
 
-		case 'less.js':
-			return true;
+			case 'less.js':
+				return true;
 
-		case 'less.js+pre':
-			return $this->ThemePlus->getBELoginStatus();
+			case 'less.js+pre':
+				return $this->ThemePlus->getBELoginStatus();
 		}
 	}
 
@@ -80,13 +81,10 @@ class LocalLessCssFile extends LocalCssFile {
 	 */
 	public function getFile()
 	{
-		if ($this->strProcessedFile == null)
-		{
-			if ($this->isClientSideCompile())
-			{
+		if ($this->strProcessedFile == null) {
+			if ($this->isClientSideCompile()) {
 				// add client side javascript
-				if ($this->ThemePlus->getBELoginStatus())
-				{
+				if ($this->ThemePlus->getBELoginStatus()) {
 					$GLOBALS['TL_JAVASCRIPT'][] = 'plugins/lesscss/less.min.development.js';
 				}
 				else
@@ -95,15 +93,14 @@ class LocalLessCssFile extends LocalCssFile {
 				}
 
 				$objFile = new File($this->strOriginFile);
-				$strKey = $objFile->basename
-						. '-' . $this->strMedia
-						. '-' . ($this->objAbsolutizePage != null ? 'absolute' : 'relative')
-						. '-' . $objFile->mtime
-						. '-' . $this->ThemePlus->getVariablesHashByTheme($this->objTheme);
+				$strKey  = $objFile->basename
+					. '-' . $this->strMedia
+					. '-' . ($this->objAbsolutizePage != null ? 'absolute' : 'relative')
+					. '-' . $objFile->mtime
+					. '-' . $this->ThemePlus->getVariablesHashByTheme($this->objTheme);
 				$strTemp = sprintf('system/scripts/%s-%s.less', $objFile->filename, substr(md5($strKey), 0, 8));
 
-				if (!file_exists(TL_ROOT . '/' . $strTemp))
-				{
+				if (!file_exists(TL_ROOT . '/' . $strTemp)) {
 					// import the url remapper
 					$this->import('CssUrlRemapper');
 
@@ -123,8 +120,7 @@ class LocalLessCssFile extends LocalCssFile {
 					$strContent = $this->replaceInsertTags($strContent);
 
 					// embed images
-					if ($GLOBALS['TL_CONFIG']['css_embed_images'] > 0)
-					{
+					if ($GLOBALS['TL_CONFIG']['css_embed_images'] > 0) {
 						$this->import('CssInlineImages');
 						$strContent = $this->CssInlineImages->embedCode($strContent, $objFile, $GLOBALS['TL_CONFIG']['css_embed_images']);
 					}
@@ -133,8 +129,7 @@ class LocalLessCssFile extends LocalCssFile {
 					$strContent = $this->CssUrlRemapper->remapCode($strContent, $this->strOriginFile, $strTemp, $this->objAbsolutizePage != null, $this->objAbsolutizePage);
 
 					// add media definition
-					if (strlen($this->strMedia))
-					{
+					if (strlen($this->strMedia)) {
 						$strContent = sprintf("@media %s\n{\n%s\n}\n", $this->strMedia, $strContent);
 					}
 
@@ -154,22 +149,20 @@ class LocalLessCssFile extends LocalCssFile {
 				$this->import('Compression');
 
 				$strCssMinimizer = $this->ThemePlus->getBELoginStatus() ? false : $this->Compression->getDefaultCssMinimizer();
-				if (!$strCssMinimizer)
-				{
+				if (!$strCssMinimizer) {
 					$strCssMinimizer = 'none';
 				}
 
 				$objFile = new File($this->strOriginFile);
-				$strKey = $objFile->basename
-						. '-' . $this->strMedia
-						. '-' . ($this->objAbsolutizePage != null ? 'absolute' : 'relative')
-						. '-' . $objFile->mtime
-						. '-' . $strCssMinimizer
-						. '-' . $this->ThemePlus->getVariablesHashByTheme($this->objTheme);
+				$strKey  = $objFile->basename
+					. '-' . $this->strMedia
+					. '-' . ($this->objAbsolutizePage != null ? 'absolute' : 'relative')
+					. '-' . $objFile->mtime
+					. '-' . $strCssMinimizer
+					. '-' . $this->ThemePlus->getVariablesHashByTheme($this->objTheme);
 				$strTemp = sprintf('system/scripts/%s-%s.css', $objFile->filename, substr(md5($strKey), 0, 8));
 
-				if (!file_exists(TL_ROOT . '/' . $strTemp))
-				{
+				if (!file_exists(TL_ROOT . '/' . $strTemp)) {
 					$this->import('Compression');
 
 					// import the css minimizer
@@ -185,17 +178,17 @@ class LocalLessCssFile extends LocalCssFile {
 					// import the less compiler
 					switch ($GLOBALS['TL_CONFIG']['theme_plus_lesscss_mode'])
 					{
-					case 'less.js+pre':
-						$this->import('LessCss', 'Compiler');
-						break;
+						case 'less.js+pre':
+							$this->import('LessCss', 'Compiler');
+							break;
 
-					case 'phpless':
-						$this->import('PHPLessCss', 'Compiler');
-						$this->Compiler->setImportDir(dirname($objFile->value));
-						break;
+						case 'phpless':
+							$this->import('PHPLessCss', 'Compiler');
+							$this->Compiler->setImportDir(dirname($objFile->value));
+							break;
 
-					default:
-						throw new Exception('Unsupported less mode!');
+						default:
+							throw new Exception('Unsupported less mode!');
 					}
 
 					// get the css code
@@ -214,8 +207,7 @@ class LocalLessCssFile extends LocalCssFile {
 					$strContent = $this->replaceInsertTags($strContent);
 
 					// embed images
-					if ($GLOBALS['TL_CONFIG']['css_embed_images'] > 0)
-					{
+					if ($GLOBALS['TL_CONFIG']['css_embed_images'] > 0) {
 						$this->import('CssInlineImages');
 						$strContent = $this->CssInlineImages->embedCode($strContent, $objFile, $GLOBALS['TL_CONFIG']['css_embed_images']);
 					}
@@ -232,14 +224,12 @@ class LocalLessCssFile extends LocalCssFile {
 					$strContent = $this->Compiler->minimizeFromFile($objSource->value);
 
 					// if compile fails, return origin file
-					if ($strContent === false)
-					{
+					if ($strContent === false) {
 						return $this->strOriginFile;
 					}
 
 					// add media definition
-					if (strlen($this->strMedia))
-					{
+					if (strlen($this->strMedia)) {
 						$strContent = sprintf("@media %s\n{\n%s\n}\n", $this->strMedia, $strContent);
 					}
 
@@ -247,8 +237,7 @@ class LocalLessCssFile extends LocalCssFile {
 					$strContent = '@charset "UTF-8";' . "\n" . $strContent;
 
 					// minify
-					if (!$this->Minimizer->minimizeToFile($strTemp, $strContent))
-					{
+					if (!$this->Minimizer->minimizeToFile($strTemp, $strContent)) {
 						// write unminified code, if minify failed
 						$objTemp = new File($strTemp);
 						$objTemp->write($strContent);
@@ -256,8 +245,7 @@ class LocalLessCssFile extends LocalCssFile {
 					}
 
 					// create the gzip compressed version
-					if ($GLOBALS['TL_CONFIG']['gzipScripts'])
-					{
+					if ($GLOBALS['TL_CONFIG']['gzipScripts']) {
 						$this->Compressor->compress($strTemp, $strTemp . '.gz');
 					}
 				}
@@ -276,8 +264,7 @@ class LocalLessCssFile extends LocalCssFile {
 	 */
 	public function getEmbeddedHtml($blnLazy = false)
 	{
-		if ($this->isClientSideCompile())
-		{
+		if ($this->isClientSideCompile()) {
 			return $this->getDebugComment() . $this->getIncludeHtml($blnLazy);
 		}
 		else

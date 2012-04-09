@@ -60,14 +60,13 @@ class JavaScriptCode extends LocalJavaScriptFile
 	 */
 	public function __construct($strCode, $strReference = 'undefined')
 	{
-		$this->strCode = $strCode;
+		$this->strCode      = $strCode;
 		$this->strReference = $strReference;
 
 		$strHash = md5($strCode);
 		$strFile = 'system/scripts/javascript-' . $strReference . '-' . substr($strHash, 0, 8) . '.js';
 
-		if (!file_exists(TL_ROOT . '/' . $strFile))
-		{
+		if (!file_exists(TL_ROOT . '/' . $strFile)) {
 			$objFile = new File($strFile);
 			$objFile->write($strCode);
 			$objFile->close();
@@ -95,8 +94,7 @@ class JavaScriptCode extends LocalJavaScriptFile
 	protected function getDebugComment()
 	{
 		$this->import('ThemePlus');
-		if ($GLOBALS['TL_CONFIG']['debugMode'] || $this->ThemePlus->getBELoginStatus())
-		{
+		if ($GLOBALS['TL_CONFIG']['debugMode'] || $this->ThemePlus->getBELoginStatus()) {
 			return '<!-- javascript code: ' . $this->strReference . ', aggregation: ' . $this->getAggregation() . ', scope: ' . $this->getAggregationScope() . ' -->' . "\n";
 		}
 		return '';

@@ -41,12 +41,14 @@ interface JavaScriptFile
 	 * Set the include position
 	 *
 	 * @abstract
+	 *
 	 * @param string $strPosition
+	 *
 	 * @return void
 	 */
 	public function setPosition($strPosition);
 
-	
+
 	/**
 	 * Return the include position.
 	 *

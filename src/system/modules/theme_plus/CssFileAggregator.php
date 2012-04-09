@@ -79,6 +79,7 @@ class CssFileAggregator extends FileAggregator
 	 * Add a file.
 	 *
 	 * @param LocalCssFile $objFile
+	 *
 	 * @return void
 	 */
 	public function add(LocalCssFile $objFile)
@@ -94,18 +95,15 @@ class CssFileAggregator extends FileAggregator
 	 */
 	public function getFile()
 	{
-		if ($this->strAggregatedFile == null)
-		{
+		if ($this->strAggregatedFile == null) {
 			$arrFiles = array();
-			$strKey = count($this->arrFiles);
+			$strKey   = count($this->arrFiles);
 			foreach ($this->arrFiles as $objThemePlusFile)
 			{
-				if ($objThemePlusFile instanceof LocalCssFile)
-				{
-					if ($objThemePlusFile->isAggregateable())
-					{
-						$strFile = $objThemePlusFile->getFile();
-						$objFile = new File($strFile);
+				if ($objThemePlusFile instanceof LocalCssFile) {
+					if ($objThemePlusFile->isAggregateable()) {
+						$strFile    = $objThemePlusFile->getFile();
+						$objFile    = new File($strFile);
 						$arrFiles[] = $strFile;
 						$strKey .= sprintf(':%s-%d', basename($strFile, '.css'), $objFile->mtime);
 						continue;
@@ -116,8 +114,7 @@ class CssFileAggregator extends FileAggregator
 
 			$strTemp = 'system/scripts/stylesheet-' . substr(md5($strKey), 0, 8) . '.css';
 
-			if (!file_exists(TL_ROOT . '/' . $strTemp))
-			{
+			if (!file_exists(TL_ROOT . '/' . $strTemp)) {
 				$this->import('Compression');
 
 				// import the gzip compressor
@@ -150,8 +147,7 @@ class CssFileAggregator extends FileAggregator
 					$strSubContent = trim($strSubContent);
 
 					// append to content
-					if (strlen($strSubContent)>0)
-					{
+					if (strlen($strSubContent) > 0) {
 						$strContent .= $strSubContent . "\n";
 					}
 				}
@@ -162,8 +158,7 @@ class CssFileAggregator extends FileAggregator
 				$objTemp->close();
 
 				// create the gzip compressed version
-				if ($GLOBALS['TL_CONFIG']['gzipScripts'])
-				{
+				if ($GLOBALS['TL_CONFIG']['gzipScripts']) {
 					$this->Compressor->compress($strTemp, $strTemp . '.gz');
 				}
 			}

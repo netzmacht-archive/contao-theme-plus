@@ -70,13 +70,13 @@ $GLOBALS['TL_LANG']['tl_theme_plus_file']['aggregations']['never']  = 'Never';
 /**
  * Buttons
  */
-$GLOBALS['TL_LANG']['tl_theme_plus_file']['new']         = array('New file', 'Add a new file');
-$GLOBALS['TL_LANG']['tl_theme_plus_file']['newJsUrl']    = array('New url', 'Add a new javascript url');
-$GLOBALS['TL_LANG']['tl_theme_plus_file']['newJsFile']   = array('New file', 'Add a new javascript file');
-$GLOBALS['TL_LANG']['tl_theme_plus_file']['newCssUrl']   = array('New url', 'Add a new css url');
-$GLOBALS['TL_LANG']['tl_theme_plus_file']['newCssFile']  = array('New file', 'Add a new css file');
-$GLOBALS['TL_LANG']['tl_theme_plus_file']['show']        = array('Details', 'Show the details of file ID %s');
-$GLOBALS['TL_LANG']['tl_theme_plus_file']['edit']        = array('Edit file', 'Edit file ID %s');
-$GLOBALS['TL_LANG']['tl_theme_plus_file']['delete']      = array('Delete file', 'Delete file ID %s');
-$GLOBALS['TL_LANG']['tl_theme_plus_file']['cut']         = array('Move file', 'Move file ID %s');
-$GLOBALS['TL_LANG']['tl_theme_plus_file']['copy']        = array('Duplicate file', 'Duplicate file ID %s');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['new']        = array('New file', 'Add a new file');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['newJsUrl']   = array('New url', 'Add a new javascript url');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['newJsFile']  = array('New file', 'Add a new javascript file');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['newCssUrl']  = array('New url', 'Add a new css url');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['newCssFile'] = array('New file', 'Add a new css file');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['show']       = array('Details', 'Show the details of file ID %s');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['edit']       = array('Edit file', 'Edit file ID %s');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['delete']     = array('Delete file', 'Delete file ID %s');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['cut']        = array('Move file', 'Move file ID %s');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['copy']       = array('Duplicate file', 'Duplicate file ID %s');

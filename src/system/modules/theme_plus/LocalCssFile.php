@@ -35,7 +35,8 @@
 /**
  * Class LocalCssFile
  */
-class LocalCssFile extends LocalThemePlusFile implements CssFile {
+class LocalCssFile extends LocalThemePlusFile implements CssFile
+{
 
 	/**
 	 * The media selectors.
@@ -66,15 +67,14 @@ class LocalCssFile extends LocalThemePlusFile implements CssFile {
 	 */
 	public function __construct($strOriginFile)
 	{
-		if ($strOriginFile[0] == '!')
-		{
+		if ($strOriginFile[0] == '!') {
 			$this->strProcessedFile = $strOriginFile = substr($strOriginFile, 1);
 		}
 		else
 		{
 			$this->strProcessedFile = null;
 		}
-		
+
 		parent::__construct($strOriginFile);
 
 		// import the Theme+ master class
@@ -84,6 +84,7 @@ class LocalCssFile extends LocalThemePlusFile implements CssFile {
 
 	/**
 	 * @see CssFile::setMedia
+	 *
 	 * @param string $strMedia
 	 */
 	public function setMedia($strMedia)
@@ -91,7 +92,7 @@ class LocalCssFile extends LocalThemePlusFile implements CssFile {
 		$this->strMedia = $strMedia;
 	}
 
-	
+
 	/**
 	 * @see CssFile::getMedia
 	 * @return string
@@ -106,6 +107,7 @@ class LocalCssFile extends LocalThemePlusFile implements CssFile {
 	 * Set if urls should be absolutized.
 	 *
 	 * @param bool $objAbsolutizePage
+	 *
 	 * @return void
 	 */
 	public function setAbsolutizePage($objAbsolutizePage)
@@ -131,27 +133,24 @@ class LocalCssFile extends LocalThemePlusFile implements CssFile {
 	 */
 	public function getFile()
 	{
-		if ($this->strProcessedFile == null)
-		{
+		if ($this->strProcessedFile == null) {
 			$this->import('Compression');
 
 			$strCssMinimizer = $this->ThemePlus->getBELoginStatus() ? false : $this->Compression->getDefaultCssMinimizer();
-			if (!$strCssMinimizer)
-			{
+			if (!$strCssMinimizer) {
 				$strCssMinimizer = 'none';
 			}
 
 			$objFile = new File($this->strOriginFile);
-			$strKey = $objFile->basename
-					. '-' . $this->strMedia
-					. '-' . ($this->objAbsolutizePage != null ? 'absolute' : 'relative')
-					. '-' . $objFile->mtime
-					. '-' . $strCssMinimizer
-					. '-' . $this->ThemePlus->getVariablesHashByTheme($this->objTheme);
+			$strKey  = $objFile->basename
+				. '-' . $this->strMedia
+				. '-' . ($this->objAbsolutizePage != null ? 'absolute' : 'relative')
+				. '-' . $objFile->mtime
+				. '-' . $strCssMinimizer
+				. '-' . $this->ThemePlus->getVariablesHashByTheme($this->objTheme);
 			$strTemp = sprintf('system/scripts/%s-%s.css', $objFile->filename, substr(md5($strKey), 0, 8));
 
-			if (!file_exists(TL_ROOT . '/' . $strTemp))
-			{
+			if (!file_exists(TL_ROOT . '/' . $strTemp)) {
 				$this->import('Compression');
 
 				// import the css minimizer
@@ -180,8 +179,7 @@ class LocalCssFile extends LocalThemePlusFile implements CssFile {
 				$strContent = $this->replaceInsertTags($strContent);
 
 				// embed images
-				if ($GLOBALS['TL_CONFIG']['css_embed_images'] > 0)
-				{
+				if ($GLOBALS['TL_CONFIG']['css_embed_images'] > 0) {
 					$this->import('CssInlineImages');
 					$strContent = $this->CssInlineImages->embedCode($strContent, $objFile, $GLOBALS['TL_CONFIG']['css_embed_images']);
 				}
@@ -190,8 +188,7 @@ class LocalCssFile extends LocalThemePlusFile implements CssFile {
 				$strContent = $this->CssUrlRemapper->remapCode($strContent, $this->strOriginFile, $strTemp, $this->objAbsolutizePage ? true : false, $this->objAbsolutizePage);
 
 				// add media definition
-				if (strlen($this->strMedia))
-				{
+				if (strlen($this->strMedia)) {
 					$strContent = sprintf("@media %s\n{\n%s\n}\n", $this->strMedia, $strContent);
 				}
 
@@ -199,8 +196,7 @@ class LocalCssFile extends LocalThemePlusFile implements CssFile {
 				$strContent = '@charset "UTF-8";' . "\n" . $strContent;
 
 				// minify
-				if (!$this->Minimizer->minimizeToFile($strTemp, $strContent))
-				{
+				if (!$this->Minimizer->minimizeToFile($strTemp, $strContent)) {
 					// write unminified code, if minify failed
 					$objTemp = new File($strTemp);
 					$objTemp->write($strContent);
@@ -208,8 +204,7 @@ class LocalCssFile extends LocalThemePlusFile implements CssFile {
 				}
 
 				// create the gzip compressed version
-				if ($GLOBALS['TL_CONFIG']['gzipScripts'])
-				{
+				if ($GLOBALS['TL_CONFIG']['gzipScripts']) {
 					$this->Compressor->compress($strTemp, $strTemp . '.gz');
 				}
 			}

@@ -55,7 +55,7 @@ abstract class FileAggregator extends LocalThemePlusFile
 		$this->strScope = $strScope;
 	}
 
-	
+
 	/**
 	 * Get the scope of this aggregator
 	 *
@@ -74,8 +74,7 @@ abstract class FileAggregator extends LocalThemePlusFile
 	protected function getDebugComment()
 	{
 		$this->import('ThemePlus');
-		if ($GLOBALS['TL_CONFIG']['debugMode'] || $this->ThemePlus->getBELoginStatus())
-		{
+		if ($GLOBALS['TL_CONFIG']['debugMode'] || $this->ThemePlus->getBELoginStatus()) {
 			return "<!--\nfile aggregation:\n - " . implode("\n - ", array_map(create_function('$objFile', 'return $objFile->getFile();'), $this->arrFiles)) . ', scope: ' . $this->getScope() . "\n-->\n";
 		}
 		return '';

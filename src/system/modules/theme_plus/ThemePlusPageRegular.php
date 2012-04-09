@@ -46,7 +46,7 @@ class ThemePlusPageRegular extends PageRegular
 	 */
 	protected $ThemePlus;
 
-	
+
 	/**
 	 * constructor
 	 */
@@ -59,58 +59,51 @@ class ThemePlusPageRegular extends PageRegular
 
 	/**
 	 * Create a new template
+	 *
 	 * @param object
 	 * @param object
 	 */
 	protected function createTemplate(Database_Result $objPage, Database_Result $objLayout)
 	{
 		// setup the TL_CSS array
-		if (!is_array($GLOBALS['TL_CSS']))
-		{
+		if (!is_array($GLOBALS['TL_CSS'])) {
 			$GLOBALS['TL_CSS'] = array();
 		}
 
-		if (!$objLayout->theme_plus_exclude_contaocss)
-		{
+		if (!$objLayout->theme_plus_exclude_contaocss) {
 			array_unshift($GLOBALS['TL_CSS'], 'system/contao.css');
 		}
 
 		// setup the TL_JAVASCRIPT array
-		if (!is_array($GLOBALS['TL_JAVASCRIPT']))
-		{
+		if (!is_array($GLOBALS['TL_JAVASCRIPT'])) {
 			$GLOBALS['TL_JAVASCRIPT'] = array();
 		}
 
 		parent::createTemplate($objPage, $objLayout);
 
-		if (version_compare(VERSION, '2.11', '<') ? !$objLayout->theme_plus_exclude_frameworkcss : !$objLayout->skipFramework)
-		{
+		if (version_compare(VERSION, '2.11', '<') ? !$objLayout->theme_plus_exclude_frameworkcss : !$objLayout->skipFramework) {
 			$strFramework = false;
 
 			// HOOK: create framework code
-			if (isset($GLOBALS['TL_HOOKS']['generateFrameworkCss']) && is_array($GLOBALS['TL_HOOKS']['generateFrameworkCss']))
-			{
+			if (isset($GLOBALS['TL_HOOKS']['generateFrameworkCss']) && is_array($GLOBALS['TL_HOOKS']['generateFrameworkCss'])) {
 				foreach ($GLOBALS['TL_HOOKS']['generateFrameworkCss'] as $callback)
 				{
 					$this->import($callback[0]);
 					$strFramework = $this->$callback[0]->$callback[1]($objPage, $objLayout, $this);
-					if ($strFramework !== false)
-					{
+					if ($strFramework !== false) {
 						break;
 					}
 				}
 			}
 
-			if ($strFramework === false)
-			{
+			if ($strFramework === false) {
 				$strFramework = $this->generateFramework($objPage, $objLayout);
 			}
 
-			$strKey = substr(md5($strFramework), 0, 8);
+			$strKey  = substr(md5($strFramework), 0, 8);
 			$strFile = 'system/scripts/framework-' . $strKey . '.css';
 
-			if (!file_exists(TL_ROOT . '/' . $strFile))
-			{
+			if (!file_exists(TL_ROOT . '/' . $strFile)) {
 				$objFile = new File($strFile);
 				$objFile->write($strFramework);
 				$objFile->close();
@@ -120,28 +113,25 @@ class ThemePlusPageRegular extends PageRegular
 			array_unshift($GLOBALS['TL_CSS'], $strFile);
 		}
 
-		$this->Template->framework = '';
+		$this->Template->framework  = '';
 		$this->Template->mooScripts = '';
 
 		// JavaScript framework
 		$GLOBALS['TL_JAVASCRIPT_FRAMEWORK'] = array();
-		foreach ($GLOBALS['TL_SCRIPT_FRAMEWORKS'] as $k=>$v)
+		foreach ($GLOBALS['TL_SCRIPT_FRAMEWORKS'] as $k=> $v)
 		{
 			// check if there is an on/off trigger
-			if (isset($v['__trigger__']))
-			{
+			if (isset($v['__trigger__'])) {
 				// name of the trigger
 				$t = $v['__trigger__'];
-				
+
 				// skip if trigger is not active
-				if (!$objLayout->$t)
-				{
+				if (!$objLayout->$t) {
 					continue;
 				}
 			}
-			
-			if (isset($v[$objLayout->$k]))
-			{
+
+			if (isset($v[$objLayout->$k])) {
 				// call the callback
 				$callback = $v[$objLayout->$k];
 				$this->import($callback[0]);
@@ -153,21 +143,19 @@ class ThemePlusPageRegular extends PageRegular
 
 	/**
 	 * Create all header scripts
+	 *
 	 * @param object
 	 * @param object
 	 */
 	protected function createHeaderScripts(Database_Result $objPage, Database_Result $objLayout)
 	{
-		if (!is_array($objLayout->theme_plus_exclude_files))
-		{
+		if (!is_array($objLayout->theme_plus_exclude_files)) {
 			$objLayout->theme_plus_exclude_files = deserialize($objLayout->theme_plus_exclude_files, true);
 		}
-		if (count($objLayout->theme_plus_exclude_files)>0)
-		{
+		if (count($objLayout->theme_plus_exclude_files) > 0) {
 			foreach ($objLayout->theme_plus_exclude_files as $v)
 			{
-				if ($v[0])
-				{
+				if ($v[0]) {
 					$GLOBALS['TL_THEME_EXCLUDE'][] = $v[0];
 				}
 			}
@@ -176,53 +164,49 @@ class ThemePlusPageRegular extends PageRegular
 		// stylesheets ---------------------------------------------------------
 		$strStyleSheets = '';
 		$arrStyleSheets = deserialize($objLayout->stylesheet);
-		$strTagEnding = ($objPage->outputFormat == 'xhtml') ? ' />' : '>';
+		$strTagEnding   = ($objPage->outputFormat == 'xhtml') ? ' />' : '>';
 
 		// build stylesheets
 		$arrStylesheets = array();
 
 		// collect internal stylesheets
-		if (is_array($GLOBALS['TL_CSS']) && count($GLOBALS['TL_CSS']))
-		{
+		if (is_array($GLOBALS['TL_CSS']) && count($GLOBALS['TL_CSS'])) {
 			foreach (array_unique($GLOBALS['TL_CSS']) as $stylesheet)
 			{
 				$objFile = false;
 
 				// split path/url, media and cc
-				if (is_string($stylesheet))
-				{
+				if (is_string($stylesheet)) {
 					list($stylesheet, $media, $cc, $static) = explode('|', $stylesheet);
 
 					// strip the static urls
 					$stylesheet = $this->stripStaticURL($stylesheet);
-					$theme = $this->ThemePlus->findThemeByLayout($objLayout);
+					$theme      = $this->ThemePlus->findThemeByLayout($objLayout);
 				}
 				else
 				{
-					$media = false;
-					$cc = false;
-					$theme = false;
+					$media  = false;
+					$cc     = false;
+					$theme  = false;
 					$static = '';
 				}
 
 				// if $cc contains 'static', switch $cc and $static contents
 				if ($cc == 'static') {
-					$tmp = $static;
+					$tmp    = $static;
 					$static = $cc;
-					$cc = $tmp;
+					$cc     = $tmp;
 				}
 
 				// $static is not supported in this version!!!
 
 				// add unmodified if its a ThemePlusFile object
-				if ($stylesheet instanceof ThemePlusFile)
-				{
+				if ($stylesheet instanceof ThemePlusFile) {
 					$objFile = $stylesheet;
 				}
 
 				// use as local path
-				else if (!preg_match('#^\w://#', $stylesheet))
-				{
+				else if (!preg_match('#^\w://#', $stylesheet)) {
 					$objFile = LocalThemePlusFile::create($stylesheet);
 				}
 
@@ -233,8 +217,7 @@ class ThemePlusPageRegular extends PageRegular
 				}
 
 				// fallback, use as external url, without checks
-				if ($objFile && $objFile instanceof CssFile)
-				{
+				if ($objFile && $objFile instanceof CssFile) {
 					if ($media) {
 						$objFile->setMedia($media);
 					}
@@ -251,8 +234,7 @@ class ThemePlusPageRegular extends PageRegular
 		}
 
 		// User style sheets
-		if (is_array($arrStyleSheets) && strlen($arrStyleSheets[0]))
-		{
+		if (is_array($arrStyleSheets) && strlen($arrStyleSheets[0])) {
 			$objStylesheets = $this->Database->execute("SELECT *, (SELECT MAX(tstamp) FROM tl_style WHERE tl_style.pid=tl_style_sheet.id) AS tstamp2, (SELECT COUNT(*) FROM tl_style WHERE tl_style.selector='@font-face' AND tl_style.pid=tl_style_sheet.id) AS hasFontFace FROM tl_style_sheet WHERE id IN (" . implode(', ', $arrStyleSheets) . ") ORDER BY FIELD(id, " . implode(', ', $arrStyleSheets) . ")");
 
 			while ($objStylesheets->next())
@@ -260,8 +242,7 @@ class ThemePlusPageRegular extends PageRegular
 				$media = implode(',', deserialize($objStylesheets->media));
 
 				// Overwrite the media type with a custom media query
-				if ($objStylesheets->mediaQuery != '')
-				{
+				if ($objStylesheets->mediaQuery != '') {
 					$media = $objStylesheets->mediaQuery;
 				}
 
@@ -278,8 +259,7 @@ class ThemePlusPageRegular extends PageRegular
 		}
 
 		// Default TinyMCE style sheet
-		if (!$objLayout->skipTinymce && file_exists(TL_ROOT . '/' . $GLOBALS['TL_CONFIG']['uploadPath'] . '/tinymce.css'))
-		{
+		if (!$objLayout->skipTinymce && file_exists(TL_ROOT . '/' . $GLOBALS['TL_CONFIG']['uploadPath'] . '/tinymce.css')) {
 			$arrStylesheets[] = LocalThemePlusFile::create($GLOBALS['TL_CONFIG']['uploadPath'] . '/tinymce.css');
 		}
 
@@ -287,11 +267,10 @@ class ThemePlusPageRegular extends PageRegular
 
 		// + from layout
 		$arrLayoutStylesheetIds = deserialize($objLayout->theme_plus_stylesheets, true);
-		$arrTemp = $this->ThemePlus->getCssFiles($arrLayoutStylesheetIds, false);
-		foreach ($arrTemp as $k=>$v)
+		$arrTemp                = $this->ThemePlus->getCssFiles($arrLayoutStylesheetIds, false);
+		foreach ($arrTemp as $k=> $v)
 		{
-			if ($v instanceof LocalThemePlusFile)
-			{
+			if ($v instanceof LocalThemePlusFile) {
 				$objTheme = $v->getTheme();
 				$v->setAggregationScope('theme:' . ($objTheme ? $objTheme->id : $objLayout->pid));
 			}
@@ -304,8 +283,8 @@ class ThemePlusPageRegular extends PageRegular
 
 		// + from this page
 		$arrPagesStylesheetIds = $this->ThemePlus->inheritFiles($objPage, 'stylesheets');
-		$arrTemp = $this->ThemePlus->getCssFiles($arrPagesStylesheetIds, false);
-		foreach ($arrTemp as $k=>$v)
+		$arrTemp               = $this->ThemePlus->getCssFiles($arrPagesStylesheetIds, false);
+		foreach ($arrTemp as $k=> $v)
 		{
 			$v->setAggregationScope('pages');
 		}
@@ -317,8 +296,8 @@ class ThemePlusPageRegular extends PageRegular
 
 		// + from parent pages
 		$arrPageStylesheetIds = ($objPage->theme_plus_include_files_noinherit ? deserialize($objPage->theme_plus_stylesheets_noinherit, true) : array());
-		$arrTemp = $this->ThemePlus->getCssFiles($arrPageStylesheetIds, false);
-		foreach ($arrTemp as $k=>$v)
+		$arrTemp              = $this->ThemePlus->getCssFiles($arrPageStylesheetIds, false);
+		foreach ($arrTemp as $k=> $v)
 		{
 			$v->setAggregationScope('page');
 		}
@@ -329,13 +308,13 @@ class ThemePlusPageRegular extends PageRegular
 		);
 
 		// filter stylesheets
-		$arrTemp = $arrStylesheets;
+		$arrTemp        = $arrStylesheets;
 		$arrStylesheets = array();
 		foreach ($arrTemp as $objStylesheet)
 		{
 			if (is_array($GLOBALS['TL_THEME_EXCLUDE']) &&
-				in_array($objStylesheet instanceof LocalThemePlusFile ? $objStylesheet->getOriginFile() : $objStylesheet->getUrl(), $GLOBALS['TL_THEME_EXCLUDE']))
-			{
+				in_array($objStylesheet instanceof LocalThemePlusFile ? $objStylesheet->getOriginFile() : $objStylesheet->getUrl(), $GLOBALS['TL_THEME_EXCLUDE'])
+			) {
 				// skip excluded files
 				continue;
 			}
@@ -343,8 +322,7 @@ class ThemePlusPageRegular extends PageRegular
 		}
 
 		// aggregate stylesheets
-		if (!$this->ThemePlus->getBELoginStatus())
-		{
+		if (!$this->ThemePlus->getBELoginStatus()) {
 			$arrStylesheets = $this->ThemePlus->aggregateFiles($arrStylesheets);
 		}
 
@@ -355,15 +333,14 @@ class ThemePlusPageRegular extends PageRegular
 		}
 
 		// feeds ---------------------------------------------------------------
-		$newsfeeds = deserialize($objLayout->newsfeeds);
+		$newsfeeds     = deserialize($objLayout->newsfeeds);
 		$calendarfeeds = deserialize($objLayout->calendarfeeds);
 
 		// Add newsfeeds
-		if (is_array($newsfeeds) && count($newsfeeds) > 0)
-		{
+		if (is_array($newsfeeds) && count($newsfeeds) > 0) {
 			$objFeeds = $this->Database->execute("SELECT * FROM tl_news_archive WHERE makeFeed=1 AND id IN(" . implode(',', array_map('intval', $newsfeeds)) . ")");
 
-			while($objFeeds->next())
+			while ($objFeeds->next())
 			{
 				$base = strlen($objFeeds->feedBase) ? $objFeeds->feedBase : $this->Environment->base;
 				$strStyleSheets .= '<link type="application/' . $objFeeds->format . '+xml" rel="alternate" href="' . $base . $objFeeds->alias . '.xml" title="' . $objFeeds->title . '"' . $strTagEnding . "\n";
@@ -371,11 +348,10 @@ class ThemePlusPageRegular extends PageRegular
 		}
 
 		// Add calendarfeeds
-		if (is_array($calendarfeeds) && count($calendarfeeds) > 0)
-		{
+		if (is_array($calendarfeeds) && count($calendarfeeds) > 0) {
 			$objFeeds = $this->Database->execute("SELECT * FROM tl_calendar WHERE makeFeed=1 AND id IN(" . implode(',', array_map('intval', $calendarfeeds)) . ")");
 
-			while($objFeeds->next())
+			while ($objFeeds->next())
 			{
 				$base = strlen($objFeeds->feedBase) ? $objFeeds->feedBase : $this->Environment->base;
 				$strStyleSheets .= '<link type="application/' . $objFeeds->format . '+xml" rel="alternate" href="' . $base . $objFeeds->alias . '.xml" title="' . $objFeeds->title . '"' . $strTagEnding . "\n";
@@ -385,9 +361,9 @@ class ThemePlusPageRegular extends PageRegular
 		// javascripts ---------------------------------------------------------
 		$strHeadTags = '';
 
-		if (    $objLayout->theme_plus_javascript_lazy_load
-			&&  $objLayout->theme_plus_default_javascript_position != 'body')
-		{
+		if ($objLayout->theme_plus_javascript_lazy_load
+			&& $objLayout->theme_plus_default_javascript_position != 'body'
+		) {
 			$objFile = new LocalJavaScriptFile('system/modules/theme_plus/html/async.js');
 			$strHeadTags .= $objFile->getEmbeddedHtml(false);
 		}
@@ -395,8 +371,7 @@ class ThemePlusPageRegular extends PageRegular
 		$strHeadTags .= $this->collectJavaScripts('head', $objPage, $objLayout);
 
 		// Add internal <head> tags
-		if (is_array($GLOBALS['TL_HEAD']) && count($GLOBALS['TL_HEAD']))
-		{
+		if (is_array($GLOBALS['TL_HEAD']) && count($GLOBALS['TL_HEAD'])) {
 			foreach (array_unique($GLOBALS['TL_HEAD']) as $head)
 			{
 				$strHeadTags .= trim($head) . "\n";
@@ -404,18 +379,18 @@ class ThemePlusPageRegular extends PageRegular
 		}
 
 		// Add <head> tags
-		if (($strHead = trim($objLayout->head)) != false)
-		{
+		if (($strHead = trim($objLayout->head)) != false) {
 			$strHeadTags .= $strHead . "\n";
 		}
 
 		$this->Template->stylesheets = $strStyleSheets;
-		$this->Template->head = $strHeadTags;
+		$this->Template->head        = $strHeadTags;
 	}
 
 
 	/**
 	 * Create all footer scripts
+	 *
 	 * @param object
 	 * @param object
 	 */
@@ -424,18 +399,15 @@ class ThemePlusPageRegular extends PageRegular
 		parent::createFooterScripts($objPage, $objLayout);
 
 		$arrDynamicFile = array();
-		if (is_array($GLOBALS['TL_JAVASCRIPT_BODY']) && count($GLOBALS['TL_JAVASCRIPT_BODY']))
-		{
+		if (is_array($GLOBALS['TL_JAVASCRIPT_BODY']) && count($GLOBALS['TL_JAVASCRIPT_BODY'])) {
 			$arrDynamicFile = $this->storeJavaScriptCode($GLOBALS['TL_JAVASCRIPT_BODY']);
 		}
 
 		$strCode = '';
 
-		if (is_array($GLOBALS['TL_JAVASCRIPT_CODE_BODY']) && count($GLOBALS['TL_JAVASCRIPT_CODE_BODY']))
-		{
+		if (is_array($GLOBALS['TL_JAVASCRIPT_CODE_BODY']) && count($GLOBALS['TL_JAVASCRIPT_CODE_BODY'])) {
 			$arrFiles = $this->storeJavaScriptCode($GLOBALS['TL_JAVASCRIPT_CODE_BODY']);
-			if ($objLayout->theme_plus_javascript_lazy_load)
-			{
+			if ($objLayout->theme_plus_javascript_lazy_load) {
 				$arrDynamicFile = array_merge(
 					$arrDynamicFile,
 					array_values($arrFiles)
@@ -453,9 +425,9 @@ class ThemePlusPageRegular extends PageRegular
 
 		$strCode = $this->collectJavaScripts('body', $objPage, $objLayout, $arrDynamicFile) . $strCode;
 
-		if (    $objLayout->theme_plus_javascript_lazy_load
-			&&  $objLayout->theme_plus_default_javascript_position == 'body')
-		{
+		if ($objLayout->theme_plus_javascript_lazy_load
+			&& $objLayout->theme_plus_default_javascript_position == 'body'
+		) {
 			$objFile = new LocalJavaScriptFile('system/modules/theme_plus/html/async.js');
 			$strCode = $objFile->getEmbeddedHtml(false) . $strCode;
 		}
@@ -480,19 +452,16 @@ class ThemePlusPageRegular extends PageRegular
 		);
 
 		// Wrapper
-		if ($objLayout->static)
-		{
+		if ($objLayout->static) {
 			$arrSize = deserialize($objLayout->width);
 			$strFramework .= sprintf('#wrapper{width:%s;margin:%s;}', $arrSize['value'] . $arrSize['unit'], $arrMargin[$objLayout->align]) . "\n";
 		}
 
 		// Header
-		if ($objLayout->header)
-		{
+		if ($objLayout->header) {
 			$arrSize = deserialize($objLayout->headerHeight);
 
-			if ($arrSize['value'] != '' && $arrSize['value'] >= 0)
-			{
+			if ($arrSize['value'] != '' && $arrSize['value'] >= 0) {
 				$strFramework .= sprintf('#header{height:%s;}', $arrSize['value'] . $arrSize['unit']) . "\n";
 			}
 		}
@@ -500,42 +469,35 @@ class ThemePlusPageRegular extends PageRegular
 		$strMain = '';
 
 		// Left column
-		if ($objLayout->cols == '2cll' || $objLayout->cols == '3cl')
-		{
+		if ($objLayout->cols == '2cll' || $objLayout->cols == '3cl') {
 			$arrSize = deserialize($objLayout->widthLeft);
 
-			if ($arrSize['value'] != '' && $arrSize['value'] >= 0)
-			{
+			if ($arrSize['value'] != '' && $arrSize['value'] >= 0) {
 				$strFramework .= sprintf('#left{width:%s;}', $arrSize['value'] . $arrSize['unit']) . "\n";
 				$strMain .= sprintf('margin-left:%s;', $arrSize['value'] . $arrSize['unit']);
 			}
 		}
 
 		// Right column
-		if ($objLayout->cols == '2clr' || $objLayout->cols == '3cl')
-		{
+		if ($objLayout->cols == '2clr' || $objLayout->cols == '3cl') {
 			$arrSize = deserialize($objLayout->widthRight);
 
-			if ($arrSize['value'] != '' && $arrSize['value'] >= 0)
-			{
+			if ($arrSize['value'] != '' && $arrSize['value'] >= 0) {
 				$strFramework .= sprintf('#right{width:%s;}', $arrSize['value'] . $arrSize['unit']) . "\n";
 				$strMain .= sprintf('margin-right:%s;', $arrSize['value'] . $arrSize['unit']);
 			}
 		}
 
 		// Main column
-		if (strlen($strMain))
-		{
+		if (strlen($strMain)) {
 			$strFramework .= sprintf('#main{%s}', $strMain) . "\n";
 		}
 
 		// Footer
-		if ($objLayout->footer)
-		{
+		if ($objLayout->footer) {
 			$arrSize = deserialize($objLayout->footerHeight);
 
-			if ($arrSize['value'] != '' && $arrSize['value'] >= 0)
-			{
+			if ($arrSize['value'] != '' && $arrSize['value'] >= 0) {
 				$strFramework .= sprintf('#footer{height:%s;}', $arrSize['value'] . $arrSize['unit']) . "\n";
 			}
 		}
@@ -546,15 +508,15 @@ class ThemePlusPageRegular extends PageRegular
 
 	/**
 	 * @param $arrCode
+	 *
 	 * @return array
 	 */
 	protected function storeJavaScriptCode($arrCode)
 	{
 		$arrFiles = array();
-		foreach ($arrCode as $k=>$v)
+		foreach ($arrCode as $k=> $v)
 		{
-			if ($v instanceof ThemePlusFile)
-			{
+			if ($v instanceof ThemePlusFile) {
 				$arrFiles[] = $v;
 			}
 			else
@@ -577,27 +539,27 @@ class ThemePlusPageRegular extends PageRegular
 	 * @param Database_Result $objPage
 	 * @param Database_Result $objLayout
 	 * @param array $arrAdditionalFiles
+	 *
 	 * @return string
 	 */
 	protected function collectJavaScripts($strPosition, Database_Result $objPage, Database_Result $objLayout, $arrAdditionalFiles = false)
 	{
-		$strBuffer = '';
+		$strBuffer      = '';
 		$arrJavaScripts = array();
 
 		// collect javascript framework
-		if (    $strPosition == 'head'
-			&& (    $objLayout->theme_plus_default_javascript_position == 'head'
-				||  $objLayout->theme_plus_default_javascript_position == 'head+body')
-			||  $strPosition == 'body'
-			&&  $objLayout->theme_plus_default_javascript_position == 'body')
-		{
+		if ($strPosition == 'head'
+			&& ($objLayout->theme_plus_default_javascript_position == 'head'
+				|| $objLayout->theme_plus_default_javascript_position == 'head+body')
+			|| $strPosition == 'body'
+				&& $objLayout->theme_plus_default_javascript_position == 'body'
+		) {
 			foreach ($GLOBALS['TL_JAVASCRIPT_FRAMEWORK'] as $javascript)
 			{
 				$objFile = false;
 
 				// split path/url and cc
-				if (is_string($javascript))
-				{
+				if (is_string($javascript)) {
 					// strip the static urls
 					$javascript = $this->stripStaticURL($javascript);
 
@@ -609,14 +571,12 @@ class ThemePlusPageRegular extends PageRegular
 				}
 
 				// add unmodified if its a ThemePlusFile object
-				if ($javascript instanceof ThemePlusFile)
-				{
+				if ($javascript instanceof ThemePlusFile) {
 					$objFile = $javascript;
 				}
 
 				// use as external url
-				else if (preg_match('#^\w+://#', $javascript))
-				{
+				else if (preg_match('#^\w+://#', $javascript)) {
 					$objFile = ExternalThemePlusFile::create($javascript);
 				}
 
@@ -627,53 +587,48 @@ class ThemePlusPageRegular extends PageRegular
 				}
 
 				// fallback, use as external url, without checks
-				if (!$objFile)
-				{
+				if (!$objFile) {
 					$objFile = new ExternalJavaScriptFile($javascript);
 				}
 
 				// only add, if its a javascript file object
-				if ($objFile && $objFile instanceof JavaScriptFile)
-				{
+				if ($objFile && $objFile instanceof JavaScriptFile) {
 					if ($theme && method_exists($objFile, 'setTheme')) {
 						$objFile->setTheme($theme);
 					}
-					
+
 					$arrJavaScripts[] = $objFile;
 				}
 			}
 		}
 
 		// collect internal javascripts
-		if (is_array($GLOBALS['TL_JAVASCRIPT']) && count($GLOBALS['TL_JAVASCRIPT']))
-		{
+		if (is_array($GLOBALS['TL_JAVASCRIPT']) && count($GLOBALS['TL_JAVASCRIPT'])) {
 			foreach (array_unique($GLOBALS['TL_JAVASCRIPT']) as $javascript)
 			{
 				$objFile = false;
 
 				// split path/url and cc
-				if (is_string($javascript))
-				{
+				if (is_string($javascript)) {
 					list($javascript, $cc, $position, $static) = explode('|', $javascript);
 
 					// if $cc contains 'static', switch $cc and $static contents
 					if ($cc == 'static') {
-						$tmp = $static;
+						$tmp    = $static;
 						$static = $cc;
-						$cc = $tmp;
+						$cc     = $tmp;
 					}
 					// if $position contains 'static', switch $position and $static contents
 					else if ($position == 'static') {
-						$tmp = $static;
-						$static = $position;
+						$tmp      = $static;
+						$static   = $position;
 						$position = $cc;
 					}
 
 					// check if no cc is set
-					if ($cc == 'head' || $cc == 'body')
-					{
+					if ($cc == 'head' || $cc == 'body') {
 						$position = $cc;
-						$cc = '';
+						$cc       = '';
 					}
 
 					// strip the static urls
@@ -681,29 +636,26 @@ class ThemePlusPageRegular extends PageRegular
 				}
 				else
 				{
-					$cc = false;
+					$cc       = false;
 					$position = false;
-					$static = '';
+					$static   = '';
 				}
 
 				// $static is not supported in this version!!!
 
-				if (!$position)
-				{
+				if (!$position) {
 					$position = $objLayout->theme_plus_default_javascript_position == 'head+body'
 						? 'body'
 						: $objLayout->theme_plus_default_javascript_position;
 				}
 
 				// add unmodified if its a ThemePlusFile object
-				if ($javascript instanceof ThemePlusFile)
-				{
+				if ($javascript instanceof ThemePlusFile) {
 					$objFile = $javascript;
 				}
 
 				// use as local path
-				else if (!preg_match('#^\w://#', $javascript))
-				{
+				else if (!preg_match('#^\w://#', $javascript)) {
 					$objFile = LocalThemePlusFile::create($javascript);
 				}
 
@@ -713,16 +665,15 @@ class ThemePlusPageRegular extends PageRegular
 					$objFile = ExternalThemePlusFile::create($javascript);
 				}
 
-				if ($objFile && !$objFile->getPosition())
-				{
+				if ($objFile && !$objFile->getPosition()) {
 					$objFile->setPosition($position);
 				}
 
 				// only add, if its a javascript file object and it is located in the position
-				if (    $objFile
-				    &&  $objFile instanceof JavaScriptFile
-				    &&  $objFile->getPosition() == $strPosition)
-				{
+				if ($objFile
+					&& $objFile instanceof JavaScriptFile
+					&& $objFile->getPosition() == $strPosition
+				) {
 					if ($cc) {
 						$objFile->setCc($cc);
 					}
@@ -736,11 +687,10 @@ class ThemePlusPageRegular extends PageRegular
 
 		// + from layout
 		$arrLayoutJavaScriptIds = deserialize($objLayout->theme_plus_javascripts, true);
-		$arrTemp = $this->ThemePlus->getJavaScriptFiles($arrLayoutJavaScriptIds, $strPosition, false);
-		foreach ($arrTemp as $k=>$v)
+		$arrTemp                = $this->ThemePlus->getJavaScriptFiles($arrLayoutJavaScriptIds, $strPosition, false);
+		foreach ($arrTemp as $k=> $v)
 		{
-			if ($v instanceof LocalThemePlusFile)
-			{
+			if ($v instanceof LocalThemePlusFile) {
 				$objTheme = $v->getTheme();
 				$v->setAggregationScope('theme:' . ($objTheme ? $objTheme->id : $objLayout->pid));
 			}
@@ -753,11 +703,10 @@ class ThemePlusPageRegular extends PageRegular
 
 		// + from this page
 		$arrPagesJavaScriptIds = $this->ThemePlus->inheritFiles($objPage, 'javascripts');
-		$arrTemp = $this->ThemePlus->getJavaScriptFiles($arrPagesJavaScriptIds, $strPosition, false);
-		foreach ($arrTemp as $k=>$v)
+		$arrTemp               = $this->ThemePlus->getJavaScriptFiles($arrPagesJavaScriptIds, $strPosition, false);
+		foreach ($arrTemp as $k=> $v)
 		{
-			if ($v instanceof LocalThemePlusFile)
-			{
+			if ($v instanceof LocalThemePlusFile) {
 				$objTheme = $v->getTheme();
 				$v->setAggregationScope('pages');
 			}
@@ -770,11 +719,10 @@ class ThemePlusPageRegular extends PageRegular
 
 		// + from parent pages
 		$arrPageJavaScriptIds = ($objPage->theme_plus_include_files_noinherit ? deserialize($objPage->theme_plus_javascripts_noinherit, true) : array());
-		$arrTemp = $this->ThemePlus->getJavaScriptFiles($arrPageJavaScriptIds, $strPosition, false);
-		foreach ($arrTemp as $k=>$v)
+		$arrTemp              = $this->ThemePlus->getJavaScriptFiles($arrPageJavaScriptIds, $strPosition, false);
+		foreach ($arrTemp as $k=> $v)
 		{
-			if ($v instanceof LocalThemePlusFile)
-			{
+			if ($v instanceof LocalThemePlusFile) {
 				$objTheme = $v->getTheme();
 				$v->setAggregationScope('page');
 			}
@@ -785,8 +733,7 @@ class ThemePlusPageRegular extends PageRegular
 			array_values($arrTemp)
 		);
 
-		if ($arrAdditionalFiles)
-		{
+		if ($arrAdditionalFiles) {
 			$arrJavaScripts = array_merge
 			(
 				$arrJavaScripts,
@@ -795,13 +742,13 @@ class ThemePlusPageRegular extends PageRegular
 		}
 
 		// filter files
-		$arrTemp = $arrJavaScripts;
+		$arrTemp        = $arrJavaScripts;
 		$arrJavaScripts = array();
 		foreach ($arrTemp as $objJavaScript)
 		{
 			if (is_array($GLOBALS['TL_THEME_EXCLUDE']) &&
-				in_array($objJavaScript instanceof LocalThemePlusFile ? $objJavaScript->getOriginFile() : $objJavaScript->getUrl(), $GLOBALS['TL_THEME_EXCLUDE']))
-			{
+				in_array($objJavaScript instanceof LocalThemePlusFile ? $objJavaScript->getOriginFile() : $objJavaScript->getUrl(), $GLOBALS['TL_THEME_EXCLUDE'])
+			) {
 				// skip excluded files
 				continue;
 			}
@@ -809,8 +756,7 @@ class ThemePlusPageRegular extends PageRegular
 		}
 
 		// aggregate javascripts
-		if (!$this->ThemePlus->getBELoginStatus())
-		{
+		if (!$this->ThemePlus->getBELoginStatus()) {
 			$arrJavaScripts = $this->ThemePlus->aggregateFiles($arrJavaScripts);
 		}
 
@@ -829,16 +775,13 @@ class ThemePlusPageRegular extends PageRegular
 	 */
 	protected function stripStaticURL($strUrl)
 	{
-		if (defined('TL_FILES_URL') && strlen(TL_FILES_URL) > 0 && strpos($strUrl, TL_FILES_URL) === 0)
-		{
+		if (defined('TL_FILES_URL') && strlen(TL_FILES_URL) > 0 && strpos($strUrl, TL_FILES_URL) === 0) {
 			return substr($strUrl, strlen(TL_FILES_URL));
 		}
-		if (defined('TL_SCRIPT_URL') && strlen(TL_SCRIPT_URL) > 0 && strpos($strUrl, TL_SCRIPT_URL) === 0)
-		{
+		if (defined('TL_SCRIPT_URL') && strlen(TL_SCRIPT_URL) > 0 && strpos($strUrl, TL_SCRIPT_URL) === 0) {
 			return substr($strUrl, strlen(TL_SCRIPT_URL));
 		}
-		if (defined('TL_PLUGINS_URL') && strlen(TL_PLUGINS_URL) > 0 && strpos($strUrl, TL_PLUGINS_URL) === 0)
-		{
+		if (defined('TL_PLUGINS_URL') && strlen(TL_PLUGINS_URL) > 0 && strpos($strUrl, TL_PLUGINS_URL) === 0) {
 			return substr($strUrl, strlen(TL_PLUGINS_URL));
 		}
 		return $strUrl;

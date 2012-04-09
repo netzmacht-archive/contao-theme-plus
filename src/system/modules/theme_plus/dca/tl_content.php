@@ -46,7 +46,8 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['script_source'] = array
 	'label'                   => &$GLOBALS['TL_LANG']['tl_content']['script_source'],
 	'inputType'               => 'checkbox',
 	'options_callback'        => array('tl_content_theme_plus', 'getJavaScriptFiles'),
-	'eval'                    => array('multiple'=>true, 'tl_class'=>'clr')
+	'eval'                    => array('multiple'=> true,
+	                                   'tl_class'=> 'clr')
 );
 
 /**
@@ -58,25 +59,22 @@ class tl_content_theme_plus extends Backend
 	public function getJavaScriptFiles(DataContainer $dc)
 	{
 		$objArticle = $this->Database->prepare("SELECT * FROM tl_article WHERE id=?")->execute($dc->activeRecord->pid);
-		if (!$objArticle->next())
-		{
+		if (!$objArticle->next()) {
 			return array();
 		}
-		
+
 		$objPage = $this->getPageDetails($objArticle->pid);
-		if (!$objPage->layout)
-		{
+		if (!$objPage->layout) {
 			$objLayout = $this->Database->execute("SELECT * FROM tl_layout WHERE fallback='1'");
-			if ($objLayout->next())
-			{
+			if ($objLayout->next()) {
 				$objPage->layout = $objLayout->id;
 			}
-			else 
+			else
 			{
 				return array();
 			}
 		}
-		
+
 		$arrJavaScriptFiles = array();
 		$objJavaScriptFiles = $this->Database->prepare("
 				SELECT
@@ -96,15 +94,16 @@ class tl_content_theme_plus extends Backend
 				AND s.type IN ('js_file','js_url')
 				ORDER BY
 					s.sorting")
-		   ->execute($objPage->layout);
+			->execute($objPage->layout);
 		while ($objJavaScriptFiles->next())
 		{
 			$strType = $objJavaScriptFiles->type;
-			$label = ' ' . $objJavaScriptFiles->$strType;
-			
+			$label   = ' ' . $objJavaScriptFiles->$strType;
+
 			$arrJavaScriptFiles[$objJavaScriptFiles->id] = $this->generateImage('iconJS.gif', $label, 'style="vertical-align:middle"') . $label;
 		}
 		return $arrJavaScriptFiles;
 	}
 }
+
 ?>

@@ -32,7 +32,7 @@
  */
 
 
-$GLOBALS['TL_LANG']['alpha']['title']   = 'Entwicklerversion';
-$GLOBALS['TL_LANG']['alpha']['message'] = 'Warnung, Sie haben eine Entwicklerversion von <strong>Theme+</strong> installiert! Bitte verwenden Sie diese Version nicht produktiv!';
-$GLOBALS['TL_LANG']['alpha']['useAlpha'] = 'Entwicklerversion benutzen';
+$GLOBALS['TL_LANG']['alpha']['title']         = 'Entwicklerversion';
+$GLOBALS['TL_LANG']['alpha']['message']       = 'Warnung, Sie haben eine Entwicklerversion von <strong>Theme+</strong> installiert! Bitte verwenden Sie diese Version nicht produktiv!';
+$GLOBALS['TL_LANG']['alpha']['useAlpha']      = 'Entwicklerversion benutzen';
 $GLOBALS['TL_LANG']['alpha']['installStable'] = 'Stabile Version installieren';

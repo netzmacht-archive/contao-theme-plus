@@ -66,20 +66,19 @@ class AlphaController extends Backend
 		// user have to be authenticated
 		$this->User->authenticate();
 
-		if ($this->Input->get('useAlpha'))
-		{
+		if ($this->Input->get('useAlpha')) {
 			$this->Config->add("\$GLOBALS['TL_CONFIG']['theme_plus_alpha_mode']", true);
 			$this->redirect('contao/main.php?do=repository_manager&update=database');
 		}
 
-		$objTemplate = new BackendTemplate('be_alpha_controller');
-		$objTemplate->theme = $this->getTheme();
-		$objTemplate->base = $this->Environment->base;
+		$objTemplate           = new BackendTemplate('be_alpha_controller');
+		$objTemplate->theme    = $this->getTheme();
+		$objTemplate->base     = $this->Environment->base;
 		$objTemplate->language = $GLOBALS['TL_LANGUAGE'];
-		$objTemplate->title = $GLOBALS['TL_CONFIG']['websiteTitle'];
-		$objTemplate->charset = $GLOBALS['TL_CONFIG']['characterSet'];
-		$objTemplate->request = ampersand($this->Environment->request);
-		$objTemplate->top = $GLOBALS['TL_LANG']['MSC']['backToTop'];
+		$objTemplate->title    = $GLOBALS['TL_CONFIG']['websiteTitle'];
+		$objTemplate->charset  = $GLOBALS['TL_CONFIG']['characterSet'];
+		$objTemplate->request  = ampersand($this->Environment->request);
+		$objTemplate->top      = $GLOBALS['TL_LANG']['MSC']['backToTop'];
 		$objTemplate->output();
 	}
 }

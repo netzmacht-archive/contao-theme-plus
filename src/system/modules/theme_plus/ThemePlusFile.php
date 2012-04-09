@@ -81,7 +81,7 @@ abstract class ThemePlusFile extends Controller
 	{
 		$this->strCc = $strCc;
 	}
-	
+
 
 	/**
 	 * Return the conditional comment.
@@ -133,26 +133,27 @@ abstract class ThemePlusFile extends Controller
 	 * Magic getter
 	 *
 	 * @param string $k
+	 *
 	 * @return mixed
 	 */
 	public function __get($k)
 	{
 		switch ($k)
 		{
-		case 'cc':
-			return $this->getCc();
+			case 'cc':
+				return $this->getCc();
 
-		case 'globalVariable':
-			return $this->getGlobalVariableCode();
+			case 'globalVariable':
+				return $this->getGlobalVariableCode();
 
-		case 'embed':
-			return $this->getEmbededHtml();
+			case 'embed':
+				return $this->getEmbededHtml();
 
-		case 'include':
-			return $this->getIncludeHtml();
+			case 'include':
+				return $this->getIncludeHtml();
 
-		case 'aggregate':
-			return $this->isAggregateable();
+			case 'aggregate':
+				return $this->isAggregateable();
 		}
 	}
 
@@ -161,12 +162,12 @@ abstract class ThemePlusFile extends Controller
 	 * Wrap the conditional comment arround.
 	 *
 	 * @param string $strCode
+	 *
 	 * @return string
 	 */
 	protected function wrapCc($strCode)
 	{
-		if (strlen($this->strCc))
-		{
+		if (strlen($this->strCc)) {
 			return '<!--[if ' . $this->strCc . ']>' . $strCode . '<![endif]-->';
 		}
 		return $strCode;

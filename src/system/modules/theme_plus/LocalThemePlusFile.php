@@ -44,27 +44,25 @@ abstract class LocalThemePlusFile extends ThemePlusFile
 	 */
 	public static function create($strFile)
 	{
-		if (file_exists(TL_ROOT . '/' . ($strFile[0] == '!' ? substr($strFile, 1) : $strFile)))
-		{
+		if (file_exists(TL_ROOT . '/' . ($strFile[0] == '!' ? substr($strFile, 1) : $strFile))) {
 			$objFile = new File($strFile[0] == '!' ? substr($strFile, 1) : $strFile);
 			switch ($objFile->extension)
 			{
 				case 'js':
 					return new LocalJavaScriptFile($strFile);
-				
+
 				case 'css':
-					if (!$GLOBALS['TL_CONFIG']['theme_plus_force_less'])
-					{
+					if (!$GLOBALS['TL_CONFIG']['theme_plus_force_less']) {
 						return new LocalCssFile($strFile);
 					}
-					
+
 				case 'less':
 					return new LocalLessCssFile($strFile);
 			}
 		}
 		return false;
 	}
-	
+
 
 	/**
 	 * The aggregation mode
@@ -88,16 +86,16 @@ abstract class LocalThemePlusFile extends ThemePlusFile
 	 * @var string
 	 */
 	protected $strOriginFile;
-	
-	
+
+
 	/**
 	 * The corresponding theme.
 	 *
 	 * @var Database_Result
 	 */
 	protected $objTheme;
-	
-	
+
+
 	/**
 	 * Create a new local file object.
 	 *
@@ -108,16 +106,15 @@ abstract class LocalThemePlusFile extends ThemePlusFile
 	 */
 	public function __construct($strOriginFile)
 	{
-		if (!file_exists(TL_ROOT . '/' . $strOriginFile))
-		{
+		if (!file_exists(TL_ROOT . '/' . $strOriginFile)) {
 			throw new Exception('File does not exists: ' . $strOriginFile);
 		}
-		
+
 		parent::__construct();
 		$this->strOriginFile = $strOriginFile;
 	}
-	
-	
+
+
 	/**
 	 * @see ThemePlusFile::getDebugComment
 	 * @return string
@@ -125,14 +122,13 @@ abstract class LocalThemePlusFile extends ThemePlusFile
 	protected function getDebugComment()
 	{
 		$this->import('ThemePlus');
-		if ($GLOBALS['TL_CONFIG']['debugMode'] || $this->ThemePlus->getBELoginStatus())
-		{
+		if ($GLOBALS['TL_CONFIG']['debugMode'] || $this->ThemePlus->getBELoginStatus()) {
 			return '<!-- local file: ' . $this->getOriginFile() . ', aggregation: ' . $this->getAggregation() . ', scope: ' . $this->getAggregationScope() . ' -->' . "\n";
 		}
 		return '';
 	}
-	
-	
+
+
 	/**
 	 * Get the original file path relative to TL_ROOT.
 	 *
@@ -179,7 +175,7 @@ abstract class LocalThemePlusFile extends ThemePlusFile
 
 	/**
 	 * Get the current aggregation level.
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getAggregationScope()
@@ -192,6 +188,7 @@ abstract class LocalThemePlusFile extends ThemePlusFile
 	 * Set the theme object.
 	 *
 	 * @param Database_Result $objTheme
+	 *
 	 * @return void
 	 */
 	public function setTheme(Database_Result $objTheme)
@@ -209,15 +206,15 @@ abstract class LocalThemePlusFile extends ThemePlusFile
 	{
 		return $this->objTheme;
 	}
-	
-	
+
+
 	/**
 	 * Get the file path relative to TL_ROOT
 	 *
 	 * @return string
 	 */
 	public abstract function getFile();
-	
+
 
 	/**
 	 * @see ThemePlusFile::getGlobalVariableCode
@@ -237,27 +234,28 @@ abstract class LocalThemePlusFile extends ThemePlusFile
 	{
 		return $this->getAggregation() == 'never' ? false : parent::isAggregateable();
 	}
-	
+
 
 	/**
 	 * Magic getter
 	 *
 	 * @param string $k
+	 *
 	 * @return mixed
 	 */
 	public function __get($k)
 	{
 		switch ($k)
 		{
-		case 'origin':
-			return $this->getOriginFile();
-			
-		case 'file':
-		case 'path':
-			return $this->getFile();
-		
-		default:
-			return parent::__get($k);
+			case 'origin':
+				return $this->getOriginFile();
+
+			case 'file':
+			case 'path':
+				return $this->getFile();
+
+			default:
+				return parent::__get($k);
 		}
 	}
 }

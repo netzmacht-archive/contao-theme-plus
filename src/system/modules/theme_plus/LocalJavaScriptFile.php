@@ -60,15 +60,14 @@ class LocalJavaScriptFile extends LocalThemePlusFile implements JavaScriptFile
 	 */
 	public function __construct($strOriginFile)
 	{
-		if ($strOriginFile[0] == '!')
-		{
+		if ($strOriginFile[0] == '!') {
 			$this->strProcessedFile = $strOriginFile = substr($strOriginFile, 1);
 		}
 		else
 		{
 			$this->strProcessedFile = null;
 		}
-		
+
 		parent::__construct($strOriginFile);
 	}
 
@@ -77,6 +76,7 @@ class LocalJavaScriptFile extends LocalThemePlusFile implements JavaScriptFile
 	 * Set the include position.
 	 *
 	 * @param string $strPosition
+	 *
 	 * @return void
 	 */
 	public function setPosition($strPosition)
@@ -103,8 +103,7 @@ class LocalJavaScriptFile extends LocalThemePlusFile implements JavaScriptFile
 	protected function getDebugComment()
 	{
 		$this->import('ThemePlus');
-		if ($GLOBALS['TL_CONFIG']['debugMode'] || $this->ThemePlus->getBELoginStatus())
-		{
+		if ($GLOBALS['TL_CONFIG']['debugMode'] || $this->ThemePlus->getBELoginStatus()) {
 			return '<!-- local file: ' . $this->getOriginFile() . ', position: ' . $this->getPosition() . ', aggregation: ' . $this->getAggregation() . ', scope: ' . $this->getAggregationScope() . ' -->' . "\n";
 		}
 		return '';
@@ -117,25 +116,22 @@ class LocalJavaScriptFile extends LocalThemePlusFile implements JavaScriptFile
 	 */
 	public function getFile()
 	{
-		if ($this->strProcessedFile == null)
-		{
+		if ($this->strProcessedFile == null) {
 			$this->import('Compression');
 
 			$strJsMinimizer = $this->ThemePlus->getBELoginStatus() ? false : $this->Compression->getDefaultJsMinimizer();
-			if (!$strJsMinimizer)
-			{
+			if (!$strJsMinimizer) {
 				$strJsMinimizer = 'none';
 			}
 
 			$objFile = new File($this->strOriginFile);
 			$strTemp = $objFile->basename
-					. '-' . $objFile->mtime
-					. '-' . $strJsMinimizer
-					. '-' . $this->ThemePlus->getVariablesHashByTheme($this->objTheme);
+				. '-' . $objFile->mtime
+				. '-' . $strJsMinimizer
+				. '-' . $this->ThemePlus->getVariablesHashByTheme($this->objTheme);
 			$strTemp = sprintf('system/scripts/%s-%s.js', $objFile->filename, substr(md5($strTemp), 0, 8));
 
-			if (!file_exists(TL_ROOT . '/' . $strTemp))
-			{
+			if (!file_exists(TL_ROOT . '/' . $strTemp)) {
 				$this->import('Compression');
 
 				// import the Theme+ master class
@@ -160,8 +156,7 @@ class LocalJavaScriptFile extends LocalThemePlusFile implements JavaScriptFile
 				$strContent = $this->replaceInsertTags($strContent);
 
 				// minify
-				if (!$this->Minimizer->minimizeToFile($strTemp, $strContent))
-				{
+				if (!$this->Minimizer->minimizeToFile($strTemp, $strContent)) {
 					// write unminified code, if minify failed
 					$objTemp = new File($strTemp);
 					$objTemp->write($strContent);
@@ -169,8 +164,7 @@ class LocalJavaScriptFile extends LocalThemePlusFile implements JavaScriptFile
 				}
 
 				// create the gzip compressed version
-				if ($GLOBALS['TL_CONFIG']['gzipScripts'])
-				{
+				if ($GLOBALS['TL_CONFIG']['gzipScripts']) {
 					$this->Compressor->compress($strTemp, $strTemp . '.gz');
 				}
 			}
@@ -198,8 +192,7 @@ class LocalJavaScriptFile extends LocalThemePlusFile implements JavaScriptFile
 		$strContent = $objFile->getContent();
 
 		// return html code
-		if ($blnLazy)
-		{
+		if ($blnLazy) {
 			return $this->getDebugComment() . $this->wrapCc('<script' . (($objPage->outputFormat == 'xhtml') ? ' type="text/javascript"' : '') . '>' . "\n" . $this->ThemePlus->wrapJavaScriptLazyEmbedded($strContent) . "\n" . '</script>');
 		}
 		else
@@ -221,8 +214,7 @@ class LocalJavaScriptFile extends LocalThemePlusFile implements JavaScriptFile
 		$strFile = $this->getFile();
 
 		// return html code
-		if ($blnLazy)
-		{
+		if ($blnLazy) {
 			return $this->getDebugComment() . $this->wrapCc('<script' . (($objPage->outputFormat == 'xhtml') ? ' type="text/javascript"' : '') . '>' . "\n" . $this->ThemePlus->wrapJavaScriptLazyInclude(TL_SCRIPT_URL . $strFile) . "\n" . '</script>');
 		}
 		else

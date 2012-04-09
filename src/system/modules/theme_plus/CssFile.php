@@ -41,14 +41,15 @@ interface CssFile
 	 * Set the media query.
 	 *
 	 * @abstract
+	 *
 	 * @param string $strMedia
 	 */
 	public function setMedia($strMedia);
 
-	
+
 	/**
 	 * Get the media query.
-	 * 
+	 *
 	 * @abstract
 	 * @return string
 	 */

@@ -35,13 +35,13 @@
 $GLOBALS['TL_DCA']['tl_theme']['config']['ctable'][] = 'tl_theme_plus_file';
 $GLOBALS['TL_DCA']['tl_theme']['config']['ctable'][] = 'tl_theme_plus_variable';
 
-$intOffset = array_search('css', array_keys($GLOBALS['TL_DCA']['tl_theme']['list']['operations'])) + 1;
+$intOffset                                           = array_search('css', array_keys($GLOBALS['TL_DCA']['tl_theme']['list']['operations'])) + 1;
 $GLOBALS['TL_DCA']['tl_theme']['list']['operations'] = array_merge
 (
 	array_slice($GLOBALS['TL_DCA']['tl_theme']['list']['operations'], 0, $intOffset),
 	array
 	(
-		'theme_plus_file' => array
+		'theme_plus_file'     => array
 		(
 			'label'               => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_file'],
 			'href'                => 'table=tl_theme_plus_file',
@@ -60,8 +60,6 @@ $GLOBALS['TL_DCA']['tl_theme']['list']['operations'] = array_merge
 );
 
 
-
-
 /**
  * Class tl_theme_plus
  *
@@ -77,17 +75,18 @@ class tl_theme_plus extends Backend
 		parent::__construct();
 		$this->import('BackendUser', 'User');
 	}
-	
-	
+
+
 	public function editThemePlusFile($row, $href, $label, $title, $icon, $attributes)
 	{
-		return ($this->User->isAdmin || $this->User->hasAccess('theme_plus', 'themes')) ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ' : $this->generateImage(preg_replace('/\.png$/i', '_.png', $icon)).' ';
+		return ($this->User->isAdmin || $this->User->hasAccess('theme_plus', 'themes')) ? '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars($title) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ' : $this->generateImage(preg_replace('/\.png$/i', '_.png', $icon)) . ' ';
 	}
-	
-	
+
+
 	public function editThemePlusVariable($row, $href, $label, $title, $icon, $attributes)
 	{
-		return ($this->User->isAdmin || $this->User->hasAccess('theme_plus', 'themes')) ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ' : $this->generateImage(preg_replace('/\.png$/i', '_.png', $icon)).' ';
+		return ($this->User->isAdmin || $this->User->hasAccess('theme_plus', 'themes')) ? '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars($title) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ' : $this->generateImage(preg_replace('/\.png$/i', '_.png', $icon)) . ' ';
 	}
 }
+
 ?>

@@ -39,7 +39,7 @@ $GLOBALS['TL_DCA']['tl_layout']['config']['onload_callback'][] = array('tl_layou
 // extend the palette
 $GLOBALS['TL_DCA']['tl_layout']['palettes']['default'] = preg_replace(
 	array(
-	    '#stylesheet#',
+		'#stylesheet#',
 		'#mootools#',
 		'#(\{expert_legend:hide\}.*);#U'
 	),
@@ -56,7 +56,7 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_exclude_contaocss'] = arra
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['theme_plus_exclude_contaocss'],
 	'inputType'               => 'checkbox',
-	'eval'                    => array('tl_class'=>'w50 m12')
+	'eval'                    => array('tl_class'=> 'w50 m12')
 );
 
 
@@ -65,7 +65,8 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_exclude_frameworkcss'] = a
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['theme_plus_exclude_frameworkcss'],
 	'inputType'               => 'checkbox',
-	'eval'                    => array('tl_class'=>'w50 m12', 'submitOnChange'=>true)
+	'eval'                    => array('tl_class'      => 'w50 m12',
+	                                   'submitOnChange'=> true)
 );
 
 
@@ -79,7 +80,8 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_stylesheets'] = array
 	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['theme_plus_stylesheets'],
 	'inputType'               => 'fancyCheckboxWizard',
 	'options_callback'        => array('tl_layout_theme_plus', 'getStylesheets'),
-	'eval'                    => array('multiple'=>true, 'tl_class'=>'clr')
+	'eval'                    => array('multiple'=> true,
+	                                   'tl_class'=> 'clr')
 );
 
 
@@ -88,7 +90,7 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_javascript_lazy_load'] = a
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['theme_plus_javascript_lazy_load'],
 	'inputType'               => 'checkbox',
-	'eval'                    => array('tl_class'=>'w50 m12')
+	'eval'                    => array('tl_class'=> 'w50 m12')
 );
 
 
@@ -99,7 +101,7 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_default_javascript_positio
 	'inputType'               => 'select',
 	'options'                 => array('head', 'head+body', 'body'),
 	'reference'               => &$GLOBALS['TL_LANG']['tl_layout']['positions'],
-	'eval'                    => array('tl_class'=>'w50')
+	'eval'                    => array('tl_class'=> 'w50')
 );
 
 
@@ -109,7 +111,8 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_javascripts'] = array
 	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['theme_plus_javascripts'],
 	'inputType'               => 'fancyCheckboxWizard',
 	'options_callback'        => array('tl_layout_theme_plus', 'getJavaScripts'),
-	'eval'                    => array('multiple'=>true, 'tl_class'=>'clr')
+	'eval'                    => array('multiple'=> true,
+	                                   'tl_class'=> 'clr')
 );
 
 
@@ -147,17 +150,16 @@ class tl_layout_theme_plus extends Backend
 	{
 		if ($dc) {
 			$objLayout = $this->Database->prepare("SELECT * FROM tl_layout WHERE id=?")->execute($dc->id);
-			if ($objLayout->next() && $objLayout->theme_plus_exclude_frameworkcss)
-			{
+			if ($objLayout->next() && $objLayout->theme_plus_exclude_frameworkcss) {
 				// remove framework css related fields
-				$GLOBALS['TL_DCA']['tl_layout']['palettes']['default'] = str_replace(
+				$GLOBALS['TL_DCA']['tl_layout']['palettes']['default']      = str_replace(
 					';{static_legend},static',
 					'',
 					$GLOBALS['TL_DCA']['tl_layout']['palettes']['default']);
-				$GLOBALS['TL_DCA']['tl_layout']['subpalettes']['header'] = str_replace(
+				$GLOBALS['TL_DCA']['tl_layout']['subpalettes']['header']    = str_replace(
 					'headerHeight', '',
 					$GLOBALS['TL_DCA']['tl_layout']['subpalettes']['header']);
-				$GLOBALS['TL_DCA']['tl_layout']['subpalettes']['footer'] = str_replace(
+				$GLOBALS['TL_DCA']['tl_layout']['subpalettes']['footer']    = str_replace(
 					'footerHeight', '',
 					$GLOBALS['TL_DCA']['tl_layout']['subpalettes']['footer']);
 				$GLOBALS['TL_DCA']['tl_layout']['subpalettes']['cols_2cll'] = str_replace(
@@ -166,7 +168,7 @@ class tl_layout_theme_plus extends Backend
 				$GLOBALS['TL_DCA']['tl_layout']['subpalettes']['cols_2clr'] = str_replace(
 					'widthRight', '',
 					$GLOBALS['TL_DCA']['tl_layout']['subpalettes']['cols_2clr']);
-				$GLOBALS['TL_DCA']['tl_layout']['subpalettes']['cols_3cl'] = str_replace(
+				$GLOBALS['TL_DCA']['tl_layout']['subpalettes']['cols_3cl']  = str_replace(
 					array('widthLeft', 'widthRight'), '',
 					$GLOBALS['TL_DCA']['tl_layout']['subpalettes']['cols_3cl']);
 			}
@@ -186,7 +188,7 @@ class tl_layout_theme_plus extends Backend
 	public function getFiles($strTypePrefix)
 	{
 		$arrFiles = array();
-		
+
 		$objTheme = $this->Database
 			->execute("SELECT * FROM tl_theme ORDER BY name");
 		while ($objTheme->next())
@@ -209,7 +211,7 @@ class tl_layout_theme_plus extends Backend
 			while ($objFile->next())
 			{
 				$strType = $objFile->type;
-				$label = $objFile->$strType;
+				$label   = $objFile->$strType;
 
 				switch ($objFile->type) {
 					case 'js_code':

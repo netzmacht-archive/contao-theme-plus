@@ -35,7 +35,8 @@
 /**
  * Class ExternalLessCssFile
  */
-class ExternalLessCssFile extends ExternalCssFile {
+class ExternalLessCssFile extends ExternalCssFile
+{
 
 	/**
 	 * Create a new css file object.
@@ -60,8 +61,7 @@ class ExternalLessCssFile extends ExternalCssFile {
 		global $objPage;
 
 		// add client side javascript
-		if ($this->ThemePlus->getBELoginStatus())
-		{
+		if ($this->ThemePlus->getBELoginStatus()) {
 			$GLOBALS['TL_JAVASCRIPT'][] = 'plugins/lesscss/less.min.development.js';
 		}
 		else

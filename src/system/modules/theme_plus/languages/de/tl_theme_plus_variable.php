@@ -47,15 +47,15 @@ $GLOBALS['TL_LANG']['tl_theme_plus_variable']['size']  = array('Größe / Abmess
 /**
  * References
  */
-$GLOBALS['TL_LANG']['tl_theme_plus_variable']['variable_legend']         = 'Variable';
+$GLOBALS['TL_LANG']['tl_theme_plus_variable']['variable_legend'] = 'Variable';
 
 
 /**
  * Buttons
  */
-$GLOBALS['TL_LANG']['tl_theme_plus_variable']['new']         = array('Neue Variable', 'Eine neue Variable anlegen');
-$GLOBALS['TL_LANG']['tl_theme_plus_variable']['show']        = array('Details', 'Details der Variable ID %s anzeigen');
-$GLOBALS['TL_LANG']['tl_theme_plus_variable']['edit']        = array('Variable bearbeiten', 'Variable ID %s bearbeiten');
-$GLOBALS['TL_LANG']['tl_theme_plus_variable']['delete']      = array('Variable löschen', 'Variable ID %s löschen');
-$GLOBALS['TL_LANG']['tl_theme_plus_variable']['cut']         = array('Variable verschieben ', 'Variable ID %s verschieben');
-$GLOBALS['TL_LANG']['tl_theme_plus_variable']['copy']        = array('Variable duplizieren', 'Variable ID %s duplizieren');
+$GLOBALS['TL_LANG']['tl_theme_plus_variable']['new']    = array('Neue Variable', 'Eine neue Variable anlegen');
+$GLOBALS['TL_LANG']['tl_theme_plus_variable']['show']   = array('Details', 'Details der Variable ID %s anzeigen');
+$GLOBALS['TL_LANG']['tl_theme_plus_variable']['edit']   = array('Variable bearbeiten', 'Variable ID %s bearbeiten');
+$GLOBALS['TL_LANG']['tl_theme_plus_variable']['delete'] = array('Variable löschen', 'Variable ID %s löschen');
+$GLOBALS['TL_LANG']['tl_theme_plus_variable']['cut']    = array('Variable verschieben ', 'Variable ID %s verschieben');
+$GLOBALS['TL_LANG']['tl_theme_plus_variable']['copy']   = array('Variable duplizieren', 'Variable ID %s duplizieren');

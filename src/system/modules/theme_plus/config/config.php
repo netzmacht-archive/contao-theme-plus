@@ -35,18 +35,17 @@
 /**
  * Version 3 alpha1 Warning
  */
-if (TL_MODE == 'BE')
-{
+if (TL_MODE == 'BE') {
 	$objEnvironment = Environment::getInstance();
-	if (   !$GLOBALS['TL_CONFIG']['theme_plus_alpha_mode']
+	if (!$GLOBALS['TL_CONFIG']['theme_plus_alpha_mode']
 		// The alpha controller itself
 		&& strpos($objEnvironment->requestUri, 'system/modules/theme_plus/AlphaController.php') === false
 		// Backend login
 		&& strpos($objEnvironment->requestUri, 'contao/index.php') === false
 		// Install Tool
-		&& strpos($objEnvironment->requestUri, 'contao/install.php') === false)
-	{
-		$objInput = Input::getInstance();
+		&& strpos($objEnvironment->requestUri, 'contao/install.php') === false
+	) {
+		$objInput         = Input::getInstance();
 		$blnInstallStable = $objInput->post('repository_action') == 'install'
 			&& $objInput->post('repository_extension') == 'theme_plus'
 			&& $objInput->post('repository_version') < 30000000;
@@ -66,17 +65,20 @@ if (TL_MODE == 'BE')
 /**
  * RC Hack!
  */
-if (VERSION == 2.10 && BUILD == 'RC1' && file_exists(TL_ROOT . '/system/modules/theme_plus/config/runonce.php'))
-{
+if (VERSION == 2.10 && BUILD == 'RC1' && file_exists(TL_ROOT . '/system/modules/theme_plus/config/runonce.php')) {
 	class ThemePlusHack extends System
 	{
-		public function __construct() {}
+		public function __construct()
+		{
+		}
+
 		public function run()
 		{
 			$this->import('Database');
 			$this->Database->execute("INSERT INTO tl_runonce (name) VALUES ('system/modules/theme_plus/config/runonce.php')");
 		}
 	}
+
 	$objThemePlusHack = new ThemePlusHack();
 	$objThemePlusHack->run();
 }
@@ -126,7 +128,7 @@ $GLOBALS['TL_PTY']['regular'] = 'ThemePlusPageRegular';
 /**
  * easy_themes integration
  */
-$GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus_file'] = array
+$GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus_file']     = array
 (
 	'href_fragment' => 'table=tl_theme_plus_file',
 	'icon'          => 'system/modules/theme_plus/html/icon.png'
@@ -154,11 +156,10 @@ $GLOBALS['TL_MIME']['less'] = array('text/css', 'iconCSS.gif');
 /**
  * Helper function
  */
-if (!function_exists('array_concat'))
-{
+if (!function_exists('array_concat')) {
 	function array_concat()
 	{
-		$args = func_get_args();
+		$args  = func_get_args();
 		$array = array_shift($args);
 		while (count($args))
 		{

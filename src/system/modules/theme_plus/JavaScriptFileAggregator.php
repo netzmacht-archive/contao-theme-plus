@@ -68,6 +68,7 @@ class JavaScriptFileAggregator extends FileAggregator
 	 * Add a file.
 	 *
 	 * @param LocalJavaScriptFile $objFile
+	 *
 	 * @return void
 	 */
 	public function add(LocalJavaScriptFile $objFile)
@@ -83,18 +84,15 @@ class JavaScriptFileAggregator extends FileAggregator
 	 */
 	public function getFile()
 	{
-		if ($this->strAggregatedFile == null)
-		{
+		if ($this->strAggregatedFile == null) {
 			$arrFiles = array();
-			$strKey = count($this->arrFiles);
+			$strKey   = count($this->arrFiles);
 			foreach ($this->arrFiles as $objThemePlusFile)
 			{
-				if ($objThemePlusFile instanceof LocalJavaScriptFile)
-				{
-					if ($objThemePlusFile->isAggregateable())
-					{
-						$strFile = $objThemePlusFile->getFile();
-						$objFile = new File($strFile);
+				if ($objThemePlusFile instanceof LocalJavaScriptFile) {
+					if ($objThemePlusFile->isAggregateable()) {
+						$strFile    = $objThemePlusFile->getFile();
+						$objFile    = new File($strFile);
 						$arrFiles[] = $strFile;
 						$strKey .= sprintf(':%s-%d', basename($strFile, '.js'), $objFile->mtime);
 						continue;
@@ -105,8 +103,7 @@ class JavaScriptFileAggregator extends FileAggregator
 
 			$strTemp = 'system/scripts/javascript-' . substr(md5($strKey), 0, 8) . '.js';
 
-			if (!file_exists(TL_ROOT . '/' . $strTemp))
-			{
+			if (!file_exists(TL_ROOT . '/' . $strTemp)) {
 				$this->import('Compression');
 
 				// import the Theme+ master class
@@ -133,8 +130,7 @@ class JavaScriptFileAggregator extends FileAggregator
 					$strSubContent = trim($strSubContent);
 
 					// append to content
-					if (strlen($strSubContent)>0)
-					{
+					if (strlen($strSubContent) > 0) {
 						$strContent .= $strSubContent . ";\n";
 					}
 				}
@@ -145,8 +141,7 @@ class JavaScriptFileAggregator extends FileAggregator
 				$objTemp->close();
 
 				// create the gzip compressed version
-				if ($GLOBALS['TL_CONFIG']['gzipScripts'])
-				{
+				if ($GLOBALS['TL_CONFIG']['gzipScripts']) {
 					$this->Compressor->compress($strTemp, $strTemp . '.gz');
 				}
 			}
@@ -173,8 +168,7 @@ class JavaScriptFileAggregator extends FileAggregator
 		$strContent = $objFile->getContent();
 
 		// return html code
-		if ($blnLazy)
-		{
+		if ($blnLazy) {
 			return $this->getDebugComment() . '<script' . (($objPage->outputFormat == 'xhtml') ? ' type="text/javascript"' : '') . '>' . $this->ThemePlus->wrapJavaScriptLazyEmbedded($strContent) . '</script>';
 		}
 		else
@@ -196,8 +190,7 @@ class JavaScriptFileAggregator extends FileAggregator
 		$strFile = $this->getFile();
 
 		// return html code
-		if ($blnLazy)
-		{
+		if ($blnLazy) {
 			return $this->getDebugComment() . '<script' . (($objPage->outputFormat == 'xhtml') ? ' type="text/javascript"' : '') . '>' . $this->ThemePlus->wrapJavaScriptLazyInclude(TL_SCRIPT_URL . $strFile) . '</script>';
 		}
 		else

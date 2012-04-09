@@ -1,4 +1,4 @@
-(function() {
+(function () {
 	var queue = [];
 	var x = null;
 	var loading = false;
@@ -10,6 +10,7 @@
 			load(src);
 		}
 	}
+
 	function dequeue() {
 		//console.log('dequeue');
 		loading = false;
@@ -18,6 +19,7 @@
 			load(src);
 		}
 	}
+
 	function load(src) {
 		//console.log(src);
 		loading = true;
@@ -26,7 +28,7 @@
 
 		s.type = "text/javascript";
 		if (window.attachEvent) {
-			s.onreadystatechange = function() {
+			s.onreadystatechange = function () {
 				//console.log(this.readyState);
 				if (this.readyState == 'loaded' || this.readyState == 'complete') dequeue();
 			};
@@ -43,13 +45,13 @@
 				x.parentNode.appendChild(s);
 			}
 		} else {
-			x=document.getElementsByTagName("script")[0];
+			x = document.getElementsByTagName("script")[0];
 			x.parentNode.insertBefore(s, x);
 		}
 		x = s;
 	}
-	window.loadAsync = function(src)
-	{
+
+	window.loadAsync = function (src) {
 		enqueue(src);
 	}
 })();

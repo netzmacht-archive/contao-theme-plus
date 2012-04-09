@@ -39,7 +39,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_variable'] = array
 (
 
 	// Config
-	'config' => array
+	'config'      => array
 	(
 		'dataContainer'               => 'Table',
 		'ptable'                      => 'tl_theme',
@@ -47,9 +47,9 @@ $GLOBALS['TL_DCA']['tl_theme_plus_variable'] = array
 	),
 
 	// List
-	'list' => array
+	'list'        => array
 	(
-		'sorting' => array
+		'sorting'           => array
 		(
 			'mode'                    => 4,
 			'flag'                    => 4,
@@ -69,21 +69,21 @@ $GLOBALS['TL_DCA']['tl_theme_plus_variable'] = array
 				'attributes'          => 'onclick="Backend.getScrollOffset();" accesskey="e"'
 			)
 		),
-		'operations' => array
+		'operations'        => array
 		(
-			'edit' => array
+			'edit'   => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_theme_plus_variable']['edit'],
 				'href'                => 'act=edit',
 				'icon'                => 'edit.gif'
 			),
-			'copy' => array
+			'copy'   => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_theme_plus_variable']['copy'],
 				'href'                => 'act=paste&amp;mode=copy',
 				'icon'                => 'copy.gif'
 			),
-			'cut' => array
+			'cut'    => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_theme_plus_variable']['cut'],
 				'href'                => 'act=paste&amp;mode=cut',
@@ -97,7 +97,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_variable'] = array
 				'icon'                => 'delete.gif',
 				'attributes'          => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"'
 			),
-			'show' => array
+			'show'   => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_theme_plus_variable']['show'],
 				'href'                => 'act=show',
@@ -107,7 +107,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_variable'] = array
 	),
 
 	// Palettes
-	'palettes' => array
+	'palettes'    => array
 	(
 		'__selector__'                => array('type'),
 		'default'                     => '{variable_legend},type',
@@ -123,11 +123,11 @@ $GLOBALS['TL_DCA']['tl_theme_plus_variable'] = array
 	(
 		'restrictLayout'              => 'layout'
 	),
-	
+
 	// Fields
-	'fields' => array
+	'fields'      => array
 	(
-		'type' => array
+		'type'  => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_theme_plus_variable']['type'],
 			'default'                 => 'text',
@@ -135,46 +135,61 @@ $GLOBALS['TL_DCA']['tl_theme_plus_variable'] = array
 			'filter'                  => true,
 			'options'                 => array('text', 'url', 'file', 'color', 'size'),
 			'reference'               => &$GLOBALS['TL_LANG']['tl_theme_plus_variable'],
-			'eval'                    => array('submitOnChange'=>true)
+			'eval'                    => array('submitOnChange'=> true)
 		),
-		'name' => array
+		'name'  => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_theme_plus_variable']['name'],
 			'inputType'               => 'text',
-			'eval'                    => array('mandatory'=>true, 'maxlength'=>255, 'rgxp'=>'alnum'),
+			'eval'                    => array('mandatory'=> true,
+			                                   'maxlength'=> 255,
+			                                   'rgxp'     => 'alnum'),
 			'save_callback'           => array(array('tl_theme_plus_variable', 'getName'))
 		),
-		'text' => array
+		'text'  => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_theme_plus_variable']['text'],
 			'inputType'               => 'text',
-			'eval'                    => array('mandatory'=>true, 'maxlength'=>255, 'decodeEntities'=>true)
+			'eval'                    => array('mandatory'     => true,
+			                                   'maxlength'     => 255,
+			                                   'decodeEntities'=> true)
 		),
-		'url' => array
+		'url'   => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_theme_plus_variable']['url'],
 			'inputType'               => 'text',
-			'eval'                    => array('mandatory'=>true, 'rgxp'=>'url', 'decodeEntities'=>true, 'tl_class'=>'clr long')
+			'eval'                    => array('mandatory'     => true,
+			                                   'rgxp'          => 'url',
+			                                   'decodeEntities'=> true,
+			                                   'tl_class'      => 'clr long')
 		),
-		'file' => array
+		'file'  => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_theme_plus_variable']['file'],
 			'inputType'               => 'fileTree',
-			'eval'                    => array('mandatory'=>true, 'fieldType'=>'radio', 'files'=>true, 'extensions'=>'css,jpg,jpeg,png,gif,bmp,svg')
+			'eval'                    => array('mandatory' => true,
+			                                   'fieldType' => 'radio',
+			                                   'files'     => true,
+			                                   'extensions'=> 'css,jpg,jpeg,png,gif,bmp,svg')
 		),
 		'color' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_theme_plus_variable']['color'],
 			'inputType'               => 'text',
-			'eval'                    => array('mandatory'=>true, 'maxlength'=>6, 'isHexColor'=>true, 'decodeEntities'=>true, 'tl_class'=>'wizard'),
+			'eval'                    => array('mandatory'     => true,
+			                                   'maxlength'     => 6,
+			                                   'isHexColor'    => true,
+			                                   'decodeEntities'=> true,
+			                                   'tl_class'      => 'wizard'),
 			'wizard'                  => array(array('tl_theme_plus_variable', 'colorPicker'))
 		),
-		'size' => array
+		'size'  => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_theme_plus_variable']['size'],
 			'inputType'               => 'trbl',
 			'options'                 => array('px', '%', 'em', 'pt', 'pc', 'in', 'cm', 'mm'),
-			'eval'                    => array('includeBlankOption'=>true, 'rgxp'=>'digit')
+			'eval'                    => array('includeBlankOption'=> true,
+			                                   'rgxp'              => 'digit')
 		)
 	)
 );
@@ -187,48 +202,49 @@ $GLOBALS['TL_DCA']['tl_theme_plus_variable'] = array
 class tl_theme_plus_variable extends Backend
 {
 	private static $objTheme = false;
-	
+
 	/**
 	 * Import the back end user object
 	 */
 	public function __construct()
 	{
 		parent::__construct();
-		
-		$GLOBALS['TL_CSS'][] = 'plugins/mootools/rainbow.css?'. MOO_RAINBOW . '|screen';
+
+		$GLOBALS['TL_CSS'][]        = 'plugins/mootools/rainbow.css?' . MOO_RAINBOW . '|screen';
 		$GLOBALS['TL_JAVASCRIPT'][] = 'plugins/mootools/rainbow.js?' . MOO_RAINBOW;
-		
+
 		$this->import('BackendUser', 'User');
 	}
-	
-	
+
+
 	/**
 	 * Get the variable name.
 	 */
 	public function getName($varValue, $dc)
 	{
 		$varValue = standardize($varValue);
-		
+
 		$objVariable = $this->Database
 			->prepare("SELECT * FROM tl_theme_plus_variable WHERE id!=? AND pid=? AND name=?")
 			->execute($dc->id, $dc->activeRecord->pid, $varValue);
-		if ($objVariable->next())
-		{
+		if ($objVariable->next()) {
 			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['unique'], $GLOBALS['TL_LANG']['tl_theme_plus_variable']['name'][0]));
 		}
-		
+
 		return $varValue;
 	}
 
 
 	/**
 	 * Return the color picker wizard
+	 *
 	 * @param object
+	 *
 	 * @return string
 	 */
 	public function colorPicker(DataContainer $dc)
 	{
-		return ' ' . $this->generateImage('pickcolor.gif', $GLOBALS['TL_LANG']['MSC']['colorpicker'], 'style="vertical-align:top; cursor:pointer;" id="moo_'.$dc->field.'" class="mooRainbow"');
+		return ' ' . $this->generateImage('pickcolor.gif', $GLOBALS['TL_LANG']['MSC']['colorpicker'], 'style="vertical-align:top; cursor:pointer;" id="moo_' . $dc->field . '" class="mooRainbow"');
 	}
 
 
@@ -237,13 +253,11 @@ class tl_theme_plus_variable extends Backend
 	 */
 	public function checkPermission()
 	{
-		if ($this->User->isAdmin)
-		{
+		if ($this->User->isAdmin) {
 			return;
 		}
 
-		if (!$this->User->hasAccess('theme_plus', 'themes'))
-		{
+		if (!$this->User->hasAccess('theme_plus', 'themes')) {
 			$this->log('Not enough permissions to access the style sheets module', 'tl_theme_plus_variable checkPermission', TL_ERROR);
 			$this->redirect('contao/main.php?act=error');
 		}
@@ -252,51 +266,52 @@ class tl_theme_plus_variable extends Backend
 
 	/**
 	 * List an variable
+	 *
 	 * @param array
+	 *
 	 * @return string
 	 */
 	public function listVariables($row)
 	{
 		$this->import('ThemePlus');
-		
+
 		$label = '<strong>' . $row['name'] . '</strong>: ' . $this->ThemePlus->renderVariable($row);
-		
+
 		switch ($row['type']) {
-		case 'text':
-			$image = 'system/modules/theme_plus/html/text.png';
-			break;
-		
-		case 'url':
-			$image = 'system/modules/theme_plus/html/url.png';
-			break;
-			
-		case 'file':
-			$image = 'files.gif';
-			break;
-		
-		case 'color':
-			$image = 'system/modules/theme_plus/html/color.png';
-			break;
-		
-		case 'size':
-			$image = 'system/modules/theme_plus/html/size.png';
-			break;
-		
-		default:
-			$image = '';
+			case 'text':
+				$image = 'system/modules/theme_plus/html/text.png';
+				break;
+
+			case 'url':
+				$image = 'system/modules/theme_plus/html/url.png';
+				break;
+
+			case 'file':
+				$image = 'files.gif';
+				break;
+
+			case 'color':
+				$image = 'system/modules/theme_plus/html/color.png';
+				break;
+
+			case 'size':
+				$image = 'system/modules/theme_plus/html/size.png';
+				break;
+
+			default:
+				$image = '';
 		}
-		
-		if ($image)
-		{
+
+		if ($image) {
 			$image = $this->generateImage(
 				$image,
 				$GLOBALS['TL_LANG']['tl_theme_plus_variable'][$row['type']][0],
 				'style="vertical-align:middle" title="' . specialchars($GLOBALS['TL_LANG']['tl_theme_plus_variable'][$row['type']][0]) . '"')
 				. ' ';
 		}
-		
-		return '<div>' . $image . $label ."</div>\n";
-		
+
+		return '<div>' . $image . $label . "</div>\n";
+
 	}
 }
 

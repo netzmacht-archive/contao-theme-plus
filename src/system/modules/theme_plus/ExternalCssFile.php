@@ -46,6 +46,7 @@ class ExternalCssFile extends ExternalThemePlusFile implements CssFile
 
 	/**
 	 * Create new external css file.
+	 *
 	 * @param string $strUrl
 	 * @param string $strMedia
 	 * @param string $strCc
@@ -103,7 +104,7 @@ class ExternalCssFile extends ExternalThemePlusFile implements CssFile
 
 	/**
 	 * Convert into a string.
-	 * 
+	 *
 	 * @return string
 	 */
 	public function __toString()

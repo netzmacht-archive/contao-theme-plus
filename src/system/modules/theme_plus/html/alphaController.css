@@ -7,14 +7,17 @@
 	overflow: hidden;
 	line-height: 1.5em;
 }
+
 img {
 	float: left;
 	margin-right: 20px;
 }
+
 form {
 	clear: left;
 	padding-top: 20px;
 }
+
 a.useAlpha,
 input.installStable {
 	width: 220px;
@@ -30,20 +33,24 @@ input.installStable {
 	border-radius: 5px;
 	text-align: center;
 }
+
 a.useAlpha {
 	float: left;
 	border: 1px solid #ff0000;
 	background: #fff6f6;
 }
+
 a.useAlpha:hover {
 	color: #ff0000;
 }
+
 input.installStable {
 	float: right;
 	border: 1px solid #009900;
 	background: #f6fff6;
 	cursor: pointer;
 }
+
 input.installStable:hover {
 	color: #009900;
 }

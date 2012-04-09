@@ -43,10 +43,10 @@ $GLOBALS['TL_LANG']['tl_settings']['css_embed_images']        = array('Embed ima
 /**
  * Reference
  */
-$GLOBALS['TL_LANG']['tl_settings']['theme_plus_compression']['noless']         = '&raquo; Install lesscss or phpless to activate this feature &laquo;';
-$GLOBALS['TL_LANG']['tl_settings']['theme_plus_compression']['less.js']        = 'less.js';
-$GLOBALS['TL_LANG']['tl_settings']['theme_plus_compression']['less.js+pre']    = 'less.js (precompiled)';
-$GLOBALS['TL_LANG']['tl_settings']['theme_plus_compression']['phpless']        = 'phpless';
+$GLOBALS['TL_LANG']['tl_settings']['theme_plus_compression']['noless']      = '&raquo; Install lesscss or phpless to activate this feature &laquo;';
+$GLOBALS['TL_LANG']['tl_settings']['theme_plus_compression']['less.js']     = 'less.js';
+$GLOBALS['TL_LANG']['tl_settings']['theme_plus_compression']['less.js+pre'] = 'less.js (precompiled)';
+$GLOBALS['TL_LANG']['tl_settings']['theme_plus_compression']['phpless']     = 'phpless';
 
 
 /**

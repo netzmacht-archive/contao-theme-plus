@@ -43,7 +43,7 @@ class ExternalJavaScriptFile extends ExternalThemePlusFile implements JavaScript
 	 * @var string
 	 */
 	protected $strPosition = '';
-	
+
 
 	/**
 	 * Create a new external javascript
@@ -60,6 +60,7 @@ class ExternalJavaScriptFile extends ExternalThemePlusFile implements JavaScript
 	 * Set the include position.
 	 *
 	 * @param string
+	 *
 	 * @return void
 	 */
 	public function setPosition($strPosition)
@@ -86,8 +87,7 @@ class ExternalJavaScriptFile extends ExternalThemePlusFile implements JavaScript
 	protected function getDebugComment()
 	{
 		$this->import('ThemePlus');
-		if ($GLOBALS['TL_CONFIG']['debugMode'] || $this->ThemePlus->getBELoginStatus())
-		{
+		if ($GLOBALS['TL_CONFIG']['debugMode'] || $this->ThemePlus->getBELoginStatus()) {
 			return '<!-- external url: ' . $this->getUrl() . ', position: ' . $this->getPosition() . ' -->' . "\n";
 		}
 		return '';
@@ -106,8 +106,7 @@ class ExternalJavaScriptFile extends ExternalThemePlusFile implements JavaScript
 		$strFile = $this->getUrl();
 
 		// return html code
-		if ($blnLazy)
-		{
+		if ($blnLazy) {
 			return $this->getDebugComment() . $this->wrapCc('<script' . (($objPage->outputFormat == 'xhtml') ? ' type="text/javascript"' : '') . '">' . $this->ThemePlus->wrapJavaScriptLazyInclude() . '</script>');
 		}
 		else
