@@ -33,36 +33,6 @@
 
 
 /**
- * Version 3 alpha1 Warning
- */
-if (TL_MODE == 'BE') {
-	$objEnvironment = Environment::getInstance();
-	if (!$GLOBALS['TL_CONFIG']['theme_plus_alpha_mode']
-		// The alpha controller itself
-		&& strpos($objEnvironment->requestUri, 'system/modules/theme_plus/AlphaController.php') === false
-		// Backend login
-		&& strpos($objEnvironment->requestUri, 'contao/index.php') === false
-		// Install Tool
-		&& strpos($objEnvironment->requestUri, 'contao/install.php') === false
-	) {
-		$objInput         = Input::getInstance();
-		$blnInstallStable = $objInput->post('repository_action') == 'install'
-			&& $objInput->post('repository_extension') == 'theme_plus'
-			&& $objInput->post('repository_version') < 30000000;
-
-		// if install stable, update the db and remove alpha, beta and rc allow
-		if ($blnInstallStable) {
-			$objDatabase = Database::getInstance();
-			$objDatabase->execute("UPDATE tl_repository_installs SET alpha=0, beta=0, rc=0 WHERE extension='theme_plus'");
-		} else {
-			header('Location: ' . $objEnvironment->url . $GLOBALS['TL_CONFIG']['websitePath'] . '/system/modules/theme_plus/AlphaController.php');
-			exit;
-		}
-	}
-}
-
-
-/**
  * RC Hack!
  */
 if (VERSION == 2.10 && BUILD == 'RC1' && file_exists(TL_ROOT . '/system/modules/theme_plus/config/runonce.php')) {
