@@ -195,26 +195,40 @@ class tl_layout_theme_plus extends Backend
 				->prepare("SELECT *
 						   FROM tl_theme_plus_file
 						   WHERE pid=?
-						   AND (type=? OR type=?)
-						   ORDER BY {$strTypePrefix}_file, {$strTypePrefix}_url")
-				->execute($objTheme->id, $strTypePrefix . '_file', $strTypePrefix . '_url');
+						   AND (type='{$strTypePrefix}_file' OR type='{$strTypePrefix}_url' OR type='{$strTypePrefix}_code')
+						   ORDER BY
+						       IF(type='{$strTypePrefix}_file',
+						           {$strTypePrefix}_file,
+						       IF(type='{$strTypePrefix}_url',
+						           {$strTypePrefix}_url,
+						       IF(type='{$strTypePrefix}_code',
+						           code_snippet_title,
+						           id
+						       )))")
+				->execute($objTheme->id);
 			while ($objFile->next())
 			{
 				$strType = $objFile->type;
 				$label = $objFile->$strType;
 
 				switch ($objFile->type) {
-				case 'js_file': case 'js_url':
-					$image = 'iconJS.gif';
-					$label = '[' . $objTheme->position . '] ' . $label;
-					break;
+					case 'js_code':
+						$label = $objFile->code_snippet_title;
+					case 'js_file':
+					case 'js_url':
+						$image = 'iconJS.gif';
+						$label = '[' . $objTheme->position . '] ' . $label;
+						break;
 
-				case 'css_file': case 'css_url':
-					$image = 'iconCSS.gif';
-					break;
+					case 'css_code':
+						$label = $objFile->code_snippet_title;
+					case 'css_file':
+					case 'css_url':
+						$image = 'iconCSS.gif';
+						break;
 
-				default:
-					$image = false;
+					default:
+						$image = false;
 				}
 
 				$arrFiles[$objFile->id] = ($image ? $this->generateImage($image, $label, 'style="vertical-align:middle"') . ' ' : '') . '[' . $objTheme->name . '] ' . $label;

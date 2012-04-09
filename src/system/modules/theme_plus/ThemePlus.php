@@ -567,7 +567,7 @@ class ThemePlus extends Frontend
 					WHERE
 						id IN (" . implode(',', $arrIds) . ")
 					AND
-						(type = 'css_url' OR type = 'css_file')");
+						(type = 'css_url' OR type = 'css_file' OR type = 'css_code')");
 			while ($objFile->next())
 			{
 				if ($this->filter($objFile))
@@ -594,6 +594,15 @@ class ThemePlus extends Frontend
 					$objTheme = $this->findTheme($objFile->pid);
 					
 					$arrStylesheets[$objFile->id] = LocalThemePlusFile::create($strValue);
+					$arrStylesheets[$objFile->id]->setTheme($objTheme);
+					$arrStylesheets[$objFile->id]->setAbsolutizePage($blnAbsolutizeUrls ? $objAbsolutizePage : false);
+					$arrStylesheets[$objFile->id]->setAggregation($objFile->aggregation);
+					break;
+
+				case 'css_code':
+					$objTheme = $this->findTheme($objFile->pid);
+
+					$arrStylesheets[$objFile->id] = new CssCode($strValue, $objFile->code_snippet_title);
 					$arrStylesheets[$objFile->id]->setTheme($objTheme);
 					$arrStylesheets[$objFile->id]->setAbsolutizePage($blnAbsolutizeUrls ? $objAbsolutizePage : false);
 					$arrStylesheets[$objFile->id]->setAggregation($objFile->aggregation);
@@ -671,7 +680,7 @@ class ThemePlus extends Frontend
 						position = ?
 					" : "") . "
 					AND
-						(type = 'js_url' OR type = 'js_file')");
+						(type = 'js_url' OR type = 'js_file' OR type = 'js_code')");
 			if ($strPosition)
 			{
 				$objFile = $objFile->execute($strPosition);
@@ -703,7 +712,15 @@ class ThemePlus extends Frontend
 					$arrJavaScripts[$objFile->id]->setTheme($objTheme);
 					$arrJavaScripts[$objFile->id]->setAggregation($objFile->aggregation);
 					break;
-				
+
+				case 'js_code':
+					$objTheme = $this->findTheme($objFile->pid);
+
+					$arrJavaScripts[$objFile->id] = new JavaScriptCode($strValue, $objFile->code_snippet_title);
+					$arrJavaScripts[$objFile->id]->setTheme($objTheme);
+					$arrJavaScripts[$objFile->id]->setAggregation($objFile->aggregation);
+					break;
+
 				default:
 					continue;
 				}
