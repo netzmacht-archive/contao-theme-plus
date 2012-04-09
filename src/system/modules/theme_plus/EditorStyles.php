@@ -387,5 +387,3 @@ class EditorStyles extends ThemePlus
 		return $arrSources;
 	}
 }
-
-?>

@@ -75,5 +75,3 @@ $GLOBALS['TL_LANG']['tl_theme_plus_file']['delete'] = array('Datei löschen', 'D
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['cut']    = array('Datei verschieben ', 'Datei ID %s verschieben');
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['copy']   = array('Datei duplizieren', 'Datei ID %s duplizieren');
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['delete'] = array('Datei löschen', 'Datei ID %s löschen');
-
-?>

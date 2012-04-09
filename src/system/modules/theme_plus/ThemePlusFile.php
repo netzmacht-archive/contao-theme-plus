@@ -173,5 +173,3 @@ abstract class ThemePlusFile extends Controller
 		return $strCode;
 	}
 }
-
-?>

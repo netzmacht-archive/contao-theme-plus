@@ -139,5 +139,3 @@ class tl_settings_theme_plus extends Backend
 		return true;
 	}
 }
-
-?>

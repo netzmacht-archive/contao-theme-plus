@@ -203,5 +203,3 @@ class CssFileAggregator extends FileAggregator
 		return $this->getDebugComment() . '<link type="text/css" rel="stylesheet" href="' . TL_SCRIPT_URL . specialchars($strFile) . '" />';
 	}
 }
-
-?>

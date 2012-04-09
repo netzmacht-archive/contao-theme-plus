@@ -43,5 +43,3 @@ $GLOBALS['TL_LANG']['theme_plus']['jsMinimizer']  = array(
 	'Der YUI Compressor ist auf Ihrem System nicht verfügbar. Alternativ können Sie den <strong>Dean Edwards Packer</strong> oder <strong>jsMinimizer</strong> benutzen um JS Dateien zu minimieren. <strong>Nach der Installation muss in den Systemeinstellungen die JS Komprimierung auf <u>Dean Edwards Packer</u>/<u>jsMinimizer</u> gestellt werden!</strong>',
 	'Dean Edwards Packer installieren',
 	'jsMinimizer installieren');
-
-?>

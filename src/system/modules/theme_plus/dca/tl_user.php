@@ -36,5 +36,3 @@
  * Table tl_user
  */
 $GLOBALS['TL_DCA']['tl_user']['fields']['themes']['options'][] = 'theme_plus';
-
-?>

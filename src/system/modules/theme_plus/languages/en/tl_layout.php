@@ -40,5 +40,3 @@ $GLOBALS['TL_LANG']['tl_layout']['theme_plus_exclude_frameworkcss'] = array('Do 
 $GLOBALS['TL_LANG']['tl_layout']['theme_plus_stylesheets']          = array('Additional stylesheets', 'Choose additional stylesheets to add to this layout.');
 $GLOBALS['TL_LANG']['tl_layout']['theme_plus_javascripts']          = array('Additional javascripts', 'Choose additional javascripts to add to this layout.');
 $GLOBALS['TL_LANG']['tl_layout']['theme_plus_exclude_files']        = array('Filter stylesheets und javasScripts', 'Stylesheets und javasScripts e.g. from plugins can be deactivated with this feature. Enter each file path to a single textfield. On global level you can also do this thrue the array <code>$GLOBALS[\'TL_THEME_EXCLUDE\']</code>, e.g. <code>$GLOBALS[\'TL_THEME_EXCLUDE\'][] = \'system/contao.css\';</code>.', '');
-
-?>

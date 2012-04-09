@@ -77,5 +77,3 @@ class tl_module_theme_plus extends Backend
 		return $arrJavaScriptFiles;
 	}
 }
-
-?>

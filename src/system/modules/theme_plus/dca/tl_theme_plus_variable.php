@@ -314,5 +314,3 @@ class tl_theme_plus_variable extends Backend
 
 	}
 }
-
-?>

@@ -787,5 +787,3 @@ class ThemePlusPageRegular extends PageRegular
 		return $strUrl;
 	}
 }
-
-?>

@@ -299,5 +299,3 @@ class LocalLessCssFile extends LocalCssFile
 		return $this->isClientSideCompile() || strlen($this->strCc) ? false : true;
 	}
 }
-
-?>

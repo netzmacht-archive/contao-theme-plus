@@ -596,5 +596,3 @@ class tl_theme_plus_file extends Backend
 		return ($this->User->isAdmin || count(preg_grep('/^tl_theme_plus_file::/', $this->User->alexf)) > 0) ? '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars($title) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ' : '';
 	}
 }
-
-?>

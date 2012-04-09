@@ -43,5 +43,3 @@ $GLOBALS['TL_LANG']['MOD']['theme_plus'] = array('Theme+', 'Theme Extension for 
  */
 $GLOBALS['TL_LANG']['FMD']['includes']      = 'Include elements';
 $GLOBALS['TL_LANG']['FMD']['script_source'] = array('JavaScript', 'Add a JavaScript into the page.');
-
-?>

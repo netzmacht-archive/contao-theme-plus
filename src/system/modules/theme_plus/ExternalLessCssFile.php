@@ -77,5 +77,3 @@ class ExternalLessCssFile extends ExternalCssFile
 	}
 
 }
-
-?>

@@ -42,5 +42,3 @@ $GLOBALS['TL_LANG']['tl_content']['script_source'] = array('JavaScript', 'Wähle
  * Legends
  */
 $GLOBALS['TL_LANG']['tl_content']['script_source_legend'] = 'JavaScript Quelle';
-
-?>

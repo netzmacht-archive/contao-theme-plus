@@ -126,5 +126,3 @@ class ExternalJavaScriptFile extends ExternalThemePlusFile implements JavaScript
 		return $this->getUrl() . '|' . $this->getCc() . '|' . $this->getPosition();
 	}
 }
-
-?>

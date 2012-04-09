@@ -1073,5 +1073,3 @@ class VariableReplacer extends System
 		return $m[0];
 	}
 }
-
-?>

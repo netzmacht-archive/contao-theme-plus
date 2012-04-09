@@ -234,5 +234,3 @@ class LocalJavaScriptFile extends LocalThemePlusFile implements JavaScriptFile
 		return $this->getOriginFile() . '|' . $this->getCc() . '|' . $this->getPosition();
 	}
 }
-
-?>

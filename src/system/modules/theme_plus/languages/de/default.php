@@ -36,5 +36,3 @@
  * Content elements
  */
 $GLOBALS['TL_LANG']['CTE']['script_source'] = array('JavaScript', 'Fügt ein JavaScript in die Seite ein.');
-
-?>

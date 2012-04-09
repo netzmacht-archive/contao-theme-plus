@@ -113,5 +113,3 @@ class ExternalCssFile extends ExternalThemePlusFile implements CssFile
 	}
 
 }
-
-?>

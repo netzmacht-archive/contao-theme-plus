@@ -112,5 +112,3 @@ class ScriptSource extends Frontend
 		return implode("\n", $this->ThemePlus->includeFiles(deserialize($this->script_source, true))) . "\n";
 	}
 }
-
-?>

@@ -527,5 +527,3 @@ class ThemePlusRunonce extends Frontend
  */
 $objThemePlusRunonce = new ThemePlusRunonce();
 $objThemePlusRunonce->run();
-
-?>

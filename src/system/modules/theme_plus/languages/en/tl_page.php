@@ -41,5 +41,3 @@ $GLOBALS['TL_LANG']['tl_page']['theme_plus_javascripts']             = array('Ad
 $GLOBALS['TL_LANG']['tl_page']['theme_plus_include_files_noinherit'] = array('Add additional files to this page', 'Activate this option to add additional files to this page');
 $GLOBALS['TL_LANG']['tl_page']['theme_plus_stylesheets_noinherit']   = array('Additional stylesheets for this page', 'Choose additional stylesheets for this page.');
 $GLOBALS['TL_LANG']['tl_page']['theme_plus_javascripts_noinherit']   = array('Additional javascripts for this page', 'Choose additional javascripts for this page.');
-
-?>
