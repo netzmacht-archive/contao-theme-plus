@@ -559,7 +559,7 @@ class tl_theme_plus_file extends Backend
 		}
 
 		if (strlen($row['filter'])) {
-			$label .= ' <span style="padding-left: 3px; color: #B3B3B3;">' . (($row['filterInvert']) ? '!' : '') . '[' . implode(',', deserialize($row['filterRule'])) . ']</span>';
+			$label .= ' <span style="padding-left: 3px; color: #B3B3B3;">' . (($row['filterInvert']) ? '!' : '') . '[' . implode(',', deserialize($row['filterRule'], true)) . ']</span>';
 		}
 
 		switch ($row['type']) {

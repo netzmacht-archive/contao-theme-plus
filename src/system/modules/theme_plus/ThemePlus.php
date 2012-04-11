@@ -724,7 +724,7 @@ class ThemePlus extends Frontend
 	{
 		if ($objFile->filter) {
 			$ua      = $this->Environment->agent;
-			$arrRule = deserialize($objFile->filterRule);
+			$arrRule = deserialize($objFile->filterRule, true);
 			foreach ($arrRule as $strRule)
 			{
 				if (preg_match('#^os-(.*)$#', $strRule, $m)) {
