@@ -15,6 +15,7 @@ CREATE TABLE `tl_theme_plus_file` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `pid` int(10) unsigned NOT NULL default '0',
   `tstamp` int(10) unsigned NOT NULL default '0',
+  `sorting` int(10) unsigned NOT NULL default '0',
   `type` varchar(32) NOT NULL default '',
   `code_snippet_title` varchar(255) NOT NULL default '',
   `js_file` blob NULL,

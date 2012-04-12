@@ -41,7 +41,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 	// Config
 	'config'          => array
 	(
-		'dataContainer'    => 'Table',
+		'dataContainer'    => 'ThemePlusFiles',
 		'ptable'           => 'tl_theme',
 		'enableVersioning' => true,
 		'onload_callback'  => array(
@@ -56,7 +56,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 		(
 			'mode'                  => 4,
 			'flag'                  => 11,
-			'fields'                => array('type', 'js_file', 'js_url', 'css_file', 'css_url'),
+			'fields'                => array('sorting'),
 			'panelLayout'           => 'filter;limit',
 			'headerFields'          => array('name', 'author', 'tstamp'),
 			'child_record_callback' => array('tl_theme_plus_file', 'listFile'),
@@ -224,10 +224,9 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 		'type'                                  => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['type'],
-			'default'   => ($this->Input->get('type') ? $this->Input->get('type') : $_SESSION['theme_plus_last_file_type']),
 			'inputType' => 'select',
 			'filter'    => true,
-			'options'   => array('js_file', 'js_url', 'js_code', 'css_file', 'css_url', 'css_code'),
+			'options'   => array(),
 			'reference' => &$GLOBALS['TL_LANG']['tl_theme_plus_file'],
 			'eval'      => array('submitOnChange'=> true,
 			                     'tl_class'      => 'w50')
@@ -448,10 +447,33 @@ class tl_theme_plus_file extends Backend
 
 	public function rememberFileType($dc)
 	{
-		$objFile                               = $this->Database
-			->prepare("SELECT * FROM tl_theme_plus_file WHERE id=?")
-			->execute($dc->id);
-		$_SESSION['theme_plus_last_file_type'] = $objFile->type;
+		if ($this->Input->get('act') == 'edit') {
+			$objFile = $this->Database
+				->prepare("SELECT * FROM tl_theme_plus_file WHERE id=?")
+				->execute($dc->id);
+
+			if ($objFile->type) {
+				$this->Session->set('THEME_PLUS_FILE_TYPE', preg_replace('#^(css|js)_.*$#', '$1', $objFile->type));
+			}
+			else if ($this->Session->get('THEME_PLUS_FILE_TYPE')) {
+				$this->Database
+					->prepare('UPDATE tl_theme_plus_file SET type=? WHERE id=?')
+					->execute($this->Session->get('THEME_PLUS_FILE_TYPE') . '_file', $dc->id);
+			}
+			else {
+				$this->redirect('contao/main.php?do=themes&table=tl_theme_plus_file&id=' . $objFile->pid);
+			}
+
+			switch ($this->Session->get('THEME_PLUS_FILE_TYPE')) {
+				case 'css':
+					$GLOBALS['TL_DCA']['tl_theme_plus_file']['fields']['type']['options'] = array('css_file', 'css_url', 'css_code');
+					break;
+
+				case 'js':
+					$GLOBALS['TL_DCA']['tl_theme_plus_file']['fields']['type']['options'] = array('js_file', 'js_url', 'js_code');
+					break;
+			}
+		}
 	}
 
 	public function detectTheme()

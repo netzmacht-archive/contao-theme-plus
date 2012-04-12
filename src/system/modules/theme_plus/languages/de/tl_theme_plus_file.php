@@ -57,6 +57,8 @@ $GLOBALS['TL_LANG']['tl_theme_plus_file']['force_editor_integration'] = array('W
 /**
  * References
  */
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['type_css']               = 'CSS';
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['type_js']                = 'JavaScript';
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['source_legend']          = 'Dateityp';
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['file_legend']            = 'Dateiquelle';
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['filter_legend']          = 'Filter-Einstellungen';
@@ -77,15 +79,20 @@ $GLOBALS['TL_LANG']['tl_theme_plus_file']['aggregations']['never']  = 'Niemals';
 /**
  * Buttons
  */
-$GLOBALS['TL_LANG']['tl_theme_plus_file']['new']        = array('Neue Datei', 'Eine neue Datei anlegen');
-$GLOBALS['TL_LANG']['tl_theme_plus_file']['newJsUrl']   = array('URL', 'Eine neue JavaScript URL anlegen');
-$GLOBALS['TL_LANG']['tl_theme_plus_file']['newJsFile']  = array('Datei', 'Eine neue JavaScript Datei anlegen');
-$GLOBALS['TL_LANG']['tl_theme_plus_file']['newJsCode']  = array('Code', 'Eine neue JavaScript Code-Snippet anlegen');
-$GLOBALS['TL_LANG']['tl_theme_plus_file']['newCssUrl']  = array('URL', 'Eine neue CSS URL anlegen');
-$GLOBALS['TL_LANG']['tl_theme_plus_file']['newCssFile'] = array('Datei', 'Eine neue CSS Datei anlegen');
-$GLOBALS['TL_LANG']['tl_theme_plus_file']['newCssCode'] = array('Code', 'Eine neue CSS Code-Snippet anlegen');
-$GLOBALS['TL_LANG']['tl_theme_plus_file']['show']       = array('Details', 'Details der Datei ID %s anzeigen');
-$GLOBALS['TL_LANG']['tl_theme_plus_file']['edit']       = array('Datei bearbeiten', 'Datei ID %s bearbeiten');
-$GLOBALS['TL_LANG']['tl_theme_plus_file']['delete']     = array('Datei löschen', 'Datei ID %s löschen');
-$GLOBALS['TL_LANG']['tl_theme_plus_file']['cut']        = array('Datei verschieben', 'Datei ID %s verschieben');
-$GLOBALS['TL_LANG']['tl_theme_plus_file']['copy']       = array('Datei duplizieren', 'Datei ID %s duplizieren');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['new']         = array('Neue Datei', 'Eine neue Datei anlegen');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['new_css']     = array('Neues CSS', 'Eine neue CSS Datei anlegen');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['new_js']      = array('Neues JavaScript', 'Eine neue JavaScript Datei anlegen');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['newJsUrl']    = array('URL', 'Eine neue JavaScript URL anlegen');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['newJsFile']   = array('Datei', 'Eine neue JavaScript Datei anlegen');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['newJsCode']   = array('Code', 'Eine neue JavaScript Code-Snippet anlegen');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['newCssUrl']   = array('URL', 'Eine neue CSS URL anlegen');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['newCssFile']  = array('Datei', 'Eine neue CSS Datei anlegen');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['newCssCode']  = array('Code', 'Eine neue CSS Code-Snippet anlegen');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['show']        = array('Details', 'Details der Datei ID %s anzeigen');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['edit']        = array('Datei bearbeiten', 'Datei ID %s bearbeiten');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['delete']      = array('Datei löschen', 'Datei ID %s löschen');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['cut']         = array('Datei verschieben', 'Datei ID %s verschieben');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['copy']        = array('Datei duplizieren', 'Datei ID %s duplizieren');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['pastetop']    = array('Am Anfang einfügen', 'Am Anfang einfügen');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['pasteafter']  = array('Einfügen nach', 'Nach Datei ID %s einfügen');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['pastebottom'] = array('Am Ende einfügen', 'Am Ende einfügen');
