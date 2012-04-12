@@ -33,28 +33,6 @@
 
 
 /**
- * RC Hack!
- */
-if (VERSION == 2.10 && BUILD == 'RC1' && file_exists(TL_ROOT . '/system/modules/theme_plus/config/runonce.php')) {
-	class ThemePlusHack extends System
-	{
-		public function __construct()
-		{
-		}
-
-		public function run()
-		{
-			$this->import('Database');
-			$this->Database->execute("INSERT INTO tl_runonce (name) VALUES ('system/modules/theme_plus/config/runonce.php')");
-		}
-	}
-
-	$objThemePlusHack = new ThemePlusHack();
-	$objThemePlusHack->run();
-}
-
-
-/**
  * Back end modules
  */
 $GLOBALS['BE_MOD']['design']['themes']['tables'][] = 'tl_theme_plus_file';
