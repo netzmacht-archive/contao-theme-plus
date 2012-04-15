@@ -151,7 +151,6 @@ class tl_page_theme_plus extends tl_layout_theme_plus
 		return $this->inheritFiles('stylesheets');
 	}
 
-
 	public function inheritJavaScripts()
 	{
 		return $this->inheritFiles('javascripts');
