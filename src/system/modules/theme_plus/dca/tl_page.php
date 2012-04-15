@@ -66,7 +66,7 @@ $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_stylesheets']             = 
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_page']['theme_plus_stylesheets'],
 	'exclude'                 => true,
-	'inputType'               => 'fancyCheckboxWizard',
+	'inputType'               => 'checkbox',
 	'options_callback'        => array('tl_page_theme_plus', 'getStylesheets'),
 	'eval'                    => array('checked_options_callback' => array('tl_page_theme_plus', 'getStylesheetsCheckedState'),
 	                                   'disabled_options_callback'=> array('tl_page_theme_plus', 'getStylesheetsDisabledState'),
@@ -78,7 +78,7 @@ $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_javascripts']             = 
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_page']['theme_plus_javascripts'],
 	'exclude'                 => true,
-	'inputType'               => 'fancyCheckboxWizard',
+	'inputType'               => 'checkbox',
 	'options_callback'        => array('tl_page_theme_plus', 'getJavaScripts'),
 	'eval'                    => array('checked_options_callback' => array('tl_page_theme_plus', 'getJavaScriptsCheckedState'),
 	                                   'disabled_options_callback'=> array('tl_page_theme_plus', 'getJavaScriptsDisabledState'),
@@ -98,7 +98,7 @@ $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_stylesheets_noinherit']   = 
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_page']['theme_plus_stylesheets_noinherit'],
 	'exclude'                 => true,
-	'inputType'               => 'fancyCheckboxWizard',
+	'inputType'               => 'checkbox',
 	'options_callback'        => array('tl_page_theme_plus', 'getStylesheets'),
 	'eval'                    => array('checked_options_callback' => array('tl_page_theme_plus', 'getStylesheetsCheckedState'),
 	                                   'disabled_options_callback'=> array('tl_page_theme_plus', 'getStylesheetsDisabledState'),
@@ -110,7 +110,7 @@ $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_javascripts_noinherit']   = 
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_page']['theme_plus_javascripts_noinherit'],
 	'exclude'                 => true,
-	'inputType'               => 'fancyCheckboxWizard',
+	'inputType'               => 'checkbox',
 	'options_callback'        => array('tl_page_theme_plus', 'getJavaScripts'),
 	'eval'                    => array('checked_options_callback' => array('tl_page_theme_plus', 'getJavaScriptsCheckedState'),
 	                                   'disabled_options_callback'=> array('tl_page_theme_plus', 'getJavaScriptsDisabledState'),

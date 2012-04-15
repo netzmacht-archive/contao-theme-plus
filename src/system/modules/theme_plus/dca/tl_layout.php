@@ -81,7 +81,7 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_stylesheets'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['theme_plus_stylesheets'],
 	'exclude'                 => true,
-	'inputType'               => 'fancyCheckboxWizard',
+	'inputType'               => 'checkbox',
 	'options_callback'        => array('tl_layout_theme_plus', 'getStylesheets'),
 	'eval'                    => array('multiple'=> true,
 	                                   'tl_class'=> 'clr')
@@ -115,7 +115,7 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_javascripts'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['theme_plus_javascripts'],
 	'exclude'                 => true,
-	'inputType'               => 'fancyCheckboxWizard',
+	'inputType'               => 'checkbox',
 	'options_callback'        => array('tl_layout_theme_plus', 'getJavaScripts'),
 	'eval'                    => array('multiple'=> true,
 	                                   'tl_class'=> 'clr')
