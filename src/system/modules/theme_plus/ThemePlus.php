@@ -794,7 +794,7 @@ class ThemePlus extends Frontend
 			// filter entries by position
 			if ($strPosition && count($arrTemp)) {
 				$objFile = $this->Database
-					->prepare("SELECT * FROM tl_theme_plus_file WHERE id IN " . implode(',', $arrTemp) . " AND position=? ORDER BY id=" . implode(',id=', $arrTemp))
+					->prepare("SELECT * FROM tl_theme_plus_file WHERE id IN " . implode(',', $arrTemp) . " AND position=? ORDER BY sorting")
 					->execute($strPosition);
 				$arrTemp = $objFile->fetchEach('id');
 			}

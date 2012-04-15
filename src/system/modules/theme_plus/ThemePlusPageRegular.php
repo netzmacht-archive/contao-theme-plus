@@ -267,19 +267,23 @@ class ThemePlusPageRegular extends PageRegular
 
 		// + from layout
 		$arrLayoutStylesheetIds = deserialize($objLayout->theme_plus_stylesheets, true);
-		$arrTemp                = $this->ThemePlus->getCssFiles($arrLayoutStylesheetIds, false);
-		foreach ($arrTemp as $k=> $v)
-		{
-			if ($v instanceof LocalThemePlusFile) {
-				$objTheme = $v->getTheme();
-				$v->setAggregationScope('theme:' . ($objTheme ? $objTheme->id : $objLayout->pid));
+		if (count($arrLayoutStylesheetIds)) {
+			$objFile = $this->Database
+				->query('SELECT * FROM tl_theme_plus_file WHERE id IN (' . implode(',', $arrLayoutStylesheetIds) . ') ORDER BY sorting');
+			$arrTemp = $this->ThemePlus->getCssFiles($objFile->fetchEach('id'), false);
+			foreach ($arrTemp as $k=> $v)
+			{
+				if ($v instanceof LocalThemePlusFile) {
+					$objTheme = $v->getTheme();
+					$v->setAggregationScope('theme:' . ($objTheme ? $objTheme->id : $objLayout->pid));
+				}
 			}
+			$arrStylesheets = array_merge
+			(
+				$arrStylesheets,
+				array_values($arrTemp)
+			);
 		}
-		$arrStylesheets = array_merge
-		(
-			$arrStylesheets,
-			array_values($arrTemp)
-		);
 
 		// + from this page
 		$arrPagesStylesheetIds = $this->ThemePlus->inheritFiles($objPage, 'stylesheets');
@@ -687,19 +691,23 @@ class ThemePlusPageRegular extends PageRegular
 
 		// + from layout
 		$arrLayoutJavaScriptIds = deserialize($objLayout->theme_plus_javascripts, true);
-		$arrTemp                = $this->ThemePlus->getJavaScriptFiles($arrLayoutJavaScriptIds, $strPosition, false);
-		foreach ($arrTemp as $k=> $v)
-		{
-			if ($v instanceof LocalThemePlusFile) {
-				$objTheme = $v->getTheme();
-				$v->setAggregationScope('theme:' . ($objTheme ? $objTheme->id : $objLayout->pid));
+		if (count($arrLayoutJavaScriptIds)) {
+			$objFile = $this->Database
+				->query('SELECT * FROM tl_theme_plus_file WHERE id IN (' . implode(',', $arrLayoutJavaScriptIds) . ') ORDER BY sorting');
+			$arrTemp = $this->ThemePlus->getJavaScriptFiles($objFile->fetchEach('id'), $strPosition, false);
+			foreach ($arrTemp as $k=> $v)
+			{
+				if ($v instanceof LocalThemePlusFile) {
+					$objTheme = $v->getTheme();
+					$v->setAggregationScope('theme:' . ($objTheme ? $objTheme->id : $objLayout->pid));
+				}
 			}
+			$arrJavaScripts = array_merge
+			(
+				$arrJavaScripts,
+				array_values($arrTemp)
+			);
 		}
-		$arrJavaScripts = array_merge
-		(
-			$arrJavaScripts,
-			array_values($arrTemp)
-		);
 
 		// + from this page
 		$arrPagesJavaScriptIds = $this->ThemePlus->inheritFiles($objPage, 'javascripts');

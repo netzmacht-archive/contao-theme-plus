@@ -205,15 +205,7 @@ class tl_layout_theme_plus extends Backend
 						   FROM tl_theme_plus_file
 						   WHERE pid=?
 						   AND (type='{$strTypePrefix}_file' OR type='{$strTypePrefix}_url' OR type='{$strTypePrefix}_code')
-						   ORDER BY
-						       IF(type='{$strTypePrefix}_file',
-						           {$strTypePrefix}_file,
-						       IF(type='{$strTypePrefix}_url',
-						           {$strTypePrefix}_url,
-						       IF(type='{$strTypePrefix}_code',
-						           code_snippet_title,
-						           id
-						       )))")
+						   ORDER BY sorting")
 				->execute($objTheme->id);
 			while ($objFile->next())
 			{
