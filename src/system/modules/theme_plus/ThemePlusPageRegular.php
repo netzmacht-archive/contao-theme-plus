@@ -206,7 +206,7 @@ class ThemePlusPageRegular extends PageRegular
 				}
 
 				// use as local path
-				else if (!preg_match('#^\w://#', $stylesheet)) {
+				else if (!preg_match('#^\w+://#', $stylesheet)) {
 					$objFile = LocalThemePlusFile::create($stylesheet);
 				}
 
@@ -659,14 +659,14 @@ class ThemePlusPageRegular extends PageRegular
 				}
 
 				// use as local path
-				else if (!preg_match('#^\w://#', $javascript)) {
+				else if (!preg_match('#^\w+://#', $javascript)) {
 					$objFile = LocalThemePlusFile::create($javascript);
 				}
 
 				// use as external url
 				else
 				{
-					$objFile = ExternalThemePlusFile::create($javascript);
+					$objFile = new ExternalJavaScriptFile($javascript);
 				}
 
 				if ($objFile && !$objFile->getPosition()) {
