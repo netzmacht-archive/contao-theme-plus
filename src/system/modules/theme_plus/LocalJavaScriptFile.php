@@ -38,6 +38,18 @@
 class LocalJavaScriptFile extends LocalThemePlusFile implements JavaScriptFile
 {
 	/**
+	 * jQuery framework context
+	 */
+	const JQUERY = 'jquery';
+
+
+	/**
+	 * MooTools framework context
+	 */
+	const MOOTOOLS = 'mootools';
+
+
+	/**
 	 * The include position
 	 *
 	 * @var string
@@ -51,6 +63,14 @@ class LocalJavaScriptFile extends LocalThemePlusFile implements JavaScriptFile
 	 * @var string
 	 */
 	protected $strProcessedFile;
+
+
+	/**
+	 * The execution framework context.
+	 *
+	 * @var string
+	 */
+	protected $strFrameworkContext = null;
 
 
 	/**
@@ -97,6 +117,25 @@ class LocalJavaScriptFile extends LocalThemePlusFile implements JavaScriptFile
 
 
 	/**
+	 * Set the
+	 * @param string $strFrameworkContext
+	 */
+	public function setFrameworkContext($strFrameworkContext)
+	{
+		$this->strFrameworkContext = $strFrameworkContext;
+	}
+
+
+	/**
+	 * @return string
+	 */
+	public function getFrameworkContext()
+	{
+		return $this->strFrameworkContext;
+	}
+
+
+	/**
 	 * @see ThemePlusFile::getDebugComment
 	 * @return string
 	 */
@@ -107,6 +146,26 @@ class LocalJavaScriptFile extends LocalThemePlusFile implements JavaScriptFile
 			return '<!-- local file: ' . $this->getOriginFile() . ', position: ' . $this->getPosition() . ', aggregation: ' . $this->getAggregation() . ', scope: ' . $this->getAggregationScope() . ' -->' . "\n";
 		}
 		return '';
+	}
+
+
+	/**
+	 * Wrap into specific framework context.
+	 */
+	protected function wrapFrameworkContext($strContent)
+	{
+		switch ($this->strFrameworkContext)
+		{
+			case self::JQUERY:
+				$strContent = sprintf('(function($){ %s })(jQuery);', $strContent);
+				break;
+
+			case self::MOOTOOLS:
+				$strContent = sprintf('(function($, $$){ %s })(document.id, document.search);', $strContent);
+				break;
+		}
+
+		return $strContent;
 	}
 
 
@@ -128,6 +187,7 @@ class LocalJavaScriptFile extends LocalThemePlusFile implements JavaScriptFile
 			$strTemp = $objFile->basename
 				. '-' . $objFile->mtime
 				. '-' . $strJsMinimizer
+				. '-' . ($this->strFrameworkContext ? $this->strFrameworkContext : 'global')
 				. '-' . $this->ThemePlus->getVariablesHashByTheme($this->objTheme);
 			$strTemp = sprintf('system/scripts/%s-%s.js', $objFile->filename, substr(md5($strTemp), 0, 8));
 
@@ -154,6 +214,9 @@ class LocalJavaScriptFile extends LocalThemePlusFile implements JavaScriptFile
 
 				// replace insert tags
 				$strContent = $this->replaceInsertTags($strContent);
+
+				// wrap context
+				$strContent = $this->wrapFrameworkContext($strContent);
 
 				// minify
 				if (!$this->Minimizer->minimizeToFile($strTemp, $strContent)) {

@@ -42,6 +42,7 @@ $GLOBALS['TL_LANG']['tl_theme_plus_file']['css_file']                 = array('C
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['css_url']                  = array('CSS url', 'Please enter the css url.');
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['media']                    = array('Mediatype', 'Here you can add a mediatype query.');
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['cc']                       = array('Conditional Comment', 'Here you can add a conditional comment. Only the condition is required, for example "lte IE 7" or "IE 9". The prefix "&lt;!--[if" and suffix "]&gt;" automatically added.');
+$GLOBALS['TL_LANG']['tl_theme_plus_file']['frameworkContext']         = array('Framework', 'Choose the framework this script should run with.');
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['filter']                   = array('Apply filter', 'Here you can activate the server site filter logik. (Warning: This feature does not work with the page cache! A modification to make this possible is already requested.)');
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['filterRule']               = array('Filter', 'Please choose the server side filters.');
 $GLOBALS['TL_LANG']['tl_theme_plus_file']['filterInvert']             = array('Invert filter', 'Invert the filter logik.');

@@ -169,7 +169,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 		(
 			'source' => array('type'),
 			'file'   => array('js_file'),
-			'filter' => array(':hide', 'cc', 'filter'),
+			'filter' => array(':hide', 'cc', 'frameworkContext', 'filter'),
 			'expert' => array(':hide', 'aggregation', 'position')
 		),
 		'js_url'   => array
@@ -183,7 +183,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 		(
 			'source' => array('type', 'code_snippet_title'),
 			'file'   => array('js_code'),
-			'filter' => array(':hide', 'cc', 'filter'),
+			'filter' => array(':hide', 'cc', 'frameworkContext', 'filter'),
 			'expert' => array(':hide', 'aggregation', 'position')
 		),
 		'css_file' => array
@@ -327,6 +327,15 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 			'exclude'   => true,
 			'inputType' => 'text',
 			'eval'      => array('tl_class'=> 'long')
+		),
+		'frameworkContext'                      => array
+		(
+			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['frameworkContext'],
+			'exclude'   => true,
+			'inputType' => 'select',
+			'options'   => array('jquery', 'mootools'),
+			'reference' => array('jQuery', 'MooTools'),
+			'eval'      => array('includeBlankOption' => true)
 		),
 		'filter'                                => array
 		(

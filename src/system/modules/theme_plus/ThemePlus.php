@@ -673,6 +673,7 @@ class ThemePlus extends Frontend
 						$arrJavaScripts[$objFile->id] = new LocalJavaScriptFile($strValue);
 						$arrJavaScripts[$objFile->id]->setTheme($objTheme);
 						$arrJavaScripts[$objFile->id]->setAggregation($objFile->aggregation);
+						$arrJavaScripts[$objFile->id]->setFrameworkContext($objFile->frameworkContext);
 						break;
 
 					case 'js_code':
@@ -681,6 +682,7 @@ class ThemePlus extends Frontend
 						$arrJavaScripts[$objFile->id] = new JavaScriptCode($strValue, $objFile->code_snippet_title);
 						$arrJavaScripts[$objFile->id]->setTheme($objTheme);
 						$arrJavaScripts[$objFile->id]->setAggregation($objFile->aggregation);
+						$arrJavaScripts[$objFile->id]->setFrameworkContext($objFile->frameworkContext);
 						break;
 
 					default:

@@ -28,6 +28,7 @@ CREATE TABLE `tl_theme_plus_file` (
   `position` char(4) NOT NULL default 'head',
   `media` blob NULL,
   `cc` blob NULL,
+  `frameworkContext` varchar(32) NOT NULL default '',
   `filter` char(1) NOT NULL default '',
   `filterRule` blob NULL,
   `filterInvert` char(1) NOT NULL default '',
