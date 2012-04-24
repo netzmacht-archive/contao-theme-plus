@@ -161,8 +161,17 @@ class ThemePlusPageRegular extends PageRegular
 			}
 		}
 
-		// stylesheets ---------------------------------------------------------
+		$strTagEnding = ($objPage->outputFormat == 'xhtml') ? ' />' : '>';
 		$strStyleSheets = '';
+
+		// Google web fonts ----------------------------------------------------
+		if ($objLayout->webfonts != '')
+		{
+			$protocol = $this->Environment->ssl ? 'https://' : 'http://';
+			$strStyleSheets .= '<link' . (($objPage->outputFormat == 'xhtml') ? ' type="text/css"' : '') .' rel="stylesheet" href="' . $protocol . 'fonts.googleapis.com/css?family=' . $objLayout->webfonts . '"' . $strTagEnding . "\n";
+		}
+
+		// stylesheets ---------------------------------------------------------
 		$arrStyleSheets = deserialize($objLayout->stylesheet);
 		$strTagEnding   = ($objPage->outputFormat == 'xhtml') ? ' />' : '>';
 
