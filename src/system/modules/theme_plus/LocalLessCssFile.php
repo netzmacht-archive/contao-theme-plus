@@ -269,7 +269,7 @@ class LocalLessCssFile extends LocalCssFile
 		}
 		else
 		{
-			return parent::getEmbededHtml($blnLazy);
+			return parent::getEmbeddedHtml($blnLazy);
 		}
 	}
 

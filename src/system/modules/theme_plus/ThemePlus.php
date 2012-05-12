@@ -872,14 +872,14 @@ class ThemePlus extends Frontend
 		$arrFiles = $this->getCssFiles($arrFileIds, $blnAbsolutizeUrls, $objAbsolutizePage);
 		foreach ($arrFiles as $objFile)
 		{
-			$arrResult[] = $objFile->getEmbededHtml();
+			$arrResult[] = $objFile->getEmbeddedHtml();
 		}
 
 		// add javascript files
 		$arrFiles = $this->getJavaScriptFiles($arrFileIds);
 		foreach ($arrFiles as $objFile)
 		{
-			$arrResult[] = $objFile->getEmbededHtml();
+			$arrResult[] = $objFile->getEmbeddedHtml();
 		}
 		return $arrResult;
 	}

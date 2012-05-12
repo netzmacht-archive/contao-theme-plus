@@ -147,7 +147,7 @@ abstract class ThemePlusFile extends Controller
 				return $this->getGlobalVariableCode();
 
 			case 'embed':
-				return $this->getEmbededHtml();
+				return $this->getEmbeddedHtml();
 
 			case 'include':
 				return $this->getIncludeHtml();
