@@ -223,8 +223,8 @@ class ThemePlus extends Frontend
 			foreach ($GLOBALS['TL_HOOKS']['renderVariable'] as $callback)
 			{
 				$this->import($callback[0]);
-				$varResult = $this->$callback[0]->$callback[1]($arrRow);
-				if ($varResult) {
+				$varResult = $this->$callback[0]->$callback[1]($arrRow, $strPath);
+				if ($varResult !== false) {
 					return $varResult;
 				}
 			}
