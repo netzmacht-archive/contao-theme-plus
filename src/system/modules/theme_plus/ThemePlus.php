@@ -1066,7 +1066,7 @@ class VariableReplacer extends System
 			{
 				$this->import($callback[0]);
 				$varResult = $this->$callback[0]->$callback[1]($m[1]);
-				if ($varResult) {
+				if ($varResult !== false) {
 					return $varResult;
 				}
 			}
