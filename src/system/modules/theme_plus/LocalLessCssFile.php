@@ -93,7 +93,7 @@ class LocalLessCssFile extends LocalCssFile
 				}
 
 				$objFile = new File($this->strOriginFile);
-				$strKey  = $objFile->basename
+				$strKey  = $objFile->value
 					. '-' . $this->strMedia
 					. '-' . ($this->objAbsolutizePage != null ? 'absolute' : 'relative')
 					. '-' . $objFile->mtime
@@ -154,7 +154,7 @@ class LocalLessCssFile extends LocalCssFile
 				}
 
 				$objFile = new File($this->strOriginFile);
-				$strKey  = $objFile->basename
+				$strKey  = $objFile->value
 					. '-' . $this->strMedia
 					. '-' . ($this->objAbsolutizePage != null ? 'absolute' : 'relative')
 					. '-' . $objFile->mtime

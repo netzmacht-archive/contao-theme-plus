@@ -94,7 +94,7 @@ class JavaScriptFileAggregator extends FileAggregator
 						$strFile    = $objThemePlusFile->getFile();
 						$objFile    = new File($strFile);
 						$arrFiles[] = $strFile;
-						$strKey .= sprintf(':%s-%d', basename($strFile, '.js'), $objFile->mtime);
+						$strKey .= sprintf(':%s-%d', md5($strFile), $objFile->mtime);
 						continue;
 					}
 				}

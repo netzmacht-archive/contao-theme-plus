@@ -184,7 +184,7 @@ class LocalJavaScriptFile extends LocalThemePlusFile implements JavaScriptFile
 			}
 
 			$objFile = new File($this->strOriginFile);
-			$strTemp = $objFile->basename
+			$strTemp = $objFile->value
 				. '-' . $objFile->mtime
 				. '-' . $strJsMinimizer
 				. '-' . ($this->strFrameworkContext ? $this->strFrameworkContext : 'global')

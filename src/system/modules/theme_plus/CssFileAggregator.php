@@ -105,7 +105,7 @@ class CssFileAggregator extends FileAggregator
 						$strFile    = $objThemePlusFile->getFile();
 						$objFile    = new File($strFile);
 						$arrFiles[] = $strFile;
-						$strKey .= sprintf(':%s-%d', basename($strFile, '.css'), $objFile->mtime);
+						$strKey .= sprintf(':%s-%d', md5($strFile), $objFile->mtime);
 						continue;
 					}
 				}

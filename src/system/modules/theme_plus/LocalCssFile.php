@@ -142,7 +142,7 @@ class LocalCssFile extends LocalThemePlusFile implements CssFile
 			}
 
 			$objFile = new File($this->strOriginFile);
-			$strKey  = $objFile->basename
+			$strKey  = $objFile->value
 				. '-' . $this->strMedia
 				. '-' . ($this->objAbsolutizePage != null ? 'absolute' : 'relative')
 				. '-' . $objFile->mtime
