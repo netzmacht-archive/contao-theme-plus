@@ -39,12 +39,18 @@ $GLOBALS['TL_DCA']['tl_layout']['config']['onload_callback'][] = array('tl_layou
 // extend the palette
 $GLOBALS['TL_DCA']['tl_layout']['palettes']['default'] = preg_replace(
 	array(
+		version_compare(VERSION, '2.11', '>=')
+			? '#skipFramework#'
+			: '#stylesheet#',
 		'#stylesheet#',
 		'#mootools#',
 		'#(\{expert_legend:hide\}.*);#U'
 	),
 	array(
-		(version_compare(VERSION, '2.11', '<') ? 'theme_plus_exclude_contaocss,' : '') . 'theme_plus_exclude_frameworkcss,stylesheet,theme_plus_stylesheets',
+		version_compare(VERSION, '2.11', '>=')
+			? 'skipFramework,theme_plus_exclude_frameworkcss'
+			: 'theme_plus_exclude_contaocss,theme_plus_exclude_frameworkcss,stylesheet',
+		'stylesheet,theme_plus_stylesheets',
 		'theme_plus_javascript_lazy_load,theme_plus_default_javascript_position,theme_plus_javascripts,mootools',
 		'$1,theme_plus_exclude_files;'
 	),
@@ -71,6 +77,8 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_exclude_frameworkcss'] = a
 	                                   'submitOnChange'=> true)
 );
 
+// enable line clear on skipFramework
+$GLOBALS['TL_DCA']['tl_layout']['fields']['skipFramework']['eval']['tl_class'] .= ' clr';
 
 // clear float with stylesheet field
 $GLOBALS['TL_DCA']['tl_layout']['fields']['stylesheet']['eval']['tl_class'] .= ' clr';

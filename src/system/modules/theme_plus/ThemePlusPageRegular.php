@@ -70,7 +70,7 @@ class ThemePlusPageRegular extends PageRegular
 			$GLOBALS['TL_CSS'] = array();
 		}
 
-		if (!$objLayout->theme_plus_exclude_contaocss) {
+		if (version_compare(VERSION, '2.11', '<') ? !$objLayout->theme_plus_exclude_contaocss : !$objLayout->skipFramework) {
 			array_unshift($GLOBALS['TL_CSS'], 'system/contao.css');
 		}
 
@@ -81,7 +81,7 @@ class ThemePlusPageRegular extends PageRegular
 
 		parent::createTemplate($objPage, $objLayout);
 
-		if (version_compare(VERSION, '2.11', '<') ? !$objLayout->theme_plus_exclude_frameworkcss : !$objLayout->skipFramework) {
+		if (!$objLayout->theme_plus_exclude_frameworkcss) {
 			$strFramework = false;
 
 			// HOOK: create framework code
