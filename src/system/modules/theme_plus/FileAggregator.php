@@ -38,12 +38,32 @@
 abstract class FileAggregator extends LocalThemePlusFile
 {
 	/**
+	 * The scope of this aggregator
+	 *
+	 * @var string
+	 */
+	protected $strScope;
+
+
+	/**
 	 * Create a new aggregator
 	 *
 	 * @param string $strScope
 	 */
-	public function __construct()
+	public function __construct($strScope)
 	{
+		$this->strScope = $strScope;
+	}
+
+
+	/**
+	 * Get the scope of this aggregator
+	 *
+	 * @return string
+	 */
+	public function getScope()
+	{
+		return $this->strScope;
 	}
 
 
