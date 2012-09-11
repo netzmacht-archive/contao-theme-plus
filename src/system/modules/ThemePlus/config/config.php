@@ -56,10 +56,15 @@ $GLOBALS['TL_PTY']['regular'] = 'ThemePlusPageRegular';
 /**
  * easy_themes integration
  */
-$GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus_file']     = array
+$GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus_stylesheet']     = array
 (
-	'href_fragment' => 'table=tl_theme_plus_file',
-	'icon'          => 'system/modules/ThemePlus/assets/images/icon.png'
+	'href_fragment' => 'table=tl_theme_plus_stylesheet',
+	'icon'          => 'system/modules/ThemePlus/assets/images/stylesheet.png'
+);
+$GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus_javascript']     = array
+(
+	'href_fragment' => 'table=tl_theme_plus_javascript',
+	'icon'          => 'system/modules/ThemePlus/assets/images/javascript.png'
 );
 $GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus_variable'] = array
 (
