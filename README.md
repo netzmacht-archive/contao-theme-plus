@@ -14,3 +14,8 @@ Dependencies
 ------------
 
 * Assetic https://github.com/kriswallsmith/assetic
+
+Attribution
+-----------
+
+icons copyright by Mark James, from http://www.famfamfam.com/
