@@ -11,12 +11,14 @@
  * @license    http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  */
 
+namespace InfinitySoft\ThemePlus\Hybrid;
+
 /**
  * Class ScriptSource
  *
  * Front end content element "script_source".
  */
-class ScriptSource extends Frontend
+class JavaScript extends Frontend
 {
 	/**
 	 * Current record
