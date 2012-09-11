@@ -13,9 +13,9 @@
 
 
 /**
- * Table tl_theme_plus_file
+ * Table tl_theme_plus_javascript
  */
-$GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
+$GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = array
 (
 
 	// Config
@@ -25,7 +25,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 		'ptable'           => 'tl_theme',
 		'enableVersioning' => true,
 		'onload_callback'  => array(
-			array('tl_theme_plus_file', 'rememberFileType')
+			array('tl_theme_plus_javascript', 'rememberFileType')
 		)
 	),
 
@@ -39,7 +39,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 			'fields'                => array('sorting'),
 			'panelLayout'           => 'filter;limit',
 			'headerFields'          => array('name', 'author', 'tstamp'),
-			'child_record_callback' => array('tl_theme_plus_file', 'listFile'),
+			'child_record_callback' => array('tl_theme_plus_javascript', 'listFile'),
 			'child_record_class'    => 'no_padding'
 		),
 		'global_operations' => array
@@ -47,42 +47,42 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 			/*
 			'newJsUrl'   => array
 			(
-				'label'      => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['newJsUrl'],
+				'label'      => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['newJsUrl'],
 				'href'       => 'act=create&mode=2&pid=' . $this->Input->get('id') . '&type=js_url',
 				'class'      => 'header_create_js_url',
 				'attributes' => 'onclick="Backend.getScrollOffset();"'
 			),
 			'newJsFile'  => array
 			(
-				'label'      => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['newJsFile'],
+				'label'      => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['newJsFile'],
 				'href'       => 'act=create&mode=2&pid=' . $this->Input->get('id') . '&type=js_file',
 				'class'      => 'header_create_js_file',
 				'attributes' => 'onclick="Backend.getScrollOffset();" accesskey="j"'
 			),
 			'newJsCode'  => array
 			(
-				'label'      => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['newJsCode'],
+				'label'      => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['newJsCode'],
 				'href'       => 'act=create&mode=2&pid=' . $this->Input->get('id') . '&type=js_code',
 				'class'      => 'header_create_js_code',
 				'attributes' => 'onclick="Backend.getScrollOffset();" accesskey="j"'
 			),
 			'newCssUrl'  => array
 			(
-				'label'      => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['newCssUrl'],
+				'label'      => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['newCssUrl'],
 				'href'       => 'act=create&mode=2&pid=' . $this->Input->get('id') . '&type=css_url',
 				'class'      => 'header_create_css_url',
 				'attributes' => 'onclick="Backend.getScrollOffset();"'
 			),
 			'newCssFile' => array
 			(
-				'label'      => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['newCssFile'],
+				'label'      => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['newCssFile'],
 				'href'       => 'act=create&mode=2&pid=' . $this->Input->get('id') . '&type=css_file',
 				'class'      => 'header_create_css_file',
 				'attributes' => 'onclick="Backend.getScrollOffset();" accesskey="c"'
 			),
 			'newCssCode' => array
 			(
-				'label'      => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['newCssCode'],
+				'label'      => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['newCssCode'],
 				'href'       => 'act=create&mode=2&pid=' . $this->Input->get('id') . '&type=css_code',
 				'class'      => 'header_create_css_code',
 				'attributes' => 'onclick="Backend.getScrollOffset();" accesskey="c"'
@@ -99,33 +99,33 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 		(
 			'edit'   => array
 			(
-				'label' => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['edit'],
+				'label' => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['edit'],
 				'href'  => 'act=edit',
 				'icon'  => 'edit.gif'
 			),
 			'copy'   => array
 			(
-				'label' => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['copy'],
+				'label' => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['copy'],
 				'href'  => 'act=paste&amp;mode=copy',
 				'icon'  => 'copy.gif'
 			),
 			'cut'    => array
 			(
-				'label'      => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['cut'],
+				'label'      => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['cut'],
 				'href'       => 'act=paste&amp;mode=cut',
 				'icon'       => 'cut.gif',
 				'attributes' => 'onclick="Backend.getScrollOffset();"'
 			),
 			'delete' => array
 			(
-				'label'      => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['delete'],
+				'label'      => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['delete'],
 				'href'       => 'act=delete',
 				'icon'       => 'delete.gif',
 				'attributes' => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"'
 			),
 			'show'   => array
 			(
-				'label' => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['show'],
+				'label' => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['show'],
 				'href'  => 'act=show',
 				'icon'  => 'show.gif'
 			)
@@ -203,17 +203,17 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 	(
 		'type'                                  => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['type'],
+			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['type'],
 			'inputType' => 'select',
 			'filter'    => true,
 			'options'   => array(),
-			'reference' => &$GLOBALS['TL_LANG']['tl_theme_plus_file'],
+			'reference' => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript'],
 			'eval'      => array('submitOnChange'=> true,
 			                     'tl_class'      => 'w50')
 		),
 		'code_snippet_title'                    => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['code_snippet_title'],
+			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['code_snippet_title'],
 			'inputType' => 'text',
 			'eval'      => array('mandatory'     => true,
 			                     'maxlength'     => 255,
@@ -221,7 +221,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 		),
 		'js_file'                               => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['js_file'],
+			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['js_file'],
 			'inputType' => 'fileTree',
 			'eval'      => array('mandatory' => true,
 			                     'fieldType' => 'radio',
@@ -231,7 +231,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 		),
 		'js_url'                                => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['js_url'],
+			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['js_url'],
 			'inputType' => 'text',
 			'eval'      => array('mandatory'     => true,
 			                     'decodeEntities'=> true,
@@ -239,7 +239,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 		),
 		'js_code'                               => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['js_code'],
+			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['js_code'],
 			'inputType' => 'textarea',
 			'eval'      => array('mandatory' => true,
 			                     'allowHtml' => true,
@@ -249,7 +249,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 		),
 		'css_file'                              => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['css_file'],
+			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['css_file'],
 			'inputType' => 'fileTree',
 			'eval'      => array('mandatory' => true,
 			                     'fieldType' => 'radio',
@@ -259,7 +259,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 		),
 		'css_url'                               => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['css_url'],
+			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['css_url'],
 			'inputType' => 'text',
 			'eval'      => array('mandatory'     => true,
 			                     'decodeEntities'=> true,
@@ -267,7 +267,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 		),
 		'css_code'                              => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['css_code'],
+			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['css_code'],
 			'inputType' => 'textarea',
 			'eval'      => array('mandatory' => true,
 			                     'allowHtml' => true,
@@ -277,25 +277,25 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 		),
 		'aggregation'                           => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['aggregation'],
+			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['aggregation'],
 			'default'   => 'global',
 			'exclude'   => true,
 			'inputType' => 'select',
 			'options'   => array('global', 'theme', 'pages', 'page', 'never'),
-			'reference' => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['aggregations']
+			'reference' => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['aggregations']
 		),
 		'position'                              => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['position'],
+			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['position'],
 			'default'   => 'head',
 			'exclude'   => true,
 			'inputType' => 'select',
 			'options'   => array('head', 'body'),
-			'reference' => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['positions']
+			'reference' => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['positions']
 		),
 		'media'                                 => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['media'],
+			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['media'],
 			'exclude'   => true,
 			'inputType' => 'text',
 			'eval'      => array('tl_class'      => 'long',
@@ -303,14 +303,14 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 		),
 		'cc'                                    => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['cc'],
+			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['cc'],
 			'exclude'   => true,
 			'inputType' => 'text',
 			'eval'      => array('tl_class'=> 'long')
 		),
 		'frameworkContext'                      => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['frameworkContext'],
+			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['frameworkContext'],
 			'exclude'   => true,
 			'inputType' => 'select',
 			'options'   => array('jquery', 'mootools'),
@@ -319,7 +319,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 		),
 		'filter'                                => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['filter'],
+			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['filter'],
 			'exclude'   => true,
 			'filter'    => true,
 			'inputType' => 'checkbox',
@@ -327,7 +327,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 		),
 		'filterRule'                            => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['filterRule'],
+			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['filterRule'],
 			'inputType' => 'checkbox',
 			'options'   => array
 			(
@@ -394,22 +394,22 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 		),
 		'filterInvert'                          => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['filterInvert'],
+			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['filterInvert'],
 			'exclude'   => true,
 			'inputType' => 'checkbox'
 		),
 		'editor_integration'                    => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['editor_integration'],
+			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['editor_integration'],
 			'exclude'   => true,
 			'inputType' => 'checkbox',
 			'options'   => array('default', 'newsletter', 'flash'),
-			'reference' => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['editors'],
+			'reference' => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['editors'],
 			'eval'      => array('multiple'=> true)
 		),
 		'force_editor_integration'              => array
 		(
-			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_file']['force_editor_integration'],
+			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['force_editor_integration'],
 			'exclude'   => true,
 			'inputType' => 'checkbox'
 		)
@@ -417,11 +417,11 @@ $GLOBALS['TL_DCA']['tl_theme_plus_file'] = array
 );
 
 /**
- * Class tl_theme_plus_file
+ * Class tl_theme_plus_javascript
  *
  * Provide miscellaneous methods that are used by the data configuration array.
  */
-class tl_theme_plus_file extends Backend
+class tl_theme_plus_javascript extends Backend
 {
 	private static $objTheme = false;
 
@@ -438,7 +438,7 @@ class tl_theme_plus_file extends Backend
 	{
 		if ($this->Input->get('act') == 'edit') {
 			$objFile = $this->Database
-				->prepare("SELECT * FROM tl_theme_plus_file WHERE id=?")
+				->prepare("SELECT * FROM tl_theme_plus_javascript WHERE id=?")
 				->execute($dc->id);
 
 			if ($objFile->type) {
@@ -446,20 +446,20 @@ class tl_theme_plus_file extends Backend
 			}
 			else if ($this->Session->get('THEME_PLUS_FILE_TYPE')) {
 				$this->Database
-					->prepare('UPDATE tl_theme_plus_file SET type=? WHERE id=?')
+					->prepare('UPDATE tl_theme_plus_javascript SET type=? WHERE id=?')
 					->execute($this->Session->get('THEME_PLUS_FILE_TYPE') . '_file', $dc->id);
 			}
 			else {
-				$this->redirect('contao/main.php?do=themes&table=tl_theme_plus_file&id=' . $objFile->pid);
+				$this->redirect('contao/main.php?do=themes&table=tl_theme_plus_javascript&id=' . $objFile->pid);
 			}
 
 			switch ($this->Session->get('THEME_PLUS_FILE_TYPE')) {
 				case 'css':
-					$GLOBALS['TL_DCA']['tl_theme_plus_file']['fields']['type']['options'] = array('css_file', 'css_url', 'css_code');
+					$GLOBALS['TL_DCA']['tl_theme_plus_javascript']['fields']['type']['options'] = array('css_file', 'css_url', 'css_code');
 					break;
 
 				case 'js':
-					$GLOBALS['TL_DCA']['tl_theme_plus_file']['fields']['type']['options'] = array('js_file', 'js_url', 'js_code');
+					$GLOBALS['TL_DCA']['tl_theme_plus_javascript']['fields']['type']['options'] = array('js_file', 'js_url', 'js_code');
 					break;
 			}
 		}
@@ -471,7 +471,7 @@ class tl_theme_plus_file extends Backend
 			$intPid = $this->Input->get('id');
 
 			if ($this->Input->get('act')) {
-				$objThemePlusFile = $this->Database->prepare("SELECT * FROM tl_theme_plus_file WHERE id=?")
+				$objThemePlusFile = $this->Database->prepare("SELECT * FROM tl_theme_plus_javascript WHERE id=?")
 					->execute($intPid);
 				if ($objThemePlusFile->next()) {
 					$intPid = $objThemePlusFile->pid;
@@ -537,7 +537,7 @@ class tl_theme_plus_file extends Backend
 		}
 
 		if (!$this->User->hasAccess('theme_plus', 'themes')) {
-			$this->log('Not enough permissions to access the style sheets module', 'tl_theme_plus_file checkPermission', TL_ERROR);
+			$this->log('Not enough permissions to access the style sheets module', 'tl_theme_plus_javascript checkPermission', TL_ERROR);
 			$this->redirect('contao/main.php?act=error');
 		}
 	}
@@ -610,6 +610,6 @@ class tl_theme_plus_file extends Backend
 	 */
 	public function editHeader($row, $href, $label, $title, $icon, $attributes)
 	{
-		return ($this->User->isAdmin || count(preg_grep('/^tl_theme_plus_file::/', $this->User->alexf)) > 0) ? '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars($title) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ' : '';
+		return ($this->User->isAdmin || count(preg_grep('/^tl_theme_plus_javascript::/', $this->User->alexf)) > 0) ? '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars($title) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ' : '';
 	}
 }
