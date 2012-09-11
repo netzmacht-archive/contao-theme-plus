@@ -59,12 +59,12 @@ $GLOBALS['TL_PTY']['regular'] = 'ThemePlusPageRegular';
 $GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus_file']     = array
 (
 	'href_fragment' => 'table=tl_theme_plus_file',
-	'icon'          => 'system/modules/theme_plus/html/icon.png'
+	'icon'          => 'system/modules/theme_plus/public/icon.png'
 );
 $GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus_variable'] = array
 (
 	'href_fragment' => 'table=tl_theme_plus_variable',
-	'icon'          => 'system/modules/theme_plus/html/variable.png'
+	'icon'          => 'system/modules/theme_plus/public/variable.png'
 );
 
 

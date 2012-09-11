@@ -259,11 +259,11 @@ class tl_theme_plus_variable extends Backend
 
 		switch ($row['type']) {
 			case 'text':
-				$image = 'system/modules/theme_plus/html/text.png';
+				$image = 'system/modules/theme_plus/public/text.png';
 				break;
 
 			case 'url':
-				$image = 'system/modules/theme_plus/html/url.png';
+				$image = 'system/modules/theme_plus/public/url.png';
 				break;
 
 			case 'file':
@@ -271,11 +271,11 @@ class tl_theme_plus_variable extends Backend
 				break;
 
 			case 'color':
-				$image = 'system/modules/theme_plus/html/color.png';
+				$image = 'system/modules/theme_plus/public/color.png';
 				break;
 
 			case 'size':
-				$image = 'system/modules/theme_plus/html/size.png';
+				$image = 'system/modules/theme_plus/public/size.png';
 				break;
 
 			default:
