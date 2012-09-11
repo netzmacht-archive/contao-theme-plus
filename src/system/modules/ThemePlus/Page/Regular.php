@@ -11,13 +11,14 @@
  * @license    http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  */
 
+namespace InfinitySoft\ThemePlus\Page;
 
 /**
  * Class ThemePlus
  *
  * Adding files to the page layout.
  */
-class ThemePlusPageRegular extends PageRegular
+class Regular extends \PageRegular
 {
 	/**
 	 * The ThemePlus object
