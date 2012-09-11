@@ -8,32 +8,54 @@
 -- ********************************************************
 
 -- 
--- Table `tl_theme_plus_file`
+-- Table `tl_theme_plus_stylesheet`
 -- 
 
-CREATE TABLE `tl_theme_plus_file` (
+CREATE TABLE `tl_theme_plus_stylesheet` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `pid` int(10) unsigned NOT NULL default '0',
   `tstamp` int(10) unsigned NOT NULL default '0',
   `sorting` int(10) unsigned NOT NULL default '0',
   `type` varchar(32) NOT NULL default '',
   `code_snippet_title` varchar(255) NOT NULL default '',
-  `js_file` blob NULL,
-  `js_url` blob NULL,
-  `js_code` blob NULL,
-  `css_file` blob NULL,
-  `css_url` blob NULL,
-  `css_code` blob NULL,
+  `file` blob NULL,
+  `url` blob NULL,
+  `code` blob NULL,
   `aggregation` varchar(6) NOT NULL default 'global',
-  `position` char(4) NOT NULL default 'head',
   `media` blob NULL,
   `cc` blob NULL,
-  `frameworkContext` varchar(32) NOT NULL default '',
   `filter` char(1) NOT NULL default '',
   `filterRule` blob NULL,
   `filterInvert` char(1) NOT NULL default '',
   `editor_integration` blob NULL,
   `force_editor_integration` char(1) NOT NULL default '',
+  PRIMARY KEY  (`id`),
+  KEY `pid` (`pid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table `tl_theme_plus_stylesheet`
+--
+
+CREATE TABLE `tl_theme_plus_javascript` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `pid` int(10) unsigned NOT NULL default '0',
+  `tstamp` int(10) unsigned NOT NULL default '0',
+  `sorting` int(10) unsigned NOT NULL default '0',
+  `type` varchar(32) NOT NULL default '',
+  `code_snippet_title` varchar(255) NOT NULL default '',
+  `file` blob NULL,
+  `url` blob NULL,
+  `code` blob NULL,
+  `aggregation` varchar(6) NOT NULL default 'global',
+  `position` char(4) NOT NULL default 'head',
+  `cc` blob NULL,
+  `frameworkContext` varchar(32) NOT NULL default '',
+  `filter` char(1) NOT NULL default '',
+  `filterRule` blob NULL,
+  `filterInvert` char(1) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
