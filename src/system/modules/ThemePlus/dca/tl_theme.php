@@ -25,14 +25,14 @@ $GLOBALS['TL_DCA']['tl_theme']['list']['operations'] = array_merge
 		(
 			'label'               => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_file'],
 			'href'                => 'table=tl_theme_plus_file',
-			'icon'                => 'system/modules/theme_plus/public/icon.png',
+			'icon'                => 'system/modules/theme_plus/assets/images/icon.png',
 			'button_callback'     => array('tl_theme_plus', 'editThemePlusFile')
 		),
 		'theme_plus_variable' => array
 		(
 			'label'               => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_variable'],
 			'href'                => 'table=tl_theme_plus_variable',
-			'icon'                => 'system/modules/theme_plus/public/variable.png',
+			'icon'                => 'system/modules/theme_plus/assets/images/variable.png',
 			'button_callback'     => array('tl_theme_plus', 'editThemePlusVariable')
 		)
 	),

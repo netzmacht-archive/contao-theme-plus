@@ -358,7 +358,7 @@ class Regular extends \PageRegular
 		if ($objLayout->theme_plus_javascript_lazy_load
 			&& $objLayout->theme_plus_default_javascript_position != 'body'
 		) {
-			$objFile = new LocalJavaScriptFile('system/modules/theme_plus/public/async.js');
+			$objFile = new LocalJavaScriptFile('system/modules/theme_plus/assets/js/async.js');
 			$strHeadTags .= $objFile->getEmbeddedHtml(false);
 		}
 
@@ -422,7 +422,7 @@ class Regular extends \PageRegular
 		if ($objLayout->theme_plus_javascript_lazy_load
 			&& $objLayout->theme_plus_default_javascript_position == 'body'
 		) {
-			$objFile = new LocalJavaScriptFile('system/modules/theme_plus/public/async.js');
+			$objFile = new LocalJavaScriptFile('system/modules/theme_plus/assets/js/async.js');
 			$strCode = $objFile->getEmbeddedHtml(false) . $strCode;
 		}
 
