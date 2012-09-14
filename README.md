@@ -8,11 +8,12 @@ Main Features
 
 * Add external stylesheet and javascript files from tl_files or via url.
 * Aggregate all stylesheet and javascript files, including the ones from the Contao CSS editor and the plugins.
-* Minimize stylesheet and javascript files with yui compresor (required the yui compressor and java installed on the server) or cssmin/jsmin (see extensions [cssMinimizer](http://www.contao.org/erweiterungsliste/view/cssMinimizer.de.html) and [jsMinimizer](http://www.contao.org/erweiterungsliste/view/jsMinimizer.de.html))
+* Filter stylesheets and javascripts through the assetic framework.
 
 Dependencies
 ------------
 
+* Assetic for Contao https://github.com/InfinitySoft/contao-Assetic
 * Assetic https://github.com/kriswallsmith/assetic
 
 Attribution
