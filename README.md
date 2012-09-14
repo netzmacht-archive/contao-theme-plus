@@ -18,4 +18,4 @@ Dependencies
 Attribution
 -----------
 
-icons copyright by Mark James, from http://www.famfamfam.com/
+* Icons by FamFamFam (Mark James) http://www.famfamfam.com/ (CC Attribution 3.0)

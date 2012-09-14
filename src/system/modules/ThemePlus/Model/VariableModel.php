@@ -11,14 +11,18 @@
  * @license    http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  */
 
+namespace InfinitySoft\ThemePlus\Model;
 
 /**
- * Fields
+ * Class VariableModel
  */
-$GLOBALS['TL_LANG']['tl_module']['script_source'] = array('JavaScript', 'Choose the javascript source.');
+class VariableModel extends \Model
+{
 
+	/**
+	 * Table name
+	 * @var string
+	 */
+	protected static $strTable = 'tl_theme_plus_variable';
 
-/**
- * Legends
- */
-$GLOBALS['TL_LANG']['tl_module']['script_source_legend'] = 'JavaScript source';
+}

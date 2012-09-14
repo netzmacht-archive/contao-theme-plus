@@ -15,7 +15,10 @@
 /**
  * Back end modules
  */
-$GLOBALS['BE_MOD']['design']['themes']['tables'][] = 'tl_theme_plus_file';
+$GLOBALS['BE_MOD']['design']['themes']['tables'][] = 'tl_theme_plus_stylesheet';
+// $GLOBALS['BE_MOD']['design']['themes']['tables'][] = 'tl_theme_plus_stylesheet_collection';
+$GLOBALS['BE_MOD']['design']['themes']['tables'][] = 'tl_theme_plus_javascript';
+// $GLOBALS['BE_MOD']['design']['themes']['tables'][] = 'tl_theme_plus_javascript_collection';
 $GLOBALS['BE_MOD']['design']['themes']['tables'][] = 'tl_theme_plus_variable';
 
 
@@ -32,52 +35,65 @@ $GLOBALS['TL_CTE']['includes']['script_source'] = 'InfinitySoft\ThemePlus\Hybrid
 
 
 /**
- * Settings
- */
-$GLOBALS['TL_CONFIG']['theme_plus_exclude_contaocss'] = '';
-$GLOBALS['TL_CONFIG']['theme_plus_exclude_mootools']  = '';
-$GLOBALS['TL_CONFIG']['theme_plus_lesscss_mode']      = 'phpless';
-$GLOBALS['TL_CONFIG']['css_embed_images']             = 16384;
-
-
-/**
  * HOOKs
  */
+$GLOBALS['TL_HOOKS']['replaceDynamicScriptTags'][] = array('ThemePlus\ThemePlus', 'hookReplaceDynamicScriptTags');
+//$GLOBALS['TL_HOOKS']['outputFrontendTemplate'] = array('ThemePlus\ThemePlus', 'hookOutputFrontendTemplate');
 //$GLOBALS['TL_HOOKS']['replaceInsertTags'][]     = array('ThemePlus', 'hookReplaceInsertTags');
 //$GLOBALS['TL_HOOKS']['outputBackendTemplate'][] = array('ThemePlus', 'hookOutputBackendTemplate');
 
 
 /**
- * Page types
- */
-$GLOBALS['TL_PTY']['regular'] = 'ThemePlusPageRegular';
-
-
-/**
  * easy_themes integration
  */
-$GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus_stylesheet']     = array
+$GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus_stylesheet'] = array
 (
-	'href_fragment' => 'table=tl_theme_plus_stylesheet',
-	'icon'          => 'system/modules/ThemePlus/assets/images/stylesheet.png'
+    'label'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_stylesheet'][0],
+    'title'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_stylesheet'][1],
+    'href_fragment' => 'table=tl_theme_plus_stylesheet',
+    'icon'          => 'system/modules/ThemePlus/assets/images/stylesheet.png',
+    'appendRT'      => true,
 );
-$GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus_javascript']     = array
+$GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus_javascript'] = array
 (
-	'href_fragment' => 'table=tl_theme_plus_javascript',
-	'icon'          => 'system/modules/ThemePlus/assets/images/javascript.png'
+    'label'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_javascript'][0],
+    'title'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_javascript'][1],
+    'href_fragment' => 'table=tl_theme_plus_javascript',
+    'icon'          => 'system/modules/ThemePlus/assets/images/javascript.png',
+    'appendRT'      => true,
 );
-$GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus_variable'] = array
+$GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus_variable']   = array
 (
-	'href_fragment' => 'table=tl_theme_plus_variable',
-	'icon'          => 'system/modules/ThemePlus/assets/images/variable.png'
+    'label'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_variable'][0],
+    'title'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_variable'][1],
+    'href_fragment' => 'table=tl_theme_plus_variable',
+    'icon'          => 'system/modules/ThemePlus/assets/images/variable.png',
+    'appendRT'      => true,
 );
 
 
 /**
- * Script frameworks
+ * Assetic compiler filter
  */
-$GLOBALS['TL_SCRIPT_FRAMEWORKS']['mooSource']['moo_googleapis'] = array('ThemePlus', 'addMooGoogleAPIs');
-$GLOBALS['TL_SCRIPT_FRAMEWORKS']['mooSource']['moo_local']      = array('ThemePlus', 'addMooLocal');
+$GLOBALS['ASSETIC']['compiler']['contaoInsertTag']                = 'ThemePlus\Filter\ContaoInsertTagFilter';
+$GLOBALS['ASSETIC']['compiler']['contaoReplaceVariable']          = 'ThemePlus\Filter\ContaoReplaceVariableFilter';
+$GLOBALS['ASSETIC']['compiler']['contaoReplaceThemePlusVariable'] = 'ThemePlus\Filter\ContaoReplaceThemePlusVariableFilter';
+
+
+/**
+ * Assetic css compatible filters
+ */
+$GLOBALS['ASSETIC']['css'][] = 'contaoInsertTag';
+$GLOBALS['ASSETIC']['css'][] = 'contaoReplaceVariable';
+$GLOBALS['ASSETIC']['css'][] = 'contaoReplaceThemePlusVariable';
+
+
+/**
+ * Assetic js compatible filters
+ */
+$GLOBALS['ASSETIC']['js'][] = 'contaoInsertTag';
+$GLOBALS['ASSETIC']['js'][] = 'contaoReplaceVariable';
+$GLOBALS['ASSETIC']['js'][] = 'contaoReplaceThemePlusVariable';
 
 
 /**
@@ -90,18 +106,16 @@ $GLOBALS['TL_MIME']['less'] = array('text/css', 'iconCSS.gif');
  * Helper function
  */
 if (!function_exists('array_concat')) {
-	function array_concat()
-	{
-		$args  = func_get_args();
-		$array = array_shift($args);
-		while (count($args))
-		{
-			$temp = array_shift($args);
-			foreach ($temp as $v)
-			{
-				$array[] = $v;
-			}
-		}
-		return $array;
-	}
+    function array_concat()
+    {
+        $args  = func_get_args();
+        $array = array_shift($args);
+        while (count($args)) {
+            $temp = array_shift($args);
+            foreach ($temp as $v) {
+                $array[] = $v;
+            }
+        }
+        return $array;
+    }
 }

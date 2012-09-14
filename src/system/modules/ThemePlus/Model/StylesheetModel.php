@@ -11,10 +11,16 @@
  * @license    http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  */
 
+namespace InfinitySoft\ThemePlus\Model;
 
 /**
- * Table tl_user
+ * Class StylesheetModel
  */
-$GLOBALS['TL_DCA']['tl_user']['fields']['themes']['options'][] = 'theme_plus_stylesheet';
-$GLOBALS['TL_DCA']['tl_user']['fields']['themes']['options'][] = 'theme_plus_javascript';
-$GLOBALS['TL_DCA']['tl_user']['fields']['themes']['options'][] = 'theme_plus_variable';
+class StylesheetModel extends \Model
+{
+	/**
+	 * Table name
+	 * @var string
+	 */
+	protected static $strTable = 'tl_theme_plus_stylesheet';
+}

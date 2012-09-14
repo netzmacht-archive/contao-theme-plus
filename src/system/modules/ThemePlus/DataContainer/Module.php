@@ -11,8 +11,15 @@
  * @license    http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  */
 
+namespace InfinitySoft\ThemePlus\DataContainer;
+
+use \ThemePlus\Model\StylesheetModel;
+use \ThemePlus\Model\JavaScriptModel;
 
 /**
- * Content elements
+ * Class Module
  */
-$GLOBALS['TL_LANG']['CTE']['script_source'] = array('JavaScript', 'Add a JavaScript into the page.');
+class Module
+    extends Page
+{
+}

@@ -23,7 +23,16 @@ $GLOBALS['TL_DCA']['tl_theme_plus_variable'] = array
 	(
 		'dataContainer'               => 'Table',
 		'ptable'                      => 'tl_theme',
-		'enableVersioning'            => true
+		'enableVersioning'            => true,
+        'sql'              => array
+        (
+            'keys' => array
+            (
+                'id'  => 'primary',
+                'pid' => 'index'
+            )
+        ),
+        'model' => 'ThemePlus\Model\VariableModel',
 	),
 
 	// List
@@ -173,124 +182,3 @@ $GLOBALS['TL_DCA']['tl_theme_plus_variable'] = array
 		)
 	)
 );
-
-/**
- * Class tl_theme_plus_variable
- *
- * Provide miscellaneous methods that are used by the data configuration array.
- */
-class tl_theme_plus_variable extends Backend
-{
-	private static $objTheme = false;
-
-	/**
-	 * Import the back end user object
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-
-		$GLOBALS['TL_CSS'][]        = 'plugins/mootools/rainbow.css?' . MOO_RAINBOW . '|screen';
-		$GLOBALS['TL_JAVASCRIPT'][] = 'plugins/mootools/rainbow.js?' . MOO_RAINBOW;
-
-		$this->import('BackendUser', 'User');
-	}
-
-
-	/**
-	 * Get the variable name.
-	 */
-	public function getName($varValue, $dc)
-	{
-		$varValue = standardize($varValue);
-
-		$objVariable = $this->Database
-			->prepare("SELECT * FROM tl_theme_plus_variable WHERE id!=? AND pid=? AND name=?")
-			->execute($dc->id, $dc->activeRecord->pid, $varValue);
-		if ($objVariable->next()) {
-			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['unique'], $GLOBALS['TL_LANG']['tl_theme_plus_variable']['name'][0]));
-		}
-
-		return $varValue;
-	}
-
-
-	/**
-	 * Return the color picker wizard
-	 *
-	 * @param object
-	 *
-	 * @return string
-	 */
-	public function colorPicker(DataContainer $dc)
-	{
-		return ' ' . $this->generateImage('pickcolor.gif', $GLOBALS['TL_LANG']['MSC']['colorpicker'], 'style="vertical-align:top; cursor:pointer;" id="moo_' . $dc->field . '" class="mooRainbow"');
-	}
-
-
-	/**
-	 * Check permissions to edit the table
-	 */
-	public function checkPermission()
-	{
-		if ($this->User->isAdmin) {
-			return;
-		}
-
-		if (!$this->User->hasAccess('theme_plus', 'themes')) {
-			$this->log('Not enough permissions to access the style sheets module', 'tl_theme_plus_variable checkPermission', TL_ERROR);
-			$this->redirect('contao/main.php?act=error');
-		}
-	}
-
-
-	/**
-	 * List an variable
-	 *
-	 * @param array
-	 *
-	 * @return string
-	 */
-	public function listVariables($row)
-	{
-		$this->import('ThemePlus');
-
-		$label = '<strong>' . $row['name'] . '</strong>: ' . $this->ThemePlus->renderVariable($row);
-
-		switch ($row['type']) {
-			case 'text':
-				$image = 'system/modules/ThemePlus/assets/images/text.png';
-				break;
-
-			case 'url':
-				$image = 'system/modules/ThemePlus/assets/images/url.png';
-				break;
-
-			case 'file':
-				$image = 'files.gif';
-				break;
-
-			case 'color':
-				$image = 'system/modules/ThemePlus/assets/images/color.png';
-				break;
-
-			case 'size':
-				$image = 'system/modules/ThemePlus/assets/images/size.png';
-				break;
-
-			default:
-				$image = '';
-		}
-
-		if ($image) {
-			$image = $this->generateImage(
-				$image,
-				$GLOBALS['TL_LANG']['tl_theme_plus_variable'][$row['type']][0],
-				'style="vertical-align:middle" title="' . specialchars($GLOBALS['TL_LANG']['tl_theme_plus_variable'][$row['type']][0]) . '"')
-				. ' ';
-		}
-
-		return '<div>' . $image . $label . "</div>\n";
-
-	}
-}

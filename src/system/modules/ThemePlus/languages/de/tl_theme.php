@@ -15,5 +15,9 @@
 /**
  * Buttons
  */
-$GLOBALS['TL_LANG']['tl_theme']['theme_plus_file']     = array('Dateien', 'Weitere Dateien in das Theme ID %s einbinden.');
-$GLOBALS['TL_LANG']['tl_theme']['theme_plus_variable'] = array('Variablen', 'Variablen für weitere Dateien definieren.');
+$GLOBALS['TL_LANG']['tl_theme']['theme_plus_stylesheet'] = array('Stylesheets+',
+                                                                 'Weitere Stylesheets in das Theme ID %s einbinden.');
+$GLOBALS['TL_LANG']['tl_theme']['theme_plus_javascript'] = array('JavaScripts+',
+                                                                 'Weitere JavaScripts in das Theme ID %s einbinden.');
+$GLOBALS['TL_LANG']['tl_theme']['theme_plus_variable']   = array('Variablen',
+                                                                 'Variablen für weitere Dateien definieren.');

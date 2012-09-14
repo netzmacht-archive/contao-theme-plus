@@ -11,9 +11,14 @@
  * @license    http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  */
 
+namespace InfinitySoft\ThemePlus\DataContainer;
 
 /**
- * Buttons
+ * Class Collection
  */
-$GLOBALS['TL_LANG']['tl_theme']['theme_plus_file']     = array('Files', 'Add additional sources to this theme.');
-$GLOBALS['TL_LANG']['tl_theme']['theme_plus_variable'] = array('Variables', 'Define variables for this theme.');
+class StylesheetCollection extends Collection
+{
+    public function getFiles()
+    {
+    }
+}

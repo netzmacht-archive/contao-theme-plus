@@ -11,14 +11,15 @@
  * @license    http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  */
 
+namespace InfinitySoft\ThemePlus\DataContainer;
+
+use \ThemePlus\Model\StylesheetModel;
+use \ThemePlus\Model\JavaScriptModel;
 
 /**
- * Fields
+ * Class Content
  */
-$GLOBALS['TL_LANG']['tl_content']['script_source'] = array('JavaScript', 'Choose the javascript source.');
-
-
-/**
- * Legends
- */
-$GLOBALS['TL_LANG']['tl_content']['script_source_legend'] = 'JavaScript source';
+class Content
+    extends Page
+{
+}
