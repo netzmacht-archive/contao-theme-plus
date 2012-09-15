@@ -80,8 +80,9 @@ class File
 
     protected function buildAsseticFilterOptions($type)
     {
-        $options = array();
+        $this->loadLanguageFile('assetic');
 
+        $options = array();
 
         $filterChain = FilterChainModel::findBy('type',
                                                 $type,

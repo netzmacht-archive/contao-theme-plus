@@ -141,8 +141,16 @@ class ThemePlus
      */
     public static function getAssetPath(AssetInterface $asset, $suffix)
     {
+        $filters = array();
+        foreach ($asset->getFilters() as $v) {
+            $filters[] = get_class($v);
+        }
+        $filters = '[' . implode(',',
+                                 $filters) . ']';
+
+        // calculate path for collections
         if ($asset instanceof AssetCollection) {
-            $string = '';
+            $string = $filters;
             foreach ($asset->all() as $child) {
                 $string .= '-' . static::getAssetPath($child,
                                                       $suffix);
@@ -152,8 +160,18 @@ class ThemePlus
                                           8) .
                 '-collection.' . $suffix;
         }
+
+        // calculate cache path from content
+        else if ($asset instanceof StringAsset) {
+            return 'assets/css/' . substr(md5($filters . '-' . $asset->getContent() . '-' . $asset->getLastModified()),
+                                          0,
+                                          8)
+                . '-' . basename($asset->getSourcePath()) . '.' . $suffix;
+        }
+
+        // calculate cache path from source path
         else {
-            return 'assets/css/' . substr(md5($asset->getSourcePath() . '-' . $asset->getLastModified()),
+            return 'assets/css/' . substr(md5($filters . '-' . $asset->getSourcePath() . '-' . $asset->getLastModified()),
                                           0,
                                           8) .
                 '-' . basename($asset->getSourcePath(),
@@ -169,7 +187,7 @@ class ThemePlus
      *
      * @return string
      */
-    public static function storeAsset(AssetInterface $asset, $suffix)
+    public static function storeAsset(AssetInterface $asset, $suffix, $additionalFilters = null)
     {
         $path = static::getAssetPath($asset,
                                      $suffix);
@@ -178,7 +196,9 @@ class ThemePlus
         if (!file_exists(TL_ROOT . '/' . $path)) {
 
             $file = new \File($path);
-            $file->write($asset->dump(new \Assetic\Filter\CssRewriteFilter()));
+            $file->write($asset->dump($additionalFilters
+                                          ? new \Assetic\Filter\FilterCollection($additionalFilters)
+                                          : null));
             $file->close();
         }
 
@@ -205,7 +225,7 @@ class ThemePlus
      */
     public static function getDebugComment(AssetInterface $asset)
     {
-        if ($GLOBALS['TL_CONFIG']['debugMode'] || ThemePlus::getBELoginStatus()) {
+        if ($GLOBALS['TL_CONFIG']['debugMode'] || ThemePlus::isDesignerMode()) {
             return '<!-- ' . static::getAssetDebugString($asset) . ' -->' . "\n";
         }
         return '';
@@ -390,16 +410,21 @@ class ThemePlus
     {
         global $objPage;
 
+        // html mode
         $xhtml     = ($objPage->outputFormat == 'xhtml');
         $tagEnding = $xhtml
             ? ' />'
             : '>';
 
+        // default filter
+        $defaultFilters = AsseticFactory::createFilterOrChain($layout->asseticStylesheetFilter,
+                                                              static::isDesignerMode());
+
         // list of non-static stylesheets
         $stylesheets = array();
 
         // collection of static stylesheets
-        $collection = new AssetCollection();
+        $collection = new AssetCollection(array(), array(), TL_ROOT);
 
         // Add the CSS framework style sheets
         if (is_array($GLOBALS['TL_FRAMEWORK_CSS']) && !empty($GLOBALS['TL_FRAMEWORK_CSS'])) {
@@ -433,6 +458,7 @@ class ThemePlus
                                                              true),
                                                  array('order' => 'sorting'));
         $this->addAssetsToCollectionFromDatabase($stylesheet,
+                                                 'css',
                                                  $collection,
                                                  $stylesheets);
 
@@ -457,7 +483,8 @@ class ThemePlus
             // use asset
             if (isset($stylesheet['asset'])) {
                 $url = static::storeAsset($stylesheet['asset'],
-                                          'css');
+                                          'css',
+                                          $defaultFilters);
             }
 
             // use url
@@ -512,16 +539,18 @@ class ThemePlus
     {
         global $objPage;
 
-        $xhtml     = ($objPage->outputFormat == 'xhtml');
-        $tagEnding = $xhtml
-            ? ' />'
-            : '>';
+        // html mode
+        $xhtml = ($objPage->outputFormat == 'xhtml');
+
+        // default filter
+        $defaultFilters = AsseticFactory::createFilterOrChain($layout->asseticJavaScriptFilter,
+                                                              static::isDesignerMode());
 
         // list of non-static stylesheets
         $javascripts = array();
 
         // collection of static stylesheets
-        $collection = new AssetCollection();
+        $collection = new AssetCollection(array(), array(), TL_ROOT);
 
         // Add the internal scripts
         if (is_array($GLOBALS['TL_JAVASCRIPT']) && !empty($GLOBALS['TL_JAVASCRIPT'])) {
@@ -533,10 +562,11 @@ class ThemePlus
         $GLOBALS['TL_JAVASCRIPT'] = array();
 
         // Add layout files
-        $javascript = StyleSheetModel::findByPks(deserialize($layout->theme_plus_javascripts,
+        $javascript = JavaScriptModel::findByPks(deserialize($layout->theme_plus_javascripts,
                                                              true),
                                                  array('order' => 'sorting'));
         $this->addAssetsToCollectionFromDatabase($javascript,
+                                                 'js',
                                                  $collection,
                                                  $javascripts);
 
@@ -561,7 +591,8 @@ class ThemePlus
             // use asset
             if (isset($javascript['asset'])) {
                 $url = static::storeAsset($javascript['asset'],
-                                          'js');
+                                          'js',
+                                          $defaultFilters);
             }
 
             // use url
@@ -575,11 +606,9 @@ class ThemePlus
             }
 
             // generate html
-            $html = '<link' . ($xhtml
-                ? ' type="text/css"'
-                : '') . ' rel="stylesheet" href="' . static::addStaticUrlTo($url) . '"' . ((isset($javascript['media']) && $javascript['media'] != 'all')
-                ? ' media="' . $javascript['media'] . '"'
-                : '') . $tagEnding;
+            $html = '<script' . ($xhtml
+                ? ' type="text/javascript"'
+                : '') . ' src="' . static::addStaticUrlTo($url) . '"></script>';
 
             // wrap cc
             $html = static::wrapCc($html,
@@ -647,7 +676,7 @@ class ThemePlus
                 }
             }
             else {
-                $asset = new FileAsset(TL_ROOT . '/' . $source);
+                $asset = new FileAsset(TL_ROOT . '/' . $source, array(), TL_ROOT, $source);
             }
 
             if ($mode == 'static' && static::isLiveMode()) {
@@ -660,6 +689,7 @@ class ThemePlus
     }
 
     protected function addAssetsToCollectionFromDatabase(\Model\Collection $data,
+                                                         $type,
                                                          AssetCollection $collection,
                                                          array &$array)
     {
@@ -670,8 +700,8 @@ class ThemePlus
                     $filter = array();
 
                     if ($data->asseticFilter) {
-                        $temp = AsseticFactory::createFilterOrChain($data->asseticFilter);
-
+                        $temp = AsseticFactory::createFilterOrChain($data->asseticFilter,
+                                                                    static::isDesignerMode());
                         if ($temp) {
                             $filter = array($temp);
                         }
@@ -679,7 +709,8 @@ class ThemePlus
 
                     switch ($data->type) {
                         case 'code':
-                            $asset = new StringAsset($data->code, $filter);
+                            $asset = new StringAsset($data->code, $filter, TL_ROOT, 'assets/' . $type . '/' . $data->code_snippet_title . '.' . $type);
+                            $asset->setLastModified($data->tstamp);
                             break;
 
                         case 'url':
@@ -690,7 +721,7 @@ class ThemePlus
                                 break;
                             }
 
-                            if ($data->fetch) {
+                            if ($data->fetchUrl) {
                                 $asset = new HttpAsset($data->url, $filter);
                             }
                             else {
@@ -711,7 +742,7 @@ class ThemePlus
                                     break;
                                 }
 
-                                $asset = new FileAsset(TL_ROOT . '/' . $file->path, $filter);
+                                $asset = new FileAsset(TL_ROOT . '/' . $file->path, $filter, TL_ROOT, $file->path);
                             }
                             break;
                     }
@@ -758,6 +789,9 @@ class ThemePlus
                                                    true),
                                        array('order' => 'sorting'));
                 $this->addAssetsToCollectionFromDatabase($data,
+                                                         $type == 'stylesheets'
+                                                             ? 'css'
+                                                             : 'js',
                                                          $collection,
                                                          $array);
             }
@@ -774,6 +808,9 @@ class ThemePlus
                                                true),
                                    array('order' => 'sorting'));
             $this->addAssetsToCollectionFromDatabase($data,
+                                                     $type == 'stylesheets'
+                                                         ? 'css'
+                                                         : 'js',
                                                      $collection,
                                                      $array);
         }

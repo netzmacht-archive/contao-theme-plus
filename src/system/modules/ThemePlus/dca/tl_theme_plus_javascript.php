@@ -143,7 +143,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = array
         'url'      => array
         (
             'source'  => array('type'),
-            'file'    => array('url'),
+            'file'    => array('url', 'fetchUrl'),
             'filter'  => array(':hide', 'cc', 'filter'),
             'assetic' => array(':hide', 'asseticFilter'),
             'expert'  => array(':hide', 'position')
@@ -206,6 +206,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = array
             'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['code_snippet_title'],
             'inputType' => 'text',
             'eval'      => array('mandatory'     => true,
+                                 'unique'        => true,
                                  'maxlength'     => 255,
                                  'tl_class'      => 'w50'),
             'sql'       => "varchar(255) NOT NULL default ''"
@@ -229,6 +230,13 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = array
                                  'decodeEntities'=> true,
                                  'tl_class'      => 'long'),
             'sql'       => "blob NULL"
+        ),
+        'fetchUrl'                                 => array
+        (
+            'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['fetchUrl'],
+            'inputType' => 'checkbox',
+            'eval'      => array(),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'code'                                  => array
         (

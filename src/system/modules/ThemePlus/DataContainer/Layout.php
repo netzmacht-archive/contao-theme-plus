@@ -25,7 +25,8 @@ class Layout
     public function getStylesheets($dc)
     {
         $stylesheet = StylesheetModel::findBy('pid',
-                                              $dc->activeRecord->pid);
+                                              $dc->activeRecord->pid,
+                                              array('order' => 'sorting'));
 
         return $stylesheet
             ? $this->buildOptions($stylesheet)
@@ -35,7 +36,8 @@ class Layout
     public function getJavaScripts($dc)
     {
         $javascripts = JavaScriptModel::findBy('pid',
-                                               $dc->activeRecord->pid);
+                                               $dc->activeRecord->pid,
+                                               array('order' => 'sorting'));
 
         return $javascripts
             ? $this->buildOptions($javascripts)

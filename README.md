@@ -20,3 +20,4 @@ Attribution
 -----------
 
 * Icons by FamFamFam (Mark James) http://www.famfamfam.com/ (CC Attribution 3.0)
+* Icons by GraphicsVibe (Jordan) http://www.graphics-vibe.com/ (Freeware)

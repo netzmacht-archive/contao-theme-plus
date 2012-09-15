@@ -151,7 +151,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = array
         'url'      => array
         (
             'source'  => array('type'),
-            'file'    => array('url'),
+            'file'    => array('url', 'fetchUrl'),
             'filter'  => array(':hide', 'media', 'cc', 'filter'),
             'editor'  => array(':hide', 'editor_integration', 'force_editor_integration'),
             'assetic' => array(':hide', 'asseticFilter'),
@@ -216,6 +216,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = array
             'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['code_snippet_title'],
             'inputType' => 'text',
             'eval'      => array('mandatory'     => true,
+                                 'unique'        => true,
                                  'maxlength'     => 255,
                                  'tl_class'      => 'w50'),
             'sql'       => "varchar(255) NOT NULL default ''"
@@ -227,7 +228,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = array
             'eval'      => array('mandatory' => true,
                                  'fieldType' => 'radio',
                                  'files'     => true,
-                                 'extensions'=> 'css,less',
+                                 'extensions'=> 'css,less,scss,sass',
                                  'path'      => $GLOBALS['TL_CONFIG']['uploadPath']),
             'sql'       => "blob NULL"
         ),
@@ -239,6 +240,13 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = array
                                  'decodeEntities'=> true,
                                  'tl_class'      => 'long'),
             'sql'       => "blob NULL"
+        ),
+        'fetchUrl'                                 => array
+        (
+            'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['fetchUrl'],
+            'inputType' => 'checkbox',
+            'eval'      => array(),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'code'                                  => array
         (

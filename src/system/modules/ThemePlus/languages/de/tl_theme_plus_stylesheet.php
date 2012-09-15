@@ -23,6 +23,8 @@ $GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['file']                     = ar
                                                                                     'Bitte wählen Sie hier die CSS Datei aus.');
 $GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['url']                      = array('URL',
                                                                                     'Bitte geben Sie die URL zur CSS Datei an.');
+$GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['fetchUrl']                    = array('URL laden',
+                                                                                    'Lädt die Datei und bindet diese lokal ein, anstatt sie als externe Datei einzubinden.');
 $GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['code']                     = array('Code-Snippet',
                                                                                     'Bitte geben Sie hier Ihr CSS Code-Snippet ein.');
 $GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['position']                 = array('Positionierung im HTML',
