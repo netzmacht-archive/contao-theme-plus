@@ -40,16 +40,9 @@ class StylesheetModel extends \Model
 			return null;
 		}
 
-		// build columns array
-		$arrColumns = array();
-		for ($i = 0; $i < count($arrPks); $i++)
-		{
-			$arrColumns[] = '?';
-		}
-
 		$arrOptions = array_merge($arrOptions, array
 		(
-			'column' => array(static::$strTable . '.' . static::$strPk . ' IN (' . implode(',', $arrColumns) . ')'),
+			'column' => array(static::$strTable . '.' . static::$strPk . ' IN (' . rtrim(str_repeat('?,', count($arrPks)), ',') . ')'),
 			'value'  => $arrPks,
 			'return' => 'Collection'
 		));
