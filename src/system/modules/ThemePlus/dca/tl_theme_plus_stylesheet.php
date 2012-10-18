@@ -142,7 +142,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = array
         (
             'source'  => array('type'),
             'file'    => array('file'),
-            'filter'  => array(':hide', 'media', 'cc', 'filter'),
+            'filter'  => array(':hide', 'cc', 'filter'),
             'editor'  => array(':hide', 'editor_integration', 'force_editor_integration'),
             'assetic' => array(':hide', 'asseticFilter'),
             'expert'  => array(':hide', 'aggregation')
@@ -151,7 +151,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = array
         (
             'source'  => array('type'),
             'file'    => array('url', 'fetchUrl'),
-            'filter'  => array(':hide', 'media', 'cc', 'filter'),
+            'filter'  => array(':hide', 'cc', 'filter'),
             'editor'  => array(':hide', 'editor_integration', 'force_editor_integration'),
             'assetic' => array(':hide', 'asseticFilter'),
             'expert'  => array(':hide')
@@ -160,7 +160,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = array
         (
             'source'  => array('type', 'code_snippet_title'),
             'file'    => array('code'),
-            'filter'  => array(':hide', 'media', 'cc', 'filter'),
+            'filter'  => array(':hide', 'cc', 'filter'),
             'editor'  => array(':hide', 'editor_integration', 'force_editor_integration'),
             'assetic' => array(':hide', 'asseticFilter'),
             'expert'  => array(':hide', 'aggregation')
@@ -267,15 +267,6 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = array
             'options'   => array('global', 'theme', 'pages', 'page', 'never'),
             'reference' => &$GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['aggregations'],
             'sql'       => "varchar(6) NOT NULL default 'global'"
-        ),
-        'media'                                 => array
-        (
-            'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['media'],
-            'exclude'   => true,
-            'inputType' => 'text',
-            'eval'      => array('tl_class'      => 'long',
-                                 'decodeEntities'=> true),
-            'sql'       => "blob NULL"
         ),
         'cc'                                    => array
         (

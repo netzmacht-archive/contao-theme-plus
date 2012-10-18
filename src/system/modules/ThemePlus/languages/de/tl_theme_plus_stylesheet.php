@@ -31,8 +31,6 @@ $GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['position']                 = ar
                                                                                     'Bitte wählen Sie hier, ob das JavaScript im &lt;head&gt; oder am Ende des &lt;body&gt; eingebunden werden soll.');
 $GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['aggregation']              = array('Zusammenfassung',
                                                                                     'Bitte wählen Sie hier, wie diese Datei mit anderen zusammengefasst werden darf.');
-$GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['media']                    = array('Medientypen',
-                                                                                    'Bitte wählen Sie die Medientypen aus, für die die CSS Datei gültig ist.');
 $GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['cc']                       = array('Conditional Comment',
                                                                                     'Conditional Comments ermöglichen das Einbinden Internet Explorer-spezifischer Dateien. Hier muss nur die Bedingung z.B. "lte IE 7" oder "IE 9" eingefügt werden. Der Prefix "&lt;!--[if" bzw. Sufix "]&gt;" werden automatisch eingefügt.');
 $GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['filter']                   = array('Filter anwenden',

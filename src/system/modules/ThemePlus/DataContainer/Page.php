@@ -70,10 +70,6 @@ class Page
                 $label .= ' <span style="padding-left: 3px; color: #B3B3B3;">[' . $collection->cc . ']</span>';
             }
 
-            if (strlen($collection->media)) {
-                $label .= ' <span style="padding-left: 3px; color: #B3B3B3;">[' . $collection->media . ']</span>';
-            }
-
             if (strlen($collection->filter)) {
                 $label .= ' <span style="padding-left: 3px; color: #B3B3B3;">' . (($collection->filterInvert)
                     ? '!'
