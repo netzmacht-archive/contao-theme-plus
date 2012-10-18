@@ -18,7 +18,7 @@ use \ThemePlus\Model\VariableModel;
 /**
  * Class PageRegular
  */
-class ContaoReplaceVariableFilter
+class ContaoReplaceThemePlusVariableFilter
     implements \Assetic\Filter\FilterInterface
 {
     /**
