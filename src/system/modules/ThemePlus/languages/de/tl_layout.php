@@ -23,7 +23,7 @@ $GLOBALS['TL_LANG']['tl_layout']['theme_plus_stylesheets']                 = arr
                                                                                    'Weitere Stylesheets in das Layout einbinden');
 $GLOBALS['TL_LANG']['tl_layout']['theme_plus_javascript_lazy_load']        = array('LazyLoad JavaScript',
                                                                                    '<a href="http://friendlybit.com/js/lazy-loading-asyncronous-javascript/" onclick="window.open(this.href); return false;">Lazy Loading Asynchronous Javascript</a> - Wählen Sie diese Option, wird JavaScript später geladen.');
-$GLOBALS['TL_LANG']['tl_layout']['theme_plus_default_javascript_position'] = array('Standardpositionierung von JavaScript Dateien',
+$GLOBALS['TL_LANG']['tl_layout']['theme_plus_default_javascript_position'] = array('Positionierung von JavaScript Dateien',
                                                                                    'Wählen Sie hier aus wo die JavaScript Dateien aus dem JavaScript Framework und aus TL_JAVASCRIPT positioniert werden sollen.');
 $GLOBALS['TL_LANG']['tl_layout']['theme_plus_javascripts']                 = array('Weitere JavaScripts',
                                                                                    'Weitere JavaScripts in das Layout einbinden');
@@ -39,6 +39,5 @@ $GLOBALS['TL_LANG']['tl_layout']['asseticJavaScriptFilter']                = arr
 /**
  * References
  */
-$GLOBALS['TL_LANG']['tl_layout']['positions']['head']      = 'Alles im &lt;head&gt;';
-$GLOBALS['TL_LANG']['tl_layout']['positions']['head+body'] = 'Framework im &lt;head&gt;, weitere Dateien im &lt;body&gt;';
-$GLOBALS['TL_LANG']['tl_layout']['positions']['body']      = 'Alles im &lt;body&gt;';
+$GLOBALS['TL_LANG']['tl_layout']['positions']['head']      = 'im &lt;head&gt;';
+$GLOBALS['TL_LANG']['tl_layout']['positions']['body']      = 'im &lt;body&gt;';

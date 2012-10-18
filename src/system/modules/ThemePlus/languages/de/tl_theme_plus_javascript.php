@@ -60,11 +60,15 @@ $GLOBALS['TL_LANG']['tl_theme_plus_javascript']['filter_legend']          = 'Fil
 $GLOBALS['TL_LANG']['tl_theme_plus_javascript']['editor_legend']          = 'WYSIWYG Editor Integration';
 $GLOBALS['TL_LANG']['tl_theme_plus_javascript']['assetic_legend']         = 'Assetic Einstellungen';
 $GLOBALS['TL_LANG']['tl_theme_plus_javascript']['expert_legend']          = 'Experten-Einstellungen';
+
 $GLOBALS['TL_LANG']['tl_theme_plus_javascript']['editors']['default']     = 'Standard Editor';
 $GLOBALS['TL_LANG']['tl_theme_plus_javascript']['editors']['newsletter']  = 'Newsletter Editor';
 $GLOBALS['TL_LANG']['tl_theme_plus_javascript']['editors']['flash']       = 'Flash Editor';
+
+$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['positions']['inherit']   = 'wie im Layout';
 $GLOBALS['TL_LANG']['tl_theme_plus_javascript']['positions']['head']      = 'im &lt;head&gt;';
-$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['positions']['body']      = 'am Ende des &lt;body&gt;';
+$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['positions']['body']      = 'im &lt;body&gt;';
+
 $GLOBALS['TL_LANG']['tl_theme_plus_javascript']['aggregations']['global'] = 'Mit allen anderen Dateien';
 $GLOBALS['TL_LANG']['tl_theme_plus_javascript']['aggregations']['theme']  = 'Mit allen Dateien aus dem gleichem Theme';
 $GLOBALS['TL_LANG']['tl_theme_plus_javascript']['aggregations']['pages']  = 'Mit allen Dateien aus der Seite und den ererbten Dateien der Elternseiten';

@@ -73,7 +73,7 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['theme_plus_default_javascript_positio
     'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['theme_plus_default_javascript_position'],
     'exclude'                 => true,
     'inputType'               => 'select',
-    'options'                 => array('head', 'head+body', 'body'),
+    'options'                 => array('head', 'body'),
     'reference'               => &$GLOBALS['TL_LANG']['tl_layout']['positions'],
     'eval'                    => array('tl_class'=> 'w50'),
     'sql'                     => "char(9) NOT NULL default 'head'"

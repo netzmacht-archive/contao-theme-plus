@@ -45,6 +45,7 @@ $GLOBALS['TL_CTE']['includes']['script_source'] = 'InfinitySoft\ThemePlus\Hybrid
 /**
  * HOOKs
  */
+$GLOBALS['TL_HOOKS']['parseTemplate'][]            = array('ThemePlus\ThemePlus', 'hookParseTemplate');
 $GLOBALS['TL_HOOKS']['replaceDynamicScriptTags'][] = array('ThemePlus\ThemePlus', 'hookReplaceDynamicScriptTags');
 //$GLOBALS['TL_HOOKS']['outputFrontendTemplate'] = array('ThemePlus\ThemePlus', 'hookOutputFrontendTemplate');
 //$GLOBALS['TL_HOOKS']['replaceInsertTags'][]     = array('ThemePlus', 'hookReplaceInsertTags');

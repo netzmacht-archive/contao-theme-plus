@@ -52,6 +52,10 @@ class File
                 $label = '?';
         }
 
+        if (strlen($row['position'])) {
+            $label = '[' . strtoupper($row['position']) . '] ' . $label;
+        }
+
         if (strlen($row['cc'])) {
             $label .= ' <span style="padding-left: 3px; color: #B3B3B3;">[' . $row['cc'] . ']</span>';
         }

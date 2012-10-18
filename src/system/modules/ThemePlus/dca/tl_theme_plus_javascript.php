@@ -266,6 +266,8 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = array
             'inputType' => 'select',
             'options'   => array('head', 'body'),
             'reference' => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['positions'],
+            'eval'      => array('includeBlankOption' => true,
+                                 'blankOptionLabel' => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['positions']['inherit']),
             'sql'       => "char(4) NOT NULL default 'head'"
         ),
         'cc'                                    => array

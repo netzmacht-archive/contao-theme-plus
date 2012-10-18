@@ -13,6 +13,8 @@
 
 namespace InfinitySoft\ThemePlus;
 
+use Template;
+use FrontendTemplate;
 use ThemePlus\Model\StylesheetModel;
 use ThemePlus\Model\JavaScriptModel;
 use Assetic\Contao\AsseticFactory;
@@ -346,6 +348,19 @@ class ThemePlus
         return $strContent;
     }
 
+    /**
+     * @see \Contao\Template::parse
+     *
+     * @param \Template $template
+     */
+    public function hookParseTemplate(Template $template)
+    {
+        if ($template instanceof FrontendTemplate) {
+            if (substr($template->getName(), 0, 3) == 'fe_') {
+                $template->mootools = '[[TL_THEME_PLUS]]' . "\n" . $template->mootools;
+            }
+        }
+    }
 
     /**
      * @see \Contao\Controller::replaceDynamicScriptTags
@@ -557,7 +572,8 @@ class ThemePlus
             $this->addAssetsToCollectionFromArray(array_unique($GLOBALS['TL_JAVASCRIPT']),
                                                   false,
                                                   $collection,
-                                                  $javascripts);
+                                                  $javascripts,
+                                                  $layout->theme_plus_default_javascript_position);
         }
         $GLOBALS['TL_JAVASCRIPT'] = array();
 
@@ -568,7 +584,8 @@ class ThemePlus
         $this->addAssetsToCollectionFromDatabase($javascript,
                                                  'js',
                                                  $collection,
-                                                 $javascripts);
+                                                 $javascripts,
+                                                 $layout->theme_plus_default_javascript_position);
 
         // Add files from page tree
         $this->addAssetsToCollectionFromPageTree($objPage,
@@ -576,14 +593,16 @@ class ThemePlus
                                                  'ThemePlus\Model\JavaScriptModel',
                                                  $collection,
                                                  $javascripts,
-                                                 true);
+                                                 true,
+                                                 $layout->theme_plus_default_javascript_position);
 
         // string contains the scripts include code
-        $scripts = '';
+        $head = '';
+        $body = '';
 
         // add collection to list
         if (count($collection->all())) {
-            $javascripts[] = array('asset' => $collection);
+            $javascripts[] = array('asset' => $collection, 'position' => $layout->theme_plus_default_javascript_position);
         }
 
         // add files
@@ -624,16 +643,26 @@ class ThemePlus
                 }
             }
 
-            $scripts .= $html;
+            if (isset($javascript['position']) &&
+                $javascript['position'] == 'body') {
+                $body .= $html;
+            }
+            else {
+                $head .= $html;
+            }
         }
 
-        $sr['[[TL_HEAD]]'] = $scripts;
+        $head .= '[[TL_HEAD]]';
+        $sr['[[TL_HEAD]]'] = $head;
+
+        $sr['[[TL_THEME_PLUS]]'] = $body;
     }
 
     protected function addAssetsToCollectionFromArray(array $sources,
                                                       $split,
                                                       AssetCollection $collection,
-                                                      array &$array)
+                                                      array &$array,
+                                                      $position = 'head')
     {
         foreach ($sources as $source) {
             if ($split === null) {
@@ -683,7 +712,7 @@ class ThemePlus
                 $collection->add($asset);
             }
             else {
-                $array[] = array('asset' => $asset, 'media' => $media);
+                $array[] = array('asset' => $asset, 'media' => $media, 'position' => $position);
             }
         }
     }
@@ -691,7 +720,8 @@ class ThemePlus
     protected function addAssetsToCollectionFromDatabase(\Model\Collection $data,
                                                          $type,
                                                          AssetCollection $collection,
-                                                         array &$array)
+                                                         array &$array,
+                                                         $position = 'head')
     {
         if ($data) {
             while ($data->next()) {
@@ -705,6 +735,10 @@ class ThemePlus
                         if ($temp) {
                             $filter = array($temp);
                         }
+                    }
+
+                    if ($data->position) {
+                        $position = $data->position;
                     }
 
                     switch ($data->type) {
@@ -752,7 +786,7 @@ class ThemePlus
                             $collection->add($asset);
                         }
                         else {
-                            $array[] = array('asset' => $asset);
+                            $array[] = array('asset' => $asset, 'position' => $position);
                         }
                     }
                 }
@@ -765,7 +799,8 @@ class ThemePlus
                                                          $model,
                                                          AssetCollection $collection,
                                                          array &$array,
-                                                         $local = false)
+                                                         $local = false,
+                                                         $position = 'head')
     {
         // inherit from parent page
         if ($objPage->pid) {
@@ -774,7 +809,9 @@ class ThemePlus
                                                      $type,
                                                      $model,
                                                      $collection,
-                                                     $array);
+                                                     $array,
+                                                     false,
+                                                     $position);
         }
 
         // add local (not inherited) files
@@ -793,7 +830,8 @@ class ThemePlus
                                                              ? 'css'
                                                              : 'js',
                                                          $collection,
-                                                         $array);
+                                                         $array,
+                                                         $position);
             }
         }
 
@@ -812,7 +850,8 @@ class ThemePlus
                                                          ? 'css'
                                                          : 'js',
                                                      $collection,
-                                                     $array);
+                                                     $array,
+                                                     $position);
         }
     }
 
