@@ -539,6 +539,7 @@ class ThemePlus
             $scripts .= $html;
         }
 
+        $scripts .= '[[TL_CSS]]';
         $sr['[[TL_CSS]]'] = $scripts;
     }
 
