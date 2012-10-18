@@ -135,7 +135,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = array
         (
             'source'  => array('type'),
             'file'    => array('file'),
-            'filter'  => array(':hide', 'cc', 'frameworkContext', 'filter'),
+            'filter'  => array(':hide', 'cc', 'filter'),
             'assetic' => array(':hide', 'asseticFilter'),
             'expert'  => array(':hide', 'aggregation', 'position')
         ),
@@ -151,7 +151,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = array
         (
             'source'  => array('type', 'code_snippet_title'),
             'file'    => array('code'),
-            'filter'  => array(':hide', 'cc', 'frameworkContext', 'filter'),
+            'filter'  => array(':hide', 'cc', 'filter'),
             'assetic' => array(':hide', 'asseticFilter'),
             'expert'  => array(':hide', 'aggregation', 'position')
         ),
@@ -277,16 +277,6 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = array
             'inputType' => 'text',
             'eval'      => array('tl_class'=> 'long'),
             'sql'       => "blob NULL"
-        ),
-        'frameworkContext'                      => array
-        (
-            'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['frameworkContext'],
-            'exclude'   => true,
-            'inputType' => 'select',
-            'options'   => array('jquery', 'mootools'),
-            'reference' => array('jQuery', 'MooTools'),
-            'eval'      => array('includeBlankOption' => true),
-            'sql'       => "varchar(32) NOT NULL default ''"
         ),
         'filter'                                => array
         (

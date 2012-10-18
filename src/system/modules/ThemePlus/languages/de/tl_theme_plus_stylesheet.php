@@ -35,8 +35,6 @@ $GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['media']                    = ar
                                                                                     'Bitte wählen Sie die Medientypen aus, für die die CSS Datei gültig ist.');
 $GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['cc']                       = array('Conditional Comment',
                                                                                     'Conditional Comments ermöglichen das Einbinden Internet Explorer-spezifischer Dateien. Hier muss nur die Bedingung z.B. "lte IE 7" oder "IE 9" eingefügt werden. Der Prefix "&lt;!--[if" bzw. Sufix "]&gt;" werden automatisch eingefügt.');
-$GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['frameworkContext']         = array('Framework',
-                                                                                    'Wählen Sie hier, in welchem Framework Context das Script ausgeführt werden soll.');
 $GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['filter']                   = array('Filter anwenden',
                                                                                     'Wählen Sie diese Option, können Sie verschiedene Serverseitige Filter anwenden. (Achtung: Dieses Feature ist inkompatibel zum Seitencache! Eine entsprechende Änderung an Contao wurde bereits beantragt.)');
 $GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['filterRule']               = array('Filter',
