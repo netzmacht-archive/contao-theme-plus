@@ -15,10 +15,9 @@
 /**
  * Models
  */
-$GLOBALS['TL_MODELS']['tl_theme_plus_javascript']            = 'ThemePlus\Model\JavaScriptModel';
-$GLOBALS['TL_MODELS']['tl_theme_plus_stylesheet']            = 'ThemePlus\Model\StylesheetModel';
-$GLOBALS['TL_MODELS']['tl_theme_plus_stylesheet_collection'] = 'ThemePlus\Model\StylesheetCollectionModel';
-$GLOBALS['TL_MODELS']['tl_theme_plus_variable']              = 'ThemePlus\Model\VariableModel';
+$GLOBALS['TL_MODELS']['tl_theme_plus_javascript'] = 'ThemePlus\Model\JavaScriptModel';
+$GLOBALS['TL_MODELS']['tl_theme_plus_stylesheet'] = 'ThemePlus\Model\StylesheetModel';
+$GLOBALS['TL_MODELS']['tl_theme_plus_variable']   = 'ThemePlus\Model\VariableModel';
 
 /**
  * Back end modules

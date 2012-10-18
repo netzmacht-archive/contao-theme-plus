@@ -70,8 +70,6 @@ $GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['new']         = array('Neues CS
 $GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['newUrl']      = array('URL', 'Eine neue CSS URL anlegen');
 $GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['newFile']     = array('Datei', 'Eine neue CSS Datei anlegen');
 $GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['newCode']     = array('Code', 'Eine neue CSS Code-Snippet anlegen');
-$GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['collections'] = array('Kollektionen',
-                                                                       'Kollektionen von CSS Dateien anlegen und verwalten');
 $GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['show']        = array('Details', 'Details der Datei ID %s anzeigen');
 $GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['edit']        = array('Datei bearbeiten', 'Datei ID %s bearbeiten');
 $GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['delete']      = array('Datei löschen', 'Datei ID %s löschen');

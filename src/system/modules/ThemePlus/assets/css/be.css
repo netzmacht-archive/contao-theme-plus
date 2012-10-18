@@ -2,8 +2,7 @@
 
 .header_new_file,
 .header_new_url,
-.header_new_code,
-.header_collection {
+.header_new_code {
     padding: 2px 0 3px 20px;
     background-position: left center;
     background-repeat: no-repeat;
@@ -20,8 +19,4 @@
 
 .header_new_code {
 	background: url(../images/code.png) no-repeat left center;
-}
-
-.header_collection {
-	background: url(../images/collection.png) no-repeat left center;
 }

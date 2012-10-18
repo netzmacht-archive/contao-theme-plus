@@ -73,13 +73,6 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = array
                 'class'      => 'header_new_code',
                 'attributes' => 'onclick="Backend.getScrollOffset();"'
             ),
-            'collections'    => array
-            (
-                'label'      => &$GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['collections'],
-                'href'       => 'table=tl_theme_plus_stylesheet_collection',
-                'class'      => 'header_collection',
-                'attributes' => 'onclick="Backend.getScrollOffset();"'
-            ),
             'all'            => array
             (
                 'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],

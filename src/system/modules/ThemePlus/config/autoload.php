@@ -38,7 +38,6 @@ ClassLoader::addClasses(array
 	'InfinitySoft\ThemePlus\DataContainer\Page'                          => 'system/modules/ThemePlus/DataContainer/Page.php',
 	'InfinitySoft\ThemePlus\DataContainer\File'                          => 'system/modules/ThemePlus/DataContainer/File.php',
 	'InfinitySoft\ThemePlus\DataContainer\Stylesheet'                    => 'system/modules/ThemePlus/DataContainer/Stylesheet.php',
-	'InfinitySoft\ThemePlus\DataContainer\Collection'                    => 'system/modules/ThemePlus/DataContainer/Collection.php',
 	'InfinitySoft\ThemePlus\DataContainer\Theme'                         => 'system/modules/ThemePlus/DataContainer/Theme.php',
 
 	// Hybrid
