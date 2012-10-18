@@ -626,9 +626,16 @@ class ThemePlus
             }
 
             // generate html
-            $html = '<script' . ($xhtml
-                ? ' type="text/javascript"'
-                : '') . ' src="' . static::addStaticUrlTo($url) . '"></script>';
+            if ($layout->theme_plus_javascript_lazy_load) {
+                $html = '<script' . ($xhtml
+                    ? ' type="text/javascript"'
+                    : '') . '>window.loadAsync(' . json_encode(static::addStaticUrlTo($url)) . ');</script>';
+            }
+            else {
+                $html = '<script' . ($xhtml
+                    ? ' type="text/javascript"'
+                    : '') . ' src="' . static::addStaticUrlTo($url) . '"></script>';
+            }
 
             // wrap cc
             $html = static::wrapCc($html,
@@ -650,6 +657,21 @@ class ThemePlus
             }
             else {
                 $head .= $html;
+            }
+        }
+
+        // add async.js script
+        if ($layout->theme_plus_javascript_lazy_load) {
+            $async = new FileAsset(TL_ROOT . '/system/modules/ThemePlus/assets/js/async.js', $defaultFilters);
+            $async = '<script' . ($xhtml
+                    ? ' type="text/javascript"'
+                    : '') . '>' . $async->dump() . '</script>' . "\n";
+
+            if ($head) {
+                $head = $async . $head;
+            }
+            else if ($body) {
+                $body = $async . $body;
             }
         }
 
