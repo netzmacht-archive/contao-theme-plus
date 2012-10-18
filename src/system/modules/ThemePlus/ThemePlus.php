@@ -159,25 +159,22 @@ class ThemePlus
             }
             return 'assets/css/' . substr(md5($string),
                                           0,
-                                          8) .
-                '-collection.' . $suffix;
+                                          8) . '-collection.' . $suffix;
         }
 
         // calculate cache path from content
         else if ($asset instanceof StringAsset) {
             return 'assets/css/' . substr(md5($filters . '-' . $asset->getContent() . '-' . $asset->getLastModified()),
                                           0,
-                                          8)
-                . '-' . basename($asset->getSourcePath()) . '.' . $suffix;
+                                          8) . '-' . basename($asset->getSourcePath()) . '.' . $suffix;
         }
 
         // calculate cache path from source path
         else {
             return 'assets/css/' . substr(md5($filters . '-' . $asset->getSourcePath() . '-' . $asset->getLastModified()),
                                           0,
-                                          8) .
-                '-' . basename($asset->getSourcePath(),
-                               '.' . $suffix) . '.' . $suffix;
+                                          8) . '-' . basename($asset->getSourcePath(),
+                                                              '.' . $suffix) . '.' . $suffix;
         }
     }
 
@@ -250,11 +247,8 @@ class ThemePlus
 
         if ($asset instanceof AssetCollection) {
             /** @var AssetCollection $asset */
-            $string = 'collection { ' .
-                'target path: ' . $asset->getTargetPath() . ', ' .
-                'filters: [' . implode(', ',
-                                       $filters) . '], ' .
-                'last modified: ' . $asset->getLastModified();
+            $string = 'collection { ' . 'target path: ' . $asset->getTargetPath() . ', ' . 'filters: [' . implode(', ',
+                                                                                                                  $filters) . '], ' . 'last modified: ' . $asset->getLastModified();
 
             foreach ($asset->all() as $child) {
                 $string .= "\n" . $depth . '- ' . static::getAssetDebugString($child,
@@ -266,13 +260,8 @@ class ThemePlus
         }
 
         else {
-            return 'asset { ' .
-                'source path: ' . $asset->getSourcePath() . ', ' .
-                'target path: ' . $asset->getTargetPath() . ', ' .
-                'filters: [' . implode(', ',
-                                       $filters) . '], ' .
-                'last modified: ' . $asset->getLastModified() .
-                ' }';
+            return 'asset { ' . 'source path: ' . $asset->getSourcePath() . ', ' . 'target path: ' . $asset->getTargetPath() . ', ' . 'filters: [' . implode(', ',
+                                                                                                                                                             $filters) . '], ' . 'last modified: ' . $asset->getLastModified() . ' }';
         }
     }
 
@@ -313,9 +302,7 @@ class ThemePlus
      */
     public function decompressGzip($varData)
     {
-        if ($varData[0] == 31
-            && $varData[0] == 139
-            && $varData[0] == 8
+        if ($varData[0] == 31 && $varData[0] == 139 && $varData[0] == 8
         ) {
             return gzdecode($varData);
         }
@@ -603,7 +590,8 @@ class ThemePlus
 
         // add collection to list
         if (count($collection->all())) {
-            $javascripts[] = array('asset' => $collection, 'position' => $layout->theme_plus_default_javascript_position);
+            $javascripts[] = array('asset'    => $collection,
+                                   'position' => $layout->theme_plus_default_javascript_position);
         }
 
         // add files
@@ -651,8 +639,7 @@ class ThemePlus
                 }
             }
 
-            if (isset($javascript['position']) &&
-                $javascript['position'] == 'body') {
+            if (isset($javascript['position']) && $javascript['position'] == 'body') {
                 $body .= $html;
             }
             else {
@@ -664,8 +651,8 @@ class ThemePlus
         if ($layout->theme_plus_javascript_lazy_load) {
             $async = new FileAsset(TL_ROOT . '/system/modules/ThemePlus/assets/js/async.js', $defaultFilters);
             $async = '<script' . ($xhtml
-                    ? ' type="text/javascript"'
-                    : '') . '>' . $async->dump() . '</script>' . "\n";
+                ? ' type="text/javascript"'
+                : '') . '>' . $async->dump() . '</script>' . "\n";
 
             if ($head) {
                 $head = $async . $head;
@@ -765,43 +752,41 @@ class ThemePlus
                     }
 
                     switch ($data->type) {
-                        case 'code':
-                            $asset = new StringAsset($data->code, $filter, TL_ROOT, 'assets/' . $type . '/' . $data->code_snippet_title . '.' . $type);
-                            $asset->setLastModified($data->tstamp);
-                            break;
+                    case 'code':
+                        $asset = new StringAsset($data->code, $filter, TL_ROOT, 'assets/' . $type . '/' . $data->code_snippet_title . '.' . $type);
+                        $asset->setLastModified($data->tstamp);
+                        break;
 
-                        case 'url':
+                    case 'url':
+                        // skip file
+                        if (in_array($data->url,
+                                     $GLOBALS['TL_THEME_EXCLUDE'])
+                        ) {
+                            break;
+                        }
+
+                        if ($data->fetchUrl) {
+                            $asset = new HttpAsset($data->url, $filter);
+                        }
+                        else {
+                            $array[] = array('url'   => $data->url, 'media' => $data->media, 'cc'    => $data->cc);
+                        }
+                        break;
+
+                    case 'file':
+                        $file = \FilesModel::findByPk($data->file);
+
+                        if ($file) {
                             // skip file
-                            if (in_array($data->url,
+                            if (in_array($file->path,
                                          $GLOBALS['TL_THEME_EXCLUDE'])
                             ) {
                                 break;
                             }
 
-                            if ($data->fetchUrl) {
-                                $asset = new HttpAsset($data->url, $filter);
-                            }
-                            else {
-                                $array[] = array('url'   => $data->url,
-                                                 'media' => $data->media,
-                                                 'cc'    => $data->cc);
-                            }
-                            break;
-
-                        case 'file':
-                            $file = \FilesModel::findByPk($data->file);
-
-                            if ($file) {
-                                // skip file
-                                if (in_array($file->path,
-                                             $GLOBALS['TL_THEME_EXCLUDE'])
-                                ) {
-                                    break;
-                                }
-
-                                $asset = new FileAsset(TL_ROOT . '/' . $file->path, $filter, TL_ROOT, $file->path);
-                            }
-                            break;
+                            $asset = new FileAsset(TL_ROOT . '/' . $file->path, $filter, TL_ROOT, $file->path);
+                        }
+                        break;
                     }
 
                     if ($asset) {
@@ -895,45 +880,45 @@ class ThemePlus
         }
 
         switch ($variable->type) {
-            case 'text':
-                return $variable->text;
+        case 'text':
+            return $variable->text;
 
-            case 'url':
-                return sprintf('url("%s")',
-                               str_replace('"',
-                                           '\\"',
-                                           $variable->url));
+        case 'url':
+            return sprintf('url("%s")',
+                           str_replace('"',
+                                       '\\"',
+                                       $variable->url));
 
-            case 'file':
-                return sprintf('url("../../%s")',
-                               str_replace('"',
-                                           '\\"',
-                                           $variable->file));
+        case 'file':
+            return sprintf('url("../../%s")',
+                           str_replace('"',
+                                       '\\"',
+                                       $variable->file));
 
-            case 'color':
-                return '#' . $variable->color;
+        case 'color':
+            return '#' . $variable->color;
 
-            case 'size':
-                $arrSize       = deserialize($variable->size);
-                $arrTargetSize = array();
-                foreach (array('top', 'right', 'bottom', 'left') as $k) {
-                    if (strlen($arrSize[$k])) {
-                        $arrTargetSize[] = $arrSize[$k] . $arrSize['unit'];
-                    }
-                    else {
-                        $arrTargetSize[] = '';
-                    }
+        case 'size':
+            $arrSize       = deserialize($variable->size);
+            $arrTargetSize = array();
+            foreach (array('top', 'right', 'bottom', 'left') as $k) {
+                if (strlen($arrSize[$k])) {
+                    $arrTargetSize[] = $arrSize[$k] . $arrSize['unit'];
                 }
-                while (count($arrTargetSize) > 0 && empty($arrTargetSize[count($arrTargetSize) - 1])) {
-                    array_pop($arrTargetSize);
+                else {
+                    $arrTargetSize[] = '';
                 }
-                foreach ($arrTargetSize as $k=> $v) {
-                    if (empty($v)) {
-                        $arrTargetSize[$k] = '0';
-                    }
+            }
+            while (count($arrTargetSize) > 0 && empty($arrTargetSize[count($arrTargetSize) - 1])) {
+                array_pop($arrTargetSize);
+            }
+            foreach ($arrTargetSize as $k=> $v) {
+                if (empty($v)) {
+                    $arrTargetSize[$k] = '0';
                 }
-                return implode(' ',
-                               $arrTargetSize);
+            }
+            return implode(' ',
+                           $arrTargetSize);
         }
     }
 
@@ -1190,23 +1175,23 @@ class ThemePlus
         $arrIds   = explode(',',
                             $arrParts[1]);
         switch ($arrParts[0]) {
-            case 'include_theme_file':
-                return implode("\n",
-                               $this->includeFiles($arrIds)) . "\n";
+        case 'include_theme_file':
+            return implode("\n",
+                           $this->includeFiles($arrIds)) . "\n";
 
-            case 'embed_theme_file':
-                return implode("\n",
-                               $this->embedFiles($arrIds)) . "\n";
-
-            // @deprecated
-            case 'insert_additional_sources':
-                return implode("\n",
-                               $this->includeFiles($arrIds)) . "\n";
+        case 'embed_theme_file':
+            return implode("\n",
+                           $this->embedFiles($arrIds)) . "\n";
 
             // @deprecated
-            case 'include_additional_sources':
-                return implode("\n",
-                               $this->embedFiles($arrIds)) . "\n";
+        case 'insert_additional_sources':
+            return implode("\n",
+                           $this->includeFiles($arrIds)) . "\n";
+
+            // @deprecated
+        case 'include_additional_sources':
+            return implode("\n",
+                           $this->embedFiles($arrIds)) . "\n";
         }
 
         return false;
