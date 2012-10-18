@@ -562,10 +562,10 @@ class ThemePlus
         $defaultFilters = AsseticFactory::createFilterOrChain($layout->asseticJavaScriptFilter,
                                                               static::isDesignerMode());
 
-        // list of non-static stylesheets
+        // list of non-static javascripts
         $javascripts = array();
 
-        // collection of static stylesheets
+        // collection of static javascript
         $collection = new AssetCollection(array(), array(), TL_ROOT);
 
         // Add the internal scripts
