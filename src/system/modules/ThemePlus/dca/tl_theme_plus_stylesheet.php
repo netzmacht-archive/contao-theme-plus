@@ -35,7 +35,6 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = array
                 'pid' => 'index'
             )
         ),
-        'model'            => 'ThemePlus\Model\StylesheetModel',
     ),
 
     // List

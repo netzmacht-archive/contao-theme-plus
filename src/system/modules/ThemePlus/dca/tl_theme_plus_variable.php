@@ -32,7 +32,6 @@ $GLOBALS['TL_DCA']['tl_theme_plus_variable'] = array
                 'pid' => 'index'
             )
         ),
-        'model' => 'ThemePlus\Model\VariableModel',
 	),
 
 	// List
