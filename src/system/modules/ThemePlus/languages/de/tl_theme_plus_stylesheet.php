@@ -29,8 +29,6 @@ $GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['code']                     = ar
                                                                                     'Bitte geben Sie hier Ihr CSS Code-Snippet ein.');
 $GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['position']                 = array('Positionierung im HTML',
                                                                                     'Bitte wählen Sie hier, ob das JavaScript im &lt;head&gt; oder am Ende des &lt;body&gt; eingebunden werden soll.');
-$GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['aggregation']              = array('Zusammenfassung',
-                                                                                    'Bitte wählen Sie hier, wie diese Datei mit anderen zusammengefasst werden darf.');
 $GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['cc']                       = array('Conditional Comment',
                                                                                     'Conditional Comments ermöglichen das Einbinden Internet Explorer-spezifischer Dateien. Hier muss nur die Bedingung z.B. "lte IE 7" oder "IE 9" eingefügt werden. Der Prefix "&lt;!--[if" bzw. Sufix "]&gt;" werden automatisch eingefügt.');
 $GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['filter']                   = array('Filter anwenden',
@@ -56,16 +54,13 @@ $GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['filter_legend']          = 'Fil
 $GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['editor_legend']          = 'WYSIWYG Editor Integration';
 $GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['assetic_legend']         = 'Assetic Einstellungen';
 $GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['expert_legend']          = 'Experten-Einstellungen';
+
 $GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['editors']['default']     = 'Standard Editor';
 $GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['editors']['newsletter']  = 'Newsletter Editor';
 $GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['editors']['flash']       = 'Flash Editor';
+
 $GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['positions']['head']      = 'im &lt;head&gt;';
 $GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['positions']['body']      = 'am Ende des &lt;body&gt;';
-$GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['aggregations']['global'] = 'Mit allen anderen Dateien';
-$GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['aggregations']['theme']  = 'Mit allen Dateien aus dem gleichem Theme';
-$GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['aggregations']['pages']  = 'Mit allen Dateien aus der Seite und den ererbten Dateien der Elternseiten';
-$GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['aggregations']['page']   = 'Mit allen Dateien aus der Seite ohne ererbte Dateien';
-$GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['aggregations']['never']  = 'Niemals';
 
 
 /**

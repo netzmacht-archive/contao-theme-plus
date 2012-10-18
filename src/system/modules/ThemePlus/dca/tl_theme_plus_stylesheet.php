@@ -145,7 +145,6 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = array
             'filter'  => array(':hide', 'cc', 'filter'),
             'editor'  => array(':hide', 'editor_integration', 'force_editor_integration'),
             'assetic' => array(':hide', 'asseticFilter'),
-            'expert'  => array(':hide', 'aggregation')
         ),
         'url'      => array
         (
@@ -154,7 +153,6 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = array
             'filter'  => array(':hide', 'cc', 'filter'),
             'editor'  => array(':hide', 'editor_integration', 'force_editor_integration'),
             'assetic' => array(':hide', 'asseticFilter'),
-            'expert'  => array(':hide')
         ),
         'code'     => array
         (
@@ -163,7 +161,6 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = array
             'filter'  => array(':hide', 'cc', 'filter'),
             'editor'  => array(':hide', 'editor_integration', 'force_editor_integration'),
             'assetic' => array(':hide', 'asseticFilter'),
-            'expert'  => array(':hide', 'aggregation')
         )
     ),
 
@@ -257,16 +254,6 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = array
                                  'rte'       => 'codeMirror|css',
                                  'helpwizard'=> true),
             'sql'       => "blob NULL"
-        ),
-        'aggregation'                           => array
-        (
-            'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['aggregation'],
-            'default'   => 'global',
-            'exclude'   => true,
-            'inputType' => 'select',
-            'options'   => array('global', 'theme', 'pages', 'page', 'never'),
-            'reference' => &$GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['aggregations'],
-            'sql'       => "varchar(6) NOT NULL default 'global'"
         ),
         'cc'                                    => array
         (

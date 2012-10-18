@@ -29,8 +29,6 @@ $GLOBALS['TL_LANG']['tl_theme_plus_javascript']['code']                     = ar
                                                                                     'Bitte geben Sie hier Ihr JavaScript Code-Snippet ein.');
 $GLOBALS['TL_LANG']['tl_theme_plus_javascript']['position']                 = array('Positionierung im HTML',
                                                                                     'Bitte wählen Sie hier, ob das JavaScript im &lt;head&gt; oder am Ende des &lt;body&gt; eingebunden werden soll.');
-$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['aggregation']              = array('Zusammenfassung',
-                                                                                    'Bitte wählen Sie hier, wie diese Datei mit anderen zusammengefasst werden darf.');
 $GLOBALS['TL_LANG']['tl_theme_plus_javascript']['cc']                       = array('Conditional Comment',
                                                                                     'Conditional Comments ermöglichen das Einbinden Internet Explorer-spezifischer Dateien. Hier muss nur die Bedingung z.B. "lte IE 7" oder "IE 9" eingefügt werden. Der Prefix "&lt;!--[if" bzw. Sufix "]&gt;" werden automatisch eingefügt.');
 $GLOBALS['TL_LANG']['tl_theme_plus_javascript']['filter']                   = array('Filter anwenden',
@@ -64,12 +62,6 @@ $GLOBALS['TL_LANG']['tl_theme_plus_javascript']['editors']['flash']       = 'Fla
 $GLOBALS['TL_LANG']['tl_theme_plus_javascript']['positions']['inherit']   = 'wie im Layout';
 $GLOBALS['TL_LANG']['tl_theme_plus_javascript']['positions']['head']      = 'im &lt;head&gt;';
 $GLOBALS['TL_LANG']['tl_theme_plus_javascript']['positions']['body']      = 'im &lt;body&gt;';
-
-$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['aggregations']['global'] = 'Mit allen anderen Dateien';
-$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['aggregations']['theme']  = 'Mit allen Dateien aus dem gleichem Theme';
-$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['aggregations']['pages']  = 'Mit allen Dateien aus der Seite und den ererbten Dateien der Elternseiten';
-$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['aggregations']['page']   = 'Mit allen Dateien aus der Seite ohne ererbte Dateien';
-$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['aggregations']['never']  = 'Niemals';
 
 
 /**
