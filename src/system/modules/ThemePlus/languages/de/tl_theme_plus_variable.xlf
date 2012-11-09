@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="system/modules/ThemePlus/languages/de/tl_theme_plus_variable.php" source-language="de" datatype="php" date="2012-11-08T21:49:41+00:00" target-language="de">
+    <body>
+      <trans-unit id="tl_theme_plus_variable.type.0">
+        <source xml:lang="de">Variablentyp</source>
+        <target xml:lang="de">Variablentyp</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_variable.type.1">
+        <source xml:lang="de">Bitte w&#xE4;hlen Sie hier den Typ der Variablen.</source>
+        <target xml:lang="de">Bitte w&#xE4;hlen Sie hier den Typ der Variablen.</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_variable.name.0">
+        <source xml:lang="de">Name</source>
+        <target xml:lang="de">Name</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_variable.name.1">
+        <source xml:lang="de">Geben Sie hier den Namen der Variable an, dieser kann nur aus Buchstablen und Zahlen bestehen und dient der Identifikation im CSS Code.</source>
+        <target xml:lang="de">Geben Sie hier den Namen der Variable an, dieser kann nur aus Buchstablen und Zahlen bestehen und dient der Identifikation im CSS Code.</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_variable.text.0">
+        <source xml:lang="de">Code</source>
+        <target xml:lang="de">Code</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_variable.text.1">
+        <source xml:lang="de">Hier kann beliebiger Code eingef&#xFC;gt werden.</source>
+        <target xml:lang="de">Hier kann beliebiger Code eingef&#xFC;gt werden.</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_variable.url.0">
+        <source xml:lang="de">URL</source>
+        <target xml:lang="de">URL</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_variable.url.1">
+        <source xml:lang="de">Hier kann eine URL eingegeben werden, welche im CSS verkn&#xFC;pft wird.</source>
+        <target xml:lang="de">Hier kann eine URL eingegeben werden, welche im CSS verkn&#xFC;pft wird.</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_variable.file.0">
+        <source xml:lang="de">Datei</source>
+        <target xml:lang="de">Datei</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_variable.file.1">
+        <source xml:lang="de">Hier kann eine Datei ausgew&#xE4;hlt werden, welche im CSS verkn&#xFC;pft wird.</source>
+        <target xml:lang="de">Hier kann eine Datei ausgew&#xE4;hlt werden, welche im CSS verkn&#xFC;pft wird.</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_variable.color.0">
+        <source xml:lang="de">Farbe</source>
+        <target xml:lang="de">Farbe</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_variable.color.1">
+        <source xml:lang="de">Hier k&#xF6;nnen Sie eine Farbe ausw&#xE4;hlen.</source>
+        <target xml:lang="de">Hier k&#xF6;nnen Sie eine Farbe ausw&#xE4;hlen.</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_variable.size.0">
+        <source xml:lang="de">Gr&#xF6;&#xDF;e / Abmessungen</source>
+        <target xml:lang="de">Gr&#xF6;&#xDF;e / Abmessungen</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_variable.size.1">
+        <source xml:lang="de">Hier k&#xF6;nnen Sie eine Gr&#xF6;&#xDF;e oder Abmessungen festlegen.</source>
+        <target xml:lang="de">Hier k&#xF6;nnen Sie eine Gr&#xF6;&#xDF;e oder Abmessungen festlegen.</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_variable.variable_legend">
+        <source xml:lang="de">Variable</source>
+        <target xml:lang="de">Variable</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_variable.new.0">
+        <source xml:lang="de">Neue Variable</source>
+        <target xml:lang="de">Neue Variable</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_variable.new.1">
+        <source xml:lang="de">Eine neue Variable anlegen</source>
+        <target xml:lang="de">Eine neue Variable anlegen</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_variable.show.0">
+        <source xml:lang="de">Details</source>
+        <target xml:lang="de">Details</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_variable.show.1">
+        <source xml:lang="de">Details der Variable ID %s anzeigen</source>
+        <target xml:lang="de">Details der Variable ID %s anzeigen</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_variable.edit.0">
+        <source xml:lang="de">Variable bearbeiten</source>
+        <target xml:lang="de">Variable bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_variable.edit.1">
+        <source xml:lang="de">Variable ID %s bearbeiten</source>
+        <target xml:lang="de">Variable ID %s bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_variable.delete.0">
+        <source xml:lang="de">Variable l&#xF6;schen</source>
+        <target xml:lang="de">Variable l&#xF6;schen</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_variable.delete.1">
+        <source xml:lang="de">Variable ID %s l&#xF6;schen</source>
+        <target xml:lang="de">Variable ID %s l&#xF6;schen</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_variable.cut.0">
+        <source xml:lang="de">Variable verschieben </source>
+        <target xml:lang="de">Variable verschieben </target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_variable.cut.1">
+        <source xml:lang="de">Variable ID %s verschieben</source>
+        <target xml:lang="de">Variable ID %s verschieben</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_variable.copy.0">
+        <source xml:lang="de">Variable duplizieren</source>
+        <target xml:lang="de">Variable duplizieren</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_variable.copy.1">
+        <source xml:lang="de">Variable ID %s duplizieren</source>
+        <target xml:lang="de">Variable ID %s duplizieren</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

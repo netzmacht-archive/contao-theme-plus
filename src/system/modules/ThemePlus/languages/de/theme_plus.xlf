@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="system/modules/ThemePlus/languages/de/theme_plus.php" source-language="de" datatype="php" date="2012-11-08T21:49:41+00:00" target-language="de">
+    <body>
+      <trans-unit id="theme_plus.upgrade1.5">
+        <source xml:lang="de">Auto-Upgrade &lt;strong&gt;theme_plus&lt;/strong&gt; auf Version &lt;strong&gt;1.5&lt;/strong&gt; abgeschlossen!</source>
+        <target xml:lang="de">Auto-Upgrade &lt;strong&gt;theme_plus&lt;/strong&gt; auf Version &lt;strong&gt;1.5&lt;/strong&gt; abgeschlossen!</target>
+      </trans-unit>
+      <trans-unit id="theme_plus.upgrade2.0">
+        <source xml:lang="de">Ihre &lt;strong&gt;layout_additional_sources&lt;/strong&gt; Einstellungen wurden auf &lt;strong&gt;Theme+&lt;/strong&gt; portiert, &lt;strong&gt;layout_additional_sources&lt;/strong&gt; wurde von Ihrem System entfernt!&lt;br/&gt;Denken Sie daran, ein &lt;a href="contao/main.php?do=repository_manager&amp;update=database"&gt;Datenbankupdate&lt;/a&gt; zu machen!</source>
+        <target xml:lang="de">Ihre &lt;strong&gt;layout_additional_sources&lt;/strong&gt; Einstellungen wurden auf &lt;strong&gt;Theme+&lt;/strong&gt; portiert, &lt;strong&gt;layout_additional_sources&lt;/strong&gt; wurde von Ihrem System entfernt!&lt;br/&gt;Denken Sie daran, ein &lt;a href="contao/main.php?do=repository_manager&amp;update=database"&gt;Datenbankupdate&lt;/a&gt; zu machen!</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

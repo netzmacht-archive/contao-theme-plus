@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="system/modules/ThemePlus/languages/de/tl_content.php" source-language="de" datatype="php" date="2012-11-08T21:49:41+00:00" target-language="de">
+    <body>
+      <trans-unit id="tl_content.script_source.0">
+        <source xml:lang="de">JavaScript</source>
+        <target xml:lang="de">JavaScript</target>
+      </trans-unit>
+      <trans-unit id="tl_content.script_source.1">
+        <source xml:lang="de">W&#xE4;hlen Sie hier das einzuf&#xFC;gende JavaScript aus.</source>
+        <target xml:lang="de">W&#xE4;hlen Sie hier das einzuf&#xFC;gende JavaScript aus.</target>
+      </trans-unit>
+      <trans-unit id="tl_content.script_source_legend">
+        <source xml:lang="de">JavaScript Quelle</source>
+        <target xml:lang="de">JavaScript Quelle</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

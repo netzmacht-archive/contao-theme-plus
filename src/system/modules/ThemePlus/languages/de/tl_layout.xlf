@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="system/modules/ThemePlus/languages/de/tl_layout.php" source-language="de" datatype="php" date="2012-11-08T21:49:41+00:00" target-language="de">
+    <body>
+      <trans-unit id="tl_layout.theme_plus_exclude_contaocss.0">
+        <source xml:lang="de">Contao Core CSS nicht einbinden</source>
+        <target xml:lang="de">Contao Core CSS nicht einbinden</target>
+      </trans-unit>
+      <trans-unit id="tl_layout.theme_plus_exclude_contaocss.1">
+        <source xml:lang="de">Deaktiviert die Contao Core CSS (contao.css).</source>
+        <target xml:lang="de">Deaktiviert die Contao Core CSS (contao.css).</target>
+      </trans-unit>
+      <trans-unit id="tl_layout.theme_plus_exclude_frameworkcss.0">
+        <source xml:lang="de">Contao Framework CSS nicht einbinden</source>
+        <target xml:lang="de">Contao Framework CSS nicht einbinden</target>
+      </trans-unit>
+      <trans-unit id="tl_layout.theme_plus_exclude_frameworkcss.1">
+        <source xml:lang="de">Deaktiviert den Contao Framework CSS Code.</source>
+        <target xml:lang="de">Deaktiviert den Contao Framework CSS Code.</target>
+      </trans-unit>
+      <trans-unit id="tl_layout.theme_plus_stylesheets.0">
+        <source xml:lang="de">Weitere Stylesheets</source>
+        <target xml:lang="de">Weitere Stylesheets</target>
+      </trans-unit>
+      <trans-unit id="tl_layout.theme_plus_stylesheets.1">
+        <source xml:lang="de">Weitere Stylesheets in das Layout einbinden</source>
+        <target xml:lang="de">Weitere Stylesheets in das Layout einbinden</target>
+      </trans-unit>
+      <trans-unit id="tl_layout.theme_plus_javascript_lazy_load.0">
+        <source xml:lang="de">LazyLoad JavaScript</source>
+        <target xml:lang="de">LazyLoad JavaScript</target>
+      </trans-unit>
+      <trans-unit id="tl_layout.theme_plus_javascript_lazy_load.1">
+        <source xml:lang="de">&lt;a href="http://friendlybit.com/js/lazy-loading-asyncronous-javascript/" onclick="window.open(this.href); return false;"&gt;Lazy Loading Asynchronous Javascript&lt;/a&gt; - W&#xE4;hlen Sie diese Option, wird JavaScript sp&#xE4;ter geladen.</source>
+        <target xml:lang="de">&lt;a href="http://friendlybit.com/js/lazy-loading-asyncronous-javascript/" onclick="window.open(this.href); return false;"&gt;Lazy Loading Asynchronous Javascript&lt;/a&gt; - W&#xE4;hlen Sie diese Option, wird JavaScript sp&#xE4;ter geladen.</target>
+      </trans-unit>
+      <trans-unit id="tl_layout.theme_plus_default_javascript_position.0">
+        <source xml:lang="de">Positionierung von JavaScript Dateien</source>
+        <target xml:lang="de">Positionierung von JavaScript Dateien</target>
+      </trans-unit>
+      <trans-unit id="tl_layout.theme_plus_default_javascript_position.1">
+        <source xml:lang="de">W&#xE4;hlen Sie hier aus wo die JavaScript Dateien aus dem JavaScript Framework und aus TL_JAVASCRIPT positioniert werden sollen.</source>
+        <target xml:lang="de">W&#xE4;hlen Sie hier aus wo die JavaScript Dateien aus dem JavaScript Framework und aus TL_JAVASCRIPT positioniert werden sollen.</target>
+      </trans-unit>
+      <trans-unit id="tl_layout.theme_plus_javascripts.0">
+        <source xml:lang="de">Weitere JavaScripts</source>
+        <target xml:lang="de">Weitere JavaScripts</target>
+      </trans-unit>
+      <trans-unit id="tl_layout.theme_plus_javascripts.1">
+        <source xml:lang="de">Weitere JavaScripts in das Layout einbinden</source>
+        <target xml:lang="de">Weitere JavaScripts in das Layout einbinden</target>
+      </trans-unit>
+      <trans-unit id="tl_layout.theme_plus_exclude_files.0">
+        <source xml:lang="de">Stylesheets und JavaScripts filtern</source>
+        <target xml:lang="de">Stylesheets und JavaScripts filtern</target>
+      </trans-unit>
+      <trans-unit id="tl_layout.theme_plus_exclude_files.1">
+        <source xml:lang="de">Stylesheets und JavaScripts bpsw. aus Plugins k&#xF6;nnen mit diesem Feature deaktiviert werden. Geben Sie dazu jeden Dateipfad einzeln in ein Feld ein. Auf globaler Ebene kann dies auch &#xFC;ber das Array &lt;code&gt;$GLOBALS['TL_THEME_EXCLUDE']&lt;/code&gt; erfolgen, z.B. &lt;code&gt;$GLOBALS['TL_THEME_EXCLUDE'][] = 'system/contao.css';&lt;/code&gt;.</source>
+        <target xml:lang="de">Stylesheets und JavaScripts bpsw. aus Plugins k&#xF6;nnen mit diesem Feature deaktiviert werden. Geben Sie dazu jeden Dateipfad einzeln in ein Feld ein. Auf globaler Ebene kann dies auch &#xFC;ber das Array &lt;code&gt;$GLOBALS['TL_THEME_EXCLUDE']&lt;/code&gt; erfolgen, z.B. &lt;code&gt;$GLOBALS['TL_THEME_EXCLUDE'][] = 'system/contao.css';&lt;/code&gt;.</target>
+      </trans-unit>
+      <trans-unit id="tl_layout.theme_plus_exclude_files.2">
+        <source xml:lang="de"></source>
+        <target xml:lang="de"></target>
+      </trans-unit>
+      <trans-unit id="tl_layout.asseticStylesheetFilter.0">
+        <source xml:lang="de">Assetic Filter f&#xFC;r Stylesheets</source>
+        <target xml:lang="de">Assetic Filter f&#xFC;r Stylesheets</target>
+      </trans-unit>
+      <trans-unit id="tl_layout.asseticStylesheetFilter.1">
+        <source xml:lang="de">W&#xE4;hlen Sie hier einen Assetic Filter oder eine Filter Chain aus, der abschlie&#xDF;end auf &lt;strong&gt;alle&lt;/strong&gt; Stylesheets angewendet wird.</source>
+        <target xml:lang="de">W&#xE4;hlen Sie hier einen Assetic Filter oder eine Filter Chain aus, der abschlie&#xDF;end auf &lt;strong&gt;alle&lt;/strong&gt; Stylesheets angewendet wird.</target>
+      </trans-unit>
+      <trans-unit id="tl_layout.asseticJavaScriptFilter.0">
+        <source xml:lang="de">Assetic Filter f&#xFC;r JavaScripts</source>
+        <target xml:lang="de">Assetic Filter f&#xFC;r JavaScripts</target>
+      </trans-unit>
+      <trans-unit id="tl_layout.asseticJavaScriptFilter.1">
+        <source xml:lang="de">W&#xE4;hlen Sie hier einen Assetic Filter oder eine Filter Chain aus, der abschlie&#xDF;end auf &lt;strong&gt;alle&lt;/strong&gt; JavaScripts angewendet wird.</source>
+        <target xml:lang="de">W&#xE4;hlen Sie hier einen Assetic Filter oder eine Filter Chain aus, der abschlie&#xDF;end auf &lt;strong&gt;alle&lt;/strong&gt; JavaScripts angewendet wird.</target>
+      </trans-unit>
+      <trans-unit id="tl_layout.positions.head">
+        <source xml:lang="de">im &amp;lt;head&amp;gt;</source>
+        <target xml:lang="de">im &amp;lt;head&amp;gt;</target>
+      </trans-unit>
+      <trans-unit id="tl_layout.positions.body">
+        <source xml:lang="de">im &amp;lt;body&amp;gt;</source>
+        <target xml:lang="de">im &amp;lt;body&amp;gt;</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
