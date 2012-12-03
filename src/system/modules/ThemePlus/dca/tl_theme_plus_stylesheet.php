@@ -219,9 +219,8 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = array
             'eval'      => array('mandatory' => true,
                                  'fieldType' => 'radio',
                                  'files'     => true,
-                                 'extensions'=> 'css,less,scss,sass',
-                                 'path'      => $GLOBALS['TL_CONFIG']['uploadPath']),
-            'sql'       => "blob NULL"
+                                 'extensions'=> 'css,less,scss,sass'),
+            'sql'       => "int(10) unsigned NOT NULL"
         ),
         'url'                                   => array
         (

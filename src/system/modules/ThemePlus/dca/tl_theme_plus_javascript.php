@@ -219,9 +219,8 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = array
             'eval'      => array('mandatory' => true,
                                  'fieldType' => 'radio',
                                  'files'     => true,
-                                 'extensions'=> 'js',
-                                 'path'      => $GLOBALS['TL_CONFIG']['uploadPath']),
-            'sql'       => "blob NULL"
+                                 'extensions'=> 'js'),
+            'sql'       => "int(10) unsigned NOT NULL"
         ),
         'url'                                   => array
         (
@@ -253,14 +252,13 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = array
         'position'                              => array
         (
             'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['position'],
-            'default'   => 'head',
             'exclude'   => true,
             'inputType' => 'select',
             'options'   => array('head', 'body'),
             'reference' => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['positions'],
             'eval'      => array('includeBlankOption' => true,
                                  'blankOptionLabel' => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['positions']['inherit']),
-            'sql'       => "char(4) NOT NULL default 'head'"
+            'sql'       => "char(4) NOT NULL default ''"
         ),
         'cc'                                    => array
         (
