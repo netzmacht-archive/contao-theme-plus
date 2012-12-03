@@ -32,13 +32,13 @@ $GLOBALS['BE_MOD']['design']['themes']['tables'][] = 'tl_theme_plus_variable';
 /**
  * Front end modules
  */
-$GLOBALS['FE_MOD']['includes']['script_source'] = 'InfinitySoft\ThemePlus\Hybrid\JavaScript';
+$GLOBALS['FE_MOD']['includes']['script_source'] = 'ThemePlus\Hybrid\JavaScript';
 
 
 /**
  * Content elements
  */
-$GLOBALS['TL_CTE']['includes']['script_source'] = 'InfinitySoft\ThemePlus\Hybrid\JavaScript';
+$GLOBALS['TL_CTE']['includes']['script_source'] = 'ThemePlus\Hybrid\JavaScript';
 
 
 /**
