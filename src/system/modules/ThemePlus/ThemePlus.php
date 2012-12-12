@@ -723,7 +723,7 @@ class ThemePlus
                 $asset = new FileAsset(TL_ROOT . '/' . $source, array(), TL_ROOT, $source);
             }
 
-            if ($mode == 'static' && static::isLiveMode()) {
+            if (($mode == 'static' || $mode === null) && static::isLiveMode()) {
                 $collection->add($asset);
             }
             else {
