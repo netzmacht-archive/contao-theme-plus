@@ -557,7 +557,7 @@ class ThemePlus
 
         // Add the internal scripts
         if (is_array($GLOBALS['TL_JAVASCRIPT']) && !empty($GLOBALS['TL_JAVASCRIPT'])) {
-            $this->addAssetsToCollectionFromArray(array_unique($GLOBALS['TL_JAVASCRIPT']),
+            $this->addAssetsToCollectionFromArray($GLOBALS['TL_JAVASCRIPT'],
                                                   false,
                                                   $collection,
                                                   $javascripts,
@@ -675,6 +675,11 @@ class ThemePlus
                                                       $position = 'head')
     {
         foreach ($sources as $source) {
+            if ($source instanceof AssetInterface) {
+                $collection->add($source);
+                continue;
+            }
+
             if ($split === null) {
                 // use source as source
             }
