@@ -431,6 +431,7 @@ class ThemePlus
         // Add the CSS framework style sheets
         if (is_array($GLOBALS['TL_FRAMEWORK_CSS']) && !empty($GLOBALS['TL_FRAMEWORK_CSS'])) {
             $this->addAssetsToCollectionFromArray(array_unique($GLOBALS['TL_FRAMEWORK_CSS']),
+	                                              'css',
                                                   null,
                                                   $collection,
                                                   $stylesheets);
@@ -440,6 +441,7 @@ class ThemePlus
         // Add the internal style sheets
         if (is_array($GLOBALS['TL_CSS']) && !empty($GLOBALS['TL_CSS'])) {
             $this->addAssetsToCollectionFromArray(array_unique($GLOBALS['TL_CSS']),
+	                                              'css',
                                                   true,
                                                   $collection,
                                                   $stylesheets);
@@ -449,6 +451,7 @@ class ThemePlus
         // Add the user style sheets
         if (is_array($GLOBALS['TL_USER_CSS']) && !empty($GLOBALS['TL_USER_CSS'])) {
             $this->addAssetsToCollectionFromArray(array_unique($GLOBALS['TL_USER_CSS']),
+	                                              'css',
                                                   true,
                                                   $collection,
                                                   $stylesheets);
@@ -482,16 +485,23 @@ class ThemePlus
 
         // add files
         foreach ($stylesheets as $stylesheet) {
+	        // use proxy for development
+	        if (static::isDesignerMode() && isset($stylesheet['id'])) {
+		        $url = 'system/modules/ThemePlus/web/proxy.php?page=' . $GLOBALS['objPage']->id . '&source=' . $stylesheet['id'];
+	        }
+
             // use asset
-            if (isset($stylesheet['asset'])) {
+            else if (isset($stylesheet['asset'])) {
                 $url = static::storeAsset($stylesheet['asset'],
                                           'css',
                                           $defaultFilters);
+	            $url = static::addStaticUrlTo($url);
             }
 
             // use url
             else if (isset($stylesheet['url'])) {
                 $url = $stylesheet['url'];
+	            $url = static::addStaticUrlTo($url);
             }
 
             // continue if file have no source
@@ -502,7 +512,7 @@ class ThemePlus
             // generate html
             $html = '<link' . ($xhtml
                 ? ' type="text/css"'
-                : '') . ' rel="stylesheet" href="' . static::addStaticUrlTo($url) . '"' . ((isset($stylesheet['media']) && $stylesheet['media'] != 'all')
+                : '') . ' rel="stylesheet" href="' . $url . '"' . ((isset($stylesheet['media']) && $stylesheet['media'] != 'all')
                 ? ' media="' . $stylesheet['media'] . '"'
                 : '') . $tagEnding;
 
@@ -558,6 +568,7 @@ class ThemePlus
         // Add the internal scripts
         if (is_array($GLOBALS['TL_JAVASCRIPT']) && !empty($GLOBALS['TL_JAVASCRIPT'])) {
             $this->addAssetsToCollectionFromArray($GLOBALS['TL_JAVASCRIPT'],
+	                                              'js',
                                                   false,
                                                   $collection,
                                                   $javascripts,
@@ -596,16 +607,23 @@ class ThemePlus
 
         // add files
         foreach ($javascripts as $javascript) {
+	        // use proxy for development
+	        if (static::isDesignerMode() && isset($javascript['id'])) {
+		        $url = 'system/modules/ThemePlus/web/proxy.php?page=' . $GLOBALS['objPage']->id . '&source=' . $javascript['id'];
+	        }
+
             // use asset
-            if (isset($javascript['asset'])) {
+            else if (isset($javascript['asset'])) {
                 $url = static::storeAsset($javascript['asset'],
                                           'js',
                                           $defaultFilters);
+	            $url = static::addStaticUrlTo($url);
             }
 
             // use url
             else if (isset($javascript['url'])) {
                 $url = $javascript['url'];
+	            $url = static::addStaticUrlTo($url);
             }
 
             // continue if file have no source
@@ -617,12 +635,12 @@ class ThemePlus
             if ($layout->theme_plus_javascript_lazy_load) {
                 $html = '<script' . ($xhtml
                     ? ' type="text/javascript"'
-                    : '') . '>window.loadAsync(' . json_encode(static::addStaticUrlTo($url)) . ');</script>';
+                    : '') . '>window.loadAsync(' . json_encode($url) . ');</script>';
             }
             else {
                 $html = '<script' . ($xhtml
                     ? ' type="text/javascript"'
-                    : '') . ' src="' . static::addStaticUrlTo($url) . '"></script>';
+                    : '') . ' src="' . $url . '"></script>';
             }
 
             // wrap cc
@@ -669,6 +687,7 @@ class ThemePlus
     }
 
     protected function addAssetsToCollectionFromArray(array $sources,
+	                                                  $type,
                                                       $split,
                                                       AssetCollection $collection,
                                                       array &$array,
@@ -676,7 +695,36 @@ class ThemePlus
     {
         foreach ($sources as $source) {
             if ($source instanceof AssetInterface) {
-                $collection->add($source);
+	            if (static::isLiveMode()) {
+                    $collection->add($source);
+	            }
+	            else if ($source instanceof StringAsset) {
+		            $data = base64_encode($source->dump());
+
+		            $array[] = array(
+			            'id' => $type . ':' . 'base64:' . $data,
+			            'asset' => $source,
+	                    'position' => $position
+		            );
+	            }
+	            else if ($source instanceof FileAsset) {
+		            $reflectionClass = new ReflectionClass($source);
+		            $sourceProperty = $reflectionClass->getProperty('source');
+		            $sourceProperty->setAccessible(true);
+		            $sourcePath = $sourceProperty->getValue();
+
+		            $array[] = array(
+			            'id' => $type . ':' . $sourcePath,
+			            'asset' => $source,
+	                    'position' => $position
+		            );
+	            }
+	            else {
+		            $array[] = array(
+			            'asset' => $source,
+	                    'position' => $position
+		            );
+	            }
                 continue;
             }
 
@@ -710,12 +758,15 @@ class ThemePlus
                            $source)
             ) {
                 // ...fetch the stylesheet
-                if ($mode == 'static') {
+                if ($mode == 'static' && static::isLiveMode()) {
                     $asset = new HttpAsset($source);
                 }
                 // ...or add if it is not static
                 else {
-                    $sources[] = array('url' => $source, 'media' => $media);
+                    $array[] = array(
+	                    'url' => $source,
+	                    'media' => $media
+                    );
                     continue;
                 }
             }
@@ -727,7 +778,12 @@ class ThemePlus
                 $collection->add($asset);
             }
             else {
-                $array[] = array('asset' => $asset, 'media' => $media, 'position' => $position);
+                $array[] = array(
+	                'id' => $type . ':' . $source,
+	                'asset' => $asset,
+	                'media' => $media,
+	                'position' => $position
+                );
             }
         }
     }
@@ -799,7 +855,11 @@ class ThemePlus
                             $collection->add($asset);
                         }
                         else {
-                            $array[] = array('asset' => $asset, 'position' => $position);
+                            $array[] = array(
+	                            'id' => $type . ':' . $data->id,
+	                            'asset' => $asset,
+	                            'position' => $position
+                            );
                         }
                     }
                 }
