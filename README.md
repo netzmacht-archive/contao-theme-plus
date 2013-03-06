@@ -13,7 +13,7 @@ Main Features
 Dependencies
 ------------
 
-* Assetic for Contao https://github.com/InfinitySoft/contao-Assetic
+* Assetic for Contao https://github.com/bit3/contao-assetic
 * Assetic https://github.com/kriswallsmith/assetic
 
 Attribution
