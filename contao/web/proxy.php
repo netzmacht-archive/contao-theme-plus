@@ -11,7 +11,8 @@
  * @license    http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  */
 
-require('../../../initialize.php');
+define('TL_MODE', 'FE');
+require(dirname(dirname(dirname(dirname($_SERVER['SCRIPT_FILENAME'])))) . '/initialize.php');
 
 use Assetic\Asset\AssetInterface;
 use Assetic\Asset\FileAsset;
