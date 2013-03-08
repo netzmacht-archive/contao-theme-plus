@@ -24,8 +24,8 @@
 	"require":{
 		"php":">=5.3",
 		"contao/core":"3.*",
-		"bit3/contao-assetic":"dev-master@dev",
-		"ikimea/browser":"dev-master@dev"
+		"bit3/contao-assetic":"dev-master",
+		"ikimea/browser":"dev-master"
 	},
 	"require-dev":{
 		"squizlabs/php_codesniffer":"1.*",
