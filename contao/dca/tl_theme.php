@@ -33,21 +33,21 @@ $GLOBALS['TL_DCA']['tl_theme']['list']['operations'] = array_merge
 		(
 			'label'               => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_stylesheet'],
 			'href'                => 'table=tl_theme_plus_stylesheet',
-			'icon'                => 'system/modules/ThemePlus/assets/images/stylesheet.png',
+			'icon'                => 'system/modules/theme-plus/assets/images/stylesheet.png',
 			'button_callback'     => array('ThemePlus\DataContainer\Theme', 'editStylesheet')
 		),
 		'theme_plus_javascript'     => array
 		(
 			'label'               => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_javascript'],
 			'href'                => 'table=tl_theme_plus_javascript',
-			'icon'                => 'system/modules/ThemePlus/assets/images/javascript.png',
+			'icon'                => 'system/modules/theme-plus/assets/images/javascript.png',
 			'button_callback'     => array('ThemePlus\DataContainer\Theme', 'editJavaScript')
 		),
 		'theme_plus_variable' => array
 		(
 			'label'               => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_variable'],
 			'href'                => 'table=tl_theme_plus_variable',
-			'icon'                => 'system/modules/ThemePlus/assets/images/variable.png',
+			'icon'                => 'system/modules/theme-plus/assets/images/variable.png',
 			'button_callback'     => array('ThemePlus\DataContainer\Theme', 'editVariable')
 		)
 	),

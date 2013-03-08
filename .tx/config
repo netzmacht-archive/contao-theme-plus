@@ -3,62 +3,62 @@ host = https://www.transifex.com
 type = XLIFF
 
 [contao-ThemePlus.v4-assetic]
-file_filter = src/system/modules/ThemePlus/languages/<lang>/assetic.xlf
-source_file = src/system/modules/ThemePlus/languages/de/assetic.xlf
+file_filter = src/system/modules/theme-plus/languages/<lang>/assetic.xlf
+source_file = src/system/modules/theme-plus/languages/de/assetic.xlf
 source_lang = de
 
 [contao-ThemePlus.v4-default]
-file_filter = src/system/modules/ThemePlus/languages/<lang>/default.xlf
-source_file = src/system/modules/ThemePlus/languages/de/default.xlf
+file_filter = src/system/modules/theme-plus/languages/<lang>/default.xlf
+source_file = src/system/modules/theme-plus/languages/de/default.xlf
 source_lang = de
 
 [contao-ThemePlus.v4-modules]
-file_filter = src/system/modules/ThemePlus/languages/<lang>/modules.xlf
-source_file = src/system/modules/ThemePlus/languages/de/modules.xlf
+file_filter = src/system/modules/theme-plus/languages/<lang>/modules.xlf
+source_file = src/system/modules/theme-plus/languages/de/modules.xlf
 source_lang = de
 
 [contao-ThemePlus.v4-theme_plus]
-file_filter = src/system/modules/ThemePlus/languages/<lang>/theme_plus.xlf
-source_file = src/system/modules/ThemePlus/languages/de/theme_plus.xlf
+file_filter = src/system/modules/theme-plus/languages/<lang>/theme_plus.xlf
+source_file = src/system/modules/theme-plus/languages/de/theme_plus.xlf
 source_lang = de
 
 [contao-ThemePlus.v4-tl_content]
-file_filter = src/system/modules/ThemePlus/languages/<lang>/tl_content.xlf
-source_file = src/system/modules/ThemePlus/languages/de/tl_content.xlf
+file_filter = src/system/modules/theme-plus/languages/<lang>/tl_content.xlf
+source_file = src/system/modules/theme-plus/languages/de/tl_content.xlf
 source_lang = de
 
 [contao-ThemePlus.v4-tl_layout]
-file_filter = src/system/modules/ThemePlus/languages/<lang>/tl_layout.xlf
-source_file = src/system/modules/ThemePlus/languages/de/tl_layout.xlf
+file_filter = src/system/modules/theme-plus/languages/<lang>/tl_layout.xlf
+source_file = src/system/modules/theme-plus/languages/de/tl_layout.xlf
 source_lang = de
 
 [contao-ThemePlus.v4-tl_module]
-file_filter = src/system/modules/ThemePlus/languages/<lang>/tl_module.xlf
-source_file = src/system/modules/ThemePlus/languages/de/tl_module.xlf
+file_filter = src/system/modules/theme-plus/languages/<lang>/tl_module.xlf
+source_file = src/system/modules/theme-plus/languages/de/tl_module.xlf
 source_lang = de
 
 [contao-ThemePlus.v4-tl_page]
-file_filter = src/system/modules/ThemePlus/languages/<lang>/tl_page.xlf
-source_file = src/system/modules/ThemePlus/languages/de/tl_page.xlf
+file_filter = src/system/modules/theme-plus/languages/<lang>/tl_page.xlf
+source_file = src/system/modules/theme-plus/languages/de/tl_page.xlf
 source_lang = de
 
 [contao-ThemePlus.v4-tl_theme_plus_javascript]
-file_filter = src/system/modules/ThemePlus/languages/<lang>/tl_theme_plus_javascript.xlf
-source_file = src/system/modules/ThemePlus/languages/de/tl_theme_plus_javascript.xlf
+file_filter = src/system/modules/theme-plus/languages/<lang>/tl_theme_plus_javascript.xlf
+source_file = src/system/modules/theme-plus/languages/de/tl_theme_plus_javascript.xlf
 source_lang = de
 
 [contao-ThemePlus.v4-tl_theme_plus_stylesheet]
-file_filter = src/system/modules/ThemePlus/languages/<lang>/tl_theme_plus_stylesheet.xlf
-source_file = src/system/modules/ThemePlus/languages/de/tl_theme_plus_stylesheet.xlf
+file_filter = src/system/modules/theme-plus/languages/<lang>/tl_theme_plus_stylesheet.xlf
+source_file = src/system/modules/theme-plus/languages/de/tl_theme_plus_stylesheet.xlf
 source_lang = de
 
 [contao-ThemePlus.v4-tl_theme_plus_variable]
-file_filter = src/system/modules/ThemePlus/languages/<lang>/tl_theme_plus_variable.xlf
-source_file = src/system/modules/ThemePlus/languages/de/tl_theme_plus_variable.xlf
+file_filter = src/system/modules/theme-plus/languages/<lang>/tl_theme_plus_variable.xlf
+source_file = src/system/modules/theme-plus/languages/de/tl_theme_plus_variable.xlf
 source_lang = de
 
 [contao-ThemePlus.v4-tl_theme]
-file_filter = src/system/modules/ThemePlus/languages/<lang>/tl_theme.xlf
-source_file = src/system/modules/ThemePlus/languages/de/tl_theme.xlf
+file_filter = src/system/modules/theme-plus/languages/<lang>/tl_theme.xlf
+source_file = src/system/modules/theme-plus/languages/de/tl_theme.xlf
 source_lang = de
 

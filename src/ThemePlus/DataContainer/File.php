@@ -68,7 +68,7 @@ class File
                                                   true)) . ']</span>';
         }
 
-        $image = 'system/modules/ThemePlus/assets/images/' . $row['type'] . '.png';
+        $image = 'system/modules/theme-plus/assets/images/' . $row['type'] . '.png';
 
         return '<div>' . ($image
             ? $this->generateImage($image,

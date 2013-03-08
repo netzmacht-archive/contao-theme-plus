@@ -194,7 +194,7 @@ class proxy
 
 	protected function outputAsset(AssetInterface $asset)
 	{
-		$asset->setTargetPath('system/modules/ThemePlus/web/proxy.php');
+		$asset->setTargetPath('system/modules/theme-plus/web/proxy.php');
 
 		$this->output(
 			$asset->dump(

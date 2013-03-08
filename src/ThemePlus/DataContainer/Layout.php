@@ -80,7 +80,7 @@ class Layout
                                                       true)) . ']</span>';
             }
 
-            $image = 'system/modules/ThemePlus/assets/images/' . $collection->type . '.png';
+            $image = 'system/modules/theme-plus/assets/images/' . $collection->type . '.png';
 
             $options[$collection->id] = ($image
                 ? $this->generateImage($image,

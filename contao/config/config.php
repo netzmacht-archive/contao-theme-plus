@@ -59,7 +59,7 @@ $GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus_stylesheet'] = array
     'label'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_stylesheet'][0],
     'title'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_stylesheet'][1],
     'href_fragment' => 'table=tl_theme_plus_stylesheet',
-    'icon'          => 'system/modules/ThemePlus/assets/images/stylesheet.png',
+    'icon'          => 'system/modules/theme-plus/assets/images/stylesheet.png',
     'appendRT'      => true,
 );
 $GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus_javascript'] = array
@@ -67,7 +67,7 @@ $GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus_javascript'] = array
     'label'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_javascript'][0],
     'title'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_javascript'][1],
     'href_fragment' => 'table=tl_theme_plus_javascript',
-    'icon'          => 'system/modules/ThemePlus/assets/images/javascript.png',
+    'icon'          => 'system/modules/theme-plus/assets/images/javascript.png',
     'appendRT'      => true,
 );
 $GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus_variable']   = array
@@ -75,7 +75,7 @@ $GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus_variable']   = array
     'label'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_variable'][0],
     'title'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_variable'][1],
     'href_fragment' => 'table=tl_theme_plus_variable',
-    'icon'          => 'system/modules/ThemePlus/assets/images/variable.png',
+    'icon'          => 'system/modules/theme-plus/assets/images/variable.png',
     'appendRT'      => true,
 );
 

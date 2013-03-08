@@ -13,7 +13,7 @@
 
 
 if (TL_MODE == 'BE') {
-    $GLOBALS['TL_CSS']['theme_plus_be'] = 'system/modules/ThemePlus/assets/css/be.css';
+    $GLOBALS['TL_CSS']['theme_plus_be'] = 'system/modules/theme-plus/assets/css/be.css';
 }
 
 

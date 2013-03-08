@@ -78,7 +78,7 @@ class Page
                                                       true)) . ']</span>';
             }
 
-            $image = 'system/modules/ThemePlus/assets/images/' . $collection->type . '.png';
+            $image = 'system/modules/theme-plus/assets/images/' . $collection->type . '.png';
 
             $options[$theme->name][$collection->id] = ($image
                 ? $this->generateImage($image,

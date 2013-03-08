@@ -553,7 +553,7 @@ class ThemePlus
 			// use proxy for development
 			if (static::isDesignerMode() && isset($stylesheet['id'])) {
 				$url = sprintf(
-					'system/modules/ThemePlus/web/proxy.php/%s/%s/%s?%s',
+					'system/modules/theme-plus/web/proxy.php/%s/%s/%s?%s',
 					$GLOBALS['objPage']->id,
 					rawurlencode($stylesheet['id']),
 					$stylesheet['name'],
@@ -762,7 +762,7 @@ class ThemePlus
 
 		// add async.js script
 		if ($layout->theme_plus_javascript_lazy_load) {
-			$async = new FileAsset(TL_ROOT . '/system/modules/ThemePlus/assets/js/async.js', $defaultFilters);
+			$async = new FileAsset(TL_ROOT . '/system/modules/theme-plus/assets/js/async.js', $defaultFilters);
 			$async = '<script' . ($xhtml
 				? ' type="text/javascript"'
 				: '') . '>' . $async->dump() . '</script>' . "\n";
