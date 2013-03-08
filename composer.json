@@ -25,7 +25,8 @@
 		"php":">=5.3",
 		"contao/core":"3.*",
 		"bit3/contao-assetic":"dev-master",
-		"ikimea/browser":"dev-master"
+		"ikimea/browser":"dev-master",
+		"bit3/contao-meta-palettes":"dev-master"
 	},
 	"require-dev":{
 		"squizlabs/php_codesniffer":"1.*",
