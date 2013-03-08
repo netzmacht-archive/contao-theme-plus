@@ -18,8 +18,8 @@ use Assetic\Asset\AssetInterface;
 use Assetic\Asset\FileAsset;
 use Assetic\Asset\HttpAsset;
 use Assetic\Asset\StringAsset;
-use Assetic\Contao\AsseticFactory;
 use Assetic\Filter\FilterCollection;
+use ContaoAssetic\AsseticFactory;
 use ThemePlus\ThemePlus;
 use ThemePlus\Model\StylesheetModel;
 use ThemePlus\Model\JavaScriptModel;
@@ -62,8 +62,10 @@ class proxy
 			$this->deny();
 		}
 
-		$sourceDescriptor = Input::get('source');
-		$pageId           = Input::get('page');
+		$scriptName = \Environment::get('scriptName');
+
+		list($pageId, $sourceDescriptor) = explode('/', substr($scriptName, 1));
+		$sourceDescriptor = base64_decode($sourceDescriptor);
 
 		$this->page   = PageModel::findWithDetails($pageId);
 		$this->layout = LayoutModel::findByPk($this->page->layout);
@@ -79,8 +81,7 @@ class proxy
 		$this->id   = $match[2];
 		$this->data = $match[3];
 
-		header("Cache-Control: no-cache, must-revalidate");
-		header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
+		header("Cache-Control: public");
 
 		switch ($this->type) {
 			case 'css':

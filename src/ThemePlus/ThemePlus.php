@@ -18,7 +18,7 @@ use FrontendTemplate;
 use ThemePlus\Model\StylesheetModel;
 use ThemePlus\Model\JavaScriptModel;
 use ThemePlus\Model\VariableModel;
-use Assetic\Contao\AsseticFactory;
+use ContaoAssetic\AsseticFactory;
 use Assetic\Asset\AssetInterface;
 use Assetic\Asset\FileAsset;
 use Assetic\Asset\HttpAsset;
@@ -555,7 +555,7 @@ class ThemePlus
 				$url = sprintf(
 					'system/modules/theme-plus/web/proxy.php/%s/%s/%s?%s',
 					$GLOBALS['objPage']->id,
-					rawurlencode($stylesheet['id']),
+					base64_encode($stylesheet['id']),
 					$stylesheet['name'],
 					$stylesheet['time']
 				);
@@ -698,8 +698,12 @@ class ThemePlus
 		foreach ($javascripts as $javascript) {
 			// use proxy for development
 			if (static::isDesignerMode() && isset($javascript['id'])) {
-				$url = 'system/modules/ThemePlus/web/proxy.php?page=' . $GLOBALS['objPage']->id . '&source=' . rawurlencode(
-					$javascript['id']
+				$url = sprintf(
+					'system/modules/theme-plus/web/proxy.php/%s/%s/%s?%s',
+					$GLOBALS['objPage']->id,
+					base64_encode($javascript['id']),
+					$javascript['name'],
+					$javascript['time']
 				);
 			}
 
