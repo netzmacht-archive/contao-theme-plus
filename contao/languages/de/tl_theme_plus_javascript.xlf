@@ -82,14 +82,6 @@
         <source xml:lang="de">W&#xE4;hlen Sie hier die Serverseitigen Filter aus.</source>
         <target xml:lang="de">W&#xE4;hlen Sie hier die Serverseitigen Filter aus.</target>
       </trans-unit>
-      <trans-unit id="tl_theme_plus_javascript.filterInvert.0">
-        <source xml:lang="de">Filter umkehren</source>
-        <target xml:lang="de">Filter umkehren</target>
-      </trans-unit>
-      <trans-unit id="tl_theme_plus_javascript.filterInvert.1">
-        <source xml:lang="de">Hiermit k&#xF6;nnen Sie die Filterlogik umkehren.</source>
-        <target xml:lang="de">Hiermit k&#xF6;nnen Sie die Filterlogik umkehren.</target>
-      </trans-unit>
       <trans-unit id="tl_theme_plus_javascript.editor_integration.0">
         <source xml:lang="de">WYSIWYG Editor Integration</source>
         <target xml:lang="de">WYSIWYG Editor Integration</target>

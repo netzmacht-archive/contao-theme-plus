@@ -26,6 +26,7 @@
 		"contao/core":"3.*",
 		"bit3/contao-assetic":"dev-master",
 		"ikimea/browser":"dev-master",
+		"mobiledetect/mobiledetectlib": "2.*",
 		"bit3/contao-meta-palettes":"dev-master"
 	},
 	"require-dev":{

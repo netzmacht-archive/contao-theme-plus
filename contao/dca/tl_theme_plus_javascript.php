@@ -16,6 +16,18 @@ if (TL_MODE == 'BE') {
     $GLOBALS['TL_CSS']['theme_plus_be'] = 'system/modules/theme-plus/assets/css/be.css';
 }
 
+$session = \Session::getInstance();
+if (\Input::get('type')) {
+	$type = \Input::get('type');
+}
+else if ($session->get('THEME_PLUS_LAST_JS_TYPE')) {
+	$type = $session->get('THEME_PLUS_LAST_JS_TYPE');
+}
+else {
+	$type = '';
+}
+
+$this->loadLanguageFile('tl_theme_plus_filter');
 
 /**
  * Table tl_theme_plus_javascript
@@ -162,7 +174,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = array
     // MetaSubpalettes
     'metasubpalettes' => array
     (
-        'filter' => array('filterRule', 'filterInvert')
+        'filter' => array('filterRule')
     ),
 
     // Fields
@@ -189,9 +201,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = array
         'type'                                  => array
         (
             'label'         => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['type'],
-            'default'       => \Input::get('type')
-                ? : \Session::getInstance()
-                    ->get('THEME_PLUS_LAST_JS_TYPE'),
+            'default'       => $type,
             'inputType'     => 'select',
             'filter'        => true,
             'options'       => array('file', 'url', 'code'),
@@ -279,78 +289,85 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = array
         ),
         'filterRule'                            => array
         (
-            'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['filterRule'],
-            'inputType' => 'checkbox',
-            'options'   => array
-            (
-                'OS'      => array
-                (
-                    'os-win'        => 'Windows',
-                    'os-win-ce'     => 'Windows CE / Phone',
-                    'os-mac'        => 'Macintosh',
-                    'os-unix'       => 'UNIX (Linux, FreeBSD, OpenBSD, NetBSD)',
-                    'os-ios'        => 'iOS (iPad, iPhone, iPod)',
-                    'os-android'    => 'Android',
-                    'os-blackberry' => 'Blackberry',
-                    'os-symbian'    => 'Symbian',
-                    'os-webos'      => 'WebOS'
-                ),
-                'Browser' => array
-                (
-                    'browser-ie'           => 'InternetExplorer',
-                    'browser-ie-6'         => 'InternetExplorer 6',
-                    'browser-ie-7'         => 'InternetExplorer 7',
-                    'browser-ie-8'         => 'InternetExplorer 8',
-                    'browser-ie-9'         => 'InternetExplorer 9',
-                    'browser-ie-10'        => 'InternetExplorer 10',
-                    'browser-ie-mobile'    => 'InternetExplorer Mobile',
-                    'browser-firefox'      => 'Firefox',
-                    'browser-firefox-3'    => 'Firefox-3',
-                    'browser-firefox-4'    => 'Firefox-4',
-                    'browser-firefox-5'    => 'Firefox-5',
-                    'browser-firefox-6'    => 'Firefox-6',
-                    'browser-firefox-7'    => 'Firefox-7',
-                    'browser-firefox-8'    => 'Firefox-8',
-                    'browser-firefox-9'    => 'Firefox-9',
-                    'browser-firefox-10'   => 'Firefox-10',
-                    'browser-firefox-11'   => 'Firefox-11',
-                    'browser-firefox-12'   => 'Firefox-12',
-                    'browser-chrome'       => 'Chrome',
-                    'browser-chrome-10'    => 'Chrome-10',
-                    'browser-chrome-11'    => 'Chrome-11',
-                    'browser-chrome-12'    => 'Chrome-12',
-                    'browser-chrome-13'    => 'Chrome-13',
-                    'browser-chrome-14'    => 'Chrome-14',
-                    'browser-chrome-15'    => 'Chrome-15',
-                    'browser-chrome-16'    => 'Chrome-16',
-                    'browser-chrome-17'    => 'Chrome-17',
-                    'browser-chrome-18'    => 'Chrome-18',
-                    'browser-chrome-19'    => 'Chrome-19',
-                    'browser-omniweb'      => 'OmniWeb',
-                    'browser-safari'       => 'Safari',
-                    'browser-safari-4'     => 'Safari 4',
-                    'browser-safari-5'     => 'Safari 5',
-                    'browser-opera'        => 'Opera',
-                    'browser-opera-mini'   => 'Opera Mini',
-                    'browser-opera-mobile' => 'Opera Mobile',
-                    'browser-camino'       => 'Camino',
-                    'browser-konqueror'    => 'Konqueror',
-                    'browser-other'        => 'Other'
-                ),
-                'Other'   => array
-                (
-                    '@mobile' => 'Mobile Client'
-                )
-            ),
-            'eval'      => array('multiple'=> true),
-            'sql'       => "blob NULL"
-        ),
-        'filterInvert'                          => array
-        (
-            'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['filterInvert'],
-            'exclude'   => true,
-            'inputType' => 'checkbox',
-            'sql'       => "char(1) NOT NULL default ''"
+			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['filterRule'],
+			'exclude'   => true,
+			'inputType' => 'multiColumnWizard',
+			'eval'      => array
+			(
+				'columnFields' => array
+				(
+					'system'          => array
+					(
+						'label'            => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['system'],
+						'exclude'          => true,
+						'inputType'        => 'select',
+						'options_callback' => array('ThemePlus\DataContainer\File', 'getSystems'),
+						'eval'             => array(
+							'style'              => 'width:158px',
+							'includeBlankOption' => true
+						)
+					),
+					'browser'         => array
+					(
+						'label'            => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['browser'],
+						'exclude'          => true,
+						'inputType'        => 'select',
+						'options_callback' => array('ThemePlus\DataContainer\File', 'getBrowsers'),
+						'eval'             => array(
+							'style'              => 'width:158px',
+							'includeBlankOption' => true
+						)
+					),
+					'comparator'      => array
+					(
+						'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['comparator'],
+						'inputType' => 'select',
+						'options'   => array(
+							'lt'  => '<',
+							'lte' => '<=',
+							'gte' => '>=',
+							'gt'  => '>'
+						),
+						'eval'      => array(
+							'style'              => 'width:70px',
+							'includeBlankOption' => true
+						)
+					),
+					'browser_version' => array
+					(
+						'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['browser_version'],
+						'inputType' => 'text',
+						'eval'      => array(
+							'style' => 'width:70px'
+						)
+					),
+					'platform'        => array
+					(
+						'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['platform'],
+						'exclude'   => true,
+						'inputType' => 'select',
+						'options'   => array(
+							'desktop' => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['desktop'],
+							'tablet'  => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['tablet'],
+							'mobile'  => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['mobile'],
+						),
+						'eval'      => array(
+							'includeBlankOption' => true,
+							'style'              => 'width:70px',
+						)
+					),
+					'invert'          => array
+					(
+						'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['invert'],
+						'exclude'   => true,
+						'inputType' => 'checkbox',
+						'eval'      => array(
+							'style' => 'width:60px'
+						)
+					)
+				)
+			),
+			'sql'       => "blob NULL"
         ),
         'asseticFilter'                         => array
         (
