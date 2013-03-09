@@ -46,8 +46,8 @@ class ThemePlus
 	 */
 	public static function getInstance()
 	{
-		if (self::$instance == null) {
-			self::$instance = new ThemePlus();
+		if (static::$instance === null) {
+			static::$instance = new ThemePlus();
 
 			// remember cookie FE_PREVIEW state
 			$fePreview = \Input::cookie('FE_PREVIEW');
@@ -59,7 +59,7 @@ class ThemePlus
 			);
 
 			// request the BE_USER_AUTH login status
-			static::setDesignerMode(self::$instance->getLoginStatus('BE_USER_AUTH'));
+			static::setDesignerMode(static::$instance->getLoginStatus('BE_USER_AUTH'));
 
 			// restore previous FE_PREVIEW state
 			\Input::setCookie(
@@ -67,9 +67,40 @@ class ThemePlus
 				$fePreview
 			);
 		}
-		return self::$instance;
+		return static::$instance;
 	}
 
+	/**
+	 * @var \Ikimea\Browser\Browser
+	 */
+	protected static $browserDetect;
+
+	/**
+	 * @return \Ikimea\Browser\Browser
+	 */
+	public static function getBrowserDetect()
+	{
+		if (static::$browserDetect === null) {
+			static::$browserDetect = new \Ikimea\Browser\Browser();
+		}
+		return static::$browserDetect;
+	}
+
+	/**
+	 * @var \Mobile_Detect
+	 */
+	protected static $mobileDetect;
+
+	/**
+	 * @return \Mobile_Detect
+	 */
+	public static function getMobileDetect()
+	{
+		if (static::$mobileDetect === null) {
+			static::$mobileDetect = new \Mobile_Detect();
+		}
+		return static::$mobileDetect;
+	}
 
 	/**
 	 * If is in live mode.
@@ -87,18 +118,6 @@ class ThemePlus
 	 * The variables cache.
 	 */
 	protected $arrVariables = null;
-
-
-	/**
-	 * @var \Ikimea\Browser\Browser
-	 */
-	protected $browserDetect;
-
-	/**
-	 * @var
-	 */
-	protected $mobileDetect;
-
 
 	/**
 	 * Singleton constructor.
@@ -247,8 +266,71 @@ class ThemePlus
 	 */
 	public static function checkBrowserFilter(\Model\Collection $file)
 	{
-		// TODO
+		if ($file->filter) {
+			$rules = deserialize($file->filterRule, true);
+
+			foreach ($rules as $rule) {
+				if (static::checkFilterRule($rule)) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 		return true;
+	}
+
+	public static function checkFilterRule($rule)
+	{
+		$match = true;
+		if (!empty($rule['system'])) {
+			$match = $match && static::getBrowserDetect()->getPlatform() == $rule['system'];
+		}
+		if (!empty($rule['browser'])) {
+			if (!empty($rule['comparator']) && !empty($rule['browser_version'])) {
+				switch ($rule['comparator']) {
+					case 'lt':
+						$rule['comparator'] = '<';
+						break;
+					case 'lte':
+						$rule['comparator'] = '<=';
+						break;
+					case 'gte':
+						$rule['comparator'] = '>=';
+						break;
+					case 'gt':
+						$rule['comparator'] = '>';
+						break;
+				}
+
+				$match = $match &&
+					static::getBrowserDetect()->getBrowser() == $rule['browser'] &&
+					version_compare(static::getBrowserDetect()->getVersion(), $rule['browser_version'], $rule['comparator']);
+			}
+			else {
+				$match = $match && static::getBrowserDetect()->getBrowser() == $rule['browser'];
+			}
+		}
+		if (!empty($rule['platform'])) {
+			switch ($rule['platform']) {
+				case 'desktop':
+					$match = $match && !(static::getMobileDetect()->isTablet() || static::getMobileDetect()->isMobile());
+					break;
+
+				case 'tablet':
+					$match = $match && static::getMobileDetect()->isTablet();
+					break;
+
+				case 'mobile':
+					$match = $match && static::getMobileDetect()->isMobile();
+					break;
+			}
+		}
+		if ($rule['invert']) {
+			$match = !$match;
+		}
+		return $match;
 	}
 
 	/**
