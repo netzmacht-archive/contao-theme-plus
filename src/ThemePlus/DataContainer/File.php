@@ -210,4 +210,75 @@ class File
 	{
 		return $this->filterBrowserProperties('BROWSER_');
 	}
+
+	public function listLayouts()
+	{
+		$layout = \Database::getInstance()
+			->query(
+				'SELECT l.*, t.name AS theme
+				 FROM tl_layout l
+				 INNER JOIN tl_theme t
+				 ON t.id=l.pid
+				 ORDER BY t.name, l.name');
+
+		$options = array();
+
+		while ($layout->next()) {
+			$options[$layout->theme][$layout->id] = $layout->name;
+		}
+
+		return $options;
+	}
+
+	public function loadLayoutsFor($field, $dc)
+	{
+		$layout = \Database::getInstance()
+			->query('SELECT * FROM tl_layout');
+
+		$values = array();
+
+		while ($layout->next()) {
+			$selected = deserialize($layout->$field, true);
+			if (in_array($dc->id, $selected)) {
+				$values[] = $layout->id;
+			}
+		}
+
+		return $values;
+	}
+
+	public function saveLayoutsFor($field, $value, $dc)
+	{
+		$layouts = deserialize($value, true);
+
+		$layout = \Database::getInstance()
+			->query('SELECT * FROM tl_layout');
+
+		while ($layout->next()) {
+			$selected = deserialize($layout->$field, true);
+
+			// select a new layout
+			if (in_array($layout->id, $layouts) && !in_array($dc->id, $selected)) {
+				$selected[] = $dc->id;
+			}
+
+			// deselect a layout
+			else if (!in_array($layout->id, $layouts) && in_array($dc->id, $selected)) {
+				$index = array_search($dc->id, $selected);
+				unset($selected[$index]);
+			}
+
+			// nothing changed
+			else {
+				continue;
+			}
+
+			\Database::getInstance()
+				->prepare('UPDATE tl_layout %s WHERE id=?')
+				->set(array($field => serialize(array_values($selected))))
+				->execute($layout->id);
+		}
+
+		return null;
+	}
 }

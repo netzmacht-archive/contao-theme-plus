@@ -58,6 +58,14 @@
         <source xml:lang="de">Bitte w&#xE4;hlen Sie hier, ob das JavaScript im &amp;lt;head&amp;gt; oder am Ende des &amp;lt;body&amp;gt; eingebunden werden soll.</source>
         <target xml:lang="de">Bitte w&#xE4;hlen Sie hier, ob das JavaScript im &amp;lt;head&amp;gt; oder am Ende des &amp;lt;body&amp;gt; eingebunden werden soll.</target>
       </trans-unit>
+      <trans-unit id="tl_theme_plus_javascript.layouts.0">
+        <source xml:lang="de">Layouts</source>
+        <target xml:lang="de">Layouts</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_javascript.layouts.1">
+        <source xml:lang="de">Bitte w&#xE4;hlen Sie hier die Layouts, in denen das JavaScript eingebunden werden soll.</source>
+        <target xml:lang="de">Bitte w&#xE4;hlen Sie hier die Layouts, in denen das JavaScript eingebunden werden soll.</target>
+      </trans-unit>
       <trans-unit id="tl_theme_plus_javascript.cc.0">
         <source xml:lang="de">Conditional Comment</source>
         <target xml:lang="de">Conditional Comment</target>
@@ -113,6 +121,10 @@
       <trans-unit id="tl_theme_plus_javascript.file_legend">
         <source xml:lang="de">Dateiquelle</source>
         <target xml:lang="de">Dateiquelle</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_javascript.layouts_legend">
+        <source xml:lang="de">Layoutzuweisung</source>
+        <target xml:lang="de">Layoutzuweisung</target>
       </trans-unit>
       <trans-unit id="tl_theme_plus_javascript.filter_legend">
         <source xml:lang="de">Filter-Einstellungen</source>

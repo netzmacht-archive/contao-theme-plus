@@ -149,6 +149,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = array
         (
             'source'  => array('type'),
             'file'    => array('file'),
+			'layouts' => array('layouts'),
             'filter'  => array(':hide', 'cc', 'filter'),
             'assetic' => array(':hide', 'asseticFilter'),
             'expert'  => array(':hide', 'position')
@@ -157,6 +158,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = array
         (
             'source'  => array('type'),
             'file'    => array('url', 'fetchUrl'),
+			'layouts' => array('layouts'),
             'filter'  => array(':hide', 'cc', 'filter'),
             'assetic' => array(':hide', 'asseticFilter'),
             'expert'  => array(':hide', 'position')
@@ -165,6 +167,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = array
         (
             'source'  => array('type', 'code_snippet_title'),
             'file'    => array('code'),
+			'layouts' => array('layouts'),
             'filter'  => array(':hide', 'cc', 'filter'),
             'assetic' => array(':hide', 'asseticFilter'),
             'expert'  => array(':hide', 'position')
@@ -269,6 +272,16 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = array
             'eval'      => array('includeBlankOption' => true,
                                  'blankOptionLabel' => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['positions']['inherit']),
             'sql'       => "char(4) NOT NULL default ''"
+        ),
+        'layouts'                               => array
+        (
+            'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['layouts'],
+            'exclude'   => true,
+            'inputType' => 'checkbox',
+			'options_callback' => array('ThemePlus\DataContainer\JavaScript', 'listLayouts'),
+            'eval'      => array('multiple' => true, 'doNotSaveEmpty' => true),
+            'load_callback' => array(array('ThemePlus\DataContainer\JavaScript', 'loadLayouts')),
+            'save_callback' => array(array('ThemePlus\DataContainer\JavaScript', 'saveLayouts')),
         ),
         'cc'                                    => array
         (

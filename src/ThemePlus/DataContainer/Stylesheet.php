@@ -49,4 +49,14 @@ class Stylesheet extends File
     {
         return $this->buildAsseticFilterOptions('css');
     }
+
+	public function loadLayouts($value, $dc)
+	{
+		return $this->loadLayoutsFor('theme_plus_stylesheets', $dc);
+	}
+
+	public function saveLayouts($value, $dc)
+	{
+		return $this->saveLayoutsFor('theme_plus_stylesheets', $value, $dc);
+	}
 }

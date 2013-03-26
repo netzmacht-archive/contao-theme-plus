@@ -44,4 +44,14 @@ class JavaScript extends File
     {
         return $this->buildAsseticFilterOptions('js');
     }
+
+	public function loadLayouts($value, $dc)
+	{
+		return $this->loadLayoutsFor('theme_plus_javascripts', $dc);
+	}
+
+	public function saveLayouts($value, $dc)
+	{
+		return $this->saveLayoutsFor('theme_plus_javascripts', $value, $dc);
+	}
 }

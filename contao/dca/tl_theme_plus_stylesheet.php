@@ -146,6 +146,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = array
 		(
 			'source'  => array('type'),
 			'file'    => array('file'),
+			'layouts' => array('layouts'),
 			'filter'  => array(':hide', 'cc', 'filter'),
 			'editor'  => array(':hide', 'editor_integration', 'force_editor_integration'),
 			'assetic' => array(':hide', 'asseticFilter'),
@@ -154,6 +155,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = array
 		(
 			'source'  => array('type'),
 			'file'    => array('url', 'fetchUrl'),
+			'layouts' => array('layouts'),
 			'filter'  => array(':hide', 'cc', 'filter'),
 			'editor'  => array(':hide', 'editor_integration', 'force_editor_integration'),
 			'assetic' => array(':hide', 'asseticFilter'),
@@ -162,6 +164,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = array
 		(
 			'source'  => array('type', 'code_snippet_title'),
 			'file'    => array('code'),
+			'layouts' => array('layouts'),
 			'filter'  => array(':hide', 'cc', 'filter'),
 			'editor'  => array(':hide', 'editor_integration', 'force_editor_integration'),
 			'assetic' => array(':hide', 'asseticFilter'),
@@ -264,6 +267,16 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = array
 			),
 			'sql'       => "blob NULL"
 		),
+        'layouts'                               => array
+        (
+            'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['layouts'],
+            'exclude'   => true,
+            'inputType' => 'checkbox',
+			'options_callback' => array('ThemePlus\DataContainer\JavaScript', 'listLayouts'),
+            'eval'      => array('multiple' => true, 'doNotSaveEmpty' => true),
+            'load_callback' => array(array('ThemePlus\DataContainer\Stylesheet', 'loadLayouts')),
+            'save_callback' => array(array('ThemePlus\DataContainer\Stylesheet', 'saveLayouts')),
+        ),
 		'cc'                       => array
 		(
 			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['cc'],
