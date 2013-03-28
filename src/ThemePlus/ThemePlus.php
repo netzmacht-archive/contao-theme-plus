@@ -962,7 +962,7 @@ class ThemePlus
 
 			// if stylesheet is an absolute url...
 			if (preg_match(
-				'#^\w:#',
+				'#^\w+:#',
 				$source
 			)
 			) {
