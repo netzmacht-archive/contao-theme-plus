@@ -616,12 +616,14 @@ class ThemePlus
 			),
 			array('order' => 'sorting')
 		);
-		$this->addAssetsToCollectionFromDatabase(
-			$stylesheet,
-			'css',
-			$collection,
-			$stylesheets
-		);
+		if ($stylesheet) {
+			$this->addAssetsToCollectionFromDatabase(
+				$stylesheet,
+				'css',
+				$collection,
+				$stylesheets
+			);
+		}
 
 		// Add files from page tree
 		$this->addAssetsToCollectionFromPageTree(
@@ -756,13 +758,15 @@ class ThemePlus
 			),
 			array('order' => 'sorting')
 		);
-		$this->addAssetsToCollectionFromDatabase(
-			$javascript,
-			'js',
-			$collection,
-			$javascripts,
-			$layout->theme_plus_default_javascript_position
-		);
+		if ($javascript) {
+			$this->addAssetsToCollectionFromDatabase(
+				$javascript,
+				'js',
+				$collection,
+				$javascripts,
+				$layout->theme_plus_default_javascript_position
+			);
+		}
 
 		// Add files from page tree
 		$this->addAssetsToCollectionFromPageTree(
@@ -1144,15 +1148,17 @@ class ThemePlus
 					),
 					array('order' => 'sorting')
 				);
-				$this->addAssetsToCollectionFromDatabase(
-					$data,
-					$type == 'stylesheets'
-						? 'css'
-						: 'js',
-					$collection,
-					$array,
-					$position
-				);
+				if ($data) {
+					$this->addAssetsToCollectionFromDatabase(
+						$data,
+						$type == 'stylesheets'
+							? 'css'
+							: 'js',
+						$collection,
+						$array,
+						$position
+					);
+				}
 			}
 		}
 
@@ -1170,15 +1176,17 @@ class ThemePlus
 				),
 				array('order' => 'sorting')
 			);
-			$this->addAssetsToCollectionFromDatabase(
-				$data,
-				$type == 'stylesheets'
-					? 'css'
-					: 'js',
-				$collection,
-				$array,
-				$position
-			);
+			if ($data) {
+				$this->addAssetsToCollectionFromDatabase(
+					$data,
+					$type == 'stylesheets'
+						? 'css'
+						: 'js',
+					$collection,
+					$array,
+					$position
+				);
+			}
 		}
 	}
 
