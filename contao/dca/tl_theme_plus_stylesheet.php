@@ -354,9 +354,10 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = array
 						'exclude'   => true,
 						'inputType' => 'select',
 						'options'   => array(
-							'desktop' => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['desktop'],
-							'tablet'  => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['tablet'],
-							'mobile'  => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['mobile'],
+							'desktop'    => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['desktop'],
+							'tablet'     => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['tablet'],
+							'smartphone' => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['smartphone'],
+							'mobile'     => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['mobile'],
 						),
 						'eval'      => array(
 							'includeBlankOption' => true,

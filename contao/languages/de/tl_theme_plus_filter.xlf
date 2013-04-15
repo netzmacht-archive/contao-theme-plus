@@ -30,6 +30,10 @@
         <source xml:lang="de">Tablet</source>
         <target xml:lang="de">Tablet</target>
       </trans-unit>
+      <trans-unit id="tl_theme_plus_filter.smartphone">
+        <source xml:lang="de">Smartphones</source>
+        <target xml:lang="de">Smartphones</target>
+      </trans-unit>
       <trans-unit id="tl_theme_plus_filter.mobile">
         <source xml:lang="de">Mobile</source>
         <target xml:lang="de">Mobile</target>

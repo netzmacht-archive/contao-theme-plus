@@ -258,6 +258,121 @@ class ThemePlus
 	}
 
 	/**
+	 * Shorthand check if current request is from a desktop.
+	 *
+	 * @return bool
+	 */
+	public static function isDesktop()
+	{
+		return !(static::getMobileDetect()->isTablet() || static::getMobileDetect()->isMobile());
+	}
+
+	/**
+	 * Shorthand check if current request is from a tablet.
+	 *
+	 * @return bool
+	 */
+	public static function isTabled()
+	{
+		return static::getMobileDetect()->isTablet();
+	}
+
+	/**
+	 * Shorthand check if current request is from a smartphone.
+	 *
+	 * @return bool
+	 */
+	public static function isSmartphone()
+	{
+		return static::getMobileDetect()->isMobile() && !static::getMobileDetect()->isTablet();
+	}
+
+	/**
+	 * Shorthand check if current request is from a mobile device.
+	 *
+	 * @return bool
+	 */
+	public static function isMobile()
+	{
+		return static::getMobileDetect()->isMobile();
+	}
+
+	/**
+	 * Check filter settings.
+	 *
+	 * @param null   $system
+	 * @param null   $browser
+	 * @param string $browserVersionComparator
+	 * @param null   $browserVersion
+	 * @param null   $platform
+	 * @param bool   $invert
+	 *
+	 * @return bool
+	 */
+	public static function checkFilter(
+		$system = null,
+		$browser = null,
+		$browserVersionComparator = '=',
+		$browserVersion = null,
+		$platform = null,
+		$invert = false
+	)
+	{
+		$match = true;
+		if (!empty($system)) {
+			$match = $match && static::getBrowserDetect()->getPlatform() == $system;
+		}
+		if (!empty($browser)) {
+			if (!empty($browserVersionComparator) && !empty($browserVersion)) {
+				switch ($browserVersionComparator) {
+					case 'lt':
+						$browserVersionComparator = '<';
+						break;
+					case 'lte':
+						$browserVersionComparator = '<=';
+						break;
+					case 'gte':
+						$browserVersionComparator = '>=';
+						break;
+					case 'gt':
+						$browserVersionComparator = '>';
+						break;
+				}
+
+				$match = $match &&
+					static::getBrowserDetect()->getBrowser() == $browser &&
+					version_compare(static::getBrowserDetect()->getVersion(), $browserVersion, $browserVersionComparator);
+			}
+			else {
+				$match = $match && static::getBrowserDetect()->getBrowser() == $browser;
+			}
+		}
+		if (!empty($platform)) {
+			switch ($platform) {
+				case 'desktop':
+					$match = $match && static::isDesktop();
+					break;
+
+				case 'tablet':
+					$match = $match && static::isTabled();
+					break;
+
+				case 'smartphone':
+					$match = $match && static::isSmartphone();
+					break;
+
+				case 'mobile':
+					$match = $match && static::isMobile();
+					break;
+			}
+		}
+		if ($invert) {
+			$match = !$match;
+		}
+		return $match;
+	}
+
+	/**
 	 * Check the file browser filter settings against the request browser.
 	 *
 	 * @param \Model $file
@@ -283,54 +398,14 @@ class ThemePlus
 
 	public static function checkFilterRule($rule)
 	{
-		$match = true;
-		if (!empty($rule['system'])) {
-			$match = $match && static::getBrowserDetect()->getPlatform() == $rule['system'];
-		}
-		if (!empty($rule['browser'])) {
-			if (!empty($rule['comparator']) && !empty($rule['browser_version'])) {
-				switch ($rule['comparator']) {
-					case 'lt':
-						$rule['comparator'] = '<';
-						break;
-					case 'lte':
-						$rule['comparator'] = '<=';
-						break;
-					case 'gte':
-						$rule['comparator'] = '>=';
-						break;
-					case 'gt':
-						$rule['comparator'] = '>';
-						break;
-				}
-
-				$match = $match &&
-					static::getBrowserDetect()->getBrowser() == $rule['browser'] &&
-					version_compare(static::getBrowserDetect()->getVersion(), $rule['browser_version'], $rule['comparator']);
-			}
-			else {
-				$match = $match && static::getBrowserDetect()->getBrowser() == $rule['browser'];
-			}
-		}
-		if (!empty($rule['platform'])) {
-			switch ($rule['platform']) {
-				case 'desktop':
-					$match = $match && !(static::getMobileDetect()->isTablet() || static::getMobileDetect()->isMobile());
-					break;
-
-				case 'tablet':
-					$match = $match && static::getMobileDetect()->isTablet();
-					break;
-
-				case 'mobile':
-					$match = $match && static::getMobileDetect()->isMobile();
-					break;
-			}
-		}
-		if ($rule['invert']) {
-			$match = !$match;
-		}
-		return $match;
+		return self::checkFilter(
+			$rule['system'],
+			$rule['browser'],
+			$rule['comparator'],
+			$rule['browser_version'],
+			$rule['platform'],
+			$rule['invert']
+		);
 	}
 
 	/**
