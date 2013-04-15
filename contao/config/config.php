@@ -44,8 +44,9 @@ $GLOBALS['TL_CTE']['includes']['script_source'] = 'ThemePlus\Hybrid\JavaScript';
 /**
  * HOOKs
  */
-$GLOBALS['TL_HOOKS']['parseTemplate'][]            = array('ThemePlus\ThemePlus', 'hookParseTemplate');
-$GLOBALS['TL_HOOKS']['replaceDynamicScriptTags'][] = array('ThemePlus\ThemePlus', 'hookReplaceDynamicScriptTags');
+$GLOBALS['TL_HOOKS']['initializeTwig']['themeplus']           = array('ThemePlus\TwigExtension', 'init');
+$GLOBALS['TL_HOOKS']['parseTemplate']['themeplus']            = array('ThemePlus\ThemePlus', 'hookParseTemplate');
+$GLOBALS['TL_HOOKS']['replaceDynamicScriptTags']['themeplus'] = array('ThemePlus\ThemePlus', 'hookReplaceDynamicScriptTags');
 //$GLOBALS['TL_HOOKS']['outputFrontendTemplate'] = array('ThemePlus\ThemePlus', 'hookOutputFrontendTemplate');
 //$GLOBALS['TL_HOOKS']['replaceInsertTags'][]     = array('ThemePlus', 'hookReplaceInsertTags');
 //$GLOBALS['TL_HOOKS']['outputBackendTemplate'][] = array('ThemePlus', 'hookOutputBackendTemplate');
