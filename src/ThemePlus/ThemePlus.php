@@ -989,6 +989,10 @@ class ThemePlus
 					$sourceProperty->setAccessible(true);
 					$sourcePath = $sourceProperty->getValue();
 
+					if (in_array($sourcePath, $GLOBALS['TL_THEME_EXCLUDE'])) {
+						continue;
+					}
+
 					$array[] = array(
 						'id'       => $type . ':' . $sourcePath,
 						'name'     => basename($sourcePath) . '.' . $type,
@@ -996,6 +1000,7 @@ class ThemePlus
 						'asset'    => $source,
 						'position' => $position
 					);
+					$GLOBALS['TL_THEME_EXCLUDE'][] = $sourcePath;
 				}
 				else {
 					$array[] = array(
@@ -1038,6 +1043,8 @@ class ThemePlus
 			) {
 				continue;
 			}
+
+			$GLOBALS['TL_THEME_EXCLUDE'][] = $source;
 
 			// if stylesheet is an absolute url...
 			if (preg_match(
@@ -1130,6 +1137,8 @@ class ThemePlus
 							) {
 								break;
 							}
+
+							$GLOBALS['TL_THEME_EXCLUDE'][] = $data->url;
 
 							$name = basename($data->url);
 							$time = $data->tstamp;
