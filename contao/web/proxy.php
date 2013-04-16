@@ -157,10 +157,19 @@ class proxy
 				break;
 
 			case 'file':
-				$file = FilesModel::findByPk($model->file);
+				$filepath = false;
+				if ($model->filesource == $GLOBALS['TL_CONFIG']['uploadPath'] && version_compare(VERSION, '3', '>=')) {
+					$file = \FilesModel::findByPk($model->file);
+					if ($file) {
+						$filepath = $file->path;
+					}
+				}
+				else {
+					$filepath = $model->file;
+				}
 
-				if ($file) {
-					$asset = new FileAsset(TL_ROOT . '/' . $file->path, $filter, TL_ROOT, $file->path);
+				if ($filepath) {
+					$asset = new FileAsset(TL_ROOT . '/' . $filepath, $filter, TL_ROOT, $file->path);
 				}
 				break;
 		}
