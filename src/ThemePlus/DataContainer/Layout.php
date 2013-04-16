@@ -53,7 +53,7 @@ class Layout
                     break;
 
                 case 'url':
-                    $label = $collection->url;
+                    $label = preg_replace('#/([^/]+)$#', '/<strong>$1</strong>', $collection->url);
                     break;
 
                 case 'file':
@@ -61,12 +61,12 @@ class Layout
 						$file = \FilesModel::findByPk($collection->file);
 
 						if ($file) {
-							$label = $file->path;
+							$label = preg_replace('#/([^/]+)$#', '/<strong>$1</strong>', $file->path);
 							break;
 						}
 					}
 					else {
-						$label = $collection->file;
+						$label = preg_replace('#/([^/]+)$#', '/<strong>$1</strong>', $collection->file);
 						break;
 					}
 
@@ -78,12 +78,9 @@ class Layout
                 $label .= ' <span style="padding-left: 3px; color: #B3B3B3;">[' . $collection->cc . ']</span>';
             }
 
-            if (strlen($collection->filter)) {
-                $label .= ' <span style="padding-left: 3px; color: #B3B3B3;">' . (($collection->filterInvert)
-                    ? '!'
-                    : '') . '[' . implode(',',
-                                          deserialize($collection->filterRule,
-                                                      true)) . ']</span>';
+			$filterRules = File::renderFilterRules($collection->row());
+			if ($filterRules) {
+                $label .= ' <span style="padding-left: 3px; color: #B3B3B3;">' . $filterRules . '</span>';
             }
 
             $image = 'system/modules/theme-plus/assets/images/' . $collection->type . '.png';

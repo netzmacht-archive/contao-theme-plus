@@ -23,50 +23,8 @@ use Ikimea\Browser\Browser;
 class File
 	extends \Backend
 {
-	/**
-	 * List an file
-	 *
-	 * @param array
-	 *
-	 * @return string
-	 */
-	public function listFile($row)
+	static public function renderFilterRules(array $row)
 	{
-		switch ($row['type']) {
-			case 'code':
-				$label = $row['code_snippet_title'];
-				break;
-
-			case 'url':
-				$label = $row['url'];
-				break;
-
-			case 'file':
-				if ($row['filesource'] == $GLOBALS['TL_CONFIG']['uploadPath'] && version_compare(VERSION, '3', '>=')) {
-					$file = \FilesModel::findByPk($row['file']);
-
-					if ($file) {
-						$label = $file->path;
-						break;
-					}
-				}
-				else {
-					$label = $row['file'];
-					break;
-				}
-
-			default:
-				$label = '?';
-		}
-
-		if (strlen($row['position'])) {
-			$label = '[' . strtoupper($row['position']) . '] ' . $label;
-		}
-
-		if (strlen($row['cc'])) {
-			$label .= ' <span style="padding-left: 3px; color: #B3B3B3;">[' . $row['cc'] . ']</span>';
-		}
-
 		if (strlen($row['filter'])) {
 			$rules      = deserialize($row['filterRule'], true);
 			$conditions = array();
@@ -119,9 +77,63 @@ class File
 				$conditions[] = $condition;
 			}
 
+			return sprintf(
+				'[%s]',
+				implode(' or ', $conditions)
+			);
+		}
+		return '';
+	}
+
+	/**
+	 * List an file
+	 *
+	 * @param array
+	 *
+	 * @return string
+	 */
+	public function listFile($row)
+	{
+		switch ($row['type']) {
+			case 'code':
+				$label = $row['code_snippet_title'];
+				break;
+
+			case 'url':
+				$label = preg_replace('#/([^/]+)$#', '/<strong>$1</strong>', $row['url']);
+				break;
+
+			case 'file':
+				if ($row['filesource'] == $GLOBALS['TL_CONFIG']['uploadPath'] && version_compare(VERSION, '3', '>=')) {
+					$file = \FilesModel::findByPk($row['file']);
+
+					if ($file) {
+						$label = preg_replace('#/([^/]+)$#', '/<strong>$1</strong>', $file->path);
+						break;
+					}
+				}
+				else {
+					$label = preg_replace('#([^/]+)$#', '<strong>$1</strong>', $row['file']);
+					break;
+				}
+
+			default:
+				$label = '?';
+		}
+
+		if (strlen($row['position'])) {
+			$label = '[' . strtoupper($row['position']) . '] ' . $label;
+		}
+
+		if (strlen($row['cc'])) {
+			$label .= ' <span style="padding-left: 3px; color: #B3B3B3;">[' . $row['cc'] . ']</span>';
+		}
+
+		$filterRules = static::renderFilterRules($row);
+		if ($filterRules) {
 			$label .= sprintf(
 				'<br><span style="margin-left: 20px; padding-left: 3px; color: #B3B3B3;">[%s]</span>',
-				implode(' or ', $conditions)
+				$filterRules
 			);
 		}
 
