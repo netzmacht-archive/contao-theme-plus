@@ -55,12 +55,18 @@ class Page
                     break;
 
                 case 'file':
-                    $file = \FilesModel::findByPk($collection->file);
+					if ($collection->filesource == $GLOBALS['TL_CONFIG']['uploadPath'] && version_compare(VERSION, '3', '>=')) {
+						$file = \FilesModel::findByPk($collection->file);
 
-                    if ($file) {
-                        $label = $file->path;
-                        break;
-                    }
+						if ($file) {
+							$label = $file->path;
+							break;
+						}
+					}
+					else {
+						$label = $collection->file;
+						break;
+					}
 
                 default:
                     $label = '?';

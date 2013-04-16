@@ -41,6 +41,9 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = array
         'dataContainer'    => 'Table',
         'ptable'           => 'tl_theme',
         'enableVersioning' => true,
+		'onload_callback'  => array(
+			array('ThemePlus\DataContainer\File', 'changeFileSource')
+		),
         'sql'              => array
         (
             'keys' => array
@@ -147,7 +150,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = array
         ),
         'file'     => array
         (
-            'source'  => array('type'),
+            'source'  => array('type', 'filesource'),
             'file'    => array('file'),
 			'layouts' => array('layouts'),
             'filter'  => array(':hide', 'cc', 'filter'),
@@ -215,6 +218,17 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = array
             'save_callback' => array(array('ThemePlus\DataContainer\JavaScript', 'rememberType')),
             'sql'           => "varchar(32) NOT NULL default ''"
         ),
+        'filesource'                            => array
+        (
+            'label'         => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['filesource'],
+            'default'       => 'files',
+            'inputType'     => 'select',
+            'filter'        => true,
+            'options'       => array($GLOBALS['TL_CONFIG']['uploadPath'], 'assets', 'system/modules'),
+            'eval'          => array('submitOnChange'    => true,
+                                     'tl_class'          => 'w50'),
+            'sql'           => "varchar(32) NOT NULL default '{$GLOBALS['TL_CONFIG']['uploadPath']}'"
+        ),
         'code_snippet_title'                    => array
         (
             'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['code_snippet_title'],
@@ -232,8 +246,9 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = array
             'eval'      => array('mandatory' => true,
                                  'fieldType' => 'radio',
                                  'files'     => true,
+                                 'filesOnly' => true,
                                  'extensions'=> 'js'),
-            'sql'       => "int(10) unsigned NOT NULL"
+            'sql'       => "text NULL"
         ),
         'url'                                   => array
         (

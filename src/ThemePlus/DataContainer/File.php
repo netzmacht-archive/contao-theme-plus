@@ -42,10 +42,16 @@ class File
 				break;
 
 			case 'file':
-				$file = \FilesModel::findByPk($row['file']);
+				if ($row['filesource'] == $GLOBALS['TL_CONFIG']['uploadPath'] && version_compare(VERSION, '3', '>=')) {
+					$file = \FilesModel::findByPk($row['file']);
 
-				if ($file) {
-					$label = $file->path;
+					if ($file) {
+						$label = $file->path;
+						break;
+					}
+				}
+				else {
+					$label = $row['file'];
 					break;
 				}
 
@@ -199,6 +205,18 @@ class File
 		uksort($options, 'strcasecmp');
 
 		return $options;
+	}
+
+	public function changeFileSource($dc)
+	{
+		$file = \Database::getInstance()
+			->query('SELECT * FROM ' . $dc->table . ' WHERE id=' . intval($dc->id));
+		if ($file->type == 'file') {
+			if ($file->filesource != $GLOBALS['TL_CONFIG']['uploadPath'] && version_compare(VERSION, '3', '>=')) {
+				$GLOBALS['TL_DCA'][$dc->table]['fields']['file']['inputType'] = 'fileSelector';
+			}
+			$GLOBALS['TL_DCA'][$dc->table]['fields']['file']['eval']['path'] = $file->filesource;
+		}
 	}
 
 	public function getSystems()

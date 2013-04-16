@@ -10,6 +10,14 @@
         <source xml:lang="de">Bitte w&#xE4;hlen Sie hier den Typ der Datei.</source>
         <target xml:lang="de">Bitte w&#xE4;hlen Sie hier den Typ der Datei.</target>
       </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.filesource.0">
+        <source xml:lang="de">Quelle</source>
+        <target xml:lang="de">Quelle</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.filesource.1">
+        <source xml:lang="de">Bitte w&#xE4;hlen Sie hier aus welchem Verzeichnis die Datei bezogen werden soll.</source>
+        <target xml:lang="de">Bitte w&#xE4;hlen Sie hier aus welchem Verzeichnis die Datei bezogen werden soll.</target>
+      </trans-unit>
       <trans-unit id="tl_theme_plus_stylesheet.code_snippet_title.0">
         <source xml:lang="de">Code-Snippet Title</source>
         <target xml:lang="de">Code-Snippet Title</target>

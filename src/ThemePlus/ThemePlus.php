@@ -1150,27 +1150,39 @@ class ThemePlus
 									'name'  => $name,
 									'url'   => $data->url,
 									'media' => $data->media,
-									'cc'    => $data->cc
+									'cc'    => $data->cc,
+									'position' => $position
 								);
 							}
 							break;
 
 						case 'file':
-							$file = \FilesModel::findByPk($data->file);
+							$filepath = false;
+							if ($data->filesource == $GLOBALS['TL_CONFIG']['uploadPath'] && version_compare(VERSION, '3', '>=')) {
+								$file = \FilesModel::findByPk($data->file);
+								if ($file) {
+									$filepath = $file->path;
+								}
+							}
+							else {
+								$filepath = $data->file;
+							}
 
-							if ($file) {
+							if ($filepath) {
 								// skip file
 								if (in_array(
-									$file->path,
+									$filepath,
 									$GLOBALS['TL_THEME_EXCLUDE']
 								)
 								) {
 									break;
 								}
 
-								$name  = basename($file->path) . '.' . $type;
-								$time  = filemtime($file->path);
-								$asset = new FileAsset(TL_ROOT . '/' . $file->path, $filter, TL_ROOT, $file->path);
+								$GLOBALS['TL_THEME_EXCLUDE'][] = $filepath;
+
+								$name  = basename($filepath) . '.' . $type;
+								$time  = filemtime($filepath);
+								$asset = new FileAsset(TL_ROOT . '/' . $filepath, $filter, TL_ROOT, $filepath);
 							}
 							break;
 					}
