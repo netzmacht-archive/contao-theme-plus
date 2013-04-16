@@ -995,7 +995,7 @@ class ThemePlus
 
 					$array[] = array(
 						'id'       => $type . ':' . $sourcePath,
-						'name'     => basename($sourcePath) . '.' . $type,
+						'name'     => basename($sourcePath, '.' . $type) . '.' . $type,
 						'time'     => filemtime($sourcePath),
 						'asset'    => $source,
 						'position' => $position
@@ -1180,7 +1180,7 @@ class ThemePlus
 
 								$GLOBALS['TL_THEME_EXCLUDE'][] = $filepath;
 
-								$name  = basename($filepath) . '.' . $type;
+								$name  = basename($filepath, '.' . $type) . '.' . $type;
 								$time  = filemtime($filepath);
 								$asset = new FileAsset(TL_ROOT . '/' . $filepath, $filter, TL_ROOT, $filepath);
 							}
