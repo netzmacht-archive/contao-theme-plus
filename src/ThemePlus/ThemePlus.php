@@ -294,7 +294,7 @@ class ThemePlus
 	 */
 	public static function isMobile()
 	{
-		return static::getMobileDetect()->isMobile();
+		return static::getMobileDetect()->isMobile() || static::getMobileDetect()->isTablet();
 	}
 
 	/**
