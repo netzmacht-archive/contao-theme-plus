@@ -24,10 +24,10 @@
 	"require":{
 		"php":">=5.3",
 		"contao/core":"3.*",
-		"bit3/contao-assetic":"dev-master",
+		"bit3/contao-assetic":"~1",
 		"ikimea/browser":"dev-master",
 		"mobiledetect/mobiledetectlib": "2.*",
-		"bit3/contao-meta-palettes":"dev-master"
+		"bit3/contao-meta-palettes":"~1"
 	},
 	"require-dev":{
 		"squizlabs/php_codesniffer":"1.*",
