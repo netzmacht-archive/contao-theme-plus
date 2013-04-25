@@ -2,7 +2,6 @@
 	"name":"bit3/contao-theme-plus",
 	"description":"Theme+ for Contao OpenSource CMS",
 	"keywords":["contao", "theme", "css", "js", "stylesheet", "javascript", "assets"],
-	"version":"4.0",
 	"type":"contao-module",
 	"homepage":"http://bit3.de",
 	"license":"LGPL-3.0+",
