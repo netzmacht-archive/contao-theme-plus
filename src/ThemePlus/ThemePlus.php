@@ -1065,8 +1065,11 @@ class ThemePlus
 					continue;
 				}
 			}
-			else {
+			else if ($source) {
 				$asset = new FileAsset(TL_ROOT . '/' . $source, array(), TL_ROOT, $source);
+			}
+			else {
+				continue;
 			}
 
 			if (($mode == 'static' || $mode === null) && static::isLiveMode()) {
