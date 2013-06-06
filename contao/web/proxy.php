@@ -62,9 +62,12 @@ class proxy
 			$this->deny();
 		}
 
-		$scriptName = \Environment::get('scriptName');
+		$user = FrontendUser::getInstance();
+		$user->authenticate();
 
-		list($pageId, $sourceDescriptor) = explode('/', substr($scriptName, 1));
+		$pathInfo = \Environment::get('pathInfo');
+
+		list($pageId, $sourceDescriptor) = explode('/', substr($pathInfo, 1));
 		$sourceDescriptor = base64_decode($sourceDescriptor);
 
 		$this->page   = PageModel::findWithDetails($pageId);
