@@ -67,7 +67,7 @@ class proxy
 
 		$pathInfo = \Environment::get('pathInfo');
 
-		list($pageId, $sourceDescriptor) = explode('/', substr($pathInfo, 1));
+		list($type, $pageId, $sourceDescriptor) = explode('/', substr($pathInfo, 1));
 		$sourceDescriptor = base64_decode($sourceDescriptor);
 
 		$this->page   = PageModel::findWithDetails($pageId);
@@ -208,7 +208,7 @@ class proxy
 
 	protected function outputAsset(AssetInterface $asset)
 	{
-		$asset->setTargetPath('system/modules/theme-plus/web/proxy.php/:page/:id/:file');
+		$asset->setTargetPath('system/modules/theme-plus/web/proxy.php/:type/:page/:id/:file');
 
 		$this->output(
 			$asset->dump(
