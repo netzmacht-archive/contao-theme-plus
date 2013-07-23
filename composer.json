@@ -32,6 +32,9 @@
 		"squizlabs/php_codesniffer":"1.*",
 		"bit3/php-coding-standard":"@dev"
 	},
+	"replace": {
+		"contao-legacy/theme_plus": "*"
+	},
 	"autoload":{
 		"psr-0": {
 			"ThemePlus": "src/"
