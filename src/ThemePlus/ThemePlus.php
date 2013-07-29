@@ -66,6 +66,9 @@ class ThemePlus
 				'FE_PREVIEW',
 				$fePreview
 			);
+
+			// Add new assetic filter factory
+			AsseticFactory::registerFilterFactory(new Filter\ThemePlusFilterFactory());                        
 		}
 		return static::$instance;
 	}
