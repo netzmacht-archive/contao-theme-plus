@@ -30,11 +30,11 @@ class ContaoReplaceVariableFilter
             // find the current page layout
             $layout = \LayoutModel::findByPk($GLOBALS['objPage']->layout);
 
-            if ($layout !== null && $layout->next()) {
+            if ($layout !== null) {
                 // find the current page theme
                 $theme = \ThemeModel::findByPk($layout->pid);
 
-                if ($theme !== null && $theme->next()) {
+                if ($theme !== null) {
                     // collect all variables from theme
                     $vars = array();
                     foreach (deserialize($theme->vars,
@@ -49,6 +49,11 @@ class ContaoReplaceVariableFilter
 
                         // get asset content
                         $content = $asset->getContent();
+                        
+                        foreach ($vars as $key => $value)
+                        {
+                            $vars[$key] = html_entity_decode($value);
+                        }
 
                         // replace all variables
                         $content = str_replace(array_keys($vars),
