@@ -73,6 +73,8 @@ class proxy
 		$this->page   = PageModel::findWithDetails($pageId);
 		$this->layout = LayoutModel::findByPk($this->page->layout);
 
+		$GLOBALS['objPage'] = $this->page;
+
 		if (!$this->page ||
 			!$this->layout ||
 			!preg_match('#^(js|css):(base64:(.+)|.+)$#', $sourceDescriptor, $match)
@@ -137,7 +139,7 @@ class proxy
 	protected function outputFromDatabase($model)
 	{
 		$asset  = null;
-		$filter = array();
+		$filter = $this->defaultFilters->all();
 
 		if ($model->asseticFilter) {
 			$temp = AsseticFactory::createFilterOrChain(
@@ -145,7 +147,7 @@ class proxy
 				ThemePlus::isDesignerMode()
 			);
 			if ($temp) {
-				$filter = array($temp);
+				$filter = array_merge($filter, array($temp));
 			}
 		}
 
