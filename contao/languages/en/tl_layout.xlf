@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="system/modules/theme-plus/languages/de/tl_layout.php" source-language="en" datatype="php" date="2012-11-08T21:49:41+00:00">
+    <body>
+      <trans-unit id="tl_layout.theme_plus_exclude_contaocss.0">
+        <source>Don't include Contao Core CSS</source>
+      </trans-unit>
+      <trans-unit id="tl_layout.theme_plus_exclude_contaocss.1">
+        <source>Disable the Contao Core CSS (contao.css).</source>
+      </trans-unit>
+      <trans-unit id="tl_layout.theme_plus_exclude_frameworkcss.0">
+        <source>Don't include the Contao CSS Framework</source>
+      </trans-unit>
+      <trans-unit id="tl_layout.theme_plus_exclude_frameworkcss.1">
+        <source>Disable the Contao CSS Framework.</source>
+      </trans-unit>
+      <trans-unit id="tl_layout.theme_plus_stylesheets.0">
+        <source>More Stylesheets</source>
+      </trans-unit>
+      <trans-unit id="tl_layout.theme_plus_stylesheets.1">
+        <source>Add Stylesheets to the Layout</source>
+      </trans-unit>
+      <trans-unit id="tl_layout.theme_plus_javascript_lazy_load.0">
+        <source>LazyLoad JavaScript</source>
+      </trans-unit>
+      <trans-unit id="tl_layout.theme_plus_javascript_lazy_load.1">
+        <source>&lt;a href=&quot;http://friendlybit.com/js/lazy-loading-asyncronous-javascript/&quot; onclick=&quot;window.open(this.href); return false;&quot;&gt;Lazy Loading Asynchronous Javascript&lt;/a&gt; - Selecting this option JavaScript will be loaded at the end.</source>
+      </trans-unit>
+      <trans-unit id="tl_layout.theme_plus_default_javascript_position.0">
+        <source>Positioning of JavaScript files</source>
+      </trans-unit>
+      <trans-unit id="tl_layout.theme_plus_default_javascript_position.1">
+        <source>Here you can select where the JavaScript files are to be positioned from the JavaScript framework and from TL_JAVASCRIPT.</source>
+      </trans-unit>
+      <trans-unit id="tl_layout.theme_plus_javascripts.0">
+        <source>More JavaScripts</source>
+      </trans-unit>
+      <trans-unit id="tl_layout.theme_plus_javascripts.1">
+        <source>Add JavaScripts to the Layout</source>
+      </trans-unit>
+      <trans-unit id="tl_layout.theme_plus_exclude_files.0">
+        <source>Filter Stylesheets and JavaScripts</source>
+      </trans-unit>
+      <trans-unit id="tl_layout.theme_plus_exclude_files.1">
+        <source>Stylesheets und JavaScripts bpsw. aus Plugins können mit diesem Feature deaktiviert werden. Geben Sie dazu jeden Dateipfad einzeln in ein Feld ein. Auf globaler Ebene kann dies auch über das Array &lt;code&gt;$GLOBALS['TL_THEME_EXCLUDE']&lt;/code&gt; erfolgen, z.B. &lt;code&gt;$GLOBALS['TL_THEME_EXCLUDE'][] = 'system/contao.css';&lt;/code&gt;.</source>
+      </trans-unit>
+      <trans-unit id="tl_layout.theme_plus_exclude_files.2">
+        <target xml:lang="de"/>
+      </trans-unit>
+      <trans-unit id="tl_layout.asseticStylesheetFilter.0">
+        <source>Assetic filter for Stylesheets</source>
+      </trans-unit>
+      <trans-unit id="tl_layout.asseticStylesheetFilter.1">
+        <source>Please choose a Assetic filter or a filter chain which is finally applied to &lt;strong&gt;all&lt;/strong&gt; stylesheets.</source>
+      </trans-unit>
+      <trans-unit id="tl_layout.asseticJavaScriptFilter.0">
+        <source>Assetic filter for JavaScripts</source>
+      </trans-unit>
+      <trans-unit id="tl_layout.asseticJavaScriptFilter.1">
+        <source>Please choose a Assetic filter or a filter chain which is finally applied to  &lt;strong&gt;all&lt;/strong&gt; JavaScripts.</source>
+      </trans-unit>
+      <trans-unit id="tl_layout.positions.head">
+        <source>In &amp;lt;head&amp;gt;</source>
+      </trans-unit>
+      <trans-unit id="tl_layout.positions.body">
+        <source>In &amp;lt;body&amp;gt;</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
