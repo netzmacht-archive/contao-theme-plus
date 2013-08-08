@@ -3,111 +3,84 @@
   <file original="system/modules/theme-plus/languages/de/tl_theme_plus_variable.php" source-language="en" datatype="php" date="2012-11-08T21:49:41+00:00">
     <body>
       <trans-unit id="tl_theme_plus_variable.type.0">
-        <source xml:lang="de">Variablentyp</source>
         <source>variable type</source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_variable.type.1">
-        <source xml:lang="de">Bitte wählen Sie hier den Typ der Variablen.</source>
         <source>Please select the type of the variable.</source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_variable.name.0">
-        <source xml:lang="de">Name</source>
         <source>Name</source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_variable.name.1">
-        <source xml:lang="de">Geben Sie hier den Namen der Variable an, dieser kann nur aus Buchstablen und Zahlen bestehen und dient der Identifikation im CSS Code.</source>
         <source>Enter the name of the variable,  this may consist only of letters and numbers and allows identification in the CSS code.</source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_variable.text.0">
-        <source xml:lang="de">Code</source>
         <source>Code</source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_variable.text.1">
-        <source xml:lang="de">Hier kann beliebiger Code eingefügt werden.</source>
         <source>You can insert any code.</source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_variable.url.0">
-        <source xml:lang="de">URL</source>
         <source>URL</source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_variable.url.1">
-        <source xml:lang="de">Hier kann eine URL eingegeben werden, welche im CSS verknüpft wird.</source>
         <source>Here you can enter a URL, which is linked in the CSS.</source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_variable.file.0">
-        <source xml:lang="de">Datei</source>
         <source>File</source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_variable.file.1">
-        <source xml:lang="de">Hier kann eine Datei ausgewählt werden, welche im CSS verknüpft wird.</source>
         <source>Here you can select a file that is linked in the CSS.</source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_variable.color.0">
-        <source xml:lang="de">Farbe</source>
         <source>Color</source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_variable.color.1">
-        <source xml:lang="de">Hier können Sie eine Farbe auswählen.</source>
         <source>Here you can select a color.</source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_variable.size.0">
-        <source xml:lang="de">Größe / Abmessungen</source>
         <source>Size / Dimensions</source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_variable.size.1">
-        <source xml:lang="de">Hier können Sie eine Größe oder Abmessungen festlegen.</source>
         <source>Here you can specify a size or dimensions.</source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_variable.variable_legend">
-        <source xml:lang="de">Variable</source>
         <source>Variable</source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_variable.new.0">
-        <source xml:lang="de">Neue Variable</source>
         <source>New variable</source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_variable.new.1">
-        <source xml:lang="de">Eine neue Variable anlegen</source>
         <source>Create a new variable</source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_variable.show.0">
-        <source xml:lang="de">Details</source>
         <source>Details</source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_variable.show.1">
-        <source xml:lang="de">Details der Variable ID %s anzeigen</source>
         <source>View details of the variable ID %s</source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_variable.edit.0">
-        <source xml:lang="de">Variable bearbeiten</source>
         <source>Edit variable</source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_variable.edit.1">
-        <source xml:lang="de">Variable ID %s bearbeiten</source>
         <source>Edit variable ID %s</source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_variable.delete.0">
-        <source xml:lang="de">Variable löschen</source>
         <source>Delete variable</source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_variable.delete.1">
-        <source xml:lang="de">Variable ID %s löschen</source>
         <source>Delete variable ID %s</source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_variable.cut.0">
-        <source xml:lang="de">Variable verschieben </source>
         <source>Move variable</source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_variable.cut.1">
-        <source xml:lang="de">Variable ID %s verschieben</source>
         <source>Move variable ID %s</source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_variable.copy.0">
-        <source xml:lang="de">Variable duplizieren</source>
         <source>Dplicate variable</source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_variable.copy.1">
-        <source xml:lang="de">Variable ID %s duplizieren</source>
         <source>Duplicate variable ID %s</source>
       </trans-unit>
     </body>
