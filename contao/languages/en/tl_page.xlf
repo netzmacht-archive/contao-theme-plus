@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="system/modules/theme-plus/languages/de/tl_page.php" source-language="en" datatype="php" date="2012-11-08T21:49:41+00:00">
+    <body>
+      <trans-unit id="tl_page.theme_plus_include_stylesheets.0">
+        <source>Add Stylesheets to this and all sub-pages</source>
+      </trans-unit>
+      <trans-unit id="tl_page.theme_plus_include_stylesheets.1">
+        <source>Add Stylesheets to the layout of this and all sub-pages</source>
+      </trans-unit>
+      <trans-unit id="tl_page.theme_plus_stylesheets.0">
+        <source>More Stylesheets for this and all sub-pages</source>
+      </trans-unit>
+      <trans-unit id="tl_page.theme_plus_stylesheets.1">
+        <source>Select the Stylesheets that are to be included in this and all sub-pages.</source>
+      </trans-unit>
+      <trans-unit id="tl_page.theme_plus_include_javascripts.0">
+        <source>Add JavaScripts to this and all sub-pages</source>
+      </trans-unit>
+      <trans-unit id="tl_page.theme_plus_include_javascripts.1">
+        <source>Add JavaScripts to the layout of this and all sub-pages</source>
+      </trans-unit>
+      <trans-unit id="tl_page.theme_plus_javascripts.0">
+        <source>More JavaScripts for this and all sub-pages</source>
+      </trans-unit>
+      <trans-unit id="tl_page.theme_plus_javascripts.1">
+        <source>Select the JavaScripts that are to be included in this and all sub-pages.</source>
+      </trans-unit>
+      <trans-unit id="tl_page.theme_plus_include_stylesheets_noinherit.0">
+        <source>Add Stylesheets to this page</source>
+      </trans-unit>
+      <trans-unit id="tl_page.theme_plus_include_stylesheets_noinherit.1">
+        <source>Add Stylesheets to the layout of this page</source>
+      </trans-unit>
+      <trans-unit id="tl_page.theme_plus_stylesheets_noinherit.0">
+        <source>More Stylesheets for this page</source>
+      </trans-unit>
+      <trans-unit id="tl_page.theme_plus_stylesheets_noinherit.1">
+        <source>Select the Stylesheets that are to be included on this page.</source>
+      </trans-unit>
+      <trans-unit id="tl_page.theme_plus_include_javascripts_noinherit.0">
+        <source>Add JavaScripts to this page</source>
+      </trans-unit>
+      <trans-unit id="tl_page.theme_plus_include_javascripts_noinherit.1">
+        <source>Add JavaScripts to the layout of this page</source>
+      </trans-unit>
+      <trans-unit id="tl_page.theme_plus_javascripts_noinherit.0">
+        <source>More JavaScripts for this page</source>
+      </trans-unit>
+      <trans-unit id="tl_page.theme_plus_javascripts_noinherit.1">
+        <source>Select the JavaScripts that are to be included on this page.</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

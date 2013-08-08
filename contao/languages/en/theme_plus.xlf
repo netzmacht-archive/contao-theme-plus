@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="system/modules/theme-plus/languages/de/theme_plus.php" source-language="en" datatype="php" date="2012-11-08T21:49:41+00:00">
+    <body>
+      <trans-unit id="theme_plus.upgrade1.5">
+        <source>Complete auto-upgrade &lt;strong&gt;theme_plus&lt;/strong&gt; to version &lt;strong&gt;1.5&lt;/strong&gt;!</source>
+      </trans-unit>
+      <trans-unit id="theme_plus.upgrade2.0">
+        <source>Your &lt;strong&gt;layout_additional_sources&lt;/strong&gt; settings have been ported to &lt;strong&gt;Theme+&lt;/strong&gt;, &lt;strong&gt;layout_additional_sources&lt;/strong&gt; has been removed from your system! &lt;br/&gt; Remember to make a &lt;a href=&quot;contao/main.php?repository_manager&amp;do=update=database&quot;&gt;database update&lt;/a&gt;!</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
