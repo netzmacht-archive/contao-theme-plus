@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="system/modules/theme-plus/languages/de/tl_theme_plus_filter.php" source-language="en" datatype="php" date="2012-11-08T21:49:41+00:00">
+    <body>
+      <trans-unit id="tl_theme_plus_filter.system">
+        <source>System</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_filter.browser">
+        <source>Browser</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_filter.comparator">
+        <source>Operator</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_filter.browser_version">
+        <source>Version</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_filter.platform">
+        <source>Platform</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_filter.desktop">
+        <source>Desktop</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_filter.tablet">
+        <source>Tablet</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_filter.smartphone">
+        <source>Smartphones</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_filter.mobile">
+        <source>Mobile</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_filter.invert">
+        <source>Deny</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
