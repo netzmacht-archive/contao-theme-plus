@@ -3,11 +3,11 @@
 	var x = null;
 	var loading = false;
 
-	function enqueue(src) {
+	function enqueue(src, hash) {
 		if (loading) {
-			queue.push(src);
+			queue.push([src, hash]);
 		} else {
-			load(src);
+			load(src, hash);
 		}
 	}
 
@@ -15,12 +15,12 @@
 		//console.log('dequeue');
 		loading = false;
 		if (queue.length) {
-			var src = queue.shift();
-			load(src);
+			var item = queue.shift();
+			load(item[0], item[1]);
 		}
 	}
 
-	function load(src) {
+	function load(src, hash) {
 		//console.log(src);
 		loading = true;
 
@@ -28,13 +28,23 @@
 
 		s.type = "text/javascript";
 		if (window.attachEvent) {
-			s.onreadystatechange = function () {
+			s.onreadystatechange = function (event) {
 				//console.log(this.readyState);
-				if (this.readyState == 'loaded' || this.readyState == 'complete') dequeue();
+				if (this.readyState == 'loaded' || this.readyState == 'complete') {
+					if (window.themePlusDevTool) {
+						window.themePlusDevTool.triggerAsyncLoad(this, hash);
+					}
+					dequeue();
+				}
 			};
 		} else {
 			s.async = true;
-			s.addEventListener('load', dequeue, false);
+			s.addEventListener('load', function(event) {
+				if (window.themePlusDevTool) {
+					window.themePlusDevTool.triggerAsyncLoad(this, hash);
+				}
+				dequeue();
+			}, false);
 		}
 		s.src = src;
 
@@ -51,7 +61,7 @@
 		x = s;
 	}
 
-	window.loadAsync = function (src) {
-		enqueue(src);
+	window.loadAsync = function (src, hash) {
+		enqueue(src, hash);
 	}
 })();

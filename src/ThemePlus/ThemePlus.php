@@ -127,6 +127,13 @@ class ThemePlus
 	protected $arrVariables = null;
 
 	/**
+	 * List of all added files.
+	 *
+	 * @var array
+	 */
+	protected $files = array();
+
+	/**
 	 * Singleton constructor.
 	 */
 	protected function __construct()
@@ -612,6 +619,82 @@ class ThemePlus
 					$sr
 				);
 
+				if (ThemePlus::getInstance()->isDesignerMode()) {
+					$files = array();
+					$devTool = '';
+					foreach ($this->files as $url => $file) {
+						$files[] = md5($url);
+
+						$icon = '';
+						$type = 'unknown';
+						if (preg_match('#.*\.(js|css)#', $file['name'], $matches)) {
+							switch ($matches[1]) {
+								case 'js':
+									$icon = '<img src="system/modules/theme-plus/assets/images/javascript.png">';
+									$type = 'js';
+									break;
+								case 'css':
+									$icon = '<img src="system/modules/theme-plus/assets/images/stylesheet.png">';
+									$type = 'css';
+									break;
+							}
+						}
+
+						if ($file['url']) {
+							$name = $file['url'];
+						}
+						else if ($file['asset'] && !$file['asset'] instanceof StringAsset) {
+							$name = $file['asset']->getSourcePath();
+						}
+						else {
+							$name = $file['name'];
+						}
+
+						$devTool .= sprintf(
+							'<div id="monitor-%s" class="theme-plus-dev-tool-monitor theme-plus-dev-tool-type-%s theme-plus-dev-tool-loading">' .
+							'%s' .
+							'<a href="%s" target="_blank" class="theme-plus-dev-tool-link">%s</a>' .
+							'</div>
+',
+							md5($url),
+							$type,
+							$icon,
+							$url,
+							$name
+						);
+					}
+
+					$strBuffer = str_replace(
+						'</head>',
+						sprintf(
+							'<link rel="stylesheet" href="system/modules/theme-plus/assets/css/dev.css">
+<script src="system/modules/theme-plus/assets/js/dev.js"></script>
+</head>'
+						),
+						$strBuffer
+					);
+
+					$strBuffer = preg_replace(
+						'|<body[^>]*>|',
+						sprintf(
+							'$0
+<div id="theme-plus-dev-tool" class="%s">
+<div id="theme-plus-dev-tool-counter"><span id="theme-plus-dev-tool-count">0</span>/<span id="theme-plus-dev-tool-total">%d</span></div>
+%s
+</div>
+<script>initThemePlusDevTool(%s, %s)</script>',
+							\Input::cookie('THEME_PLUS_DEV_TOOL_COLLAPES') == 'no'
+								? ''
+								: 'theme-plus-dev-tool-collapsed',
+							count($files),
+							$devTool,
+							json_encode($files),
+							json_encode((bool) $layout->theme_plus_javascript_lazy_load)
+						),
+						$strBuffer
+					);
+				}
+
 				// replace dynamic scripts
 				return str_replace(
 					array_keys($sr),
@@ -735,6 +818,7 @@ class ThemePlus
 					base64_encode($stylesheet['id']),
 					$stylesheet['name']
 				);
+				$this->files[$url] = $stylesheet;
 			}
 
 			// use asset
@@ -745,12 +829,14 @@ class ThemePlus
 					$defaultFilters
 				);
 				$url = static::addStaticUrlTo($url);
+				$this->files[$url] = $stylesheet;
 			}
 
 			// use url
 			else if (isset($stylesheet['url'])) {
 				$url = $stylesheet['url'];
 				$url = static::addStaticUrlTo($url);
+				$this->files[$url] = $stylesheet;
 			}
 
 			// continue if file have no source
@@ -759,11 +845,18 @@ class ThemePlus
 			}
 
 			// generate html
-			$html = '<link' . ($xhtml
-				? ' type="text/css"'
-				: '') . ' rel="stylesheet" href="' . $url . '"' . ((isset($stylesheet['media']) && $stylesheet['media'] != 'all')
-				? ' media="' . $stylesheet['media'] . '"'
-				: '') . $tagEnding;
+			$html = '<link' .
+				($xhtml
+					? ' type="text/css"'
+					: '') .
+				' rel="stylesheet" href="' . $url . '"' .
+				((isset($stylesheet['media']) && $stylesheet['media'] != 'all')
+					? ' media="' . $stylesheet['media'] . '"'
+					: '') .
+				(static::isDesignerMode()
+					? ' id="' . md5($url) . '"'
+					: '') .
+				$tagEnding;
 
 			// wrap cc around
 			$html = static::wrapCc(
@@ -882,6 +975,7 @@ class ThemePlus
 					base64_encode($javascript['id']),
 					$javascript['name']
 				);
+				$this->files[$url] = $javascript;
 			}
 
 			// use asset
@@ -892,12 +986,14 @@ class ThemePlus
 					$defaultFilters
 				);
 				$url = static::addStaticUrlTo($url);
+				$this->files[$url] = $javascript;
 			}
 
 			// use url
 			else if (isset($javascript['url'])) {
 				$url = $javascript['url'];
 				$url = static::addStaticUrlTo($url);
+				$this->files[$url] = $javascript;
 			}
 
 			// continue if file have no source
@@ -907,14 +1003,27 @@ class ThemePlus
 
 			// generate html
 			if ($layout->theme_plus_javascript_lazy_load) {
-				$html = '<script' . ($xhtml
-					? ' type="text/javascript"'
-					: '') . '>window.loadAsync(' . json_encode($url) . ');</script>';
+				$html = '<script' .
+					($xhtml
+						? ' type="text/javascript"'
+						: '') .
+					(static::isDesignerMode()
+						? ' id="' . md5($url) . '"'
+						: '') .
+					'>window.loadAsync(' .
+					json_encode($url) .
+					(ThemePlus::getInstance()->isDesignerMode() ? ', ' . json_encode(md5($url)) : '') .
+					');</script>';
 			}
 			else {
-				$html = '<script' . ($xhtml
-					? ' type="text/javascript"'
-					: '') . ' src="' . $url . '"></script>';
+				$html = '<script' .
+					($xhtml
+						? ' type="text/javascript"'
+						: '') .
+					(static::isDesignerMode()
+						? ' id="' . md5($url) . '"'
+						: '') .
+					' src="' . $url . '"></script>';
 			}
 
 			// wrap cc
@@ -1124,15 +1233,20 @@ class ThemePlus
 
 					switch ($data->type) {
 						case 'code':
-							$name  = $data->code_snippet_title
+							$name  = ($data->code_snippet_title
 								? $data->code_snippet_title
 								: ('string' . substr(
 									md5($data->code),
 									0,
 									8
-								) . '.' . $type);
+								))) . '.' . $type;
 							$time = $data->tstamp;
-							$asset = new StringAsset($data->code, $filter, TL_ROOT, 'assets/' . $type . '/' . $data->code_snippet_title . '.' . $type);
+							$asset = new StringAsset(
+								$data->code,
+								$filter,
+								TL_ROOT,
+								'assets/' . $type . '/' . $data->code_snippet_title . '.' . $type
+							);
 							$asset->setLastModified($data->tstamp);
 							break;
 
@@ -1482,7 +1596,7 @@ class ThemePlus
 	 */
 	public function wrapJavaScriptLazyInclude($strSrc)
 	{
-		return 'loadAsync(' . json_encode($strSrc) . ');';
+		return 'loadAsync(' . json_encode($strSrc) . (ThemePlus::getInstance()->isDesignerMode() ? ', ' . json_encode(md5($strSrc)) : '') . ');';
 	}
 
 

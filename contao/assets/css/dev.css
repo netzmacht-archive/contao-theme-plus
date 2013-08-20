@@ -1,0 +1,108 @@
+@charset "utf-8";
+
+#theme-plus-dev-tool {
+	display: block;
+	font-family: sans-serif;
+	font-weight: normal;
+	font-size: 12px;
+	position: fixed;
+	width: 50px;
+	height: auto;
+	left: 0;
+	bottom: 0;
+	z-index: 100000;
+	margin: 0;
+	padding: 0;
+	color: #333;
+	background: #eeeeee; /* Old browsers */
+	background: -moz-linear-gradient(top,  #eeeeee 0%, #cccccc 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eeeeee), color-stop(100%,#cccccc)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #eeeeee 0%,#cccccc 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #eeeeee 0%,#cccccc 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #eeeeee 0%,#cccccc 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #eeeeee 0%,#cccccc 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#cccccc',GradientType=0 ); /* IE6-9 */
+	border-width: 1px 1px 0 0;
+	border-style: solid solid none none;
+	border-color: #ccc;
+	-moz-border-radius: 0 20px 0 0;
+	-webkit-border-radius: 0 20px 0 0;
+	border-radius: 0 20px 0 0;
+}
+
+#theme-plus-dev-tool.theme-plus-dev-tool-collapsed {
+	width: 50px;
+	height: 50px;
+	overflow: hidden;
+}
+
+#theme-plus-dev-tool #theme-plus-dev-tool-counter {
+	width: 50px;
+	height: 50px;
+	line-height: 46px;
+	text-align: center;
+	font-size: 15px;
+	cursor: pointer;
+}
+#theme-plus-dev-tool #theme-plus-dev-tool-counter #theme-plus-dev-tool-count {
+	vertical-align: super;
+}
+#theme-plus-dev-tool #theme-plus-dev-tool-counter #theme-plus-dev-tool-total {
+	vertical-align: sub;
+}
+#theme-plus-dev-tool #theme-plus-dev-tool-counter.theme-plus-dev-tool-errors {
+	color: red;
+}
+
+#theme-plus-dev-tool div.theme-plus-dev-tool-monitor {
+	margin: 0;
+	padding: 2px 4px 2px 24px;
+	height: 18px;
+	line-height: 18px;
+	white-space: nowrap;
+	background-position: 4px center;
+	background-repeat: no-repeat;
+}
+#theme-plus-dev-tool div.theme-plus-dev-tool-monitor.theme-plus-dev-tool-loading {
+	background-image: url(../images/loading.gif);
+}
+#theme-plus-dev-tool div.theme-plus-dev-tool-monitor.theme-plus-dev-tool-failed {
+	background-image: url(../images/failed.png);
+}
+#theme-plus-dev-tool div.theme-plus-dev-tool-monitor.theme-plus-dev-tool-finished {
+	background-image: url(../images/loaded.png);
+}
+
+#theme-plus-dev-tool a.theme-plus-dev-tool-link,
+#theme-plus-dev-tool a.theme-plus-dev-tool-link:link,
+#theme-plus-dev-tool a.theme-plus-dev-tool-link:hover,
+#theme-plus-dev-tool a.theme-plus-dev-tool-link:active,
+#theme-plus-dev-tool a.theme-plus-dev-tool-link:visited {
+	display: none;
+	color: inherit;
+	text-decoration: none;
+}
+#theme-plus-dev-tool div.theme-plus-dev-tool-monitor:hover a.theme-plus-dev-tool-link {
+	display: inline-block;
+	padding: 0 4px;
+	height: 20px;
+	line-height: 20px;
+	background-color: #eee;
+}
+#theme-plus-dev-tool a.theme-plus-dev-tool-monitor:before {
+	display: inline-block;
+	content: '\2217';
+	width: 16px;
+	padding: 0 2px;
+	color: inherit;
+	text-align: center;
+	vertical-align: -3px;
+}
+
+/*
+	background-color: #fff;
+	border: 1px solid #333;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+*/
