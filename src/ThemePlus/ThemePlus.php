@@ -59,7 +59,11 @@ class ThemePlus
 			);
 
 			// request the BE_USER_AUTH login status
-			static::setDesignerMode(static::$instance->getLoginStatus('BE_USER_AUTH'));
+			if (static::$instance->getLoginStatus('BE_USER_AUTH')) {
+				$backendUser = \BackendUser::getInstance();
+				$backendUser->authenticate();
+				static::setDesignerMode($backendUser->themePlusDesignerMode);
+			}
 
 			// restore previous FE_PREVIEW state
 			\Input::setCookie(
