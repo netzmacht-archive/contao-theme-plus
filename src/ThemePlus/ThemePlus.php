@@ -744,7 +744,8 @@ class ThemePlus
 				'css',
 				null,
 				$collection,
-				$stylesheets
+				$stylesheets,
+				$defaultFilters
 			);
 		}
 		$GLOBALS['TL_FRAMEWORK_CSS'] = array();
@@ -756,7 +757,8 @@ class ThemePlus
 				'css',
 				true,
 				$collection,
-				$stylesheets
+				$stylesheets,
+				$defaultFilters
 			);
 		}
 		$GLOBALS['TL_CSS'] = array();
@@ -768,7 +770,8 @@ class ThemePlus
 				'css',
 				true,
 				$collection,
-				$stylesheets
+				$stylesheets,
+				$defaultFilters
 			);
 		}
 		$GLOBALS['TL_USER_CSS'] = array();
@@ -786,7 +789,8 @@ class ThemePlus
 				$stylesheet,
 				'css',
 				$collection,
-				$stylesheets
+				$stylesheets,
+			$defaultFilters
 			);
 		}
 
@@ -797,6 +801,7 @@ class ThemePlus
 			'ThemePlus\Model\StylesheetModel',
 			$collection,
 			$stylesheets,
+			$defaultFilters,
 			true
 		);
 
@@ -919,6 +924,7 @@ class ThemePlus
 				false,
 				$collection,
 				$javascripts,
+				$defaultFilters,
 				$layout->theme_plus_default_javascript_position
 			);
 		}
@@ -938,6 +944,7 @@ class ThemePlus
 				'js',
 				$collection,
 				$javascripts,
+				$defaultFilters,
 				$layout->theme_plus_default_javascript_position
 			);
 		}
@@ -949,6 +956,7 @@ class ThemePlus
 			'ThemePlus\Model\JavaScriptModel',
 			$collection,
 			$javascripts,
+			$defaultFilters,
 			true,
 			$layout->theme_plus_default_javascript_position
 		);
@@ -1077,6 +1085,7 @@ class ThemePlus
 		$split,
 		AssetCollection $collection,
 		array &$array,
+		$defaultFilters,
 		$position = 'head'
 	) {
 		foreach ($sources as $source) {
@@ -1182,7 +1191,7 @@ class ThemePlus
 				}
 			}
 			else if ($source) {
-				$asset = new FileAsset(TL_ROOT . '/' . $source, array(), TL_ROOT, $source);
+				$asset = new FileAsset(TL_ROOT . '/' . $source, $defaultFilters, TL_ROOT, $source);
 			}
 			else {
 				continue;
@@ -1209,6 +1218,7 @@ class ThemePlus
 		$type,
 		AssetCollection $collection,
 		array &$array,
+		$defaultFilters,
 		$position = 'head'
 	) {
 		if ($data) {
@@ -1226,6 +1236,8 @@ class ThemePlus
 							$filter = array($temp);
 						}
 					}
+
+					$filter[] = $defaultFilters;
 
 					if ($data->position) {
 						$position = $data->position;
@@ -1334,6 +1346,7 @@ class ThemePlus
 		$model,
 		AssetCollection $collection,
 		array &$array,
+		$defaultFilters,
 		$local = false,
 		$position = 'head'
 	) {
@@ -1346,6 +1359,7 @@ class ThemePlus
 				$model,
 				$collection,
 				$array,
+				$defaultFilters,
 				false,
 				$position
 			);
@@ -1374,6 +1388,7 @@ class ThemePlus
 							: 'js',
 						$collection,
 						$array,
+						$defaultFilters,
 						$position
 					);
 				}
