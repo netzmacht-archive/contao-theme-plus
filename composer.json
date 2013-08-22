@@ -23,6 +23,7 @@
 	"require":{
 		"php":">=5.3",
 		"contao/core":"3.*",
+		"contao-community-alliance/composer-installer": "*",
 		"bit3/contao-assetic":"~1",
 		"ikimea/browser":"dev-master",
 		"mobiledetect/mobiledetectlib": "2.*",
@@ -42,9 +43,12 @@
 	},
 	"extra":{
 		"contao": {
-			"symlinks":{
+			"sources":{
 				"contao":"system/modules/theme-plus"
 			}
+		},
+		"branch-alias": {
+			"dev-master": "4.x-dev"
 		}
 	}
 }
