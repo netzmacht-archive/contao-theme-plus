@@ -1053,6 +1053,7 @@ class ThemePlus
 		// add async.js script
 		if ($layout->theme_plus_javascript_lazy_load) {
 			$async = new FileAsset(TL_ROOT . '/system/modules/theme-plus/assets/js/async.js', $defaultFilters);
+			$async->setTargetPath($this->getAssetPath($async, 'js'));
 			$async = '<script' . ($xhtml
 				? ' type="text/javascript"'
 				: '') . '>' . $async->dump() . '</script>' . "\n";
@@ -1169,6 +1170,7 @@ class ThemePlus
 				// ...fetch the stylesheet
 				if ($mode == 'static' && static::isLiveMode()) {
 					$asset = new HttpAsset($source);
+					$asset->setTargetPath($this->getAssetPath($asset, $type));
 				}
 				// ...or add if it is not static
 				else {
@@ -1183,6 +1185,7 @@ class ThemePlus
 			}
 			else if ($source) {
 				$asset = new FileAsset(TL_ROOT . '/' . $source, array(), TL_ROOT, $source);
+				$asset->setTargetPath($this->getAssetPath($asset, $type));
 			}
 			else {
 				continue;
@@ -1247,6 +1250,7 @@ class ThemePlus
 								TL_ROOT,
 								'assets/' . $type . '/' . $data->code_snippet_title . '.' . $type
 							);
+							$asset->setTargetPath($this->getAssetPath($asset, $type));
 							$asset->setLastModified($data->tstamp);
 							break;
 
@@ -1266,6 +1270,7 @@ class ThemePlus
 							$time = $data->tstamp;
 							if ($data->fetchUrl) {
 								$asset = new HttpAsset($data->url, $filter);
+								$asset->setTargetPath($this->getAssetPath($asset, $type));
 							}
 							else {
 								$array[] = array(
@@ -1305,6 +1310,7 @@ class ThemePlus
 								$name  = basename($filepath, '.' . $type) . '.' . $type;
 								$time  = filemtime($filepath);
 								$asset = new FileAsset(TL_ROOT . '/' . $filepath, $filter, TL_ROOT, $filepath);
+								$asset->setTargetPath($this->getAssetPath($asset, $type));
 							}
 							break;
 					}
