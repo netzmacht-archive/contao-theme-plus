@@ -112,7 +112,7 @@ class ThemePlus
 	/**
 	 * If is in live mode.
 	 */
-	protected $blnLiveMode = false;
+	protected $blnLiveMode = true;
 
 
 	/**
