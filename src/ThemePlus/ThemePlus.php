@@ -49,27 +49,29 @@ class ThemePlus
 		if (static::$instance === null) {
 			static::$instance = new ThemePlus();
 
-			// remember cookie FE_PREVIEW state
-			$fePreview = \Input::cookie('FE_PREVIEW');
+			if (TL_MODE == 'FE') {
+				// remember cookie FE_PREVIEW state
+				$fePreview = \Input::cookie('FE_PREVIEW');
 
-			// set into preview mode
-			\Input::setCookie(
-				'FE_PREVIEW',
-				true
-			);
+				// set into preview mode
+				\Input::setCookie(
+					'FE_PREVIEW',
+					true
+				);
 
-			// request the BE_USER_AUTH login status
-			if (static::$instance->getLoginStatus('BE_USER_AUTH')) {
-				$backendUser = \BackendUser::getInstance();
-				$backendUser->authenticate();
-				static::setDesignerMode($backendUser->themePlusDesignerMode);
+				// request the BE_USER_AUTH login status
+				if (static::$instance->getLoginStatus('BE_USER_AUTH')) {
+					$backendUser = \BackendUser::getInstance();
+					$backendUser->authenticate();
+					static::setDesignerMode($backendUser->themePlusDesignerMode);
+				}
+
+				// restore previous FE_PREVIEW state
+				\Input::setCookie(
+					'FE_PREVIEW',
+					$fePreview
+				);
 			}
-
-			// restore previous FE_PREVIEW state
-			\Input::setCookie(
-				'FE_PREVIEW',
-				$fePreview
-			);
 
 			// Add new assetic filter factory
 			AsseticFactory::registerFilterFactory(new Filter\ThemePlusFilterFactory());                        
