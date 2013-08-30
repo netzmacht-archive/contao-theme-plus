@@ -63,7 +63,10 @@ class ThemePlus
 				if (static::$instance->getLoginStatus('BE_USER_AUTH')) {
 					$backendUser = \BackendUser::getInstance();
 					$backendUser->authenticate();
+
 					static::setDesignerMode($backendUser->themePlusDesignerMode);
+
+					BackendUserHack::destroyInstance();
 				}
 
 				// restore previous FE_PREVIEW state
