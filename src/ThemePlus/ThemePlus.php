@@ -61,12 +61,37 @@ class ThemePlus
 
 				// request the BE_USER_AUTH login status
 				if (static::$instance->getLoginStatus('BE_USER_AUTH')) {
-					$backendUser = \BackendUser::getInstance();
-					$backendUser->authenticate();
+					$cookieName = 'BE_USER_AUTH';
+					$ip   = \Environment::get('ip');
+					$hash = \Input::cookie($cookieName);
 
-					static::setDesignerMode($backendUser->themePlusDesignerMode);
+					// Check the cookie hash
+					if ($hash == sha1(session_id() . (!$GLOBALS['TL_CONFIG']['disableIpCheck'] ? $ip : '') . $cookieName))
+					{
+						$session = \Database::getInstance()
+							->prepare("SELECT * FROM tl_session WHERE hash=? AND name=?")
+							->execute($hash, $cookieName);
 
-					BackendUserHack::destroyInstance();
+						// Try to find the session in the database
+						if ($session->next())
+						{
+							$time = time();
+
+							// Validate the session
+							if ($session->sessionID == session_id() &&
+								($GLOBALS['TL_CONFIG']['disableIpCheck'] || $session->ip == $ip) &&
+								$session->hash == $hash &&
+								($session->tstamp + $GLOBALS['TL_CONFIG']['sessionTimeout']) >= $time
+							) {
+								$userId = $session->pid;
+								$user = \UserModel::findByPk($userId);
+
+								if ($user) {
+									static::setDesignerMode($user->themePlusDesignerMode);
+								}
+							}
+						}
+					}
 				}
 
 				// restore previous FE_PREVIEW state
