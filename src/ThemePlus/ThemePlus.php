@@ -31,7 +31,6 @@ use Assetic\Asset\AssetCollection;
  * Adding files to the page layout.
  */
 class ThemePlus
-	extends \Frontend
 {
 	/**
 	 * Singleton
@@ -50,55 +49,38 @@ class ThemePlus
 			static::$instance = new ThemePlus();
 
 			if (TL_MODE == 'FE') {
-				// remember cookie FE_PREVIEW state
-				$fePreview = \Input::cookie('FE_PREVIEW');
-
-				// set into preview mode
-				\Input::setCookie(
-					'FE_PREVIEW',
-					true
-				);
-
 				// request the BE_USER_AUTH login status
-				if (static::$instance->getLoginStatus('BE_USER_AUTH')) {
-					$cookieName = 'BE_USER_AUTH';
-					$ip   = \Environment::get('ip');
-					$hash = \Input::cookie($cookieName);
+				$cookieName = 'BE_USER_AUTH';
+				$ip   = \Environment::get('ip');
+				$hash = \Input::cookie($cookieName);
 
-					// Check the cookie hash
-					if ($hash == sha1(session_id() . (!$GLOBALS['TL_CONFIG']['disableIpCheck'] ? $ip : '') . $cookieName))
+				// Check the cookie hash
+				if ($hash == sha1(session_id() . (!$GLOBALS['TL_CONFIG']['disableIpCheck'] ? $ip : '') . $cookieName))
+				{
+					$session = \Database::getInstance()
+						->prepare("SELECT * FROM tl_session WHERE hash=? AND name=?")
+						->execute($hash, $cookieName);
+
+					// Try to find the session in the database
+					if ($session->next())
 					{
-						$session = \Database::getInstance()
-							->prepare("SELECT * FROM tl_session WHERE hash=? AND name=?")
-							->execute($hash, $cookieName);
+						$time = time();
 
-						// Try to find the session in the database
-						if ($session->next())
-						{
-							$time = time();
+						// Validate the session
+						if ($session->sessionID == session_id() &&
+							($GLOBALS['TL_CONFIG']['disableIpCheck'] || $session->ip == $ip) &&
+							$session->hash == $hash &&
+							($session->tstamp + $GLOBALS['TL_CONFIG']['sessionTimeout']) >= $time
+						) {
+							$userId = $session->pid;
+							$user = \UserModel::findByPk($userId);
 
-							// Validate the session
-							if ($session->sessionID == session_id() &&
-								($GLOBALS['TL_CONFIG']['disableIpCheck'] || $session->ip == $ip) &&
-								$session->hash == $hash &&
-								($session->tstamp + $GLOBALS['TL_CONFIG']['sessionTimeout']) >= $time
-							) {
-								$userId = $session->pid;
-								$user = \UserModel::findByPk($userId);
-
-								if ($user) {
-									static::setDesignerMode($user->themePlusDesignerMode);
-								}
+							if ($user) {
+								static::setDesignerMode($user->themePlusDesignerMode);
 							}
 						}
 					}
 				}
-
-				// restore previous FE_PREVIEW state
-				\Input::setCookie(
-					'FE_PREVIEW',
-					$fePreview
-				);
 			}
 
 			// Add new assetic filter factory
@@ -168,9 +150,7 @@ class ThemePlus
 	 */
 	protected function __construct()
 	{
-		parent::__construct();
 	}
-
 
 	/**
 	 * Get productive mode status.
@@ -528,10 +508,9 @@ class ThemePlus
 	 */
 	public static function stripStaticURL($strUrl)
 	{
-		if (defined('TL_ASSETS_URL') && strlen(TL_ASSETS_URL) > 0 && strpos(
-			$strUrl,
-			TL_ASSETS_URL
-		) === 0
+		if (defined('TL_ASSETS_URL') &&
+			strlen(TL_ASSETS_URL) > 0 &&
+			strpos($strUrl, TL_ASSETS_URL) === 0
 		) {
 			return substr(
 				$strUrl,
@@ -863,14 +842,14 @@ class ThemePlus
 					'css',
 					$defaultFilters
 				);
-				$url = static::addStaticUrlTo($url);
+				$url = \Controller::addStaticUrlTo($url);
 				$this->files[$url] = $stylesheet;
 			}
 
 			// use url
 			else if (isset($stylesheet['url'])) {
 				$url = $stylesheet['url'];
-				$url = static::addStaticUrlTo($url);
+				$url = \Controller::addStaticUrlTo($url);
 				$this->files[$url] = $stylesheet;
 			}
 
@@ -1023,14 +1002,14 @@ class ThemePlus
 					'js',
 					$defaultFilters
 				);
-				$url = static::addStaticUrlTo($url);
+				$url = \Controller::addStaticUrlTo($url);
 				$this->files[$url] = $javascript;
 			}
 
 			// use url
 			else if (isset($javascript['url'])) {
 				$url = $javascript['url'];
-				$url = static::addStaticUrlTo($url);
+				$url = \Controller::addStaticUrlTo($url);
 				$this->files[$url] = $javascript;
 			}
 
@@ -1388,7 +1367,7 @@ class ThemePlus
 	) {
 		// inherit from parent page
 		if ($objPage->pid) {
-			$objParent = $this->getPageDetails($objPage->pid);
+			$objParent = \PageModel::findWithDetails($objPage->pid);
 			$this->addAssetsToCollectionFromPageTree(
 				$objParent,
 				$type,
@@ -1462,13 +1441,13 @@ class ThemePlus
 	/**
 	 * Render a variable to css code.
 	 */
-	public function renderVariable(VariableModel $variable)
+	static public function renderVariable(VariableModel $variable)
 	{
 		// HOOK: create framework code
 		if (isset($GLOBALS['TL_HOOKS']['renderVariable']) && is_array($GLOBALS['TL_HOOKS']['renderVariable'])) {
 			foreach ($GLOBALS['TL_HOOKS']['renderVariable'] as $callback) {
-				$this->import($callback[0]);
-				$varResult = $this->$callback[0]->$callback[1]($variable);
+				$object = \System::importStatic($callback[0]);
+				$varResult = $object->$callback[1]($variable);
 				if ($varResult !== false) {
 					return $varResult;
 				}
@@ -1539,7 +1518,7 @@ class ThemePlus
 		if (!isset($this->arrVariables[$objTheme->id])) {
 			$this->arrVariables[$objTheme->id] = array();
 
-			$objVariable = $this->Database
+			$objVariable = \Database::getInstance()
 				->prepare("SELECT * FROM tl_theme_plus_variable WHERE pid=?")
 				->execute($objTheme->id);
 
@@ -1869,7 +1848,6 @@ class SortingHelper
  * A little helper class that work as callback for preg_replace_callback.
  */
 class VariableReplacer
-	extends \System
 {
 	/**
 	 * The variables and there values.
@@ -1903,8 +1881,8 @@ class VariableReplacer
 		)
 		) {
 			foreach ($GLOBALS['TL_HOOKS']['replaceUndefinedVariable'] as $callback) {
-				$this->import($callback[0]);
-				$varResult = $this->$callback[0]->$callback[1]($m[1]);
+				$object = \System::importStatic($callback[0]);
+				$varResult = $object->$callback[1]($m[1]);
 				if ($varResult !== false) {
 					return $varResult;
 				}
