@@ -46,9 +46,6 @@
 			"sources":{
 				"contao":"system/modules/theme-plus"
 			}
-		},
-		"branch-alias": {
-			"dev-master": "4.x-dev"
 		}
 	}
 }
