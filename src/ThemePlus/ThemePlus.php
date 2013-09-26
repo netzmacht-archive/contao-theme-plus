@@ -630,23 +630,34 @@ class ThemePlus
 
 				if (ThemePlus::getInstance()->isDesignerMode()) {
 					$files = array();
-					$devTool = '';
+					$stylesheetsCount  = 0;
+					$stylesheetsBuffer = '';
+					$javascriptsCount  = 0;
+					$javascriptsBuffer = '';
+
 					foreach ($this->files as $url => $file) {
 						$files[] = md5($url);
 
-						$icon = '';
-						$type = 'unknown';
+						$icon   = '';
+						$type   = 'unknown';
 						if (preg_match('#.*\.(js|css)#', $file['name'], $matches)) {
 							switch ($matches[1]) {
 								case 'js':
 									$icon = '<img src="system/modules/theme-plus/assets/images/javascript.png">';
 									$type = 'js';
+									$buffer = &$javascriptsBuffer;
+									$javascriptsCount ++;
 									break;
 								case 'css':
 									$icon = '<img src="system/modules/theme-plus/assets/images/stylesheet.png">';
 									$type = 'css';
+									$buffer = &$stylesheetsBuffer;
+									$stylesheetsCount ++;
 									break;
 							}
+						}
+						else {
+							continue;
 						}
 
 						if ($file['url']) {
@@ -659,9 +670,9 @@ class ThemePlus
 							$name = $file['name'];
 						}
 
-						$devTool .= sprintf(
+						$buffer .= sprintf(
 							'<div id="monitor-%s" class="theme-plus-dev-tool-monitor theme-plus-dev-tool-type-%s theme-plus-dev-tool-loading">' .
-							'%s' .
+							'%s ' .
 							'<a href="%s" target="_blank" class="theme-plus-dev-tool-link">%s</a>' .
 							'</div>
 ',
@@ -672,6 +683,9 @@ class ThemePlus
 							$name
 						);
 					}
+
+					// clean reference variable
+					unset($buffer);
 
 					$strBuffer = str_replace(
 						'</head>',
@@ -688,15 +702,27 @@ class ThemePlus
 						sprintf(
 							'$0
 <div id="theme-plus-dev-tool" class="%s">
-<div id="theme-plus-dev-tool-counter"><span id="theme-plus-dev-tool-count">0</span>/<span id="theme-plus-dev-tool-total">%d</span></div>
-%s
+<div id="theme-plus-dev-tool-toggler" title="Theme+ developers tool">T+</div>
+<div id="theme-plus-dev-tool-stylesheets">
+	<div id="theme-plus-dev-tool-stylesheets-counter">%s <span id="theme-plus-dev-tool-stylesheets-count">0</span> / <span id="theme-plus-dev-tool-stylesheets-total">%d</span></div>
+	<div id="theme-plus-dev-tool-stylesheets-files">%s</div>
+</div>
+<div id="theme-plus-dev-tool-javascripts">
+	<div id="theme-plus-dev-tool-javascripts-counter">%s <span id="theme-plus-dev-tool-javascripts-count">0</span> / <span id="theme-plus-dev-tool-javascripts-total">%d</span></div>
+	<div id="theme-plus-dev-tool-javascripts-files">%s</div>
+</div>
+<div id="theme-plus-dev-tool-exception"></div>
 </div>
 <script>initThemePlusDevTool(%s, %s)</script>',
 							\Input::cookie('THEME_PLUS_DEV_TOOL_COLLAPES') == 'no'
 								? ''
 								: 'theme-plus-dev-tool-collapsed',
-							count($files),
-							$devTool,
+							\Image::getHtml('system/modules/theme-plus/assets/images/stylesheet.png'),
+							$stylesheetsCount,
+							$stylesheetsBuffer,
+							\Image::getHtml('system/modules/theme-plus/assets/images/javascript.png'),
+							$javascriptsCount,
+							$javascriptsBuffer,
 							json_encode($files),
 							json_encode((bool) $layout->theme_plus_javascript_lazy_load)
 						),

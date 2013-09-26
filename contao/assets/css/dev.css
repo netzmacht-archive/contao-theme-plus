@@ -6,8 +6,8 @@
 	font-weight: normal;
 	font-size: 12px;
 	position: fixed;
-	width: 50px;
-	height: auto;
+	width: 100%;
+	height: 50px;
 	left: 0;
 	bottom: 0;
 	z-index: 100000;
@@ -21,37 +21,89 @@
 	background: -o-linear-gradient(top,  #eeeeee 0%,#cccccc 100%); /* Opera 11.10+ */
 	background: -ms-linear-gradient(top,  #eeeeee 0%,#cccccc 100%); /* IE10+ */
 	background: linear-gradient(to bottom,  #eeeeee 0%,#cccccc 100%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#cccccc',GradientType=0 ); /* IE6-9 */
 	border-width: 1px 1px 0 0;
 	border-style: solid solid none none;
 	border-color: #ccc;
-	-moz-border-radius: 0 20px 0 0;
-	-webkit-border-radius: 0 20px 0 0;
-	border-radius: 0 20px 0 0;
 }
 
 #theme-plus-dev-tool.theme-plus-dev-tool-collapsed {
 	width: 50px;
 	height: 50px;
 	overflow: hidden;
+	-webkit-border-radius: 0 20px 0 0;
+	-moz-border-radius: 0 20px 0 0;
+	border-radius: 0 20px 0 0;
+}
+#theme-plus-dev-tool.theme-plus-dev-tool-collapsed #theme-plus-dev-tool-stylesheets,
+#theme-plus-dev-tool.theme-plus-dev-tool-collapsed #theme-plus-dev-tool-javascripts,
+#theme-plus-dev-tool.theme-plus-dev-tool-collapsed #theme-plus-dev-tool-exception {
+	display: none;
 }
 
-#theme-plus-dev-tool #theme-plus-dev-tool-counter {
+#theme-plus-dev-tool img {
+	vertical-align: middle;
+}
+
+#theme-plus-dev-tool-toggler {
+	float: right;
 	width: 50px;
 	height: 50px;
-	line-height: 46px;
+	line-height: 50px;
 	text-align: center;
 	font-size: 15px;
+	font-weight: bold;
 	cursor: pointer;
 }
-#theme-plus-dev-tool #theme-plus-dev-tool-counter #theme-plus-dev-tool-count {
-	vertical-align: super;
+#theme-plus-dev-tool-exception,
+#theme-plus-dev-tool-stylesheets,
+#theme-plus-dev-tool-javascripts {
+	position: relative;
+	float: left;
+	height: 50px;
+	line-height: 50px;
+	margin: 0 10px;
+	padding: 0 10px;
 }
-#theme-plus-dev-tool #theme-plus-dev-tool-counter #theme-plus-dev-tool-total {
-	vertical-align: sub;
-}
-#theme-plus-dev-tool #theme-plus-dev-tool-counter.theme-plus-dev-tool-errors {
+#theme-plus-dev-tool-exception {
 	color: red;
+}
+#theme-plus-dev-tool-stylesheets,
+#theme-plus-dev-tool-javascripts {
+	cursor: pointer;
+}
+
+#theme-plus-dev-tool-stylesheets:hover,
+#theme-plus-dev-tool-javascripts:hover,
+#theme-plus-dev-tool-exception:hover,
+#theme-plus-dev-tool-stylesheets.theme-plus-dev-tool-expanded,
+#theme-plus-dev-tool-javascripts.theme-plus-dev-tool-expanded {
+	background: #cccccc; /* Old browsers */
+	background: -moz-linear-gradient(bottom,  #eeeeee 0%, #cccccc 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left bottom, left top, color-stop(0%,#eeeeee), color-stop(100%,#cccccc)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(bottom,  #eeeeee 0%,#cccccc 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(bottom,  #eeeeee 0%,#cccccc 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(bottom,  #eeeeee 0%,#cccccc 100%); /* IE10+ */
+	background: linear-gradient(to top,  #eeeeee 0%,#cccccc 100%); /* W3C */
+}
+
+#theme-plus-dev-tool-toggler.theme-plus-dev-tool-errors,
+#theme-plus-dev-tool-stylesheets-count.theme-plus-dev-tool-errors,
+#theme-plus-dev-tool-javascripts-counter.theme-plus-dev-tool-errors {
+	color: red;
+}
+
+#theme-plus-dev-tool-stylesheets-files,
+#theme-plus-dev-tool-javascripts-files {
+	display: none;
+	position: absolute;
+	left: 0;
+	bottom: 50px;
+	padding: 10px;
+	background-color: rgba(238, 238, 238, .85);
+}
+#theme-plus-dev-tool-stylesheets.theme-plus-dev-tool-expanded #theme-plus-dev-tool-stylesheets-files,
+#theme-plus-dev-tool-javascripts.theme-plus-dev-tool-expanded #theme-plus-dev-tool-javascripts-files {
+	display: block;
 }
 
 #theme-plus-dev-tool div.theme-plus-dev-tool-monitor {
@@ -78,16 +130,8 @@
 #theme-plus-dev-tool a.theme-plus-dev-tool-link:hover,
 #theme-plus-dev-tool a.theme-plus-dev-tool-link:active,
 #theme-plus-dev-tool a.theme-plus-dev-tool-link:visited {
-	display: none;
 	color: inherit;
 	text-decoration: none;
-}
-#theme-plus-dev-tool div.theme-plus-dev-tool-monitor:hover a.theme-plus-dev-tool-link {
-	display: inline-block;
-	padding: 0 4px;
-	height: 20px;
-	line-height: 20px;
-	background-color: #eee;
 }
 #theme-plus-dev-tool a.theme-plus-dev-tool-monitor:before {
 	display: inline-block;

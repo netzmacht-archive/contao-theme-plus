@@ -1,20 +1,33 @@
 function initThemePlusDevTool(files, asyncJS) {
 	window.themePlusDevTool = new (function(files, asyncJS) {
 		var tool = document.getElementById('theme-plus-dev-tool');
-		var counter = document.getElementById('theme-plus-dev-tool-counter');
-		var count = document.getElementById('theme-plus-dev-tool-count');
+		var toggler = document.getElementById('theme-plus-dev-tool-toggler');
 
-		counter.addEventListener('click', function() {
-			var cssClass = tool.getAttribute('class');
-			if (cssClass.match(/theme-plus-dev-tool-collapsed/)) {
-				document.cookie='THEME_PLUS_DEV_TOOL_COLLAPES=no';
-				cssClass = cssClass.replace('theme-plus-dev-tool-collapsed', '');
+		var stylesheets        = document.getElementById('theme-plus-dev-tool-stylesheets');
+		var stylesheetsCounter = document.getElementById('theme-plus-dev-tool-stylesheets-counter');
+		var stylesheetsCount   = document.getElementById('theme-plus-dev-tool-stylesheets-count');
+		var javascripts        = document.getElementById('theme-plus-dev-tool-javascripts');
+		var javascriptsCounter = document.getElementById('theme-plus-dev-tool-javascripts-counter');
+		var javascriptsCount = document.getElementById('theme-plus-dev-tool-javascripts-count');
+		var exception = document.getElementById('theme-plus-dev-tool-exception');
+
+		stylesheetsCounter.addEventListener('click', function() {
+			if (toggleClass(stylesheets, 'theme-plus-dev-tool-expanded')) {
+				removeClass(javascripts, 'theme-plus-dev-tool-expanded');
+			}
+		});
+		javascriptsCounter.addEventListener('click', function() {
+			if (toggleClass(javascripts, 'theme-plus-dev-tool-expanded')) {
+				removeClass(stylesheets, 'theme-plus-dev-tool-expanded');
+			}
+		});
+		toggler.addEventListener('click', function() {
+			if (toggleClass(tool, 'theme-plus-dev-tool-collapsed')) {
+				document.cookie='THEME_PLUS_DEV_TOOL_COLLAPES=yes';
 			}
 			else {
-				document.cookie='THEME_PLUS_DEV_TOOL_COLLAPES=yes';
-				cssClass = (cssClass + ' theme-plus-dev-tool-collapsed').trim();
+				document.cookie='THEME_PLUS_DEV_TOOL_COLLAPES=no';
 			}
-			tool.setAttribute('class', cssClass);
 		});
 
 		var documentLoaded = false;
@@ -22,35 +35,112 @@ function initThemePlusDevTool(files, asyncJS) {
 			documentLoaded = true;
 		});
 
+		function getClasses(element) {
+			var cssClasses = [];
+			var tempClasses = element.getAttribute('class');
+			if (tempClasses) {
+				tempClasses = tempClasses.split(/\s+/);
+				for (var index in tempClasses) {
+					var tempClass = tempClasses[index].trim();
+					if (tempClass) {
+						cssClasses.push(tempClass);
+					}
+				}
+			}
+			return cssClasses;
+		}
+
+		function addClass(element, cssClass) {
+			var cssClasses = getClasses(element);
+			if (cssClasses.indexOf(cssClass) == -1) {
+				cssClasses.push(cssClass);
+				element.setAttribute('class', cssClasses.join(' '));
+			}
+		}
+
+		function removeClass(element, cssClass) {
+			var cssClasses = getClasses(element);
+			var index = cssClasses.indexOf(cssClass);
+			if (index != -1) {
+				cssClasses.splice(index, 1);
+				element.setAttribute('class', cssClasses.join(' '));
+			}
+		}
+
+		function toggleClass(element, cssClass) {
+			var cssClasses = getClasses(element);
+			var index = cssClasses.indexOf(cssClass);
+			if (index == -1) {
+				cssClasses.push(cssClass);
+				element.setAttribute('class', cssClasses.join(' '));
+				return true;
+			}
+			else {
+				cssClasses.splice(index, 1);
+				element.setAttribute('class', cssClasses.join(' '));
+				return false;
+			}
+		}
+
 		var self = this;
-		this.succeeded = [];
-		this.failed = [];
+		this.stylesheets = {
+			succeeded: [],
+			failed: []
+		}
+		this.javascripts = {
+			succeeded: [],
+			failed: []
+		}
 		this.lastError = false;
 
-		function updateCount() {
-			count.innerText = (self.succeeded.length + self.failed.length);
+		function updateStylesheetsCount() {
+			stylesheetsCount.innerText = (self.stylesheets.succeeded.length + self.stylesheets.failed.length);
 
-			var cssClass = counter.getAttribute('class');
-			if (self.failed.length && (!cssClass || !cssClass.match(/theme-plus-dev-tool-errors/))) {
-				counter.setAttribute('class', (cssClass + ' theme-plus-dev-tool-errors').trim());
+			if (self.stylesheets.failed.length) {
+				addClass(stylesheetsCounter, 'theme-plus-dev-tool-errors');
+				addClass(toggler, 'theme-plus-dev-tool-errors');
+			}
+		}
+
+		function updateJavascriptsCount() {
+			javascriptsCount.innerText = (self.javascripts.succeeded.length + self.javascripts.failed.length);
+
+			if (self.javascripts.failed.length) {
+				addClass(javascriptsCounter, 'theme-plus-dev-tool-errors');
+				addClass(toggler, 'theme-plus-dev-tool-errors');
 			}
 		}
 
 		window.addEventListener('error', function(event) {
 			self.lastError = event;
+
+			var filename = event.filename;
+			var lastIndex = filename.lastIndexOf('/');
+			if (lastIndex != -1) {
+				filename = filename.substr(lastIndex + 1);
+			}
+			exception.innerHTML = '<img src="system/modules/theme-plus/assets/images/exception.png"> ' +
+				'<strong>' + event.message + '</strong>' +
+				', in <em>' + filename + ':' + event.lineno + '</em>';
+
+			var cssClass = toggler.getAttribute('class');
+			if (!cssClass || !cssClass.match(/theme-plus-dev-tool-errors/)) {
+				toggler.setAttribute('class', ((cssClass ? cssClass : '') + ' theme-plus-dev-tool-errors').trim());
+			}
 		});
+
 		this.triggerAsyncLoad = function(script, hash) {
 			var monitor = document.getElementById('monitor-' + hash);
 			if (self.lastError) {
 				monitor.setAttribute('class', monitor.getAttribute('class') + ' theme-plus-dev-tool-failed');
-				self.failed.push(hash);
+				self.javascripts.failed.push(hash);
 			}
 			else {
 				monitor.setAttribute('class', monitor.getAttribute('class') + ' theme-plus-dev-tool-finished');
-				self.succeeded.push(hash);
+				self.javascripts.succeeded.push(hash);
 			}
 			self.lastError = false;
-			updateCount();
+			updateJavascriptsCount();
 		};
 
 		for (var i=0; i<files.length; i++) {
@@ -69,15 +159,15 @@ function initThemePlusDevTool(files, asyncJS) {
 									document.styleSheets[j].rules.length
 								) {
 									monitor.setAttribute('class', monitor.getAttribute('class') + ' theme-plus-dev-tool-finished');
-									self.succeeded.push(id);
-									updateCount();
+									self.stylesheets.succeeded.push(id);
+									updateStylesheetsCount();
 									clearInterval(interval);
 									return;
 								}
 								else {
 									monitor.setAttribute('class', monitor.getAttribute('class') + ' theme-plus-dev-tool-failed');
-									self.failed.push(id);
-									updateCount()
+									self.stylesheets.failed.push(id);
+									updateStylesheetsCount()
 									clearInterval(interval);
 									return;
 								}
@@ -85,8 +175,8 @@ function initThemePlusDevTool(files, asyncJS) {
 						}
 						if (documentLoaded) {
 							monitor.setAttribute('class', monitor.getAttribute('class') + ' theme-plus-dev-tool-failed');
-							self.failed.push(id);
-							updateCount()
+							self.stylesheets.failed.push(id);
+							updateStylesheetsCount()
 							clearInterval(interval);
 						}
 					}, 100);
