@@ -853,7 +853,8 @@ class ThemePlus
 			// use proxy for development
 			if (static::isDesignerMode() && isset($stylesheet['id'])) {
 				$url = sprintf(
-					'system/modules/theme-plus/web/proxy.php/css/%s/%s/%s',
+					'system/modules/theme-plus/web/proxy.php/css/%s/%s/%s/%s',
+					$stylesheet['name'],
 					$GLOBALS['objPage']->id,
 					base64_encode($stylesheet['id']),
 					$stylesheet['name']
@@ -1013,7 +1014,8 @@ class ThemePlus
 			// use proxy for development
 			if (static::isDesignerMode() && isset($javascript['id'])) {
 				$url = sprintf(
-					'system/modules/theme-plus/web/proxy.php/js/%s/%s/%s',
+					'system/modules/theme-plus/web/proxy.php/js/%s/%s/%s/%s',
+					$javascript['name'],
 					$GLOBALS['objPage']->id,
 					base64_encode($javascript['id']),
 					$javascript['name']
