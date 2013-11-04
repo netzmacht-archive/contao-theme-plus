@@ -83,6 +83,10 @@ class ThemePlus
 				}
 			}
 
+			if (!isset($_SESSION['THEME_PLUS_ASSETS'])) {
+				$_SESSION['THEME_PLUS_ASSETS'] = array();
+			}
+
 			// Add new assetic filter factory
 			AsseticFactory::registerFilterFactory(new Filter\ThemePlusFilterFactory());                        
 		}
@@ -266,7 +270,6 @@ class ThemePlus
 		$asset->setTargetPath($path);
 
 		if (!file_exists(TL_ROOT . '/' . $path)) {
-
 			$file = new \File($path);
 			$file->write(
 				$asset->dump(
@@ -788,7 +791,7 @@ class ThemePlus
 		// Add the internal style sheets
 		if (is_array($GLOBALS['TL_CSS']) && !empty($GLOBALS['TL_CSS'])) {
 			$this->addAssetsToCollectionFromArray(
-				array_unique($GLOBALS['TL_CSS']),
+				$GLOBALS['TL_CSS'],
 				'css',
 				true,
 				$collection,
@@ -825,7 +828,7 @@ class ThemePlus
 				'css',
 				$collection,
 				$stylesheets,
-			$defaultFilters
+				$defaultFilters
 			);
 		}
 
@@ -852,12 +855,23 @@ class ThemePlus
 		foreach ($stylesheets as $stylesheet) {
 			// use proxy for development
 			if (static::isDesignerMode() && isset($stylesheet['id'])) {
+				/** @var AssetInterface $asset */
+				$asset = $stylesheet['asset'];
+
+				$session          = new \stdClass;
+				$session->page    = $objPage->id;
+				$session->asset   = $asset;
+				$session->filters = $defaultFilters;
+
+				$id = substr(md5($asset->getSourceRoot() . '/' . $asset->getSourcePath()), 0, 8);
+
+				$_SESSION['THEME_PLUS_ASSETS'][$id] = serialize($session);
+
+				$pathinfo = pathinfo($stylesheet['name']);
+
 				$url = sprintf(
-					'system/modules/theme-plus/web/proxy.php/css/%s/%s/%s/%s',
-					$stylesheet['name'],
-					$GLOBALS['objPage']->id,
-					base64_encode($stylesheet['id']),
-					$stylesheet['name']
+					'system/modules/theme-plus/web/proxy.php/css/%s',
+					$pathinfo['filename'] . '.' . $id . '.' . $pathinfo['extension']
 				);
 				$this->files[$url] = $stylesheet;
 			}
@@ -1013,12 +1027,23 @@ class ThemePlus
 		foreach ($javascripts as $javascript) {
 			// use proxy for development
 			if (static::isDesignerMode() && isset($javascript['id'])) {
+				/** @var AssetInterface $asset */
+				$asset = $javascript['asset'];
+
+				$session          = new \stdClass;
+				$session->page    = $objPage->id;
+				$session->asset   = $asset;
+				$session->filters = $defaultFilters;
+
+				$id = substr(md5($asset->getSourceRoot() . '/' . $asset->getSourcePath()), 0, 8);
+
+				$_SESSION['THEME_PLUS_ASSETS'][$id] = serialize($session);
+
+				$pathinfo = pathinfo($javascript['name']);
+
 				$url = sprintf(
-					'system/modules/theme-plus/web/proxy.php/js/%s/%s/%s/%s',
-					$javascript['name'],
-					$GLOBALS['objPage']->id,
-					base64_encode($javascript['id']),
-					$javascript['name']
+					'system/modules/theme-plus/web/proxy.php/js/%s',
+					$pathinfo['filename'] . '.' . $id . '.' . $pathinfo['extension']
 				);
 				$this->files[$url] = $javascript;
 			}
@@ -1145,17 +1170,17 @@ class ThemePlus
 					);
 				}
 				else if ($source instanceof FileAsset) {
-					$reflectionClass = new ReflectionClass($source);
-					$sourceProperty  = $reflectionClass->getProperty('source');
+					$reflectionClass = new \ReflectionClass('Assetic\Asset\BaseAsset');
+					$sourceProperty  = $reflectionClass->getProperty('sourcePath');
 					$sourceProperty->setAccessible(true);
-					$sourcePath = $sourceProperty->getValue();
+					$sourcePath = $sourceProperty->getValue($source);
 
 					if (in_array($sourcePath, $GLOBALS['TL_THEME_EXCLUDE'])) {
 						continue;
 					}
 
 					$array[] = array(
-						'id'       => $type . ':' . $sourcePath,
+						'id'       => $type . ':asset:' . spl_object_hash($source),
 						'name'     => basename($sourcePath, '.' . $type) . '.' . $type,
 						'time'     => filemtime($sourcePath),
 						'asset'    => $source,
@@ -1165,6 +1190,7 @@ class ThemePlus
 				}
 				else {
 					$array[] = array(
+						'id'       => $type . ':asset:' . spl_object_hash($source),
 						'name'     => get_class($source) . '.' . $type,
 						'time'     => time(),
 						'asset'    => $source,
