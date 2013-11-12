@@ -1361,7 +1361,7 @@ class ThemePlus
 						case 'file':
 							$filepath = false;
 							if ($data->filesource == $GLOBALS['TL_CONFIG']['uploadPath'] && version_compare(VERSION, '3', '>=')) {
-								$file = \FilesModel::findByPk($data->file);
+								$file = (version_compare(VERSION, '3.2', '>=') ? \FilesModel::findByUuid($data->file) : \FilesModel::findByPk($data->file));
 								if ($file) {
 									$filepath = $file->path;
 								}

@@ -248,7 +248,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = array
                                  'files'     => true,
                                  'filesOnly' => true,
                                  'extensions'=> 'js'),
-            'sql'       => "text NULL"
+            'sql'       => "blob NULL"
         ),
         'url'                                   => array
         (
