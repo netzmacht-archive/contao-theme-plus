@@ -22,7 +22,7 @@
 	},
 	"require":{
 		"php":">=5.3",
-		"contao/core":">=3,<3.2",
+		"contao/core":">=3,<=3.2-RC1",
 		"contao-community-alliance/composer-installer": "*",
 		"bit3/contao-assetic":"~1",
 		"ikimea/browser":"dev-master",
@@ -48,7 +48,8 @@
 			}
 		},
 		"branch-alias": {
-			"dev-master": "4.2.x-dev"
+			"dev-master": "4.2.x-dev",
+			"dev-develop": "4.3.x-dev"
 		}
 	}
 }

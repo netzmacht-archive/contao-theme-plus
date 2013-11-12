@@ -105,7 +105,7 @@ class File
 
 			case 'file':
 				if ($row['filesource'] == $GLOBALS['TL_CONFIG']['uploadPath'] && version_compare(VERSION, '3', '>=')) {
-					$file = \FilesModel::findByPk($row['file']);
+					$file = (version_compare(VERSION, '3.2', '>=') ? \FilesModel::findByUuid($row['file']) : \FilesModel::findByPk($row['file']));
 
 					if ($file) {
 						$label = preg_replace('#/([^/]+)$#', '/<strong>$1</strong>', $file->path);

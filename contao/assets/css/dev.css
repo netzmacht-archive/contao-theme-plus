@@ -6,7 +6,7 @@
 	font-weight: normal;
 	font-size: 12px;
 	position: fixed;
-	width: 100%;
+	width: auto;
 	height: 50px;
 	left: 0;
 	bottom: 0;
@@ -24,15 +24,15 @@
 	border-width: 1px 1px 0 0;
 	border-style: solid solid none none;
 	border-color: #ccc;
+	-webkit-border-radius: 0 20px 0 0;
+	-moz-border-radius: 0 20px 0 0;
+	border-radius: 0 20px 0 0;
 }
 
 #theme-plus-dev-tool.theme-plus-dev-tool-collapsed {
 	width: 50px;
 	height: 50px;
 	overflow: hidden;
-	-webkit-border-radius: 0 20px 0 0;
-	-moz-border-radius: 0 20px 0 0;
-	border-radius: 0 20px 0 0;
 }
 #theme-plus-dev-tool.theme-plus-dev-tool-collapsed #theme-plus-dev-tool-stylesheets,
 #theme-plus-dev-tool.theme-plus-dev-tool-collapsed #theme-plus-dev-tool-javascripts,
