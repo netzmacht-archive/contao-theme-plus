@@ -18,7 +18,7 @@ namespace ThemePlus\Hybrid;
  *
  * Front end content element "script_source".
  */
-class JavaScript extends Frontend
+class JavaScript extends \Frontend
 {
 	/**
 	 * Current record
