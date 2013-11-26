@@ -19,7 +19,10 @@ class upgrade_to_contao3_2
 	protected function updateFileField($table)
 	{
 		$desc = \Database::getInstance()->query('DESC ' . $table . ' file');
-		if ($desc->Type != 'binary(16)') {
+		$stillNumericRecordCount = \Database::getInstance()
+			->query('SELECT COUNT(id) AS count FROM ' . $table . ' WHERE file REGEXP \'^[0-9]+$\'')
+			->count;
+		if ($desc->Type != 'binary(16)' || $stillNumericRecordCount) {
 			\Database\Updater::convertSingleField($table, 'file');
 		}
 	}
