@@ -249,7 +249,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = array
 				'filesOnly'  => true,
 				'extensions' => 'css,less,scss,sass'
 			),
-            'sql'       => "blob NULL"
+            'sql'       => "binary(16) NULL"
 		),
 		'url'                      => array
 		(
