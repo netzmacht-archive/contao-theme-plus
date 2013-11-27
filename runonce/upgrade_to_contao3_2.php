@@ -22,7 +22,7 @@ class upgrade_to_contao3_2
 		$stillNumericRecordCount = \Database::getInstance()
 			->query('SELECT COUNT(id) AS count FROM ' . $table . ' WHERE file REGEXP \'^[0-9]+$\'')
 			->count;
-		if ($desc->Type != 'binary(16)' || $stillNumericRecordCount) {
+		if ($desc->Type != 'blob' && $desc->Type != 'binary(16)' || $stillNumericRecordCount) {
 			\Database\Updater::convertSingleField($table, 'file');
 		}
 	}
