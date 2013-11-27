@@ -1,5 +1,8 @@
 <?php
 
+// HOTFIX: disable update to prevent data loss
+return;
+
 if (version_compare(VERSION, '3.2', '<')) {
 	return;
 }
