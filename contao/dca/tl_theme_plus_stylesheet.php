@@ -276,6 +276,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = array
 			'eval'      => array(
 				'mandatory'  => true,
 				'allowHtml'  => true,
+				'preserveTags' => true,
 				'class'      => 'monospace',
 				'rte'        => 'codeMirror|css',
 				'helpwizard' => true

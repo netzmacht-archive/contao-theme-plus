@@ -23,6 +23,11 @@ use Ikimea\Browser\Browser;
 class File
 	extends \Backend
 {
+	public function __construct()
+	{
+		parent::__construct();
+	}
+
 	static public function renderFilterRules(array $row)
 	{
 		if (strlen($row['filter'])) {

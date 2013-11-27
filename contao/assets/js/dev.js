@@ -99,6 +99,7 @@ function initThemePlusDevTool(files, asyncJS) {
 			if (self.stylesheets.failed.length) {
 				addClass(stylesheetsCounter, 'theme-plus-dev-tool-errors');
 				addClass(toggler, 'theme-plus-dev-tool-errors');
+				addClass(tool, 'theme-plus-dev-tool-errors');
 			}
 		}
 
@@ -108,6 +109,7 @@ function initThemePlusDevTool(files, asyncJS) {
 			if (self.javascripts.failed.length) {
 				addClass(javascriptsCounter, 'theme-plus-dev-tool-errors');
 				addClass(toggler, 'theme-plus-dev-tool-errors');
+				addClass(tool, 'theme-plus-dev-tool-errors');
 			}
 		}
 

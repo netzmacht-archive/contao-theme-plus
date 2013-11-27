@@ -15,6 +15,7 @@ namespace ThemePlus;
 
 use Template;
 use FrontendTemplate;
+use ThemePlus\DataContainer\File;
 use ThemePlus\Model\StylesheetModel;
 use ThemePlus\Model\JavaScriptModel;
 use ThemePlus\Model\VariableModel;
@@ -32,6 +33,8 @@ use Assetic\Asset\AssetCollection;
  */
 class ThemePlus
 {
+	const BROWSER_IDENT_OVERWRITE = 'THEME_PLUS_BROWSER_IDENT_OVERWRITE';
+
 	/**
 	 * Singleton
 	 */
@@ -345,12 +348,36 @@ class ThemePlus
 		$invert = false
 	)
 	{
+		$browserIdentOverwrite = \Session::getInstance()->get(self::BROWSER_IDENT_OVERWRITE);
+
 		$match = true;
+
 		if (!empty($system)) {
-			$match = $match && static::getBrowserDetect()->getPlatform() == $system;
+			if ($browserIdentOverwrite && $browserIdentOverwrite->system) {
+				$currentSystem = $browserIdentOverwrite->system;
+			}
+			else {
+				$currentSystem = static::getBrowserDetect()->getPlatform();
+			}
+
+			$match = $match && $currentSystem == $system;
 		}
 		if (!empty($browser)) {
+			if ($browserIdentOverwrite && $browserIdentOverwrite->browser) {
+				$currentBrowser = $browserIdentOverwrite->browser;
+			}
+			else {
+				$currentBrowser = static::getBrowserDetect()->getBrowser();
+			}
+
 			if (!empty($browserVersionComparator) && !empty($browserVersion)) {
+				if ($browserIdentOverwrite && $browserIdentOverwrite->version) {
+					$currentBrowserVersion = $browserIdentOverwrite->version;
+				}
+				else {
+					$currentBrowserVersion = static::getBrowserDetect()->getVersion();
+				}
+
 				switch ($browserVersionComparator) {
 					case 'lt':
 						$browserVersionComparator = '<';
@@ -367,32 +394,38 @@ class ThemePlus
 				}
 
 				$match = $match &&
-					static::getBrowserDetect()->getBrowser() == $browser &&
-					version_compare(static::getBrowserDetect()->getVersion(), $browserVersion, $browserVersionComparator);
+					$currentBrowser == $browser &&
+					version_compare($currentBrowserVersion, $browserVersion, $browserVersionComparator);
 			}
 			else {
-				$match = $match && static::getBrowserDetect()->getBrowser() == $browser;
+				$match = $match && $currentBrowser == $browser;
 			}
 		}
 		if (!empty($platform)) {
-			switch ($platform) {
-				case 'desktop':
-					$match = $match && static::isDesktop();
-					break;
+			if ($browserIdentOverwrite && $browserIdentOverwrite->platform) {
+				$match = $match && $platform == $browserIdentOverwrite->platform;
+			}
+			else {
+				switch ($platform) {
+					case 'desktop':
+						$match = $match && static::isDesktop();
+						break;
 
-				case 'tablet':
-					$match = $match && static::isTabled();
-					break;
+					case 'tablet':
+						$match = $match && static::isTabled();
+						break;
 
-				case 'smartphone':
-					$match = $match && static::isSmartphone();
-					break;
+					case 'smartphone':
+						$match = $match && static::isSmartphone();
+						break;
 
-				case 'mobile':
-					$match = $match && static::isMobile();
-					break;
+					case 'mobile':
+						$match = $match && static::isMobile();
+						break;
+				}
 			}
 		}
+
 		if ($invert) {
 			$match = !$match;
 		}
@@ -632,6 +665,30 @@ class ThemePlus
 				);
 
 				if (ThemePlus::getInstance()->isDesignerMode()) {
+					if (\Input::post('FORM_SUBMIT') == 'theme_plus_dev_tool') {
+						$session = \Session::getInstance();
+
+						$system = \Input::post('theme_plus_dev_tool_system');
+						$browser = \Input::post('theme_plus_dev_tool_browser');
+						$version = \Input::post('theme_plus_dev_tool_version');
+						$platform = \Input::post('theme_plus_dev_tool_platform');
+
+						if ($system || $browser || $version || $platform) {
+							$browserIdentOverwrite = (object) array(
+								'system' => $system,
+								'browser' => $browser,
+								'version' => $version,
+								'platform' => $platform,
+							);
+							$session->set(self::BROWSER_IDENT_OVERWRITE, $browserIdentOverwrite);
+						}
+						else {
+							$session->set(self::BROWSER_IDENT_OVERWRITE, null);
+						}
+
+						\Controller::reload();
+					}
+
 					$files = array();
 					$stylesheetsCount  = 0;
 					$stylesheetsBuffer = '';
@@ -700,6 +757,46 @@ class ThemePlus
 						$strBuffer
 					);
 
+					$browserIdentOverwrite = \Session::getInstance()->get(self::BROWSER_IDENT_OVERWRITE);
+
+					$fileDC = new File();
+
+					$filterSystems = array('<option value="">System</option>');
+					foreach ($fileDC->getSystems() as $system) {
+						$filterSystems[] = sprintf(
+							'<option value="%1$s"%2$s>%1$s</option>',
+							$system,
+							$browserIdentOverwrite && $browserIdentOverwrite->system == $system
+								? ' selected'
+								: ''
+						);
+					}
+
+					$filterBrowsers = array('<option value="">Browser</option>');
+					foreach ($fileDC->getBrowsers() as $browser) {
+						$filterBrowsers[] = sprintf(
+							'<option value="%1$s">%1$s</option>',
+							$browser,
+							$browserIdentOverwrite && $browserIdentOverwrite->browser == $browser
+								? ' selected'
+								: ''
+						);
+					}
+
+					\Controller::loadLanguageFile('tl_theme_plus_filter');
+
+					$filterPlatforms = array('<option value="">Platform</option>');
+					foreach (array('desktop', 'tablet', 'smartphone', 'mobile') as $platform) {
+						$filterPlatforms[] = sprintf(
+							'<option value="%1$s"%3$s>%2$s</option>',
+							$platform,
+							$GLOBALS['TL_LANG']['tl_theme_plus_filter'][$platform],
+							$browserIdentOverwrite && $browserIdentOverwrite->platform == $platform
+								? ' selected'
+								: ''
+						);
+					}
+
 					$strBuffer = preg_replace(
 						'|<body[^>]*>|',
 						sprintf(
@@ -714,9 +811,21 @@ class ThemePlus
 	<div id="theme-plus-dev-tool-javascripts-counter">%s <span id="theme-plus-dev-tool-javascripts-count">0</span> / <span id="theme-plus-dev-tool-javascripts-total">%d</span></div>
 	<div id="theme-plus-dev-tool-javascripts-files">%s</div>
 </div>
+<div id="theme-plus-dev-tool-filter">
+	<form method="post" action="%s">
+		<input type="hidden" name="REQUEST_TOKEN" value="%s">
+		<input type="hidden" name="FORM_SUBMIT" value="theme_plus_dev_tool">
+		<select id="theme-plus-dev-tool-filter-system" name="theme_plus_dev_tool_system" onchange="this.form.submit()">%s</select>
+		<select id="theme-plus-dev-tool-filter-browser" name="theme_plus_dev_tool_browser" onchange="this.form.submit()">%s</select>
+		<input id="theme-plus-dev-tool-filter-version" name="theme_plus_dev_tool_version" value="%s" placeholder="Version" size="4">
+		<select id="theme-plus-dev-tool-filter-platform" name="theme_plus_dev_tool_platform" onchange="this.form.submit()">%s</select>
+		&nbsp;
+		<input id="theme-plus-dev-tool-filter-apply" type="submit" value="&raquo;">
+	</form>
+</div>
 <div id="theme-plus-dev-tool-exception"></div>
 </div>
-<script>initThemePlusDevTool(%s, %s)</script>',
+<script>initThemePlusDevTool(%s, %s);</script>',
 							\Input::cookie('THEME_PLUS_DEV_TOOL_COLLAPES') == 'no'
 								? ''
 								: 'theme-plus-dev-tool-collapsed',
@@ -726,6 +835,12 @@ class ThemePlus
 							\Image::getHtml('system/modules/theme-plus/assets/images/javascript.png'),
 							$javascriptsCount,
 							$javascriptsBuffer,
+							\Environment::get('request'),
+							REQUEST_TOKEN,
+							implode('', $filterSystems),
+							implode('', $filterBrowsers),
+							$browserIdentOverwrite ? $browserIdentOverwrite->version : '',
+							implode('', $filterPlatforms),
 							json_encode($files),
 							json_encode((bool) $layout->theme_plus_javascript_lazy_load)
 						),

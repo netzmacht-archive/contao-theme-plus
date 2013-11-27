@@ -272,6 +272,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = array
             'inputType' => 'textarea',
             'eval'      => array('mandatory' => true,
                                  'allowHtml' => true,
+                                 'preserveTags' => true,
                                  'class'     => 'monospace',
                                  'rte'       => 'codeMirror|javascript',
                                  'helpwizard'=> true),
