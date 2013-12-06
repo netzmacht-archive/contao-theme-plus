@@ -158,7 +158,8 @@ $GLOBALS['TL_DCA']['tl_theme_plus_variable'] = array
 			'eval'                    => array('mandatory' => true,
 			                                   'fieldType' => 'radio',
 			                                   'files'     => true,
-			                                   'extensions'=> 'css,jpg,jpeg,png,gif,bmp,svg')
+			                                   'extensions'=> 'css,jpg,jpeg,png,gif,bmp,svg'),
+            'sql'       => "blob NULL"
 		),
 		'color' => array
 		(

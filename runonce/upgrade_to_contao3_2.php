@@ -1,8 +1,5 @@
 <?php
 
-// HOTFIX: disable update to prevent data loss
-return;
-
 if (version_compare(VERSION, '3.2', '<')) {
 	return;
 }
@@ -21,12 +18,29 @@ class upgrade_to_contao3_2
 
 	protected function updateFileField($table)
 	{
-		$desc = \Database::getInstance()->query('DESC ' . $table . ' file');
-		$stillNumericRecordCount = \Database::getInstance()
-			->query('SELECT COUNT(id) AS count FROM ' . $table . ' WHERE file REGEXP \'^[0-9]+$\'')
-			->count;
-		if ($desc->Type != 'blob' && $desc->Type != 'binary(16)' || $stillNumericRecordCount) {
-			\Database\Updater::convertSingleField($table, 'file');
+		$database = \Database::getInstance();
+
+		// get the field description
+		$desc = $database->query('DESC ' . $table . ' file');
+
+		// convert the field into a blob
+		if ($desc->Type != 'blob') {
+			$database->query('ALTER TABLE `' . $table . '` CHANGE `file` `file` blob NULL');
+			$database->query('UPDATE `' . $table . '` SET `file`=NULL WHERE `file`=\'\' OR `file`=0');
+		}
+
+		// select fields with numeric values
+		$resultSet = $database->query('SELECT id, file FROM ' . $table . ' WHERE file REGEXP \'^[0-9]+$\'');
+
+		while ($resultSet->next()) {
+			// Numeric ID to UUID
+			$file = \FilesModel::findByPk($resultSet->file);
+
+			if ($file) {
+				$database
+					->prepare('UPDATE `' . $table . '` SET file=? WHERE id=?')
+					->execute($file->uuid, $resultSet->id);
+			}
 		}
 	}
 }
