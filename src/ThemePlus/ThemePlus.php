@@ -973,14 +973,22 @@ class ThemePlus
 				/** @var AssetInterface $asset */
 				$asset = $stylesheet['asset'];
 
-				$session          = new \stdClass;
-				$session->page    = $objPage->id;
-				$session->asset   = $asset;
-				$session->filters = $defaultFilters;
-
 				$id = substr(md5($asset->getSourceRoot() . '/' . $asset->getSourcePath()), 0, 8);
 
-				$_SESSION['THEME_PLUS_ASSETS'][$id] = serialize($session);
+				$session = unserialize($_SESSION['THEME_PLUS_ASSETS'][$id]);
+
+				if (
+					!$session ||
+					!$session->asset instanceof StringAsset ||
+					$asset->getLastModified() > $session->asset->getLastModified()
+				) {
+					$session          = new \stdClass;
+					$session->page    = $objPage->id;
+					$session->asset   = $asset;
+					$session->filters = $defaultFilters;
+
+					$_SESSION['THEME_PLUS_ASSETS'][$id] = serialize($session);
+				}
 
 				$pathinfo = pathinfo($stylesheet['name']);
 
@@ -1145,14 +1153,22 @@ class ThemePlus
 				/** @var AssetInterface $asset */
 				$asset = $javascript['asset'];
 
-				$session          = new \stdClass;
-				$session->page    = $objPage->id;
-				$session->asset   = $asset;
-				$session->filters = $defaultFilters;
-
 				$id = substr(md5($asset->getSourceRoot() . '/' . $asset->getSourcePath()), 0, 8);
 
-				$_SESSION['THEME_PLUS_ASSETS'][$id] = serialize($session);
+				$session = unserialize($_SESSION['THEME_PLUS_ASSETS'][$id]);
+
+				if (
+					!$session ||
+					!$session->asset instanceof StringAsset ||
+					$asset->getLastModified() > $session->asset->getLastModified()
+				) {
+					$session          = new \stdClass;
+					$session->page    = $objPage->id;
+					$session->asset   = $asset;
+					$session->filters = $defaultFilters;
+
+					$_SESSION['THEME_PLUS_ASSETS'][$id] = serialize($session);
+				}
 
 				$pathinfo = pathinfo($javascript['name']);
 
