@@ -1601,6 +1601,7 @@ class ThemePlus
 						: 'js',
 					$collection,
 					$array,
+					$defaultFilters,
 					$position
 				);
 			}
