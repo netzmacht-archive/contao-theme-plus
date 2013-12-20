@@ -302,7 +302,7 @@ class ThemePlus
 	 *
 	 * @return bool
 	 */
-	public static function isTabled()
+	public static function isTablet()
 	{
 		return static::getMobileDetect()->isTablet();
 	}
@@ -412,7 +412,7 @@ class ThemePlus
 						break;
 
 					case 'tablet':
-						$match = $match && static::isTabled();
+						$match = $match && static::isTablet();
 						break;
 
 					case 'smartphone':
