@@ -800,7 +800,7 @@ class ThemePlus
 					$strBuffer = preg_replace(
 						'|<body[^>]*>|',
 						sprintf(
-							'$0
+							'$0<!-- indexer::stop -->
 <div id="theme-plus-dev-tool" class="%s">
 <div id="theme-plus-dev-tool-toggler" title="Theme+ developers tool">T+</div>
 <div id="theme-plus-dev-tool-stylesheets">
@@ -825,7 +825,7 @@ class ThemePlus
 </div>
 <div id="theme-plus-dev-tool-exception"></div>
 </div>
-<script>initThemePlusDevTool(%s, %s);</script>',
+<script>initThemePlusDevTool(%s, %s);</script><!-- indexer::continue -->',
 							\Input::cookie('THEME_PLUS_DEV_TOOL_COLLAPES') == 'no'
 								? ''
 								: 'theme-plus-dev-tool-collapsed',
