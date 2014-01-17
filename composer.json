@@ -25,8 +25,6 @@
 		"contao/core":">=3,<3.3-dev",
 		"contao-community-alliance/composer-installer": "*",
 		"bit3/contao-assetic":"~1",
-		"ikimea/browser":"dev-master",
-		"mobiledetect/mobiledetectlib": "2.*",
 		"bit3/contao-meta-palettes":"~1"
 	},
 	"require-dev":{
@@ -38,7 +36,8 @@
 	},
 	"autoload":{
 		"psr-0": {
-			"ThemePlus": "src/"
+			"Bit3\\Contao\\ThemePlus": "src",
+			"ThemePlus": "deprecated/"
 		}
 	},
 	"extra":{

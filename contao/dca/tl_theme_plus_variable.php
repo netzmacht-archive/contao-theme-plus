@@ -44,7 +44,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_variable'] = array
 			'fields'                  => array('name'),
 			'panelLayout'             => 'filter;limit',
 			'headerFields'            => array('name', 'author', 'tstamp'),
-			'child_record_callback'   => array('ThemePlus\DataContainer\Variable', 'listVariables'),
+			'child_record_callback'   => array('Bit3\Contao\ThemePlus\DataContainer\Variable', 'listVariables'),
 			'child_record_class'      => 'no_padding'
 		),
 		'global_operations' => array
@@ -132,7 +132,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_variable'] = array
 			'eval'                    => array('mandatory'=> true,
 			                                   'maxlength'=> 255,
 			                                   'rgxp'     => 'alnum'),
-			'save_callback'           => array(array('ThemePlus\DataContainer\Variable', 'getName'))
+			'save_callback'           => array(array('Bit3\Contao\ThemePlus\DataContainer\Variable', 'getName'))
 		),
 		'text'  => array
 		(

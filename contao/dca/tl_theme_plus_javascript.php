@@ -42,7 +42,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = array
         'ptable'           => 'tl_theme',
         'enableVersioning' => true,
 		'onload_callback'  => array(
-			array('ThemePlus\DataContainer\File', 'changeFileSource')
+			array('Bit3\Contao\ThemePlus\DataContainer\File', 'changeFileSource')
 		),
         'sql'              => array
         (
@@ -64,7 +64,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = array
             'fields'                => array('sorting'),
             'panelLayout'           => 'filter;limit',
             'headerFields'          => array('name', 'author', 'tstamp'),
-            'child_record_callback' => array('ThemePlus\DataContainer\File', 'listFile'),
+            'child_record_callback' => array('Bit3\Contao\ThemePlus\DataContainer\File', 'listFile'),
             'child_record_class'    => 'no_padding'
         ),
         'global_operations' => array
@@ -215,7 +215,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = array
             'eval'          => array('includeBlankOption'=> true,
                                      'submitOnChange'    => true,
                                      'tl_class'          => 'w50'),
-            'save_callback' => array(array('ThemePlus\DataContainer\JavaScript', 'rememberType')),
+            'save_callback' => array(array('Bit3\Contao\ThemePlus\DataContainer\JavaScript', 'rememberType')),
             'sql'           => "varchar(32) NOT NULL default ''"
         ),
         'filesource'                            => array
@@ -294,10 +294,10 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = array
             'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['layouts'],
             'exclude'   => true,
             'inputType' => 'checkbox',
-			'options_callback' => array('ThemePlus\DataContainer\JavaScript', 'listLayouts'),
+			'options_callback' => array('Bit3\Contao\ThemePlus\DataContainer\JavaScript', 'listLayouts'),
             'eval'      => array('multiple' => true, 'doNotSaveEmpty' => true),
-            'load_callback' => array(array('ThemePlus\DataContainer\JavaScript', 'loadLayouts')),
-            'save_callback' => array(array('ThemePlus\DataContainer\JavaScript', 'saveLayouts')),
+            'load_callback' => array(array('Bit3\Contao\ThemePlus\DataContainer\JavaScript', 'loadLayouts')),
+            'save_callback' => array(array('Bit3\Contao\ThemePlus\DataContainer\JavaScript', 'saveLayouts')),
         ),
         'cc'                                    => array
         (
@@ -330,7 +330,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = array
 						'label'            => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['system'],
 						'exclude'          => true,
 						'inputType'        => 'select',
-						'options_callback' => array('ThemePlus\DataContainer\File', 'getSystems'),
+						'options_callback' => array('Bit3\Contao\ThemePlus\DataContainer\File', 'getSystems'),
 						'eval'             => array(
 							'style'              => 'width:158px',
 							'includeBlankOption' => true
@@ -341,7 +341,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = array
 						'label'            => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['browser'],
 						'exclude'          => true,
 						'inputType'        => 'select',
-						'options_callback' => array('ThemePlus\DataContainer\File', 'getBrowsers'),
+						'options_callback' => array('Bit3\Contao\ThemePlus\DataContainer\File', 'getBrowsers'),
 						'eval'             => array(
 							'style'              => 'width:158px',
 							'includeBlankOption' => true
@@ -403,7 +403,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = array
         (
             'label'            => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['asseticFilter'],
             'inputType'        => 'select',
-            'options_callback' => array('ThemePlus\DataContainer\JavaScript', 'getAsseticFilterOptions'),
+            'options_callback' => array('Bit3\Contao\ThemePlus\DataContainer\JavaScript', 'getAsseticFilterOptions'),
             'reference'        => &$GLOBALS['TL_LANG']['assetic'],
             'eval'             => array('includeBlankOption' => true),
             'sql'              => "varbinary(32) NOT NULL default ''"
