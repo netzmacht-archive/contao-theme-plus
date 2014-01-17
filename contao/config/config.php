@@ -13,11 +13,18 @@
 
 
 /**
+ * Config
+ */
+$GLOBALS['TL_CONFIG']['theme_plus_compile_mode'] = 'immediate';
+
+
+/**
  * Models
  */
-$GLOBALS['TL_MODELS']['tl_theme_plus_javascript'] = 'ThemePlus\Model\JavaScriptModel';
-$GLOBALS['TL_MODELS']['tl_theme_plus_stylesheet'] = 'ThemePlus\Model\StylesheetModel';
-$GLOBALS['TL_MODELS']['tl_theme_plus_variable']   = 'ThemePlus\Model\VariableModel';
+$GLOBALS['TL_MODELS']['tl_theme_plus_javascript'] = 'Bit3\Contao\ThemePlus\Model\JavaScriptModel';
+$GLOBALS['TL_MODELS']['tl_theme_plus_stylesheet'] = 'Bit3\Contao\ThemePlus\Model\StylesheetModel';
+$GLOBALS['TL_MODELS']['tl_theme_plus_variable']   = 'Bit3\Contao\ThemePlus\Model\VariableModel';
+
 
 /**
  * Back end modules
@@ -32,24 +39,24 @@ $GLOBALS['BE_MOD']['design']['themes']['tables'][] = 'tl_theme_plus_variable';
 /**
  * Front end modules
  */
-$GLOBALS['FE_MOD']['includes']['script_source'] = 'ThemePlus\Hybrid\JavaScript';
+$GLOBALS['FE_MOD']['includes']['script_source'] = 'Bit3\Contao\ThemePlus\Hybrid\JavaScript';
 
 
 /**
  * Content elements
  */
-$GLOBALS['TL_CTE']['includes']['script_source'] = 'ThemePlus\Hybrid\JavaScript';
+$GLOBALS['TL_CTE']['includes']['script_source'] = 'Bit3\Contao\ThemePlus\Hybrid\JavaScript';
 
 
 /**
  * HOOKs
  */
-$GLOBALS['TL_HOOKS']['initializeTwig']['themeplus']           = array('ThemePlus\TwigExtension', 'init');
-$GLOBALS['TL_HOOKS']['parseTemplate']['themeplus']            = array('ThemePlus\ThemePlus', 'hookParseTemplate');
-$GLOBALS['TL_HOOKS']['replaceDynamicScriptTags']['themeplus'] = array('ThemePlus\ThemePlus', 'hookReplaceDynamicScriptTags');
-//$GLOBALS['TL_HOOKS']['outputFrontendTemplate'] = array('ThemePlus\ThemePlus', 'hookOutputFrontendTemplate');
-//$GLOBALS['TL_HOOKS']['replaceInsertTags'][]     = array('ThemePlus', 'hookReplaceInsertTags');
-//$GLOBALS['TL_HOOKS']['outputBackendTemplate'][] = array('ThemePlus', 'hookOutputBackendTemplate');
+$GLOBALS['TL_HOOKS']['initializeTwig']['themeplus']           = array('Bit3\Contao\ThemePlus\TwigExtension', 'init');
+$GLOBALS['TL_HOOKS']['parseTemplate']['themeplus']            = array('Bit3\Contao\ThemePlus\ThemePlus', 'hookParseTemplate');
+$GLOBALS['TL_HOOKS']['replaceDynamicScriptTags']['themeplus'] = array('Bit3\Contao\ThemePlus\ThemePlus', 'hookReplaceDynamicScriptTags');
+//$GLOBALS['TL_HOOKS']['outputFrontendTemplate'] = array('Bit3\Contao\ThemePlus\ThemePlus', 'hookOutputFrontendTemplate');
+//$GLOBALS['TL_HOOKS']['replaceInsertTags'][]     = array('Bit3\Contao\ThemePlus', 'hookReplaceInsertTags');
+//$GLOBALS['TL_HOOKS']['outputBackendTemplate'][] = array('Bit3\Contao\ThemePlus', 'hookOutputBackendTemplate');
 
 
 /**
@@ -84,9 +91,9 @@ $GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus_variable']   = array
 /**
  * Assetic compiler filter
  */
-$GLOBALS['ASSETIC']['compiler']['contaoInsertTag']                = 'ThemePlus\Filter\ContaoInsertTagFilter';
-$GLOBALS['ASSETIC']['compiler']['contaoReplaceVariable']          = 'ThemePlus\Filter\ContaoReplaceVariableFilter';
-$GLOBALS['ASSETIC']['compiler']['contaoReplaceThemePlusVariable'] = 'ThemePlus\Filter\ContaoReplaceThemePlusVariableFilter';
+$GLOBALS['ASSETIC']['compiler']['contaoInsertTag']                = 'Bit3\Contao\ThemePlus\Filter\ContaoInsertTagFilter';
+$GLOBALS['ASSETIC']['compiler']['contaoReplaceVariable']          = 'Bit3\Contao\ThemePlus\Filter\ContaoReplaceVariableFilter';
+$GLOBALS['ASSETIC']['compiler']['contaoReplaceThemePlusVariable'] = 'Bit3\Contao\ThemePlus\Filter\ContaoReplaceThemePlusVariableFilter';
 
 
 /**

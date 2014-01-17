@@ -26,7 +26,7 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['script_source'] = array
     'label'            => &$GLOBALS['TL_LANG']['tl_content']['script_source'],
     'exclude'          => true,
     'inputType'        => 'checkbox',
-    'options_callback' => array('ThemePlus\DataContainer\Content', 'getJavaScripts'),
+    'options_callback' => array('Bit3\Contao\ThemePlus\DataContainer\Content', 'getJavaScripts'),
     'eval'             => array('mandatory' => true,
                                 'multiple'  => true,
                                 'tl_class'  => 'clr'),

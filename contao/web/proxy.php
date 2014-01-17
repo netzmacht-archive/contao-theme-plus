@@ -21,15 +21,15 @@ use Assetic\Asset\HttpAsset;
 use Assetic\Asset\StringAsset;
 use Assetic\Filter\FilterCollection;
 use ContaoAssetic\AsseticFactory;
-use ThemePlus\ThemePlus;
-use ThemePlus\Model\StylesheetModel;
-use ThemePlus\Model\JavaScriptModel;
+use Bit3\Contao\ThemePlus\ThemePlusEnvironment;
+use Bit3\Contao\ThemePlus\Model\StylesheetModel;
+use Bit3\Contao\ThemePlus\Model\JavaScriptModel;
 
 class proxy
 {
 	public function run()
 	{
-		if (ThemePlus::isDesignerMode()) {
+		if (ThemePlusEnvironment::isDesignerMode()) {
 			$user = FrontendUser::getInstance();
 			$user->authenticate();
 
@@ -61,7 +61,8 @@ class proxy
 
 					if ($asset instanceof StringAsset) {
 						header('X-Theme-Plus-Rendering: cached');
-						echo $asset->dump();
+						echo $asset->getContent();
+						ob_flush();
 						return;
 					}
 
@@ -79,10 +80,13 @@ class proxy
 					// dump the asset
 					$buffer =  $asset->dump($defaultFilters);
 
-					$cachedAsset = new StringAsset($buffer);
+					$cachedAsset = new StringAsset($buffer, array(), $asset->getSourceRoot(), $asset->getSourcePath());
+					$cachedAsset->setTargetPath($asset->getTargetPath());
 					$cachedAsset->setLastModified($asset->getLastModified());
+					$cachedAsset->load();
 
-					$session->asset = $cachedAsset;
+					$session->asset   = $cachedAsset;
+					$session->filters = array();
 					$_SESSION['THEME_PLUS_ASSETS'][$id] = serialize($session);
 
 					echo $buffer;
