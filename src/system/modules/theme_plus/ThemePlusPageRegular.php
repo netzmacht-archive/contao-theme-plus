@@ -230,10 +230,10 @@ class ThemePlusPageRegular extends PageRegular
 					if ($media) {
 						$objFile->setMedia($media);
 					}
-					if ($cc) {
+					if ($cc && $objFile instanceof ThemePlusFile) {
 						$objFile->setCc($cc);
 					}
-					if ($theme) {
+					if ($theme && $objFile instanceof LocalThemePlusFile) {
 						$objFile->setTheme($theme);
 					}
 
