@@ -50,15 +50,15 @@ abstract class ExternalThemePlusFile extends ThemePlusFile
 			switch (strtolower($strExtension))
 			{
 				case 'js':
-					return new ExternalJavaScriptFile($strFile);
+					return new ExternalJavaScriptFile($strUrl);
 
 				case 'css':
 					if (!$GLOBALS['TL_CONFIG']['theme_plus_force_less']) {
-						return new ExternalCssFile($strFile);
+						return new ExternalCssFile($strUrl);
 					}
 
 				case 'less':
-					return new ExternalLessCssFile($strFile);
+					return new ExternalLessCssFile($strUrl);
 			}
 		}
 		return false;
