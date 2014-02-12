@@ -1,0 +1,58 @@
+{
+	"name":"bit3/contao-theme-plus",
+	"description":"Theme+ for Contao OpenSource CMS",
+	"keywords":["contao", "theme", "css", "js", "stylesheet", "javascript", "assets"],
+	"type":"contao-module",
+	"homepage":"http://bit3.de",
+	"license":"LGPL-3.0+",
+	"authors":[
+		{
+			"name":"Tristan Lins",
+			"email":"tristan.lins@bit3.de",
+			"homepage":"http://bit3.de",
+			"role":"Developer"
+		}
+	],
+	"support":{
+		"email":"info@bit3.de",
+		"issues":"https://github.com/bit3/contao-theme-plus/issues",
+		"wiki":"https://github.com/bit3/contao-theme-plus/wiki",
+		"irc":"irc://irc.freenode.org/contao.dev",
+		"source":"https://github.com/bit3/contao-theme-plus"
+	},
+	"require":{
+		"php":">=5.3",
+		"contao/core":">=2.11,<3-dev",
+		"contao-community-alliance/composer-installer": "*",
+		"contao-legacy/compression-api": "*",
+		"bit3/contao-meta-palettes":"~1",
+		"contao-legacy/multitextwizard": "*"
+	},
+	"require-dev":{
+		"squizlabs/php_codesniffer":"1.*",
+		"bit3/php-coding-standard":"@dev"
+	},
+	"replace": {
+		"contao-legacy/theme_plus": "self.version"
+	},
+	"autoload":{
+		"psr-0": {
+			"Bit3\\Contao\\ThemePlus": "src",
+			"ThemePlus": "deprecated/"
+		}
+	},
+	"extra":{
+		"contao": {
+			"sources":{
+				"contao":"system/modules/theme-plus"
+			},
+			"runonce":[
+				"runonce/upgrade_to_contao3_2.php"
+			]
+		},
+		"branch-alias": {
+			"dev-master": "4.3.x-dev",
+			"dev-develop": "5.0.x-dev"
+		}
+	}
+}
