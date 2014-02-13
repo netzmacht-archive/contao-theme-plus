@@ -44,10 +44,10 @@
 	"extra":{
 		"contao": {
 			"sources":{
-				"contao":"system/modules/theme-plus"
+				"src/system/modules/theme_plus":"system/modules/theme_plus",
+				"src/system/drivers/DC_ThemePlusFiles.php":"system/drivers/DC_ThemePlusFiles.php"
 			},
 			"runonce":[
-				"runonce/upgrade_to_contao3_2.php"
 			]
 		},
 		"branch-alias": {
