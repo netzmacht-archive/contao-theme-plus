@@ -24,7 +24,7 @@ foreach (array('regular', 'forward', 'redirect', 'root') as $strType) {
     $GLOBALS['TL_DCA']['tl_page']['palettes']['__selector__'][] = 'theme_plus_include_javascripts_noinherit';
 
     $GLOBALS['TL_DCA']['tl_page']['palettes'][$strType] = preg_replace(
-        '#({layout_legend:hide}.*);#U',
+        '#({layout_legend(:hide)*}.*);#U',
         '$1,theme_plus_include_stylesheets,theme_plus_include_stylesheets_noinherit,theme_plus_include_javascripts,theme_plus_include_javascripts_noinherit;',
         $GLOBALS['TL_DCA']['tl_page']['palettes'][$strType]
     );
