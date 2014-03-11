@@ -29,6 +29,9 @@ class ThemePlusFilterFactory
             case 'contaoReplaceVariable':
                 $filter = new ContaoReplaceVariableFilter();
                 break;
+            case 'contaoInsertTag':
+                $filter = new ContaoInsertTagFilter();
+                break;
         }
         
         if($filter === null)
