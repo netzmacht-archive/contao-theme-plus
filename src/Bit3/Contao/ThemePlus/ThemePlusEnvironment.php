@@ -221,7 +221,7 @@ class ThemePlusEnvironment
 	 */
 	public static function isTabled()
 	{
-		$browserIdentOverwrite = \Session::getInstance()->get(self::BROWSER_IDENT_OVERWRITE);
+		$browserIdentOverwrite = json_decode(\Session::getInstance()->get(self::BROWSER_IDENT_OVERWRITE));
 
 		if ($browserIdentOverwrite && $browserIdentOverwrite->platform) {
 			return in_array($browserIdentOverwrite->platform, array('tablet', 'mobile'));
@@ -237,7 +237,7 @@ class ThemePlusEnvironment
 	 */
 	public static function isSmartphone()
 	{
-		$browserIdentOverwrite = \Session::getInstance()->get(self::BROWSER_IDENT_OVERWRITE);
+		$browserIdentOverwrite = json_decode(\Session::getInstance()->get(self::BROWSER_IDENT_OVERWRITE));
 
 		if ($browserIdentOverwrite && $browserIdentOverwrite->platform) {
 			return in_array($browserIdentOverwrite->platform, array('smartphone', 'mobile'));
@@ -253,7 +253,7 @@ class ThemePlusEnvironment
 	 */
 	public static function isMobile()
 	{
-		$browserIdentOverwrite = \Session::getInstance()->get(self::BROWSER_IDENT_OVERWRITE);
+		$browserIdentOverwrite = json_decode(\Session::getInstance()->get(self::BROWSER_IDENT_OVERWRITE));
 
 		if ($browserIdentOverwrite && $browserIdentOverwrite->platform) {
 			return in_array($browserIdentOverwrite->platform, array('tablet', 'smartphone', 'mobile'));

@@ -265,7 +265,9 @@ class ThemePlus
 	 */
 	public static function isDesktop()
 	{
-		$browserIdentOverwrite = \Session::getInstance()->get(self::BROWSER_IDENT_OVERWRITE);
+		$browserIdentOverwrite = json_decode(
+			\Session::getInstance()->get(self::BROWSER_IDENT_OVERWRITE)
+		);
 
 		if ($browserIdentOverwrite && $browserIdentOverwrite->platform) {
 			return $browserIdentOverwrite->platform == 'desktop';
@@ -283,7 +285,9 @@ class ThemePlus
 	 */
 	public static function isTabled()
 	{
-		$browserIdentOverwrite = \Session::getInstance()->get(self::BROWSER_IDENT_OVERWRITE);
+		$browserIdentOverwrite = json_decode(
+			\Session::getInstance()->get(self::BROWSER_IDENT_OVERWRITE)
+		);
 
 		if ($browserIdentOverwrite && $browserIdentOverwrite->platform) {
 			return in_array($browserIdentOverwrite->platform, array('tablet', 'mobile'));
@@ -300,7 +304,9 @@ class ThemePlus
 	 */
 	public static function isSmartphone()
 	{
-		$browserIdentOverwrite = \Session::getInstance()->get(self::BROWSER_IDENT_OVERWRITE);
+		$browserIdentOverwrite = json_decode(
+			\Session::getInstance()->get(self::BROWSER_IDENT_OVERWRITE)
+		);
 
 		if ($browserIdentOverwrite && $browserIdentOverwrite->platform) {
 			return in_array($browserIdentOverwrite->platform, array('smartphone', 'mobile'));
@@ -318,7 +324,9 @@ class ThemePlus
 	 */
 	public static function isMobile()
 	{
-		$browserIdentOverwrite = \Session::getInstance()->get(self::BROWSER_IDENT_OVERWRITE);
+		$browserIdentOverwrite = json_decode(
+			\Session::getInstance()->get(self::BROWSER_IDENT_OVERWRITE)
+		);
 
 		if ($browserIdentOverwrite && $browserIdentOverwrite->platform) {
 			return in_array($browserIdentOverwrite->platform, array('tablet', 'smartphone', 'mobile'));
@@ -348,9 +356,10 @@ class ThemePlus
 		$browserVersion = null,
 		$platform = null,
 		$invert = false
-	)
-	{
-		$browserIdentOverwrite = \Session::getInstance()->get(self::BROWSER_IDENT_OVERWRITE);
+	) {
+		$browserIdentOverwrite = json_decode(
+			\Session::getInstance()->get(self::BROWSER_IDENT_OVERWRITE)
+		);
 
 		$match = true;
 
