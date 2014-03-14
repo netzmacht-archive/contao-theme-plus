@@ -91,7 +91,7 @@ class ThemePlus
 			}
 
 			// Add new assetic filter factory
-			AsseticFactory::registerFilterFactory(new Filter\ThemePlusFilterFactory());                        
+			AsseticFactory::registerFilterFactory(new Filter\ThemePlusFilterFactory());
 		}
 		return static::$instance;
 	}
