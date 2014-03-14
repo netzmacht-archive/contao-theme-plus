@@ -973,7 +973,7 @@ class ThemePlus
 		$this->addAssetsToCollectionFromPageTree(
 			$objPage,
 			'stylesheets',
-			'ThemePlus\Model\StylesheetModel',
+			'Bit3\Contao\ThemePlus\Model\StylesheetModel',
 			$collection,
 			$stylesheets,
 			$defaultFilters,
@@ -1148,7 +1148,7 @@ class ThemePlus
 		$this->addAssetsToCollectionFromPageTree(
 			$objPage,
 			'javascripts',
-			'ThemePlus\Model\JavaScriptModel',
+			'Bit3\Contao\ThemePlus\Model\JavaScriptModel',
 			$collection,
 			$javascripts,
 			$defaultFilters,
