@@ -205,7 +205,7 @@ class ThemePlusEnvironment
 	 */
 	public static function isDesktop()
 	{
-		$browserIdentOverwrite = \Session::getInstance()->get(self::BROWSER_IDENT_OVERWRITE);
+		$browserIdentOverwrite = json_decode(\Session::getInstance()->get(self::BROWSER_IDENT_OVERWRITE));
 
 		if ($browserIdentOverwrite && $browserIdentOverwrite->platform) {
 			return $browserIdentOverwrite->platform == 'desktop';

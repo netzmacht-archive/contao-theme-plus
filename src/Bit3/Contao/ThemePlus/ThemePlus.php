@@ -51,11 +51,11 @@ class ThemePlus
 		if (static::$instance === null) {
 			static::$instance = new ThemePlus();
 
-            ThemePlusEnvironment::getInstance();
+			ThemePlusEnvironment::getInstance();
 
-            if (!isset($_SESSION['THEME_PLUS_ASSETS'])) {
-                $_SESSION['THEME_PLUS_ASSETS'] = array();
-            }
+			if (!isset($_SESSION['THEME_PLUS_ASSETS'])) {
+				$_SESSION['THEME_PLUS_ASSETS'] = array();
+			}
 
 			AsseticFactory::registerFilterFactory(new Filter\ThemePlusFilterFactory());
 		}
@@ -64,24 +64,27 @@ class ThemePlus
 
 	/**
 	 * @return \Ikimea\Browser\Browser
-     *
-     * @deprecated use \ThemePlus\ThemePlusEnvironment::getBrowserDetect() instead
+	 *
+	 * @deprecated use \ThemePlus\ThemePlusEnvironment::getBrowserDetect() instead
 	 */
 	public static function getBrowserDetect()
 	{
-        trigger_error('Deprecated, use \ThemePlus\ThemePlusEnvironment::getBrowserDetect() instead!', E_USER_DEPRECATED);
+		trigger_error(
+			'Deprecated, use \ThemePlus\ThemePlusEnvironment::getBrowserDetect() instead!',
+			E_USER_DEPRECATED
+		);
 		return ThemePlusEnvironment::getBrowserDetect();
 	}
 
 	/**
 	 * @return \Mobile_Detect
-     *
-     * @deprecated use \ThemePlus\ThemePlusEnvironment::getMobileDetect() instead
+	 *
+	 * @deprecated use \ThemePlus\ThemePlusEnvironment::getMobileDetect() instead
 	 */
 	public static function getMobileDetect()
 	{
-        trigger_error('Deprecated, use \ThemePlus\ThemePlusEnvironment::getMobileDetect() instead!', E_USER_DEPRECATED);
-        return ThemePlusEnvironment::getMobileDetect();
+		trigger_error('Deprecated, use \ThemePlus\ThemePlusEnvironment::getMobileDetect() instead!', E_USER_DEPRECATED);
+		return ThemePlusEnvironment::getMobileDetect();
 	}
 
 	/**
@@ -105,64 +108,67 @@ class ThemePlus
 
 	/**
 	 * Get productive mode status.
-     *
-     * @deprecated use \ThemePlus\ThemePlusEnvironment::isLiveMode() instead
+	 *
+	 * @deprecated use \ThemePlus\ThemePlusEnvironment::isLiveMode() instead
 	 */
 	public static function isLiveMode()
 	{
-        trigger_error('Deprecated, use \ThemePlus\ThemePlusEnvironment::isLiveMode() instead!', E_USER_DEPRECATED);
-        return ThemePlusEnvironment::isLiveMode();
+		trigger_error('Deprecated, use \ThemePlus\ThemePlusEnvironment::isLiveMode() instead!', E_USER_DEPRECATED);
+		return ThemePlusEnvironment::isLiveMode();
 	}
 
 
 	/**
 	 * Set productive mode.
-     *
-     * @deprecated use \ThemePlus\ThemePlusEnvironment::setLiveMode() instead
+	 *
+	 * @deprecated use \ThemePlus\ThemePlusEnvironment::setLiveMode() instead
 	 */
 	public static function setLiveMode($liveMode = true)
 	{
-        trigger_error('Deprecated, use \ThemePlus\ThemePlusEnvironment::setLiveMode() instead!', E_USER_DEPRECATED);
-        ThemePlusEnvironment::setLiveMode($liveMode);
+		trigger_error('Deprecated, use \ThemePlus\ThemePlusEnvironment::setLiveMode() instead!', E_USER_DEPRECATED);
+		ThemePlusEnvironment::setLiveMode($liveMode);
 	}
 
 
 	/**
 	 * Get productive mode status.
-     *
-     * @deprecated use \ThemePlus\ThemePlusEnvironment::isDesignerMode() instead
+	 *
+	 * @deprecated use \ThemePlus\ThemePlusEnvironment::isDesignerMode() instead
 	 */
 	public static function isDesignerMode()
 	{
-        trigger_error('Deprecated, use \ThemePlus\ThemePlusEnvironment::isDesignerMode() instead!', E_USER_DEPRECATED);
-        return ThemePlusEnvironment::isDesignerMode();
+		trigger_error('Deprecated, use \ThemePlus\ThemePlusEnvironment::isDesignerMode() instead!', E_USER_DEPRECATED);
+		return ThemePlusEnvironment::isDesignerMode();
 	}
 
 
 	/**
 	 * Set designer mode.
-     *
-     * @deprecated use \ThemePlus\ThemePlusEnvironment::setDesignerMode() instead
+	 *
+	 * @deprecated use \ThemePlus\ThemePlusEnvironment::setDesignerMode() instead
 	 */
 	public static function setDesignerMode($designerMode = true)
 	{
-        trigger_error('Deprecated, use \ThemePlus\ThemePlusEnvironment::setDesignerMode() instead!', E_USER_DEPRECATED);
-        ThemePlusEnvironment::setDesignerMode($designerMode);
+		trigger_error('Deprecated, use \ThemePlus\ThemePlusEnvironment::setDesignerMode() instead!', E_USER_DEPRECATED);
+		ThemePlusEnvironment::setDesignerMode($designerMode);
 	}
 
 
-    /**
-     * Determine if the pre-compile mode is enabled.
-     *
-     * @return bool
-     *
-     * @deprecated use \ThemePlus\ThemePlusEnvironment::isInPreCompileMode() instead
-     */
-    public static function isInPreCompileMode()
-    {
-        trigger_error('Deprecated, use \ThemePlus\ThemePlusEnvironment::isInPreCompileMode() instead!', E_USER_DEPRECATED);
-        return ThemePlusEnvironment::isInPreCompileMode();
-    }
+	/**
+	 * Determine if the pre-compile mode is enabled.
+	 *
+	 * @return bool
+	 *
+	 * @deprecated use \ThemePlus\ThemePlusEnvironment::isInPreCompileMode() instead
+	 */
+	public static function isInPreCompileMode()
+	{
+		trigger_error(
+			'Deprecated, use \ThemePlus\ThemePlusEnvironment::isInPreCompileMode() instead!',
+			E_USER_DEPRECATED
+		);
+		return ThemePlusEnvironment::isInPreCompileMode();
+	}
 
 	/**
 	 * Calculate the target path for the asset.
@@ -179,18 +185,18 @@ class ThemePlus
 			$filters[] = get_class($v);
 		}
 		$filters = '[' . implode(
-			',',
-			$filters
-		) . ']';
+				',',
+				$filters
+			) . ']';
 
 		// calculate path for collections
 		if ($asset instanceof AssetCollection) {
 			$string = $filters;
 			foreach ($asset->all() as $child) {
 				$string .= '-' . static::getAssetPath(
-					$child,
-					$suffix
-				);
+						$child,
+						$suffix
+					);
 			}
 			return 'assets/css/' . substr(
 				md5($string),
@@ -265,7 +271,9 @@ class ThemePlus
 			return $browserIdentOverwrite->platform == 'desktop';
 		}
 
-		return !(ThemePlusEnvironment::getMobileDetect()->isTablet() || ThemePlusEnvironment::getMobileDetect()->isMobile());
+		return !(ThemePlusEnvironment::getMobileDetect()
+				->isTablet() || ThemePlusEnvironment::getMobileDetect()
+				->isMobile());
 	}
 
 	/**
@@ -281,7 +289,8 @@ class ThemePlus
 			return in_array($browserIdentOverwrite->platform, array('tablet', 'mobile'));
 		}
 
-		return ThemePlusEnvironment::getMobileDetect()->isTablet();
+		return ThemePlusEnvironment::getMobileDetect()
+			->isTablet();
 	}
 
 	/**
@@ -297,7 +306,9 @@ class ThemePlus
 			return in_array($browserIdentOverwrite->platform, array('smartphone', 'mobile'));
 		}
 
-		return ThemePlusEnvironment::getMobileDetect()->isMobile() && !ThemePlusEnvironment::getMobileDetect()->isTablet();
+		return ThemePlusEnvironment::getMobileDetect()
+			->isMobile() && !ThemePlusEnvironment::getMobileDetect()
+			->isTablet();
 	}
 
 	/**
@@ -313,7 +324,9 @@ class ThemePlus
 			return in_array($browserIdentOverwrite->platform, array('tablet', 'smartphone', 'mobile'));
 		}
 
-		return ThemePlusEnvironment::getMobileDetect()->isMobile() || ThemePlusEnvironment::getMobileDetect()->isTablet();
+		return ThemePlusEnvironment::getMobileDetect()
+			->isMobile() || ThemePlusEnvironment::getMobileDetect()
+			->isTablet();
 	}
 
 	/**
@@ -346,7 +359,8 @@ class ThemePlus
 				$currentSystem = $browserIdentOverwrite->system;
 			}
 			else {
-				$currentSystem = ThemePlusEnvironment::getBrowserDetect()->getPlatform();
+				$currentSystem = ThemePlusEnvironment::getBrowserDetect()
+					->getPlatform();
 			}
 
 			$match = $match && $currentSystem == $system;
@@ -356,7 +370,8 @@ class ThemePlus
 				$currentBrowser = $browserIdentOverwrite->browser;
 			}
 			else {
-				$currentBrowser = ThemePlusEnvironment::getBrowserDetect()->getBrowser();
+				$currentBrowser = ThemePlusEnvironment::getBrowserDetect()
+					->getBrowser();
 			}
 
 			if (!empty($browserVersionComparator) && !empty($browserVersion)) {
@@ -364,7 +379,8 @@ class ThemePlus
 					$currentBrowserVersion = $browserIdentOverwrite->version;
 				}
 				else {
-					$currentBrowserVersion = ThemePlusEnvironment::getBrowserDetect()->getVersion();
+					$currentBrowserVersion = ThemePlusEnvironment::getBrowserDetect()
+						->getVersion();
 				}
 
 				switch ($browserVersionComparator) {
@@ -483,15 +499,15 @@ class ThemePlus
 		if ($asset instanceof AssetCollection) {
 			/** @var AssetCollection $asset */
 			$string = 'collection { ' . 'target path: ' . $asset->getTargetPath() . ', ' . 'filters: [' . implode(
-				', ',
-				$filters
-			) . '], ' . 'last modified: ' . $asset->getLastModified();
+					', ',
+					$filters
+				) . '], ' . 'last modified: ' . $asset->getLastModified();
 
 			foreach ($asset->all() as $child) {
 				$string .= "\n" . $depth . '- ' . static::getAssetDebugString(
-					$child,
-					$depth . '    '
-				);
+						$child,
+						$depth . '    '
+					);
 			}
 
 			$string .= ' }';
@@ -559,6 +575,7 @@ class ThemePlus
 
 	/**
 	 * Handle
+	 *
 	 * @charset and remove the rule.
 	 */
 	public function handleCharset($strContent)
@@ -610,185 +627,189 @@ class ThemePlus
 	{
 		global $objPage;
 
-        if ($objPage) {
-            // the search and replace array
-            $sr = array();
+		if ($objPage) {
+			// the search and replace array
+			$sr = array();
 
-            if (ThemePlusEnvironment::isLiveMode() && $GLOBALS['TL_CONFIG']['theme_plus_compile_mode'] == 'pre-compiled') {
+			if (ThemePlusEnvironment::isLiveMode(
+				) && $GLOBALS['TL_CONFIG']['theme_plus_compile_mode'] == 'pre-compiled'
+			) {
 
-            }
+			}
 
-            else {
-                // search for the layout
-                $layout = \LayoutModel::findByPk($objPage->layout);
+			else {
+				// search for the layout
+				$layout = \LayoutModel::findByPk($objPage->layout);
 
-                if ($layout) {
-                    // build exclude list
-                    if (!is_array($GLOBALS['TL_THEME_EXCLUDE'])) {
-                        $GLOBALS['TL_THEME_EXCLUDE'] = array();
-                    }
-                    if (!is_array($layout->theme_plus_exclude_files)) {
-                        $layout->theme_plus_exclude_files = deserialize(
-                            $layout->theme_plus_exclude_files,
-                            true
-                        );
-                    }
-                    if (count($layout->theme_plus_exclude_files) > 0) {
-                        foreach ($layout->theme_plus_exclude_files as $v) {
-                            if ($v[0]) {
-                                $GLOBALS['TL_THEME_EXCLUDE'][] = $v[0];
-                            }
-                        }
-                    }
+				if ($layout) {
+					// build exclude list
+					if (!is_array($GLOBALS['TL_THEME_EXCLUDE'])) {
+						$GLOBALS['TL_THEME_EXCLUDE'] = array();
+					}
+					if (!is_array($layout->theme_plus_exclude_files)) {
+						$layout->theme_plus_exclude_files = deserialize(
+							$layout->theme_plus_exclude_files,
+							true
+						);
+					}
+					if (count($layout->theme_plus_exclude_files) > 0) {
+						foreach ($layout->theme_plus_exclude_files as $v) {
+							if ($v[0]) {
+								$GLOBALS['TL_THEME_EXCLUDE'][] = $v[0];
+							}
+						}
+					}
 
-                    // parse stylesheets
-                    $this->parseStylesheets(
-                        $layout,
-                        $sr
-                    );
+					// parse stylesheets
+					$this->parseStylesheets(
+						$layout,
+						$sr
+					);
 
-                    // parse javascripts
-                    $this->parseJavaScripts(
-                        $layout,
-                        $sr
-                    );
+					// parse javascripts
+					$this->parseJavaScripts(
+						$layout,
+						$sr
+					);
 
-                    if (ThemePlusEnvironment::isDesignerMode()) {
-                        if (\Input::post('FORM_SUBMIT') == 'theme_plus_dev_tool') {
-                            $session = \Session::getInstance();
+					if (ThemePlusEnvironment::isDesignerMode()) {
+						if (\Input::post('FORM_SUBMIT') == 'theme_plus_dev_tool') {
+							$session = \Session::getInstance();
 
-                            $system = \Input::post('theme_plus_dev_tool_system');
-                            $browser = \Input::post('theme_plus_dev_tool_browser');
-                            $version = \Input::post('theme_plus_dev_tool_version');
-                            $platform = \Input::post('theme_plus_dev_tool_platform');
+							$system   = \Input::post('theme_plus_dev_tool_system');
+							$browser  = \Input::post('theme_plus_dev_tool_browser');
+							$version  = \Input::post('theme_plus_dev_tool_version');
+							$platform = \Input::post('theme_plus_dev_tool_platform');
 
-                            if ($system || $browser || $version || $platform) {
-                                $browserIdentOverwrite = (object) array(
-                                    'system' => $system,
-                                    'browser' => $browser,
-                                    'version' => $version,
-                                    'platform' => $platform,
-                                );
-                                $session->set(self::BROWSER_IDENT_OVERWRITE, $browserIdentOverwrite);
-                            }
-                            else {
-                                $session->set(self::BROWSER_IDENT_OVERWRITE, null);
-                            }
+							if ($system || $browser || $version || $platform) {
+								$browserIdentOverwrite = (object) array(
+									'system'   => $system,
+									'browser'  => $browser,
+									'version'  => $version,
+									'platform' => $platform,
+								);
+								$session->set(self::BROWSER_IDENT_OVERWRITE, json_encode($browserIdentOverwrite));
+							}
+							else {
+								$session->set(self::BROWSER_IDENT_OVERWRITE, null);
+							}
 
-                            \Controller::reload();
-                        }
+							\Controller::reload();
+						}
 
-                        $files = array();
-                        $stylesheetsCount  = 0;
-                        $stylesheetsBuffer = '';
-                        $javascriptsCount  = 0;
-                        $javascriptsBuffer = '';
+						$files             = array();
+						$stylesheetsCount  = 0;
+						$stylesheetsBuffer = '';
+						$javascriptsCount  = 0;
+						$javascriptsBuffer = '';
 
-                        foreach ($this->files as $url => $file) {
-                            $files[] = md5($url);
+						foreach ($this->files as $url => $file) {
+							$files[] = md5($url);
 
-                            $icon   = '';
-                            $type   = 'unknown';
-                            if (preg_match('#.*\.(js|css)#', $file['name'], $matches)) {
-                                switch ($matches[1]) {
-                                    case 'js':
-                                        $icon = '<img src="system/modules/theme-plus/assets/images/javascript.png">';
-                                        $type = 'js';
-                                        $buffer = &$javascriptsBuffer;
-                                        $javascriptsCount ++;
-                                        break;
-                                    case 'css':
-                                        $icon = '<img src="system/modules/theme-plus/assets/images/stylesheet.png">';
-                                        $type = 'css';
-                                        $buffer = &$stylesheetsBuffer;
-                                        $stylesheetsCount ++;
-                                        break;
-                                }
-                            }
-                            else {
-                                continue;
-                            }
+							$icon = '';
+							$type = 'unknown';
+							if (preg_match('#.*\.(js|css)#', $file['name'], $matches)) {
+								switch ($matches[1]) {
+									case 'js':
+										$icon   = '<img src="system/modules/theme-plus/assets/images/javascript.png">';
+										$type   = 'js';
+										$buffer = & $javascriptsBuffer;
+										$javascriptsCount++;
+										break;
+									case 'css':
+										$icon   = '<img src="system/modules/theme-plus/assets/images/stylesheet.png">';
+										$type   = 'css';
+										$buffer = & $stylesheetsBuffer;
+										$stylesheetsCount++;
+										break;
+								}
+							}
+							else {
+								continue;
+							}
 
-                            if ($file['url']) {
-                                $name = $file['url'];
-                            }
-                            else if ($file['asset'] && !$file['asset'] instanceof StringAsset) {
-                                $name = $file['asset']->getSourcePath();
-                            }
-                            else {
-                                $name = $file['name'];
-                            }
+							if ($file['url']) {
+								$name = $file['url'];
+							}
+							else if ($file['asset'] && !$file['asset'] instanceof StringAsset) {
+								$name = $file['asset']->getSourcePath();
+							}
+							else {
+								$name = $file['name'];
+							}
 
-                            $buffer .= sprintf(
-                                '<div id="monitor-%s" class="theme-plus-dev-tool-monitor theme-plus-dev-tool-type-%s theme-plus-dev-tool-loading">' .
-                                '%s ' .
-                                '<a href="%s" target="_blank" class="theme-plus-dev-tool-link">%s</a>' .
-                                '</div>
-    ',
-                                md5($url),
-                                $type,
-                                $icon,
-                                $url,
-                                $name
-                            );
-                        }
+							$buffer .= sprintf(
+								'<div id="monitor-%s" class="theme-plus-dev-tool-monitor theme-plus-dev-tool-type-%s theme-plus-dev-tool-loading">' .
+								'%s ' .
+								'<a href="%s" target="_blank" class="theme-plus-dev-tool-link">%s</a>' .
+								'</div>
+	',
+								md5($url),
+								$type,
+								$icon,
+								$url,
+								$name
+							);
+						}
 
-                        // clean reference variable
-                        unset($buffer);
+						// clean reference variable
+						unset($buffer);
 
-                        $strBuffer = str_replace(
-                            '</head>',
-                            sprintf(
-                                '<link rel="stylesheet" href="system/modules/theme-plus/assets/css/dev.css">
-    <script src="system/modules/theme-plus/assets/js/dev.js"></script>
-    </head>'
-                            ),
-                            $strBuffer
-                        );
+						$strBuffer = str_replace(
+							'</head>',
+							sprintf(
+								'<link rel="stylesheet" href="system/modules/theme-plus/assets/css/dev.css">
+	<script src="system/modules/theme-plus/assets/js/dev.js"></script>
+	</head>'
+							),
+							$strBuffer
+						);
 
-                        $browserIdentOverwrite = \Session::getInstance()->get(self::BROWSER_IDENT_OVERWRITE);
+						$browserIdentOverwrite = json_decode(
+							\Session::getInstance()->get(self::BROWSER_IDENT_OVERWRITE)
+						);
 
-                        $fileDC = new File();
+						$fileDC = new File();
 
-                        $filterSystems = array('<option value="">System</option>');
-                        foreach ($fileDC->getSystems() as $system) {
-                            $filterSystems[] = sprintf(
-                                '<option value="%1$s"%2$s>%1$s</option>',
-                                $system,
-                                $browserIdentOverwrite && $browserIdentOverwrite->system == $system
-                                    ? ' selected'
-                                    : ''
-                            );
-                        }
+						$filterSystems = array('<option value="">System</option>');
+						foreach ($fileDC->getSystems() as $system) {
+							$filterSystems[] = sprintf(
+								'<option value="%1$s"%2$s>%1$s</option>',
+								$system,
+								$browserIdentOverwrite && $browserIdentOverwrite->system == $system
+									? ' selected'
+									: ''
+							);
+						}
 
-                        $filterBrowsers = array('<option value="">Browser</option>');
-                        foreach ($fileDC->getBrowsers() as $browser) {
-                            $filterBrowsers[] = sprintf(
-                                '<option value="%1$s">%1$s</option>',
-                                $browser,
-                                $browserIdentOverwrite && $browserIdentOverwrite->browser == $browser
-                                    ? ' selected'
-                                    : ''
-                            );
-                        }
+						$filterBrowsers = array('<option value="">Browser</option>');
+						foreach ($fileDC->getBrowsers() as $browser) {
+							$filterBrowsers[] = sprintf(
+								'<option value="%1$s">%1$s</option>',
+								$browser,
+								$browserIdentOverwrite && $browserIdentOverwrite->browser == $browser
+									? ' selected'
+									: ''
+							);
+						}
 
-                        \Controller::loadLanguageFile('tl_theme_plus_filter');
+						\Controller::loadLanguageFile('tl_theme_plus_filter');
 
-                        $filterPlatforms = array('<option value="">Platform</option>');
-                        foreach (array('desktop', 'tablet', 'smartphone', 'mobile') as $platform) {
-                            $filterPlatforms[] = sprintf(
-                                '<option value="%1$s"%3$s>%2$s</option>',
-                                $platform,
-                                $GLOBALS['TL_LANG']['tl_theme_plus_filter'][$platform],
-                                $browserIdentOverwrite && $browserIdentOverwrite->platform == $platform
-                                    ? ' selected'
-                                    : ''
-                            );
-                        }
+						$filterPlatforms = array('<option value="">Platform</option>');
+						foreach (array('desktop', 'tablet', 'smartphone', 'mobile') as $platform) {
+							$filterPlatforms[] = sprintf(
+								'<option value="%1$s"%3$s>%2$s</option>',
+								$platform,
+								$GLOBALS['TL_LANG']['tl_theme_plus_filter'][$platform],
+								$browserIdentOverwrite && $browserIdentOverwrite->platform == $platform
+									? ' selected'
+									: ''
+							);
+						}
 
-                        $strBuffer = preg_replace(
-                            '|<body[^>]*>|',
-                            sprintf(
+						$strBuffer = preg_replace(
+							'|<body[^>]*>|',
+							sprintf(
 								'$0
 	<!-- indexer::stop -->
     <div id="theme-plus-dev-tool" class="%s">
@@ -817,36 +838,36 @@ class ThemePlus
     </div>
 	<script>initThemePlusDevTool(%s, %s);</script>
 	<!-- indexer::continue -->',
-                                \Input::cookie('THEME_PLUS_DEV_TOOL_COLLAPES') == 'no'
-                                    ? ''
-                                    : 'theme-plus-dev-tool-collapsed',
-                                \Image::getHtml('system/modules/theme-plus/assets/images/stylesheet.png'),
-                                $stylesheetsCount,
-                                $stylesheetsBuffer,
-                                \Image::getHtml('system/modules/theme-plus/assets/images/javascript.png'),
-                                $javascriptsCount,
-                                $javascriptsBuffer,
-                                \Environment::get('request'),
-                                REQUEST_TOKEN,
-                                implode('', $filterSystems),
-                                implode('', $filterBrowsers),
-                                $browserIdentOverwrite ? $browserIdentOverwrite->version : '',
-                                implode('', $filterPlatforms),
-                                json_encode($files),
-                                json_encode((bool) $layout->theme_plus_javascript_lazy_load)
-                            ),
-                            $strBuffer
-                        );
-                    }
-                }
-            }
+								\Input::cookie('THEME_PLUS_DEV_TOOL_COLLAPES') == 'no'
+									? ''
+									: 'theme-plus-dev-tool-collapsed',
+								\Image::getHtml('system/modules/theme-plus/assets/images/stylesheet.png'),
+								$stylesheetsCount,
+								$stylesheetsBuffer,
+								\Image::getHtml('system/modules/theme-plus/assets/images/javascript.png'),
+								$javascriptsCount,
+								$javascriptsBuffer,
+								\Environment::get('request'),
+								REQUEST_TOKEN,
+								implode('', $filterSystems),
+								implode('', $filterBrowsers),
+								$browserIdentOverwrite ? $browserIdentOverwrite->version : '',
+								implode('', $filterPlatforms),
+								json_encode($files),
+								json_encode((bool) $layout->theme_plus_javascript_lazy_load)
+							),
+							$strBuffer
+						);
+					}
+				}
+			}
 
-            // replace dynamic scripts
-            return str_replace(
-                array_keys($sr),
-                array_values($sr),
-                $strBuffer
-            );
+			// replace dynamic scripts
+			return str_replace(
+				array_keys($sr),
+				array_values($sr),
+				$strBuffer
+			);
 		}
 
 		return $strBuffer;
@@ -984,7 +1005,7 @@ class ThemePlus
 
 				$pathinfo = pathinfo($stylesheet['name']);
 
-				$url = sprintf(
+				$url               = sprintf(
 					'system/modules/theme-plus/web/proxy.php/css/%s',
 					$pathinfo['filename'] . '.' . $id . '.' . $pathinfo['extension']
 				);
@@ -993,19 +1014,19 @@ class ThemePlus
 
 			// use asset
 			else if (isset($stylesheet['asset'])) {
-				$url = static::storeAsset(
+				$url               = static::storeAsset(
 					$stylesheet['asset'],
 					'css',
 					$defaultFilters
 				);
-				$url = \Controller::addStaticUrlTo($url);
+				$url               = \Controller::addStaticUrlTo($url);
 				$this->files[$url] = $stylesheet;
 			}
 
 			// use url
 			else if (isset($stylesheet['url'])) {
-				$url = $stylesheet['url'];
-				$url = \Controller::addStaticUrlTo($url);
+				$url               = $stylesheet['url'];
+				$url               = \Controller::addStaticUrlTo($url);
 				$this->files[$url] = $stylesheet;
 			}
 
@@ -1030,9 +1051,9 @@ class ThemePlus
 
 			// wrap cc around
 			$html = static::wrapCc(
-				$html,
-				$stylesheet['cc']
-			) . "\n";
+					$html,
+					$stylesheet['cc']
+				) . "\n";
 
 			// add debug information
 			if (ThemePlusEnvironment::isDesignerMode()) {
@@ -1164,7 +1185,7 @@ class ThemePlus
 
 				$pathinfo = pathinfo($javascript['name']);
 
-				$url = sprintf(
+				$url               = sprintf(
 					'system/modules/theme-plus/web/proxy.php/js/%s',
 					$pathinfo['filename'] . '.' . $id . '.' . $pathinfo['extension']
 				);
@@ -1173,19 +1194,19 @@ class ThemePlus
 
 			// use asset
 			else if (isset($javascript['asset'])) {
-				$url = static::storeAsset(
+				$url               = static::storeAsset(
 					$javascript['asset'],
 					'js',
 					$defaultFilters
 				);
-				$url = \Controller::addStaticUrlTo($url);
+				$url               = \Controller::addStaticUrlTo($url);
 				$this->files[$url] = $javascript;
 			}
 
 			// use url
 			else if (isset($javascript['url'])) {
-				$url = $javascript['url'];
-				$url = \Controller::addStaticUrlTo($url);
+				$url               = $javascript['url'];
+				$url               = \Controller::addStaticUrlTo($url);
 				$this->files[$url] = $javascript;
 			}
 
@@ -1205,7 +1226,8 @@ class ThemePlus
 						: '') .
 					'>window.loadAsync(' .
 					json_encode($url) .
-					(ThemePlus::getInstance()->isDesignerMode() ? ', ' . json_encode(md5($url)) : '') .
+					(ThemePlus::getInstance()
+						->isDesignerMode() ? ', ' . json_encode(md5($url)) : '') .
 					');</script>';
 			}
 			else {
@@ -1226,9 +1248,9 @@ class ThemePlus
 
 			// wrap cc
 			$html = static::wrapCc(
-				$html,
-				$javascript['cc']
-			) . "\n";
+					$html,
+					$javascript['cc']
+				) . "\n";
 
 			// add debug information
 			if (ThemePlusEnvironment::isDesignerMode()) {
@@ -1253,8 +1275,8 @@ class ThemePlus
 			$async = new FileAsset(TL_ROOT . '/system/modules/theme-plus/assets/js/async.js', $defaultFilters);
 			$async->setTargetPath($this->getAssetPath($async, 'js'));
 			$async = '<script' . ($xhtml
-				? ' type="text/javascript"'
-				: '') . '>' . $async->dump() . '</script>' . "\n";
+					? ' type="text/javascript"'
+					: '') . '>' . $async->dump() . '</script>' . "\n";
 
 			if ($head) {
 				$head = $async . $head;
@@ -1307,7 +1329,7 @@ class ThemePlus
 						continue;
 					}
 
-					$array[] = array(
+					$array[]                       = array(
 						'id'       => $type . ':asset:' . spl_object_hash($source),
 						'name'     => basename($sourcePath, '.' . $type) . '.' . $type,
 						'time'     => filemtime($sourcePath),
@@ -1440,13 +1462,13 @@ class ThemePlus
 					switch ($data->type) {
 						case 'code':
 							$name  = ($data->code_snippet_title
-								? $data->code_snippet_title
-								: ('string' . substr(
-									md5($data->code),
-									0,
-									8
-								))) . '.' . $type;
-							$time = $data->tstamp;
+									? $data->code_snippet_title
+									: ('string' . substr(
+											md5($data->code),
+											0,
+											8
+										))) . '.' . $type;
+							$time  = $data->tstamp;
 							$asset = new StringAsset(
 								$data->code,
 								$filter,
@@ -1477,10 +1499,10 @@ class ThemePlus
 							}
 							else {
 								$array[] = array(
-									'name'  => $name,
-									'url'   => $data->url,
-									'media' => $data->media,
-									'cc'    => $data->cc,
+									'name'     => $name,
+									'url'      => $data->url,
+									'media'    => $data->media,
+									'cc'       => $data->cc,
 									'position' => $position
 								);
 							}
@@ -1488,8 +1510,14 @@ class ThemePlus
 
 						case 'file':
 							$filepath = false;
-							if ($data->filesource == $GLOBALS['TL_CONFIG']['uploadPath'] && version_compare(VERSION, '3', '>=')) {
-								$file = (version_compare(VERSION, '3.2', '>=') ? \FilesModel::findByUuid($data->file) : \FilesModel::findByPk($data->file));
+							if ($data->filesource == $GLOBALS['TL_CONFIG']['uploadPath'] && version_compare(
+									VERSION,
+									'3',
+									'>='
+								)
+							) {
+								$file = (version_compare(VERSION, '3.2', '>=') ? \FilesModel::findByUuid($data->file)
+									: \FilesModel::findByPk($data->file));
 								if ($file) {
 									$filepath = $file->path;
 								}
@@ -1629,7 +1657,7 @@ class ThemePlus
 		// HOOK: create framework code
 		if (isset($GLOBALS['TL_HOOKS']['renderVariable']) && is_array($GLOBALS['TL_HOOKS']['renderVariable'])) {
 			foreach ($GLOBALS['TL_HOOKS']['renderVariable'] as $callback) {
-				$object = \System::importStatic($callback[0]);
+				$object    = \System::importStatic($callback[0]);
 				$varResult = $object->$callback[1]($variable);
 				if ($varResult !== false) {
 					return $varResult;
@@ -1809,7 +1837,8 @@ class ThemePlus
 	 */
 	public function wrapJavaScriptLazyInclude($strSrc)
 	{
-		return 'loadAsync(' . json_encode($strSrc) . (ThemePlus::getInstance()->isDesignerMode() ? ', ' . json_encode(md5($strSrc)) : '') . ');';
+		return 'loadAsync(' . json_encode($strSrc) . (ThemePlus::getInstance()
+			->isDesignerMode() ? ', ' . json_encode(md5($strSrc)) : '') . ');';
 	}
 
 
@@ -2060,11 +2089,11 @@ class VariableReplacer
 
 		// HOOK: replace undefined variable
 		if (isset($GLOBALS['TL_HOOKS']['replaceUndefinedVariable']) && is_array(
-			$GLOBALS['TL_HOOKS']['replaceUndefinedVariable']
-		)
+				$GLOBALS['TL_HOOKS']['replaceUndefinedVariable']
+			)
 		) {
 			foreach ($GLOBALS['TL_HOOKS']['replaceUndefinedVariable'] as $callback) {
-				$object = \System::importStatic($callback[0]);
+				$object    = \System::importStatic($callback[0]);
 				$varResult = $object->$callback[1]($m[1]);
 				if ($varResult !== false) {
 					return $varResult;
