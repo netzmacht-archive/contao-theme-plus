@@ -41,7 +41,7 @@ class ThemePlusEnvironment
 	/**
 	 * Get the singleton instance.
 	 *
-	 * @return \ThemePlus\ThemePlusEnvironment
+	 * @return ThemePlusEnvironment
 	 */
 	public static function getInstance()
 	{
