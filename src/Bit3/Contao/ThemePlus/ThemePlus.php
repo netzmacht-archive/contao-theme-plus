@@ -1009,6 +1009,10 @@ class ThemePlus
 					$session->asset   = $asset;
 					$session->filters = $defaultFilters;
 
+					if ($asset instanceof StringAsset) {
+						$asset->load();
+					}
+
 					$_SESSION['THEME_PLUS_ASSETS'][$id] = serialize($session);
 				}
 
@@ -1188,6 +1192,10 @@ class ThemePlus
 					$session->page    = $objPage->id;
 					$session->asset   = $asset;
 					$session->filters = $defaultFilters;
+
+					if ($asset instanceof StringAsset) {
+						$asset->load();
+					}
 
 					$_SESSION['THEME_PLUS_ASSETS'][$id] = serialize($session);
 				}
