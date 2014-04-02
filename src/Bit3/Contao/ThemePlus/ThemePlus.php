@@ -1243,8 +1243,7 @@ class ThemePlus
 						: '') .
 					'>window.loadAsync(' .
 					json_encode($url) .
-					(ThemePlus::getInstance()
-						->isDesignerMode() ? ', ' . json_encode(md5($url)) : '') .
+					(ThemePlusEnvironment::isDesignerMode() ? ', ' . json_encode(md5($url)) : '') .
 					');</script>';
 			}
 			else {
