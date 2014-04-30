@@ -22,7 +22,7 @@
 	},
 	"require":{
 		"php":">=5.3",
-		"contao/core":">=3,<3.3-dev",
+		"contao/core":">=3,<3.4-dev",
 		"contao-community-alliance/composer-installer": "*",
 		"bit3/contao-assetic":"~1",
 		"ikimea/browser":"dev-master",
