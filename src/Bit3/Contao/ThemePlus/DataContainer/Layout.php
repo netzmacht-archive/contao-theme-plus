@@ -13,8 +13,8 @@
 
 namespace Bit3\Contao\ThemePlus\DataContainer;
 
-use \ThemePlus\Model\StylesheetModel;
-use \ThemePlus\Model\JavaScriptModel;
+use Bit3\Contao\ThemePlus\Model\JavaScriptModel;
+use Bit3\Contao\ThemePlus\Model\StylesheetModel;
 
 /**
  * Class Layout
