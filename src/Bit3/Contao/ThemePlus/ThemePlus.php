@@ -1355,9 +1355,15 @@ class ThemePlus
 					$GLOBALS['TL_THEME_EXCLUDE'][] = $sourcePath;
 				}
 				else {
+					$name = get_class($source);
+					$name = strtolower($name);
+					$name = preg_replace('~^.*\\\\~', '', $name);
+					$name = preg_replace('~asset$~', '', $name);
+					$name .= '_' . standardize($source->getSourcePath());
+
 					$array[] = array(
 						'id'       => $type . ':asset:' . spl_object_hash($source),
-						'name'     => get_class($source) . '.' . $type,
+						'name'     => $name . '.' . $type,
 						'time'     => time(),
 						'asset'    => $source,
 						'position' => $position
