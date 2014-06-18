@@ -221,7 +221,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = array
             'default'       => 'files',
             'inputType'     => 'select',
             'filter'        => true,
-            'options'       => array($GLOBALS['TL_CONFIG']['uploadPath'], 'assets', 'system/modules'),
+            'options'       => array($GLOBALS['TL_CONFIG']['uploadPath'], 'assets', 'system/modules', 'composer/vendor'),
             'eval'          => array('submitOnChange'    => true,
                                      'tl_class'          => 'w50'),
             'sql'           => "varchar(32) NOT NULL default '{$GLOBALS['TL_CONFIG']['uploadPath']}'"
