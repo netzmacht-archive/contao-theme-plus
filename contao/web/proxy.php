@@ -21,15 +21,15 @@ use Assetic\Asset\HttpAsset;
 use Assetic\Asset\StringAsset;
 use Assetic\Filter\FilterCollection;
 use ContaoAssetic\AsseticFactory;
-use ThemePlus\ThemePlus;
-use ThemePlus\Model\StylesheetModel;
-use ThemePlus\Model\JavaScriptModel;
+use Bit3\Contao\ThemePlus\ThemePlusEnvironment;
+use Bit3\Contao\ThemePlus\Model\StylesheetModel;
+use Bit3\Contao\ThemePlus\Model\JavaScriptModel;
 
 class proxy
 {
 	public function run()
 	{
-		if (ThemePlus::isDesignerMode()) {
+		if (ThemePlusEnvironment::isDesignerMode()) {
 			$user = FrontendUser::getInstance();
 			$user->authenticate();
 
@@ -55,21 +55,41 @@ class proxy
 				if (isset($_SESSION['THEME_PLUS_ASSETS'][$id])) {
 					$session = unserialize($_SESSION['THEME_PLUS_ASSETS'][$id]);
 
+					// load asset from session
+					/** @var AssetInterface $asset */
+					$asset = $session->asset;
+
+					if ($asset instanceof StringAsset) {
+						header('X-Theme-Plus-Rendering: cached');
+						echo $asset->getContent();
+						ob_flush();
+						return;
+					}
+
+					header('X-Theme-Plus-Rendering: live');
+
 					// load page from session
 					$GLOBALS['objPage'] = \PageModel::findWithDetails($session->page);
 
 					// load filters from session
 					$defaultFilters = $session->filters;
 
-					// load asset from session
-					/** @var AssetInterface $asset */
-					$asset = $session->asset;
-
 					// update the target path
 					$asset->setTargetPath('system/modules/theme-plus/web/proxy.php/:type/:descriptor');
 
 					// dump the asset
-					echo $asset->dump($defaultFilters);
+					$buffer =  $asset->dump($defaultFilters);
+
+					$cachedAsset = new StringAsset($buffer, array(), $asset->getSourceRoot(), $asset->getSourcePath());
+					$cachedAsset->setTargetPath($asset->getTargetPath());
+					$cachedAsset->setLastModified($asset->getLastModified());
+					$cachedAsset->load();
+
+					$session->asset   = $cachedAsset;
+					$session->filters = array();
+					$_SESSION['THEME_PLUS_ASSETS'][$id] = serialize($session);
+
+					echo $buffer;
 
 					return;
 				}

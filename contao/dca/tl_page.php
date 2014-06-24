@@ -54,7 +54,7 @@ $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_stylesheets']               
     'label'            => &$GLOBALS['TL_LANG']['tl_page']['theme_plus_stylesheets'],
     'exclude'          => true,
     'inputType'        => 'checkbox',
-    'options_callback' => array('ThemePlus\DataContainer\Page', 'getStylesheets'),
+    'options_callback' => array('Bit3\Contao\ThemePlus\DataContainer\Page', 'getStylesheets'),
     'eval'             => array(
         'mandatory' => true,
         'multiple'  => true,
@@ -78,7 +78,7 @@ $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_javascripts']               
     'label'            => &$GLOBALS['TL_LANG']['tl_page']['theme_plus_javascripts'],
     'exclude'          => true,
     'inputType'        => 'checkbox',
-    'options_callback' => array('ThemePlus\DataContainer\Page', 'getJavaScripts'),
+    'options_callback' => array('Bit3\Contao\ThemePlus\DataContainer\Page', 'getJavaScripts'),
     'eval'             => array(
         'mandatory' => true,
         'multiple'  => true,
@@ -102,7 +102,7 @@ $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_stylesheets_noinherit']     
     'label'            => &$GLOBALS['TL_LANG']['tl_page']['theme_plus_stylesheets_noinherit'],
     'exclude'          => true,
     'inputType'        => 'checkbox',
-    'options_callback' => array('ThemePlus\DataContainer\Page', 'getStylesheets'),
+    'options_callback' => array('Bit3\Contao\ThemePlus\DataContainer\Page', 'getStylesheets'),
     'eval'             => array(
         'mandatory' => true,
         'multiple'  => true,
@@ -126,7 +126,7 @@ $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_javascripts_noinherit']     
     'label'            => &$GLOBALS['TL_LANG']['tl_page']['theme_plus_javascripts_noinherit'],
     'exclude'          => true,
     'inputType'        => 'checkbox',
-    'options_callback' => array('ThemePlus\DataContainer\Page', 'getJavaScripts'),
+    'options_callback' => array('Bit3\Contao\ThemePlus\DataContainer\Page', 'getJavaScripts'),
     'eval'             => array(
         'mandatory' => true,
         'multiple'  => true,

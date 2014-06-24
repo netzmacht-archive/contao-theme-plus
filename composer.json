@@ -22,7 +22,7 @@
 	},
 	"require":{
 		"php":">=5.3",
-		"contao/core":">=3,<3.3-dev",
+		"contao/core":">=3,<3.4-dev",
 		"contao-community-alliance/composer-installer": "*",
 		"bit3/contao-assetic":"~1",
 		"ikimea/browser":"dev-master",
@@ -38,7 +38,8 @@
 	},
 	"autoload":{
 		"psr-0": {
-			"ThemePlus": "src/"
+			"Bit3\\Contao\\ThemePlus": "src",
+			"ThemePlus": "deprecated/"
 		}
 	},
 	"extra":{
@@ -52,7 +53,7 @@
 		},
 		"branch-alias": {
 			"dev-master": "4.3.x-dev",
-			"dev-develop": "4.4.x-dev"
+			"dev-develop": "5.0.x-dev"
 		}
 	}
 }

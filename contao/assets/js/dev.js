@@ -41,9 +41,11 @@ function initThemePlusDevTool(files, asyncJS) {
 			if (tempClasses) {
 				tempClasses = tempClasses.split(/\s+/);
 				for (var index in tempClasses) {
-					var tempClass = tempClasses[index].trim();
-					if (tempClass) {
-						cssClasses.push(tempClass);
+					if (typeof tempClasses[index] == 'string') { // work around mootools $family bullshit -.-
+						var tempClass = tempClasses[index].trim();
+						if (tempClass) {
+							cssClasses.push(tempClass);
+						}
 					}
 				}
 			}
