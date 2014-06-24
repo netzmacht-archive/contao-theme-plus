@@ -1315,7 +1315,7 @@ class ThemePlus
 		AssetCollection $collection,
 		array &$array,
 		$defaultFilters,
-		$position = 'head'
+		$defaultPosition = 'head'
 	) {
 		foreach ($sources as $source) {
 			if ($source instanceof AssetInterface) {
@@ -1332,7 +1332,7 @@ class ThemePlus
 						'name'     => 'string' . substr(md5($data), 0, 8) . '.' . $type,
 						'time'     => substr(md5($data), 0, 8),
 						'asset'    => $source,
-						'position' => $position
+						'position' => $defaultPosition
 					);
 				}
 				else if ($source instanceof FileAsset) {
@@ -1350,7 +1350,7 @@ class ThemePlus
 						'name'     => basename($sourcePath, '.' . $type) . '.' . $type,
 						'time'     => filemtime($sourcePath),
 						'asset'    => $source,
-						'position' => $position
+						'position' => $defaultPosition
 					);
 					$GLOBALS['TL_THEME_EXCLUDE'][] = $sourcePath;
 				}
@@ -1366,7 +1366,7 @@ class ThemePlus
 						'name'     => $name . '.' . $type,
 						'time'     => time(),
 						'asset'    => $source,
-						'position' => $position
+						'position' => $defaultPosition
 					);
 				}
 				continue;
@@ -1445,7 +1445,7 @@ class ThemePlus
 					'time'     => filemtime($source),
 					'asset'    => $asset,
 					'media'    => $media,
-					'position' => $position
+					'position' => $defaultPosition
 				);
 			}
 		}
@@ -1457,7 +1457,7 @@ class ThemePlus
 		AssetCollection $collection,
 		array &$array,
 		$defaultFilters,
-		$position = 'head'
+		$defaultPosition = 'head'
 	) {
 		if ($data) {
 			while ($data->next()) {
@@ -1479,6 +1479,9 @@ class ThemePlus
 
 					if ($data->position) {
 						$position = $data->position;
+					}
+					else {
+						$position = $defaultPosition;
 					}
 
 					switch ($data->type) {
@@ -1569,7 +1572,7 @@ class ThemePlus
 					}
 
 					if ($asset) {
-						if (ThemePlusEnvironment::isLiveMode()) {
+						if (ThemePlusEnvironment::isLiveMode() && $defaultPosition == $position) {
 							$collection->add($asset);
 						}
 						else {
@@ -1595,7 +1598,7 @@ class ThemePlus
 		array &$array,
 		$defaultFilters,
 		$local = false,
-		$position = 'head'
+		$defaultPosition = 'head'
 	) {
 		// inherit from parent page
 		if ($objPage->pid) {
@@ -1608,7 +1611,7 @@ class ThemePlus
 				$array,
 				$defaultFilters,
 				false,
-				$position
+				$defaultPosition
 			);
 		}
 
@@ -1636,7 +1639,7 @@ class ThemePlus
 						$collection,
 						$array,
 						$defaultFilters,
-						$position
+						$defaultPosition
 					);
 				}
 			}
@@ -1665,7 +1668,7 @@ class ThemePlus
 					$collection,
 					$array,
 					$defaultFilters,
-					$position
+					$defaultPosition
 				);
 			}
 		}
