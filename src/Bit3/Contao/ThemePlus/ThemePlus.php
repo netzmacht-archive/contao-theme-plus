@@ -57,6 +57,7 @@ class ThemePlus
 				$_SESSION['THEME_PLUS_ASSETS'] = array();
 			}
 
+			// Add new assetic filter factory
 			AsseticFactory::registerFilterFactory(new Filter\ThemePlusFilterFactory());
 		}
 		return static::$instance;

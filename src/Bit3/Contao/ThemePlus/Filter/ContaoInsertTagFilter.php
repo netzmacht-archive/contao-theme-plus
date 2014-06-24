@@ -21,6 +21,14 @@ class ContaoInsertTagFilter
     implements \Assetic\Filter\FilterInterface
 {
     /**
+     * As the \Controller class extends the \System class which has a protected __construct
+     * we have to override the constructor to make it available
+     */
+    public function __construct() {
+        return parent::__construct();
+    }
+    
+    /**
      * Filters an asset after it has been loaded.
      *
      * @param AssetInterface $asset An asset
