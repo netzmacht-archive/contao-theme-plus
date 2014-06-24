@@ -218,7 +218,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = array
         'filesource'                            => array
         (
             'label'         => &$GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['filesource'],
-            'default'       => 'files',
+            'default'       => $GLOBALS['TL_CONFIG']['uploadPath'],
             'inputType'     => 'select',
             'filter'        => true,
             'options'       => array($GLOBALS['TL_CONFIG']['uploadPath'], 'assets', 'system/modules', 'composer/vendor'),
