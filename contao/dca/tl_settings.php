@@ -15,6 +15,7 @@
 /**
  * Palettes
  */
+/*
 \MetaPalettes::appendTo(
     'tl_settings',
     array(
@@ -23,6 +24,7 @@
         )
     )
 );
+*/
 
 
 /**
