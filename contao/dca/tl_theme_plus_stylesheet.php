@@ -278,7 +278,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = array
 				'allowHtml'  => true,
 				'preserveTags' => true,
 				'class'      => 'monospace',
-				'rte'        => 'codeMirror|css',
+				'rte'        => version_compare(VERSION, '3.3', '<') ? 'codeMirror|css' : 'ace|css',
 				'helpwizard' => true
 			),
 			'sql'       => "blob NULL"

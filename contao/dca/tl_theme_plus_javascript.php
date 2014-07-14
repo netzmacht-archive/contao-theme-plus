@@ -274,7 +274,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = array
                                  'allowHtml' => true,
                                  'preserveTags' => true,
                                  'class'     => 'monospace',
-                                 'rte'       => 'codeMirror|javascript',
+                                 'rte'       => version_compare(VERSION, '3.3', '<') ? 'codeMirror|javascript' : 'ace|javascript',
                                  'helpwizard'=> true),
             'sql'       => "blob NULL"
         ),
