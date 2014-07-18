@@ -101,6 +101,11 @@ class ThemePlus
 	protected $files = array();
 
 	/**
+	 * @var array|string[]
+	 */
+	protected $excludeList = array();
+
+	/**
 	 * Singleton constructor.
 	 */
 	protected function __construct()
@@ -652,9 +657,11 @@ class ThemePlus
 				$layout = \LayoutModel::findByPk($objPage->layout);
 
 				if ($layout) {
+					$this->excludeList = array();
+
 					// build exclude list
-					if (!is_array($GLOBALS['TL_THEME_EXCLUDE'])) {
-						$GLOBALS['TL_THEME_EXCLUDE'] = array();
+					if (is_array($GLOBALS['TL_THEME_EXCLUDE'])) {
+						$this->excludeList = array_merge($this->excludeList, $GLOBALS['TL_THEME_EXCLUDE']);
 					}
 					if (!is_array($layout->theme_plus_exclude_files)) {
 						$layout->theme_plus_exclude_files = deserialize(
@@ -665,7 +672,7 @@ class ThemePlus
 					if (count($layout->theme_plus_exclude_files) > 0) {
 						foreach ($layout->theme_plus_exclude_files as $v) {
 							if ($v[0]) {
-								$GLOBALS['TL_THEME_EXCLUDE'][] = $v[0];
+								$this->excludeList[] = $v[0];
 							}
 						}
 					}
@@ -1342,7 +1349,7 @@ class ThemePlus
 					$sourceProperty->setAccessible(true);
 					$sourcePath = $sourceProperty->getValue($source);
 
-					if (in_array($sourcePath, $GLOBALS['TL_THEME_EXCLUDE'])) {
+					if (in_array($sourcePath, $this->excludeList)) {
 						continue;
 					}
 
@@ -1353,7 +1360,7 @@ class ThemePlus
 						'asset'    => $source,
 						'position' => $defaultPosition
 					);
-					$GLOBALS['TL_THEME_EXCLUDE'][] = $sourcePath;
+					$this->excludeList[] = $sourcePath;
 				}
 				else {
 					$name = get_class($source);
@@ -1398,13 +1405,13 @@ class ThemePlus
 			// skip file
 			if (in_array(
 				$source,
-				$GLOBALS['TL_THEME_EXCLUDE']
+				$this->excludeList
 			)
 			) {
 				continue;
 			}
 
-			$GLOBALS['TL_THEME_EXCLUDE'][] = $source;
+			$this->excludeList[] = $source;
 
 			// if stylesheet is an absolute url...
 			if (preg_match(
@@ -1509,13 +1516,13 @@ class ThemePlus
 							// skip file
 							if (in_array(
 								$data->url,
-								$GLOBALS['TL_THEME_EXCLUDE']
+								$this->excludeList
 							)
 							) {
 								break;
 							}
 
-							$GLOBALS['TL_THEME_EXCLUDE'][] = $data->url;
+							$this->excludeList[] = $data->url;
 
 							$name = basename($data->url);
 							$time = $data->tstamp;
@@ -1556,13 +1563,13 @@ class ThemePlus
 								// skip file
 								if (in_array(
 									$filepath,
-									$GLOBALS['TL_THEME_EXCLUDE']
+									$this->excludeList
 								)
 								) {
 									break;
 								}
 
-								$GLOBALS['TL_THEME_EXCLUDE'][] = $filepath;
+								$this->excludeList[] = $filepath;
 
 								$name  = basename($filepath, '.' . $type) . '.' . $type;
 								$time  = filemtime($filepath);
