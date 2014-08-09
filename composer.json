@@ -37,9 +37,8 @@
 		"contao-legacy/theme_plus": "self.version"
 	},
 	"autoload":{
-		"psr-0": {
-			"Bit3\\Contao\\ThemePlus": "src",
-			"ThemePlus": "deprecated/"
+		"psr-4": {
+			"Bit3\\Contao\\ThemePlus\\": "src"
 		}
 	},
 	"extra":{
