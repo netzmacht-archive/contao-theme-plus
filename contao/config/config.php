@@ -91,7 +91,6 @@ $GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus_variable']   = array
 /**
  * Assetic compiler filter
  */
-$GLOBALS['ASSETIC']['compiler']['contaoInsertTag']                = 'Bit3\Contao\ThemePlus\Filter\ContaoInsertTagFilter';
 $GLOBALS['ASSETIC']['compiler']['contaoReplaceVariable']          = 'Bit3\Contao\ThemePlus\Filter\ContaoReplaceVariableFilter';
 $GLOBALS['ASSETIC']['compiler']['contaoReplaceThemePlusVariable'] = 'Bit3\Contao\ThemePlus\Filter\ContaoReplaceThemePlusVariableFilter';
 
@@ -99,7 +98,6 @@ $GLOBALS['ASSETIC']['compiler']['contaoReplaceThemePlusVariable'] = 'Bit3\Contao
 /**
  * Assetic css compatible filters
  */
-$GLOBALS['ASSETIC']['css'][] = 'contaoInsertTag';
 $GLOBALS['ASSETIC']['css'][] = 'contaoReplaceVariable';
 $GLOBALS['ASSETIC']['css'][] = 'contaoReplaceThemePlusVariable';
 
@@ -107,7 +105,6 @@ $GLOBALS['ASSETIC']['css'][] = 'contaoReplaceThemePlusVariable';
 /**
  * Assetic js compatible filters
  */
-$GLOBALS['ASSETIC']['js'][] = 'contaoInsertTag';
 $GLOBALS['ASSETIC']['js'][] = 'contaoReplaceVariable';
 $GLOBALS['ASSETIC']['js'][] = 'contaoReplaceThemePlusVariable';
 
