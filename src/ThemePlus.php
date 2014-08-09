@@ -1027,7 +1027,7 @@ class ThemePlus
 				$pathinfo = pathinfo($stylesheet['name']);
 
 				$url               = sprintf(
-					'system/modules/theme-plus/web/proxy.php/css/%s',
+					'assets/proxy.php/css/%s',
 					$pathinfo['filename'] . '.' . $id . '.' . $pathinfo['extension']
 				);
 				$this->files[$url] = $stylesheet;
@@ -1211,7 +1211,7 @@ class ThemePlus
 				$pathinfo = pathinfo($javascript['name']);
 
 				$url               = sprintf(
-					'system/modules/theme-plus/web/proxy.php/js/%s',
+					'assets/proxy.php/js/%s',
 					$pathinfo['filename'] . '.' . $id . '.' . $pathinfo['extension']
 				);
 				$this->files[$url] = $javascript;

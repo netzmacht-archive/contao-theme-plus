@@ -12,7 +12,7 @@
  */
 
 define('TL_MODE', 'FE');
-require(dirname(dirname(dirname(dirname($_SERVER['SCRIPT_FILENAME'])))) . '/initialize.php');
+require(dirname(dirname($_SERVER['SCRIPT_FILENAME'])) . '/system/initialize.php');
 
 use Assetic\Asset\AssetInterface;
 use Assetic\Asset\AssetCollection;
@@ -75,7 +75,7 @@ class proxy
 					$defaultFilters = $session->filters;
 
 					// update the target path
-					$asset->setTargetPath('system/modules/theme-plus/web/proxy.php/:type/:descriptor');
+					$asset->setTargetPath('assets/proxy.php/:type/:descriptor');
 
 					// dump the asset
 					$buffer =  $asset->dump($defaultFilters);

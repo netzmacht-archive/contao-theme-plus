@@ -46,7 +46,8 @@
 	"extra":{
 		"contao": {
 			"sources":{
-				"contao":"system/modules/theme-plus"
+				"contao": "system/modules/theme-plus",
+				"assets/proxy.php": "assets/proxy.php"
 			},
 			"runonce":[
 				"runonce/upgrade_to_contao3_2.php"
