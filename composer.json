@@ -58,8 +58,8 @@
 			]
 		},
 		"branch-alias": {
-			"dev-master": "4.3.x-dev",
-			"dev-develop": "5.0.x-dev"
+			"dev-master": "5.0.x-dev",
+			"dev-develop": "5.1.x-dev"
 		}
 	}
 }
