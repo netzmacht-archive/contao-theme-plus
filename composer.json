@@ -27,7 +27,7 @@
 		"contao-community-alliance/event-dispatcher": "~1.0",
 		"contao-community-alliance/dependency-container": "~1.0",
 		"bit3/contao-meta-palettes":"~1.0",
-		"bit3/contao-assetic":"~1.0",
+		"bit3/contao-assetic":"~2.0",
 		"ikimea/browser":"dev-master",
 		"mobiledetect/mobiledetectlib": "2.*"
 	},
