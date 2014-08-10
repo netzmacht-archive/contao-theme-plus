@@ -19,159 +19,160 @@ use Assetic\Filter\FilterInterface;
 /**
  * Class AbstractDelegateAsset
  */
-class AbstractDelegateAsset implements AssetInterface
+class AbstractDelegateAsset implements DelegateAssetInterface
 {
-    /**
-     * @var AssetInterface
-     */
-    protected $asset;
 
-    public function __construct(AssetInterface $asset)
-    {
-        $this->asset = $asset;
-    }
+	/**
+	 * @var AssetInterface
+	 */
+	protected $asset;
 
-    /**
-     * @param AssetInterface $asset
-     */
-    public function setAsset(AssetInterface $asset)
-    {
-        $this->asset = $asset;
-    }
+	public function __construct(AssetInterface $asset)
+	{
+		$this->asset = $asset;
+	}
 
-    /**
-     * @return AssetInterface
-     */
-    public function getAsset()
-    {
-        return $this->asset;
-    }
+	/**
+	 * @param AssetInterface $asset
+	 */
+	public function setAsset(AssetInterface $asset)
+	{
+		$this->asset = $asset;
+	}
 
-    /**
-     * {@inheritdoc}
-     */
-    public function ensureFilter(FilterInterface $filter)
-    {
-        $this->asset->ensureFilter($filter);
-    }
+	/**
+	 * @return AssetInterface
+	 */
+	public function getAsset()
+	{
+		return $this->asset;
+	}
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getFilters()
-    {
-        return $this->asset->getFilters();
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public function ensureFilter(FilterInterface $filter)
+	{
+		$this->asset->ensureFilter($filter);
+	}
 
-    /**
-     * {@inheritdoc}
-     */
-    public function clearFilters()
-    {
-        return $this->asset->clearFilters();
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getFilters()
+	{
+		return $this->asset->getFilters();
+	}
 
-    /**
-     * {@inheritdoc}
-     */
-    public function load(FilterInterface $additionalFilter = null)
-    {
-        return $this->asset->load($additionalFilter);
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public function clearFilters()
+	{
+		return $this->asset->clearFilters();
+	}
 
-    /**
-     * {@inheritdoc}
-     */
-    public function dump(FilterInterface $additionalFilter = null)
-    {
-        return $this->asset->dump($additionalFilter);
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public function load(FilterInterface $additionalFilter = null)
+	{
+		return $this->asset->load($additionalFilter);
+	}
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getContent()
-    {
-        return $this->asset->getContent();
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public function dump(FilterInterface $additionalFilter = null)
+	{
+		return $this->asset->dump($additionalFilter);
+	}
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setContent($content)
-    {
-        return $this->asset->setContent($content);
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getContent()
+	{
+		return $this->asset->getContent();
+	}
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getSourceRoot()
-    {
-        return $this->asset->getSourceRoot();
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public function setContent($content)
+	{
+		return $this->asset->setContent($content);
+	}
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getSourcePath()
-    {
-        return $this->asset->getSourcePath();
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getSourceRoot()
+	{
+		return $this->asset->getSourceRoot();
+	}
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getSourceDirectory()
-    {
-        return $this->asset->getSourceDirectory();
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getSourcePath()
+	{
+		return $this->asset->getSourcePath();
+	}
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getTargetPath()
-    {
-        return $this->asset->getTargetPath();
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getSourceDirectory()
+	{
+		return $this->asset->getSourceDirectory();
+	}
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setTargetPath($targetPath)
-    {
-        return $this->asset->setTargetPath($targetPath);
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getTargetPath()
+	{
+		return $this->asset->getTargetPath();
+	}
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getLastModified()
-    {
-        return $this->asset->getLastModified();
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public function setTargetPath($targetPath)
+	{
+		return $this->asset->setTargetPath($targetPath);
+	}
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getVars()
-    {
-        return $this->asset->getVars();
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getLastModified()
+	{
+		return $this->asset->getLastModified();
+	}
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setValues(array $values)
-    {
-        return $this->asset->setValues($values);
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getVars()
+	{
+		return $this->asset->getVars();
+	}
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getValues()
-    {
-        return $this->asset->getValues();
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public function setValues(array $values)
+	{
+		return $this->asset->setValues($values);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getValues()
+	{
+		return $this->asset->getValues();
+	}
 }

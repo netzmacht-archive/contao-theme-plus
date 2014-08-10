@@ -21,6 +21,7 @@ class VariableModel extends \Model
 
 	/**
 	 * Table name
+	 *
 	 * @var string
 	 */
 	protected static $strTable = 'tl_theme_plus_variable';

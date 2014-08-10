@@ -58,11 +58,11 @@ class Variable
 
 		switch ($variable->type) {
 			case 'text':
-				$image = 'system/modules/theme-plus/assets/images/text.png';
+				$image = 'assets/theme-plus/images/text.png';
 				break;
 
 			case 'url':
-				$image = 'system/modules/theme-plus/assets/images/url.png';
+				$image = 'assets/theme-plus/images/url.png';
 				break;
 
 			case 'file':
@@ -70,11 +70,11 @@ class Variable
 				break;
 
 			case 'color':
-				$image = 'system/modules/theme-plus/assets/images/color.png';
+				$image = 'assets/theme-plus/images/color.png';
 				break;
 
 			case 'size':
-				$image = 'system/modules/theme-plus/assets/images/size.png';
+				$image = 'assets/theme-plus/images/size.png';
 				break;
 
 			default:
@@ -83,9 +83,12 @@ class Variable
 
 		if ($image) {
 			$image = \Image::getHtml(
-				$image,
-				$GLOBALS['TL_LANG']['tl_theme_plus_variable'][$variable->type][0],
-				'style="vertical-align:middle" title="' . specialchars($GLOBALS['TL_LANG']['tl_theme_plus_variable'][$variable->type][0]) . '"')
+					$image,
+					$GLOBALS['TL_LANG']['tl_theme_plus_variable'][$variable->type][0],
+					'style="vertical-align:middle" title="' . specialchars(
+						$GLOBALS['TL_LANG']['tl_theme_plus_variable'][$variable->type][0]
+					) . '"'
+				)
 				. ' ';
 		}
 

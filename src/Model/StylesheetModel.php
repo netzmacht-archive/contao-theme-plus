@@ -18,8 +18,10 @@ namespace Bit3\Contao\ThemePlus\Model;
  */
 class StylesheetModel extends \Model
 {
+
 	/**
 	 * Table name
+	 *
 	 * @var string
 	 */
 	protected static $strTable = 'tl_theme_plus_stylesheet';
@@ -33,19 +35,25 @@ class StylesheetModel extends \Model
 	 *
 	 * @return \Model\Collection|null The model collection or null if the result is empty
 	 */
-	public static function findByPks($arrPks, array $arrOptions = array())
+	public static function findByPks($arrPks, array $arrOptions = [])
 	{
-		if (!is_array($arrPks) || empty($arrPks))
-		{
+		if (!is_array($arrPks) || empty($arrPks)) {
 			return null;
 		}
 
-		$arrOptions = array_merge($arrOptions, array
-		(
-			'column' => array(static::$strTable . '.' . static::$strPk . ' IN (' . rtrim(str_repeat('?,', count($arrPks)), ',') . ')'),
-			'value'  => $arrPks,
-			'return' => 'Collection'
-		));
+		$arrOptions = array_merge(
+			$arrOptions,
+			[
+				'column' => [
+					static::$strTable . '.' . static::$strPk . ' IN (' . rtrim(
+						str_repeat('?,', count($arrPks)),
+						','
+					) . ')'
+				],
+				'value'  => $arrPks,
+				'return' => 'Collection'
+			]
+		);
 
 		return static::find($arrOptions);
 	}

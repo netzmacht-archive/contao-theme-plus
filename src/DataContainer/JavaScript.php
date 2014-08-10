@@ -28,22 +28,26 @@ class JavaScript extends File
 		}
 
 		if (!$this->User->hasAccess('theme_plus_javascript', 'themes')) {
-			$this->log('Not enough permissions to access the Theme+ javascript module', 'tl_theme_plus_javascript checkPermission', TL_ERROR);
+			$this->log(
+				'Not enough permissions to access the Theme+ javascript module',
+				'tl_theme_plus_javascript checkPermission',
+				TL_ERROR
+			);
 			$this->redirect('contao/main.php?act=error');
 		}
 	}
 
-    public function rememberType($varValue)
-    {
-        \Session::getInstance()->set('THEME_PLUS_LAST_JS_TYPE', $varValue);
+	public function rememberType($varValue)
+	{
+		\Session::getInstance()->set('THEME_PLUS_LAST_JS_TYPE', $varValue);
 
-        return $varValue;
-    }
+		return $varValue;
+	}
 
-    public function getAsseticFilterOptions()
-    {
-        return $this->buildAsseticFilterOptions('js');
-    }
+	public function getAsseticFilterOptions()
+	{
+		return $this->buildAsseticFilterOptions('js');
+	}
 
 	public function loadLayouts($value, $dc)
 	{

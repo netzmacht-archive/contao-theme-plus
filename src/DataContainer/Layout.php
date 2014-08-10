@@ -20,45 +20,55 @@ use Bit3\Contao\ThemePlus\Model\StylesheetModel;
  * Class Layout
  */
 class Layout
-    extends \Backend
+	extends \Backend
 {
-    public function getStylesheets($dc)
-    {
-        $stylesheet = StylesheetModel::findBy('pid',
-                                              $dc->activeRecord->pid,
-                                              array('order' => 'sorting'));
+	public function getStylesheets($dc)
+	{
+		$stylesheet = StylesheetModel::findBy(
+			'pid',
+			$dc->activeRecord->pid,
+			['order' => 'sorting']
+		);
 
-        return $stylesheet
-            ? $this->buildOptions($stylesheet)
-            : array();
-    }
+		return $stylesheet
+			? $this->buildOptions($stylesheet)
+			: [];
+	}
 
-    public function getJavaScripts($dc)
-    {
-        $javascripts = JavaScriptModel::findBy('pid',
-                                               $dc->activeRecord->pid,
-                                               array('order' => 'sorting'));
+	public function getJavaScripts($dc)
+	{
+		$javascripts = JavaScriptModel::findBy(
+			'pid',
+			$dc->activeRecord->pid,
+			['order' => 'sorting']
+		);
 
-        return $javascripts
-            ? $this->buildOptions($javascripts)
-            : array();
-    }
+		return $javascripts
+			? $this->buildOptions($javascripts)
+			: [];
+	}
 
-    protected function buildOptions(\Model\Collection $collection)
-    {
-        while ($collection->next()) {
-            switch ($collection->type) {
-                case 'code':
-                    $label = $collection->code_snippet_title;
-                    break;
+	protected function buildOptions(\Model\Collection $collection)
+	{
+		while ($collection->next()) {
+			switch ($collection->type) {
+				case 'code':
+					$label = $collection->code_snippet_title;
+					break;
 
-                case 'url':
-                    $label = preg_replace('#/([^/]+)$#', '/<strong>$1</strong>', $collection->url);
-                    break;
+				case 'url':
+					$label = preg_replace('#/([^/]+)$#', '/<strong>$1</strong>', $collection->url);
+					break;
 
-                case 'file':
-					if ($collection->filesource == $GLOBALS['TL_CONFIG']['uploadPath'] && version_compare(VERSION, '3', '>=')) {
-						$file = (version_compare(VERSION, '3.2', '>=') ? \FilesModel::findByUuid($collection->file) : \FilesModel::findByPk($collection->file));
+				case 'file':
+					if ($collection->filesource == $GLOBALS['TL_CONFIG']['uploadPath'] && version_compare(
+							VERSION,
+							'3',
+							'>='
+						)
+					) {
+						$file = (version_compare(VERSION, '3.2', '>=') ? \FilesModel::findByUuid($collection->file)
+							: \FilesModel::findByPk($collection->file));
 
 						if ($file) {
 							$label = preg_replace('#/([^/]+)$#', '/<strong>$1</strong>', $file->path);
@@ -70,28 +80,30 @@ class Layout
 						break;
 					}
 
-                default:
-                    $label = '?';
-            }
+				default:
+					$label = '?';
+			}
 
-            if (strlen($collection->cc)) {
-                $label .= ' <span style="padding-left: 3px; color: #B3B3B3;">[' . $collection->cc . ']</span>';
-            }
+			if (strlen($collection->cc)) {
+				$label .= ' <span style="padding-left: 3px; color: #B3B3B3;">[' . $collection->cc . ']</span>';
+			}
 
 			$filterRules = File::renderFilterRules($collection->row());
 			if ($filterRules) {
-                $label .= ' <span style="padding-left: 3px; color: #B3B3B3;">' . $filterRules . '</span>';
-            }
+				$label .= ' <span style="padding-left: 3px; color: #B3B3B3;">' . $filterRules . '</span>';
+			}
 
-            $image = 'system/modules/theme-plus/assets/images/' . $collection->type . '.png';
+			$image = 'assets/theme-plus/images/' . $collection->type . '.png';
 
-            $options[$collection->id] = ($image
-                ? $this->generateImage($image,
-                                       $label,
-                                       'style="vertical-align:-3px"') . ' '
-                : '') . $label;
-        }
+			$options[$collection->id] = ($image
+					? $this->generateImage(
+						$image,
+						$label,
+						'style="vertical-align:-3px"'
+					) . ' '
+					: '') . $label;
+		}
 
-        return $options;
-    }
+		return $options;
+	}
 }

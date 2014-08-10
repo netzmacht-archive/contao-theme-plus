@@ -13,9 +13,8 @@
 
 namespace Bit3\Contao\ThemePlus\DataContainer;
 
-use ContaoAssetic\Model\FilterModel;
-use ContaoAssetic\Model\FilterChainModel;
-use Ikimea\Browser\Browser;
+use Bit3\Contao\Assetic\Model\FilterChainModel;
+use Bit3\Contao\Assetic\Model\FilterModel;
 
 /**
  * Class ThemePlus
@@ -32,9 +31,9 @@ class File
 	{
 		if (strlen($row['filter'])) {
 			$rules      = deserialize($row['filterRule'], true);
-			$conditions = array();
+			$conditions = [];
 			foreach ($rules as $rule) {
-				$condition = array();
+				$condition = [];
 
 				if (!empty($rule['system'])) {
 					$condition[] = $rule['system'];
@@ -110,7 +109,8 @@ class File
 
 			case 'file':
 				if ($row['filesource'] == $GLOBALS['TL_CONFIG']['uploadPath'] && version_compare(VERSION, '3', '>=')) {
-					$file = (version_compare(VERSION, '3.2', '>=') ? \FilesModel::findByUuid($row['file']) : \FilesModel::findByPk($row['file']));
+					$file = (version_compare(VERSION, '3.2', '>=') ? \FilesModel::findByUuid($row['file'])
+						: \FilesModel::findByPk($row['file']));
 
 					if ($file) {
 						$label = preg_replace('#/([^/]+)$#', '/<strong>$1</strong>', $file->path);
@@ -142,7 +142,7 @@ class File
 			);
 		}
 
-		$image = 'system/modules/theme-plus/assets/images/' . $row['type'] . '.png';
+		$image = 'assets/theme-plus/images/' . $row['type'] . '.png';
 
 		return '<div>' . ($image
 			? $this->generateImage(
@@ -158,18 +158,18 @@ class File
 	{
 		$this->loadLanguageFile('assetic');
 
-		$options = array();
+		$options = [];
 
 		$filterChain = FilterChainModel::findBy(
 			'type',
 			$type,
-			array('order' => 'type')
+			['order' => 'type']
 		);
 		if ($filterChain) {
 			while ($filterChain->next()) {
 				$label = '[';
 				$label .= $GLOBALS['TL_LANG']['tl_assetic_filter_chain']['types'][$filterChain->type]
-					? : $filterChain->type;
+					?: $filterChain->type;
 				$label .= '] ';
 				$label .= $filterChain->name;
 
@@ -179,7 +179,7 @@ class File
 			}
 		}
 
-		$filter = FilterModel::findAll(array('order' => 'type'));
+		$filter = FilterModel::findAll(['order' => 'type']);
 		if ($filter) {
 			while ($filter->next()) {
 				if (!in_array(
@@ -191,7 +191,7 @@ class File
 				}
 
 				$label = $GLOBALS['TL_LANG']['assetic'][$filter->type]
-					? : $filter->type;
+					?: $filter->type;
 
 				if ($filter->note) {
 					$label .= ' [' . $filter->note . ']';
@@ -208,7 +208,7 @@ class File
 
 	protected function filterBrowserProperties($prefix)
 	{
-		$options   = array();
+		$options   = [];
 		$regexp    = '#^' . preg_quote($prefix) . '#';
 		$class     = new \ReflectionClass('Ikimea\Browser\Browser');
 		$constants = $class->getConstants();
@@ -254,9 +254,10 @@ class File
 				 FROM tl_layout l
 				 INNER JOIN tl_theme t
 				 ON t.id=l.pid
-				 ORDER BY t.name, l.name');
+				 ORDER BY t.name, l.name'
+			);
 
-		$options = array();
+		$options = [];
 
 		while ($layout->next()) {
 			$options[$layout->theme][$layout->id] = $layout->name;
@@ -270,7 +271,7 @@ class File
 		$layout = \Database::getInstance()
 			->query('SELECT * FROM tl_layout');
 
-		$values = array();
+		$values = [];
 
 		while ($layout->next()) {
 			$selected = deserialize($layout->$field, true);
@@ -310,7 +311,7 @@ class File
 
 			\Database::getInstance()
 				->prepare('UPDATE tl_layout %s WHERE id=?')
-				->set(array($field => serialize(array_values($selected))))
+				->set([$field => serialize(array_values($selected))])
 				->execute($layout->id);
 		}
 

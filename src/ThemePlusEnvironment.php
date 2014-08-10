@@ -13,19 +13,6 @@
 
 namespace Bit3\Contao\ThemePlus;
 
-use Template;
-use FrontendTemplate;
-use Bit3\Contao\ThemePlus\DataContainer\File;
-use Bit3\Contao\ThemePlus\Model\StylesheetModel;
-use Bit3\Contao\ThemePlus\Model\JavaScriptModel;
-use Bit3\Contao\ThemePlus\Model\VariableModel;
-use ContaoAssetic\AsseticFactory;
-use Assetic\Asset\AssetInterface;
-use Assetic\Asset\FileAsset;
-use Assetic\Asset\HttpAsset;
-use Assetic\Asset\StringAsset;
-use Assetic\Asset\AssetCollection;
-
 /**
  * Class ThemePlusEnvironment
  */
@@ -51,19 +38,17 @@ class ThemePlusEnvironment
 			if (TL_MODE == 'FE') {
 				// request the BE_USER_AUTH login status
 				$cookieName = 'BE_USER_AUTH';
-				$ip   = \Environment::get('ip');
-				$hash = \Input::cookie($cookieName);
+				$ip         = \Environment::get('ip');
+				$hash       = \Input::cookie($cookieName);
 
 				// Check the cookie hash
-				if ($hash == sha1(session_id() . (!$GLOBALS['TL_CONFIG']['disableIpCheck'] ? $ip : '') . $cookieName))
-				{
+				if ($hash == sha1(session_id() . (!$GLOBALS['TL_CONFIG']['disableIpCheck'] ? $ip : '') . $cookieName)) {
 					$session = \Database::getInstance()
 						->prepare("SELECT * FROM tl_session WHERE hash=? AND name=?")
 						->execute($hash, $cookieName);
 
 					// Try to find the session in the database
-					if ($session->next())
-					{
+					if ($session->next()) {
 						$time = time();
 
 						// Validate the session
@@ -73,10 +58,12 @@ class ThemePlusEnvironment
 							($session->tstamp + $GLOBALS['TL_CONFIG']['sessionTimeout']) >= $time
 						) {
 							$userId = $session->pid;
-							$user = \UserModel::findByPk($userId);
+							$user   = \UserModel::findByPk($userId);
 
 							if ($user) {
-								static::setDesignerMode($user->themePlusDesignerMode || \Input::get('theme_plus_compile_assets'));
+								static::setDesignerMode(
+									$user->themePlusDesignerMode || \Input::get('theme_plus_compile_assets')
+								);
 							}
 						}
 					}
@@ -138,7 +125,7 @@ class ThemePlusEnvironment
 	 *
 	 * @var array
 	 */
-	protected $files = array();
+	protected $files = [];
 
 	/**
 	 * Singleton constructor.
@@ -187,16 +174,16 @@ class ThemePlusEnvironment
 	}
 
 
-    /**
-     * Determine if the pre-compile mode is enabled.
-     *
-     * @bool
-     */
-    public static function isInPreCompileMode()
-    {
-        return static::isDesignerMode() &&
-            \Input::get('theme_plus_compile_assets');
-    }
+	/**
+	 * Determine if the pre-compile mode is enabled.
+	 *
+	 * @bool
+	 */
+	public static function isInPreCompileMode()
+	{
+		return static::isDesignerMode() &&
+		\Input::get('theme_plus_compile_assets');
+	}
 
 	/**
 	 * Shorthand check if current request is from a desktop.
@@ -224,26 +211,10 @@ class ThemePlusEnvironment
 		$browserIdentOverwrite = json_decode(\Session::getInstance()->get(self::BROWSER_IDENT_OVERWRITE));
 
 		if ($browserIdentOverwrite && $browserIdentOverwrite->platform) {
-			return in_array($browserIdentOverwrite->platform, array('tablet', 'mobile'));
+			return in_array($browserIdentOverwrite->platform, ['tablet', 'tablet-or-mobile', 'mobile']);
 		}
 
 		return static::getMobileDetect()->isTablet();
-	}
-
-	/**
-	 * Shorthand check if current request is from a smartphone.
-	 *
-	 * @return bool
-	 */
-	public static function isSmartphone()
-	{
-		$browserIdentOverwrite = json_decode(\Session::getInstance()->get(self::BROWSER_IDENT_OVERWRITE));
-
-		if ($browserIdentOverwrite && $browserIdentOverwrite->platform) {
-			return in_array($browserIdentOverwrite->platform, array('smartphone', 'mobile'));
-		}
-
-		return static::getMobileDetect()->isMobile() && !static::getMobileDetect()->isTablet();
 	}
 
 	/**
@@ -256,7 +227,7 @@ class ThemePlusEnvironment
 		$browserIdentOverwrite = json_decode(\Session::getInstance()->get(self::BROWSER_IDENT_OVERWRITE));
 
 		if ($browserIdentOverwrite && $browserIdentOverwrite->platform) {
-			return in_array($browserIdentOverwrite->platform, array('tablet', 'smartphone', 'mobile'));
+			return in_array($browserIdentOverwrite->platform, ['tablet', 'tablet-or-mobile', 'mobile']);
 		}
 
 		return static::getMobileDetect()->isMobile() || static::getMobileDetect()->isTablet();

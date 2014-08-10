@@ -1,0 +1,199 @@
+<?xml version="1.0"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="system/modules/theme-plus/languages/de/tl_theme_plus_stylesheet.php" source-language="en" datatype="php" date="2012-11-08T21:49:41+00:00">
+    <body>
+      <trans-unit id="tl_theme_plus_stylesheet.type.0">
+        <source>File type</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.type.1">
+        <source>Please select the file type.</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.filesource.0">
+        <source>Source</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.filesource.1">
+        <source>Please select from the directory where the file is to be placed.</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.code_snippet_title.0">
+        <source>Code snippet title</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.code_snippet_title.1">
+        <source>Please enter a title for the code snippet.</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.file.0">
+        <source>File</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.file.1">
+        <source>Please select the CSS file.</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.url.0">
+        <source>URL</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.url.1">
+        <source>Please enter the URL to the CSS file.</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.fetchUrl.0">
+        <source>Load URL</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.fetchUrl.1">
+        <source>Load files and integrate them locally, rather than include them as an external file.</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.code.0">
+        <source>Code snippet</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.code.1">
+        <source>Please enter your CSS code snippet.</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.layouts.0">
+        <source>Layouts</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.layouts.1">
+        <source>Please choose the layout in which the style sheet is to be integrated.</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.cc.0">
+        <source>Conditional Comment</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.cc.1">
+        <source>Conditional Comments ermöglichen das Einbinden Internet Explorer-spezifischer Dateien. Hier muss nur die Bedingung z.B. &quot;lte IE 7&quot; oder &quot;IE 9&quot; eingefügt werden. Der Prefix &quot;&amp;lt;!--[if&quot; bzw. Sufix &quot;]&amp;gt;&quot; werden automatisch eingefügt.</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.filter.0">
+        <source>Apply filter</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.filter.1">
+        <source>Wählen Sie diese Option, können Sie verschiedene Serverseitige Filter anwenden. (Achtung: Dieses Feature ist inkompatibel zum Seitencache! Eine entsprechende Änderung an Contao wurde bereits beantragt.)</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.filterRule.0">
+        <source>Filter</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.filterRule.1">
+        <source>Here you can select the server-side filters.</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.editor_integration.0">
+        <source>WYSIWYG editor integration</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.editor_integration.1">
+        <source>Hier kann die Datei dem WYSIWYG Editor hinzugefügt werden. Lesen Sie hierzu die Hinweise im Handbuch.</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.force_editor_integration.0">
+        <source>Enforce WYSIWYG editor integration</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.force_editor_integration.1">
+        <source>HTML WYSIWYG editor added even if this was not assigned to the layout.</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.asseticFilter.0">
+        <source>Assetic filter</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.asseticFilter.1">
+        <source>Please choose a Assetic filter or a filter chain, which are applied to this file.</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.standalone.0">
+        <source>Standalone</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.standalone.1">
+        <source>Do not combine this asset with the others in the layout.</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.source_legend">
+        <source>File type</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.file_legend">
+        <source>File source</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.layouts_legend">
+        <source>Layout assignment</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.filter_legend">
+        <source>Filter settings</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.editor_legend">
+        <source>WYSIWYG editor integration</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.assetic_legend">
+        <source>Assetic settings</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.expert_legend">
+        <source>Expert settings</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.editors.default">
+        <source>Default editor</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.editors.newsletter">
+        <source>Newsletter Editor</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.editors.flash">
+        <source>Flash Editor</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.positions.head">
+        <source>In &amp;lt;head&amp;gt;</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.positions.body">
+        <source>at the end of &lt;body&gt;</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.new.0">
+        <source>New CSS</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.new.1">
+        <source>Add a new CSS</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.newUrl.0">
+        <source>URL</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.newUrl.1">
+        <source>Create a new CSS URL</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.newFile.0">
+        <source>File</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.newFile.1">
+        <source>Create a new CSS file</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.newCode.0">
+        <source>Code</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.newCode.1">
+        <source>Creae a new CSS code snippet</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.show.0">
+        <source>Details</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.show.1">
+        <source>Details of the file ID %s</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.edit.0">
+        <source>Edit file</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.edit.1">
+        <source>Edit file ID %s</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.delete.0">
+        <source>Delete file</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.delete.1">
+        <source>Delete file ID %s</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.cut.0">
+        <source>Move file</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.cut.1">
+        <source>Move file ID %s</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.copy.0">
+        <source>Duplicate file</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.copy.1">
+        <source>Duplicate file ID %s</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.pasteafter.0">
+        <source>Insert above</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.pasteafter.1">
+        <source>Insert after the file ID %s</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.pastenew.0">
+        <source>Create a new file above</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.pastenew.1">
+        <source>Create new element after the file ID %s</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

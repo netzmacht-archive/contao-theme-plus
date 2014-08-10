@@ -17,6 +17,6 @@ namespace Bit3\Contao\ThemePlus\DataContainer;
  * Class Content
  */
 class Content
-    extends Page
+	extends Page
 {
 }

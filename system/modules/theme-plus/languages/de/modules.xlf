@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="system/modules/theme-plus/languages/de/modules.php" source-language="de" datatype="php" date="2012-11-08T21:49:41+00:00" target-language="de">
+    <body>
+      <trans-unit id="MOD.theme_plus.0">
+        <source xml:lang="de">Theme+</source>
+        <target xml:lang="de">Theme+</target>
+      </trans-unit>
+      <trans-unit id="MOD.theme_plus.1">
+        <source xml:lang="de">Theme Erweiterung f&#xFC;r Contao mit Unterst&#xFC;tzung zum Einbinden, Minimieren, Komprimieren und Vereinigen von CSS und JavaScript Dateien.</source>
+        <target xml:lang="de">Theme Erweiterung f&#xFC;r Contao mit Unterst&#xFC;tzung zum Einbinden, Minimieren, Komprimieren und Vereinigen von CSS und JavaScript Dateien.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -13,32 +13,30 @@
 
 namespace Bit3\Contao\ThemePlus\Filter;
 
-use Bit3\Contao\ThemePlus\Filter\ContaoReplaceVariableFilter;
-use ContaoAssetic\DefaultFilterFactory;
-use ContaoAssetic\FilterFactory;
+use Bit3\Contao\Assetic\DefaultFilterFactory;
+use Bit3\Contao\Assetic\FilterFactory;
 
 class ThemePlusFilterFactory
-    extends DefaultFilterFactory
-    implements FilterFactory
+	extends DefaultFilterFactory
+	implements FilterFactory
 {
-    public function createFilter(array $filterConfig)
-    {
-        $filter = null;
+	public function createFilter(array $filterConfig)
+	{
+		$filter = null;
 
-        switch ($filterConfig['type']) {
-            case 'contaoReplaceVariable':
-                $filter = new ContaoReplaceVariableFilter();
-                break;
-            case 'contaoInsertTag':
-                $filter = new ContaoInsertTagFilter();
-                break;
-        }
-        
-        if($filter === null)
-        {
-            $filter = parent::createFilter($filterConfig);
-        }
+		switch ($filterConfig['type']) {
+			case 'contaoReplaceVariable':
+				$filter = new ContaoReplaceVariableFilter();
+				break;
+			case 'contaoInsertTag':
+				$filter = new ContaoInsertTagFilter();
+				break;
+		}
 
-        return $filter;
-    }
+		if ($filter === null) {
+			$filter = parent::createFilter($filterConfig);
+		}
+
+		return $filter;
+	}
 }

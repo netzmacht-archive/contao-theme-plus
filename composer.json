@@ -21,7 +21,7 @@
 		"source":"https://github.com/bit3/contao-theme-plus"
 	},
 	"require":{
-		"php":">=5.3",
+		"php":">=5.4",
 		"contao/core":">=3.2,<3.4-dev",
 		"contao-community-alliance/composer-plugin": "~2.0",
 		"contao-community-alliance/event-dispatcher": "~1.0",
@@ -33,10 +33,14 @@
 	},
 	"require-dev":{
 		"squizlabs/php_codesniffer":"1.*",
-		"bit3/php-coding-standard":"@dev"
+		"bit3/php-coding-standard":"@dev",
+		"pdepend/pdepend": "1.1.*"
 	},
 	"replace": {
 		"contao-legacy/theme_plus": "self.version"
+	},
+	"conflict": {
+		"symfony/event-dispatcher": "<2.4"
 	},
 	"autoload":{
 		"psr-4": {
@@ -46,8 +50,8 @@
 	"extra":{
 		"contao": {
 			"sources":{
-				"contao": "system/modules/theme-plus",
-				"assets/proxy.php": "assets/proxy.php"
+				"system/modules/theme-plus": "system/modules/theme-plus",
+				"assets/theme-plus": "assets/theme-plus"
 			},
 			"runonce":[
 				"runonce/upgrade_to_contao3_2.php"
