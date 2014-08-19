@@ -349,6 +349,22 @@ class ThemePlus
 			$defaultFilters = null;
 		}
 
+		// inject async.js if required
+		if ($layout->theme_plus_javascript_lazy_load) {
+			$asset = new ExtendedFileAsset(TL_ROOT . '/assets/theme-plus/js/async.js', [], TL_ROOT, 'assets/theme-plus/js/async.js');
+			$asset->setInline(true);
+
+			$event = new RenderAssetHtmlEvent($objPage, $layout, $defaultFilters, $asset, $this->developerTool);
+			$eventDispatcher->dispatch(ThemePlusEvents::RENDER_JAVASCRIPT_HTML, $event);
+
+			if ($layout->theme_plus_default_javascript_position == 'body') {
+				$sr['[[TL_THEME_PLUS]]'] .= $event->getHtml();
+			}
+			else {
+				$sr['[[TL_HEAD]]'] .= $event->getHtml();
+			}
+		}
+
 		// collect head javascript assets
 		$event = new CollectAssetsEvent($objPage, $layout);
 		$eventDispatcher->dispatch(ThemePlusEvents::COLLECT_HEAD_JAVASCRIPT_ASSETS, $event);
