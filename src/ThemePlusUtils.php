@@ -22,35 +22,6 @@ use Bit3\Contao\ThemePlus\Asset\ExtendedAssetInterface;
 class ThemePlusUtils
 {
 	/**
-	 * @param AssetCollectionInterface $collection
-	 * @param AssetCollectionInterface $combinedAssets
-	 * @param AssetCollectionInterface $standaloneAssets
-	 */
-	static public function splitAssets(
-		AssetCollectionInterface $collection,
-		AssetCollectionInterface $combinedAssets,
-		AssetCollectionInterface $standaloneAssets
-	) {
-		foreach ($collection as $asset) {
-			if ($asset instanceof AssetCollectionInterface) {
-				static::splitAssets($asset, $combinedAssets, $standaloneAssets);
-			}
-			else if (
-				$asset instanceof ExtendedAssetInterface && (
-					$asset->getMediaQuery() ||
-					$asset->getConditionalComment() ||
-					$asset->isStandalone()
-				)
-			) {
-				$standaloneAssets->add($asset);
-			}
-			else {
-				$combinedAssets->add($asset);
-			}
-		}
-	}
-
-	/**
 	 * Calculate the target path for the asset.
 	 *
 	 * @param \Assetic\Asset\AssetInterface $asset

@@ -39,7 +39,10 @@ $GLOBALS['TL_HOOKS']['replaceDynamicScriptTags']['themeplus'] = ['Bit3\Contao\Th
  * Event subscriber
  */
 $GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'Bit3\Contao\ThemePlus\StylesheetCollector';
+$GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'Bit3\Contao\ThemePlus\StylesheetRenderer';
 $GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'Bit3\Contao\ThemePlus\JavaScriptCollector';
+$GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'Bit3\Contao\ThemePlus\JavaScriptRenderer';
+$GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'Bit3\Contao\ThemePlus\AssetOrganizer';
 
 
 /**

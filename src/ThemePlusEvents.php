@@ -27,6 +27,28 @@ class ThemePlusEvents
 	const COLLECT_STYLESHEET_ASSETS = 'theme-plus.collect-stylesheet-assets';
 
 	/**
+	 * The ORGANIZE_STYLESHEET_ASSETS event occurs when the stylesheet assets must be organized into a specific order.
+	 *
+	 * The event listener method receives a Bit3\Contao\ThemePlus\Event\OrganizeAssetsEvent instance.
+	 *
+	 * @var string
+	 *
+	 * @api
+	 */
+	const ORGANIZE_STYLESHEET_ASSETS = 'theme-plus.organize-stylesheet-assets';
+
+	/**
+	 * The RENDER_STYLESHEET_HTML event occurs when the stylesheet asset is rendered into html.
+	 *
+	 * The event listener method receives a Bit3\Contao\ThemePlus\Event\RenderAssetHtmlEvent instance.
+	 *
+	 * @var string
+	 *
+	 * @api
+	 */
+	const RENDER_STYLESHEET_HTML = 'theme-plus.render-stylesheet-html';
+
+	/**
 	 * The COLLECT_HEAD_JAVASCRIPT_ASSETS event occurs when the javascript assets for a page should be collected.
 	 *
 	 * The event listener method receives a Bit3\Contao\ThemePlus\Event\CollectAssetsEvent instance.
@@ -47,4 +69,26 @@ class ThemePlusEvents
 	 * @api
 	 */
 	const COLLECT_BODY_JAVASCRIPT_ASSETS = 'theme-plus.collect-body-javascript-assets';
+
+	/**
+	 * The ORGANIZE_JAVASCRIPT_ASSETS event occurs when the javascript assets must be organized into a specific order.
+	 *
+	 * The event listener method receives a Bit3\Contao\ThemePlus\Event\OrganizeAssetsEvent instance.
+	 *
+	 * @var string
+	 *
+	 * @api
+	 */
+	const ORGANIZE_JAVASCRIPT_ASSETS = 'theme-plus.organize-javascript-assets';
+
+	/**
+	 * The RENDER_JAVASCRIPT_HTML event occurs when the javascript asset is rendered into html.
+	 *
+	 * The event listener method receives a Bit3\Contao\ThemePlus\Event\RenderAssetHtmlEvent instance.
+	 *
+	 * @var string
+	 *
+	 * @api
+	 */
+	const RENDER_JAVASCRIPT_HTML = 'theme-plus.render-javascript-html';
 }
