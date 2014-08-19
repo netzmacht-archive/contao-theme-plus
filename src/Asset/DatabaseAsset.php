@@ -314,6 +314,22 @@ class DatabaseAsset implements ExtendedAssetInterface, DelegateAssetInterface, \
 	/**
 	 * {@inheritdoc}
 	 */
+	public function isInline()
+	{
+		return $this->row['inline'];
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function setInline($inline)
+	{
+		$this->row['inline'] = (bool) $inline;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
 	public function serialize()
 	{
 		return serialize([$this->row, $this->type]);

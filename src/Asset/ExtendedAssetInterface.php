@@ -56,6 +56,18 @@ interface ExtendedAssetInterface extends AssetInterface
 	/**
 	 * @return bool
 	 */
+	public function isInline();
+
+	/**
+	 * @param bool $inline
+	 *
+	 * @return static
+	 */
+	public function setInline($inline);
+
+	/**
+	 * @return bool
+	 */
 	public function isStandalone();
 
 	/**

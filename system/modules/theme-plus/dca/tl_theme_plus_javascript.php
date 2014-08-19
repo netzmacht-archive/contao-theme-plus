@@ -119,7 +119,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = [
 	'palettes'        => [
 		'__selector__' => ['type', 'filter']
 	],
-	// MetaPalettes
+	// Meta palettes
 	'metapalettes'    => [
 		'default' => [
 			'source' => ['type']
@@ -130,7 +130,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = [
 			'layouts' => ['layouts'],
 			'filter'  => [':hide', 'cc', 'filter'],
 			'assetic' => [':hide', 'asseticFilter'],
-			'expert'  => [':hide', 'position', 'standalone'],
+			'expert'  => [':hide', 'position', 'inline'],
 		],
 		'url'     => [
 			'source'  => ['type'],
@@ -138,7 +138,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = [
 			'layouts' => ['layouts'],
 			'filter'  => [':hide', 'cc', 'filter'],
 			'assetic' => [':hide', 'asseticFilter'],
-			'expert'  => [':hide', 'position', 'standalone'],
+			'expert'  => [':hide', 'position', 'inline'],
 		],
 		'code'    => [
 			'source'  => ['type', 'code_snippet_title'],
@@ -146,12 +146,18 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = [
 			'layouts' => ['layouts'],
 			'filter'  => [':hide', 'cc', 'filter'],
 			'assetic' => [':hide', 'asseticFilter'],
-			'expert'  => [':hide', 'position', 'standalone'],
+			'expert'  => [':hide', 'position', 'inline'],
 		],
 	],
-	// MetaSubpalettes
+	// Meta sub palettes
 	'metasubpalettes' => [
 		'filter' => ['filterRule']
+	],
+	// Meta sub-select palettes
+	'metasubselectpalettes' => [
+		'inline' => [
+			'' => ['standalone'],
+		],
 	],
 	// Fields
 	'fields'          => [
@@ -358,11 +364,20 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = [
 			],
 			'sql'       => "blob NULL"
 		],
+		'inline'                   => [
+			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['inline'],
+			'exclude'   => true,
+			'filter'    => true,
+			'inputType' => 'checkbox',
+			'eval'      => ['submitOnChange' => true, 'tl_class' => 'w50'],
+			'sql'       => "char(1) NOT NULL default ''"
+		],
 		'standalone'             => [
 			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['standalone'],
 			'exclude'   => true,
 			'filter'    => true,
 			'inputType' => 'checkbox',
+			'eval'      => ['tl_class' => 'w50'],
 			'sql'       => "char(1) NOT NULL default ''"
 		],
 		'asseticFilter'      => [
