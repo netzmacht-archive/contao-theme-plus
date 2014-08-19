@@ -78,8 +78,15 @@ class proxy
 				// update the target path
 				$asset->setTargetPath('assets/theme-plus/proxy.php/:type/:id/:name');
 
+				// create debug informations
+				$buffer = '/*' . PHP_EOL;
+				$buffer .= ' * DEBUG' . PHP_EOL;
+				$buffer .= \Bit3\Contao\ThemePlus\ThemePlusUtils::getAssetDebugString($asset, ' * ') . PHP_EOL;
+				$buffer .= ' * END' . PHP_EOL;
+				$buffer .= ' */' . PHP_EOL . PHP_EOL;
+
 				// dump the asset
-				$buffer = $asset->dump($defaultFilters);
+				$buffer .= $asset->dump($defaultFilters);
 
 				$cachedAsset = new StringAsset($buffer, [], $asset->getSourceRoot(), $asset->getSourcePath());
 				$cachedAsset->setTargetPath($asset->getTargetPath());

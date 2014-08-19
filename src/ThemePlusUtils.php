@@ -289,7 +289,7 @@ class ThemePlusUtils
 	 */
 	public static function getDebugComment(AssetInterface $asset)
 	{
-		return '<!-- ' . static::getAssetDebugString($asset) . ' -->' . "\n";
+		return '<!-- ' . PHP_EOL . static::getAssetDebugString($asset, '  ') . PHP_EOL . '-->' . PHP_EOL;
 	}
 
 	/**
@@ -309,28 +309,66 @@ class ThemePlusUtils
 
 		if ($asset instanceof AssetCollectionInterface) {
 			/** @var AssetCollectionInterface $asset */
-			$string = 'collection { ' . 'target path: ' . $asset->getTargetPath() . ', ' . 'filters: [' . implode(
-					', ',
-					$filters
-				) . '], ' . 'last modified: ' . $asset->getLastModified();
+			$buffer = $depth . 'collection(' . get_class($asset) . ') {' . PHP_EOL;
 
+			if ($asset->getTargetPath()) {
+				$buffer .= $depth . '  target path: ' . $asset->getTargetPath() . PHP_EOL;
+			}
+			if (count($asset->getFilters())) {
+				$buffer .= $depth . '  filters: [' . PHP_EOL;
+
+				foreach ($asset->getFilters() as $filter) {
+					$buffer .= $depth . '    ' . get_class($filter) . PHP_EOL;
+				}
+
+				$buffer .= $depth . '  ]' . PHP_EOL;
+			}
+			$buffer .= $depth . '  last modified: ' . $asset->getLastModified() . PHP_EOL;
+
+			$buffer .= $depth . '  elements: [' . PHP_EOL;
 			foreach ($asset->all() as $child) {
-				$string .= "\n" . $depth . '- ' . static::getAssetDebugString(
-						$child,
-						$depth . '    '
-					);
+				$buffer .= static::getAssetDebugString($child, $depth . '    ') . PHP_EOL;
 			}
 
-			$string .= ' }';
-			return $string;
+			$buffer .= $depth . '}';
+			return $buffer;
+		}
+
+		else if ($asset instanceof DelegateAssetInterface) {
+			/** @var AssetCollectionInterface $asset */
+			$buffer = $depth . 'delegator(' . get_class($asset) . ') {' . PHP_EOL;
+			if ($asset instanceof DelegateAssetInterface) {
+				$buffer .= $depth . '  delegate: [' . PHP_EOL;
+				$buffer .= static::getAssetDebugString($asset->getAsset(), $depth . '    ') . PHP_EOL;
+				$buffer .= $depth . '  ]' . PHP_EOL;
+			}
+			$buffer .= $depth . '}';
+			return $buffer;
 		}
 
 		else {
-			return 'asset { ' . 'source path: ' . $asset->getSourcePath() . ', ' . 'target path: ' . $asset->getTargetPath(
-			) . ', ' . 'filters: [' . implode(
-				', ',
-				$filters
-			) . '], ' . 'last modified: ' . $asset->getLastModified() . ' }';
+			/** @var AssetCollectionInterface $asset */
+			$buffer = $depth . 'asset(' . get_class($asset) . ') {' . PHP_EOL;
+			$buffer .= $depth . '  source path: ' . $asset->getSourcePath() . PHP_EOL;
+			$buffer .= $depth . '  source root: ' . $asset->getSourceRoot() . PHP_EOL;
+
+			if ($asset->getTargetPath()) {
+				$buffer .= $depth . '  target path: ' . $asset->getTargetPath() . PHP_EOL;
+			}
+			if (count($asset->getFilters())) {
+				$buffer .= $depth . '  filters: [' . PHP_EOL;
+
+				foreach ($asset->getFilters() as $filter) {
+					$buffer .= $depth . '    ' . get_class($filter) . PHP_EOL;
+				}
+
+				$buffer .= $depth . '  ]' . PHP_EOL;
+			}
+
+			$buffer .= $depth . '  last modified: ' . $asset->getLastModified() . PHP_EOL;
+
+			$buffer .= $depth . '}';
+			return $buffer;
 		}
 	}
 
