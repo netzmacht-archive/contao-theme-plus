@@ -195,6 +195,10 @@ class ThemePlus
 				$filters
 			) . ']';
 
+		if (!is_dir(TL_ROOT . '/assets/' . $suffix)) {
+			mkdir(TL_ROOT . '/assets/' . $suffix);
+		}
+
 		// calculate path for collections
 		if ($asset instanceof AssetCollection) {
 			$string = $filters;
@@ -204,7 +208,7 @@ class ThemePlus
 						$suffix
 					);
 			}
-			return 'assets/css/' . substr(
+			return 'assets/' . $suffix . '/' . substr(
 				md5($string),
 				0,
 				8
@@ -213,7 +217,7 @@ class ThemePlus
 
 		// calculate cache path from content
 		else if ($asset instanceof StringAsset) {
-			return 'assets/css/' . substr(
+			return 'assets/' . $suffix . '/' . substr(
 				md5($filters . '-' . $asset->getContent() . '-' . $asset->getLastModified()),
 				0,
 				8
@@ -222,7 +226,7 @@ class ThemePlus
 
 		// calculate cache path from source path
 		else {
-			return 'assets/css/' . substr(
+			return 'assets/' . $suffix . '/' . substr(
 				md5($filters . '-' . $asset->getSourcePath() . '-' . $asset->getLastModified()),
 				0,
 				8
