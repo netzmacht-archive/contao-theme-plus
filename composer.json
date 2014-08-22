@@ -42,6 +42,8 @@
 	"conflict": {
 		"symfony/event-dispatcher": "<2.4"
 	},
+	"minimum-stability": "dev",
+	"prefer-stable": true,
 	"autoload":{
 		"psr-4": {
 			"Bit3\\Contao\\ThemePlus\\": "src"
