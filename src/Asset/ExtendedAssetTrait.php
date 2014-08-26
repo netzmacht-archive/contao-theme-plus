@@ -34,6 +34,11 @@ trait ExtendedAssetTrait
 	/**
 	 * @var bool
 	 */
+	protected $inline = false;
+
+	/**
+	 * @var bool
+	 */
 	protected $standalone = false;
 
 	/**
@@ -84,6 +89,25 @@ trait ExtendedAssetTrait
 	public function setCondition(ConditionInterface $condition = null)
 	{
 		$this->condition = $condition;
+		return $this;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isInline()
+	{
+		return $this->inline;
+	}
+
+	/**
+	 * @param bool $inline
+	 *
+	 * @return static
+	 */
+	public function setInline($inline)
+	{
+		$this->inline = (bool) $inline;
 		return $this;
 	}
 

@@ -211,7 +211,7 @@ class ThemePlusEnvironment
 		$browserIdentOverwrite = json_decode(\Session::getInstance()->get(self::BROWSER_IDENT_OVERWRITE));
 
 		if ($browserIdentOverwrite && $browserIdentOverwrite->platform) {
-			return in_array($browserIdentOverwrite->platform, ['tablet', 'tablet-or-mobile', 'mobile']);
+			return in_array($browserIdentOverwrite->platform, ['tablet', 'tablet-or-mobile']);
 		}
 
 		return static::getMobileDetect()->isTablet();
@@ -227,7 +227,7 @@ class ThemePlusEnvironment
 		$browserIdentOverwrite = json_decode(\Session::getInstance()->get(self::BROWSER_IDENT_OVERWRITE));
 
 		if ($browserIdentOverwrite && $browserIdentOverwrite->platform) {
-			return in_array($browserIdentOverwrite->platform, ['tablet', 'tablet-or-mobile', 'mobile']);
+			return in_array($browserIdentOverwrite->platform, ['tablet-or-mobile', 'mobile']);
 		}
 
 		return static::getMobileDetect()->isMobile() || static::getMobileDetect()->isTablet();

@@ -96,7 +96,7 @@ class File
 	 *
 	 * @return string
 	 */
-	public function listFile($row)
+	public function listFileFor($row, $layoutField = false)
 	{
 		switch ($row['type']) {
 			case 'code':
@@ -126,6 +126,25 @@ class File
 				$label = '?';
 		}
 
+		if ($row['inline']) {
+			\Controller::loadLanguageFile('tl_theme_plus_file');
+
+			$label = sprintf(
+				'<span title="%s">&lsaquo;&rsaquo;</span> %s',
+				htmlentities($GLOBALS['TL_LANG']['tl_theme_plus_file']['inline'], ENT_QUOTES, 'UTF-8'),
+				$label
+			);
+		}
+		else if ($row['standalone']) {
+			\Controller::loadLanguageFile('tl_theme_plus_file');
+
+			$label = sprintf(
+				'<span title="%s">&times;</span> %s',
+				htmlentities($GLOBALS['TL_LANG']['tl_theme_plus_file']['standalone'], ENT_QUOTES, 'UTF-8'),
+				$label
+			);
+		}
+
 		if (strlen($row['position'])) {
 			$label = '[' . strtoupper($row['position']) . '] ' . $label;
 		}
@@ -140,6 +159,47 @@ class File
 				'<br><span style="margin-left: 20px; padding-left: 3px; color: #B3B3B3;">[%s]</span>',
 				$filterRules
 			);
+		}
+
+		if ($layoutField) {
+			$assignedLayouts = [];
+			$themes          = \ThemeModel::findAll(['order' => 'name']);
+
+			foreach ($themes as $theme) {
+				$assignedThemeLayouts = [];
+				$layouts              = \LayoutModel::findBy('pid', $theme->id, ['order' => 'name']);
+
+				foreach ($layouts as $layout) {
+					$files = deserialize($layout->$layoutField, true);
+
+					if (in_array($row['id'], $files)) {
+						$assignedThemeLayouts[$layout->id] = $layout->name;
+					}
+				}
+
+				if (count($assignedThemeLayouts)) {
+					$assignedLayouts[$theme->name] = $assignedThemeLayouts;
+				}
+			}
+
+			if (count($assignedLayouts)) {
+				$label .= '<ul style="margin-left: 20px; padding-left: 3px; color: #B3B3B3;">';
+				foreach ($assignedLayouts as $theme => $layouts) {
+					$label .= '<li>';
+					$label .= sprintf('<strong>%s</strong>', $theme);
+					$label .= '<ul>';
+					foreach ($layouts as $id => $layout) {
+						$label .= sprintf(
+							'<li>&nbsp;&rdsh; <a href="%s">%s</a></li>',
+							\Backend::addToUrl('table=tl_layout&act=edit&id=' . $id),
+							$layout
+						);
+					}
+					$label .= '</ul>';
+					$label .= '</li>';
+				}
+				$label .= '</ul>';
+			}
 		}
 
 		$image = 'assets/theme-plus/images/' . $row['type'] . '.png';

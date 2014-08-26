@@ -34,12 +34,12 @@ $this->loadLanguageFile('tl_theme_plus_filter');
  */
 $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = [
 	// Config
-	'config'          => [
+	'config'                => [
 		'dataContainer'    => 'Table',
 		'ptable'           => 'tl_theme',
 		'enableVersioning' => true,
 		'onload_callback'  => [
-			['Bit3\Contao\ThemePlus\DataContainer\File', 'changeFileSource']
+			['Bit3\Contao\ThemePlus\DataContainer\JavaScript', 'changeFileSource']
 		],
 		'sql'              => [
 			'keys' => [
@@ -49,14 +49,14 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = [
 		],
 	],
 	// List
-	'list'            => [
+	'list'                  => [
 		'sorting'           => [
 			'mode'                  => 4,
 			'flag'                  => 11,
 			'fields'                => ['sorting'],
 			'panelLayout'           => 'filter;limit',
 			'headerFields'          => ['name', 'author', 'tstamp'],
-			'child_record_callback' => ['Bit3\Contao\ThemePlus\DataContainer\File', 'listFile'],
+			'child_record_callback' => ['Bit3\Contao\ThemePlus\DataContainer\JavaScript', 'listFile'],
 			'child_record_class'    => 'no_padding'
 		],
 		'global_operations' => [
@@ -116,11 +116,11 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = [
 		]
 	],
 	// Palettes
-	'palettes'        => [
+	'palettes'              => [
 		'__selector__' => ['type', 'filter']
 	],
-	// MetaPalettes
-	'metapalettes'    => [
+	// Meta palettes
+	'metapalettes'          => [
 		'default' => [
 			'source' => ['type']
 		],
@@ -130,7 +130,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = [
 			'layouts' => ['layouts'],
 			'filter'  => [':hide', 'cc', 'filter'],
 			'assetic' => [':hide', 'asseticFilter'],
-			'expert'  => [':hide', 'position', 'standalone'],
+			'expert'  => [':hide', 'position', 'inline'],
 		],
 		'url'     => [
 			'source'  => ['type'],
@@ -138,7 +138,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = [
 			'layouts' => ['layouts'],
 			'filter'  => [':hide', 'cc', 'filter'],
 			'assetic' => [':hide', 'asseticFilter'],
-			'expert'  => [':hide', 'position', 'standalone'],
+			'expert'  => [':hide', 'position', 'inline'],
 		],
 		'code'    => [
 			'source'  => ['type', 'code_snippet_title'],
@@ -146,15 +146,21 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = [
 			'layouts' => ['layouts'],
 			'filter'  => [':hide', 'cc', 'filter'],
 			'assetic' => [':hide', 'asseticFilter'],
-			'expert'  => [':hide', 'position', 'standalone'],
+			'expert'  => [':hide', 'position', 'inline'],
 		],
 	],
-	// MetaSubpalettes
-	'metasubpalettes' => [
+	// Meta sub palettes
+	'metasubpalettes'       => [
 		'filter' => ['filterRule']
 	],
+	// Meta sub-select palettes
+	'metasubselectpalettes' => [
+		'inline' => [
+			'' => ['standalone'],
+		],
+	],
 	// Fields
-	'fields'          => [
+	'fields'                => [
 		'id'                 => [
 			'sql' => "int(10) unsigned NOT NULL auto_increment"
 		],
@@ -309,7 +315,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = [
 						'label'            => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['system'],
 						'exclude'          => true,
 						'inputType'        => 'select',
-						'options_callback' => ['Bit3\Contao\ThemePlus\DataContainer\File', 'getSystems'],
+						'options_callback' => ['Bit3\Contao\ThemePlus\DataContainer\JavaScript', 'getSystems'],
 						'eval'             => [
 							'style'              => 'width:158px',
 							'includeBlankOption' => true
@@ -319,7 +325,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = [
 						'label'            => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['browser'],
 						'exclude'          => true,
 						'inputType'        => 'select',
-						'options_callback' => ['Bit3\Contao\ThemePlus\DataContainer\File', 'getBrowsers'],
+						'options_callback' => ['Bit3\Contao\ThemePlus\DataContainer\JavaScript', 'getBrowsers'],
 						'eval'             => [
 							'style'              => 'width:158px',
 							'includeBlankOption' => true
@@ -358,11 +364,20 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = [
 			],
 			'sql'       => "blob NULL"
 		],
-		'standalone'             => [
+		'inline'             => [
+			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['inline'],
+			'exclude'   => true,
+			'filter'    => true,
+			'inputType' => 'checkbox',
+			'eval'      => ['submitOnChange' => true, 'tl_class' => 'w50'],
+			'sql'       => "char(1) NOT NULL default ''"
+		],
+		'standalone'         => [
 			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['standalone'],
 			'exclude'   => true,
 			'filter'    => true,
 			'inputType' => 'checkbox',
+			'eval'      => ['tl_class' => 'w50'],
 			'sql'       => "char(1) NOT NULL default ''"
 		],
 		'asseticFilter'      => [

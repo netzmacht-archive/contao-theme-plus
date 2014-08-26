@@ -15,133 +15,10 @@ namespace Bit3\Contao\ThemePlus;
 
 use Assetic\Asset\AssetCollectionInterface;
 use Assetic\Asset\AssetInterface;
-use Assetic\Asset\StringAsset;
 use Bit3\Contao\ThemePlus\Asset\DelegateAssetInterface;
-use Bit3\Contao\ThemePlus\Asset\ExtendedAssetInterface;
 
 class ThemePlusUtils
 {
-	/**
-	 * @param AssetCollectionInterface $collection
-	 * @param AssetCollectionInterface $combinedAssets
-	 * @param AssetCollectionInterface $standaloneAssets
-	 */
-	static public function splitAssets(
-		AssetCollectionInterface $collection,
-		AssetCollectionInterface $combinedAssets,
-		AssetCollectionInterface $standaloneAssets
-	) {
-		foreach ($collection as $asset) {
-			if ($asset instanceof AssetCollectionInterface) {
-				static::splitAssets($asset, $combinedAssets, $standaloneAssets);
-			}
-			else if (
-				$asset instanceof ExtendedAssetInterface && (
-					$asset->getMediaQuery() ||
-					$asset->getConditionalComment() ||
-					$asset->isStandalone()
-				)
-			) {
-				$standaloneAssets->add($asset);
-			}
-			else {
-				$combinedAssets->add($asset);
-			}
-		}
-	}
-
-	/**
-	 * Calculate the target path for the asset.
-	 *
-	 * @param \Assetic\Asset\AssetInterface $asset
-	 * @param                               $suffix
-	 *
-	 * @return string
-	 */
-	public static function getAssetPath(AssetInterface $asset, $suffix)
-	{
-		$filters = [];
-		foreach ($asset->getFilters() as $v) {
-			$filters[] = get_class($v);
-		}
-		$filters = '[' . implode(
-				',',
-				$filters
-			) . ']';
-
-		while ($asset instanceof DelegateAssetInterface) {
-			$asset = $asset->getAsset();
-		}
-
-		// calculate path for collections
-		if ($asset instanceof AssetCollectionInterface) {
-			$string = $filters;
-			foreach ($asset->all() as $child) {
-				$string .= '-' . static::getAssetPath(
-						$child,
-						$suffix
-					);
-			}
-			return 'assets/css/' . substr(
-				md5($string),
-				0,
-				8
-			) . '-collection.' . $suffix;
-		}
-
-		// calculate cache path from content
-		else if ($asset instanceof StringAsset) {
-			return 'assets/css/' . substr(
-				md5($filters . '-' . $asset->getContent() . '-' . $asset->getLastModified()),
-				0,
-				8
-			) . '-' . basename($asset->getSourcePath()) . '.' . $suffix;
-		}
-
-		// calculate cache path from source path
-		else {
-			return 'assets/css/' . substr(
-				md5($filters . '-' . $asset->getSourcePath() . '-' . $asset->getLastModified()),
-				0,
-				8
-			) . '-' . basename(
-				$asset->getSourcePath(),
-				'.' . $suffix
-			) . '.' . $suffix;
-		}
-	}
-
-	/**
-	 * Store an asset.
-	 *
-	 * @param \Assetic\Asset\AssetInterface $asset
-	 * @param                               $suffix
-	 *
-	 * @return string
-	 */
-	public static function storeAsset(AssetInterface $asset, $suffix, $additionalFilters = null)
-	{
-		$path = static::getAssetPath(
-			$asset,
-			$suffix
-		);
-		$asset->setTargetPath($path);
-
-		if (!file_exists(TL_ROOT . '/' . $path)) {
-			$file = new \File($path);
-			$file->write(
-				$asset->dump(
-					$additionalFilters
-						? new \Assetic\Filter\FilterCollection($additionalFilters)
-						: null
-				)
-			);
-			$file->close();
-		}
-
-		return $path;
-	}
-
 	/**
 	 * Check filter settings.
 	 *
@@ -289,7 +166,7 @@ class ThemePlusUtils
 	 */
 	public static function getDebugComment(AssetInterface $asset)
 	{
-		return '<!-- ' . static::getAssetDebugString($asset) . ' -->' . "\n";
+		return '<!-- ' . PHP_EOL . static::getAssetDebugString($asset, '  ') . PHP_EOL . '-->' . PHP_EOL;
 	}
 
 	/**
@@ -309,28 +186,66 @@ class ThemePlusUtils
 
 		if ($asset instanceof AssetCollectionInterface) {
 			/** @var AssetCollectionInterface $asset */
-			$string = 'collection { ' . 'target path: ' . $asset->getTargetPath() . ', ' . 'filters: [' . implode(
-					', ',
-					$filters
-				) . '], ' . 'last modified: ' . $asset->getLastModified();
+			$buffer = $depth . 'collection(' . get_class($asset) . ') {' . PHP_EOL;
 
+			if ($asset->getTargetPath()) {
+				$buffer .= $depth . '  target path: ' . $asset->getTargetPath() . PHP_EOL;
+			}
+			if (count($asset->getFilters())) {
+				$buffer .= $depth . '  filters: [' . PHP_EOL;
+
+				foreach ($asset->getFilters() as $filter) {
+					$buffer .= $depth . '    ' . get_class($filter) . PHP_EOL;
+				}
+
+				$buffer .= $depth . '  ]' . PHP_EOL;
+			}
+			$buffer .= $depth . '  last modified: ' . $asset->getLastModified() . PHP_EOL;
+
+			$buffer .= $depth . '  elements: [' . PHP_EOL;
 			foreach ($asset->all() as $child) {
-				$string .= "\n" . $depth . '- ' . static::getAssetDebugString(
-						$child,
-						$depth . '    '
-					);
+				$buffer .= static::getAssetDebugString($child, $depth . '    ') . PHP_EOL;
 			}
 
-			$string .= ' }';
-			return $string;
+			$buffer .= $depth . '}';
+			return $buffer;
+		}
+
+		else if ($asset instanceof DelegateAssetInterface) {
+			/** @var AssetCollectionInterface $asset */
+			$buffer = $depth . 'delegator(' . get_class($asset) . ') {' . PHP_EOL;
+			if ($asset instanceof DelegateAssetInterface) {
+				$buffer .= $depth . '  delegate: [' . PHP_EOL;
+				$buffer .= static::getAssetDebugString($asset->getAsset(), $depth . '    ') . PHP_EOL;
+				$buffer .= $depth . '  ]' . PHP_EOL;
+			}
+			$buffer .= $depth . '}';
+			return $buffer;
 		}
 
 		else {
-			return 'asset { ' . 'source path: ' . $asset->getSourcePath() . ', ' . 'target path: ' . $asset->getTargetPath(
-			) . ', ' . 'filters: [' . implode(
-				', ',
-				$filters
-			) . '], ' . 'last modified: ' . $asset->getLastModified() . ' }';
+			/** @var AssetCollectionInterface $asset */
+			$buffer = $depth . 'asset(' . get_class($asset) . ') {' . PHP_EOL;
+			$buffer .= $depth . '  source path: ' . $asset->getSourcePath() . PHP_EOL;
+			$buffer .= $depth . '  source root: ' . $asset->getSourceRoot() . PHP_EOL;
+
+			if ($asset->getTargetPath()) {
+				$buffer .= $depth . '  target path: ' . $asset->getTargetPath() . PHP_EOL;
+			}
+			if (count($asset->getFilters())) {
+				$buffer .= $depth . '  filters: [' . PHP_EOL;
+
+				foreach ($asset->getFilters() as $filter) {
+					$buffer .= $depth . '    ' . get_class($filter) . PHP_EOL;
+				}
+
+				$buffer .= $depth . '  ]' . PHP_EOL;
+			}
+
+			$buffer .= $depth . '  last modified: ' . $asset->getLastModified() . PHP_EOL;
+
+			$buffer .= $depth . '}';
+			return $buffer;
 		}
 	}
 
@@ -348,23 +263,6 @@ class ThemePlusUtils
 			return '<!--[if ' . $cc . ']>' . $html . '<![endif]-->';
 		}
 		return $html;
-	}
-
-	/**
-	 * Strip static urls.
-	 */
-	public static function stripStaticURL($strUrl)
-	{
-		if (defined('TL_ASSETS_URL') &&
-			strlen(TL_ASSETS_URL) > 0 &&
-			strpos($strUrl, TL_ASSETS_URL) === 0
-		) {
-			return substr(
-				$strUrl,
-				strlen(TL_ASSETS_URL)
-			);
-		}
-		return $strUrl;
 	}
 
 	/**

@@ -17,10 +17,13 @@ use Assetic\Asset\AssetInterface;
 use Bit3\Contao\ThemePlus\Asset\DatabaseAsset;
 use Bit3\Contao\ThemePlus\Asset\ExtendedFileAsset;
 use Bit3\Contao\ThemePlus\Event\CollectAssetsEvent;
+use Bit3\Contao\ThemePlus\Event\GenerateAssetPathEvent;
+use Bit3\Contao\ThemePlus\Event\StripStaticDomainEvent;
 use Bit3\Contao\ThemePlus\Model\JavaScriptModel;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class JavaScriptCollector implements EventSubscriberInterface
+class JavaScriptCollectorSubscriber implements EventSubscriberInterface
 {
 	/**
 	 * {@inheritdoc}
@@ -41,8 +44,11 @@ class JavaScriptCollector implements EventSubscriberInterface
 		];
 	}
 
-	public function collectRuntimeJavaScripts(CollectAssetsEvent $event, $eventName)
-	{
+	public function collectRuntimeJavaScripts(
+		CollectAssetsEvent $event,
+		$eventName,
+		EventDispatcherInterface $eventDispatcher
+	) {
 		if (
 			$eventName == ThemePlusEvents::COLLECT_HEAD_JAVASCRIPT_ASSETS &&
 			$event->getLayout()->theme_plus_default_javascript_position != 'head' ||
@@ -60,9 +66,24 @@ class JavaScriptCollector implements EventSubscriberInterface
 				else {
 					list($javaScript, $mode) = explode('|', $javaScript);
 
+					$stripStaticDomainEvent = new StripStaticDomainEvent(
+						$event->getPage(), $event->getLayout(), $javaScript
+					);
+					$eventDispatcher->dispatch(ThemePlusEvents::STRIP_STATIC_DOMAIN, $stripStaticDomainEvent);
+					$javaScript = $stripStaticDomainEvent->getUrl();
+
 					$asset = new ExtendedFileAsset(TL_ROOT . '/' . $javaScript, [], TL_ROOT, $javaScript);
-					$asset->setTargetPath(ThemePlusUtils::getAssetPath($asset, 'css'));
 					$asset->setStandalone($mode != 'static');
+
+					$generateAssetPathEvent = new GenerateAssetPathEvent(
+						$event->getPage(),
+						$event->getLayout(),
+						$asset,
+						'js'
+					);
+					$eventDispatcher->dispatch(ThemePlusEvents::GENERATE_ASSET_PATH, $generateAssetPathEvent);
+
+					$asset->setTargetPath($generateAssetPathEvent->getPath());
 					$event->append($asset);
 				}
 			}
@@ -121,7 +142,7 @@ class JavaScriptCollector implements EventSubscriberInterface
 
 	public function collectPageJavaScripts(CollectAssetsEvent $event, $eventName)
 	{
-		$page          = $event->getPage();
+		$page = $event->getPage();
 		$javaScriptIds = [];
 
 		// add noinherit javascripts from current page

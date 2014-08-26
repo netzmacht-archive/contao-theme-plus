@@ -92,6 +92,12 @@
       <trans-unit id="tl_theme_plus_javascript.asseticFilter.1">
         <source>Please choose a Assetic filter or a filter chain, which are applied to this file.</source>
       </trans-unit>
+      <trans-unit id="tl_theme_plus_javascript.inline.0">
+        <source>Inline</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_javascript.inline.1">
+        <source>Add the asset inline into the html.</source>
+      </trans-unit>
       <trans-unit id="tl_theme_plus_javascript.standalone.0">
         <source>Standalone</source>
       </trans-unit>

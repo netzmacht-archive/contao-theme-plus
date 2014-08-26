@@ -34,12 +34,12 @@ $this->loadLanguageFile('tl_theme_plus_filter');
  */
 $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = [
 	// Config
-	'config'          => [
+	'config'                => [
 		'dataContainer'    => 'Table',
 		'ptable'           => 'tl_theme',
 		'enableVersioning' => true,
 		'onload_callback'  => [
-			['Bit3\Contao\ThemePlus\DataContainer\File', 'changeFileSource']
+			['Bit3\Contao\ThemePlus\DataContainer\Stylesheet', 'changeFileSource']
 		],
 		'sql'              => [
 			'keys' => [
@@ -49,14 +49,14 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = [
 		],
 	],
 	// List
-	'list'            => [
+	'list'                  => [
 		'sorting'           => [
 			'mode'                  => 4,
 			'flag'                  => 11,
 			'fields'                => ['sorting'],
 			'panelLayout'           => 'filter;limit',
 			'headerFields'          => ['name', 'author', 'tstamp'],
-			'child_record_callback' => ['Bit3\Contao\ThemePlus\DataContainer\File', 'listFile'],
+			'child_record_callback' => ['Bit3\Contao\ThemePlus\DataContainer\Stylesheet', 'listFile'],
 			'child_record_class'    => 'no_padding'
 		],
 		'global_operations' => [
@@ -116,11 +116,11 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = [
 		]
 	],
 	// Palettes
-	'palettes'        => [
+	'palettes'              => [
 		'__selector__' => ['type', 'filter']
 	],
-	// MetaPalettes
-	'metapalettes'    => [
+	// Meta palettes
+	'metapalettes'          => [
 		'default' => [
 			'source' => ['type']
 		],
@@ -131,7 +131,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = [
 			'filter'  => [':hide', 'cc', 'filter'],
 			'editor'  => [':hide', 'editor_integration', 'force_editor_integration'],
 			'assetic' => [':hide', 'asseticFilter'],
-			'expert'  => [':hide', 'standalone'],
+			'expert'  => [':hide', 'inline'],
 		],
 		'url'     => [
 			'source'  => ['type'],
@@ -140,7 +140,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = [
 			'filter'  => [':hide', 'cc', 'filter'],
 			'editor'  => [':hide', 'editor_integration', 'force_editor_integration'],
 			'assetic' => [':hide', 'asseticFilter'],
-			'expert'  => [':hide', 'standalone'],
+			'expert'  => [':hide', 'inline'],
 		],
 		'code'    => [
 			'source'  => ['type', 'code_snippet_title'],
@@ -149,15 +149,21 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = [
 			'filter'  => [':hide', 'cc', 'filter'],
 			'editor'  => [':hide', 'editor_integration', 'force_editor_integration'],
 			'assetic' => [':hide', 'asseticFilter'],
-			'expert'  => [':hide', 'standalone'],
-		]
+			'expert'  => [':hide', 'inline'],
+		],
 	],
-	// MetaSubpalettes
-	'metasubpalettes' => [
-		'filter' => ['filterRule']
+	// Meta sub palettes
+	'metasubpalettes'       => [
+		'filter' => ['filterRule'],
+	],
+	// Meta sub-select palettes
+	'metasubselectpalettes' => [
+		'inline' => [
+			'' => ['standalone'],
+		],
 	],
 	// Fields
-	'fields'          => [
+	'fields'                => [
 		'id'                       => [
 			'sql' => "int(10) unsigned NOT NULL auto_increment"
 		],
@@ -300,7 +306,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = [
 						'label'            => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['system'],
 						'exclude'          => true,
 						'inputType'        => 'select',
-						'options_callback' => ['Bit3\Contao\ThemePlus\DataContainer\File', 'getSystems'],
+						'options_callback' => ['Bit3\Contao\ThemePlus\DataContainer\Stylesheet', 'getSystems'],
 						'eval'             => [
 							'style'              => 'width:158px',
 							'includeBlankOption' => true
@@ -310,7 +316,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = [
 						'label'            => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['browser'],
 						'exclude'          => true,
 						'inputType'        => 'select',
-						'options_callback' => ['Bit3\Contao\ThemePlus\DataContainer\File', 'getBrowsers'],
+						'options_callback' => ['Bit3\Contao\ThemePlus\DataContainer\Stylesheet', 'getBrowsers'],
 						'eval'             => [
 							'style'              => 'width:158px',
 							'includeBlankOption' => true
@@ -364,11 +370,20 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = [
 			'inputType' => 'checkbox',
 			'sql'       => "char(1) NOT NULL default ''"
 		],
-		'standalone'             => [
+		'inline'                   => [
+			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['inline'],
+			'exclude'   => true,
+			'filter'    => true,
+			'inputType' => 'checkbox',
+			'eval'      => ['submitOnChange' => true, 'tl_class' => 'w50'],
+			'sql'       => "char(1) NOT NULL default ''"
+		],
+		'standalone'               => [
 			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['standalone'],
 			'exclude'   => true,
 			'filter'    => true,
 			'inputType' => 'checkbox',
+			'eval'      => ['tl_class' => 'w50'],
 			'sql'       => "char(1) NOT NULL default ''"
 		],
 		'asseticFilter'            => [

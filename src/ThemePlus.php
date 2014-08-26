@@ -13,15 +13,11 @@
 
 namespace Bit3\Contao\ThemePlus;
 
-use Assetic\Asset\AssetCollection;
-use Assetic\Asset\AssetCollectionInterface;
-use Assetic\Asset\AssetInterface;
-use Assetic\Asset\FileAsset;
-use Assetic\Asset\HttpAsset;
 use Bit3\Contao\Assetic\AsseticFactory;
-use Bit3\Contao\ThemePlus\Asset\DelegateAssetInterface;
-use Bit3\Contao\ThemePlus\Asset\ExtendedAssetInterface;
+use Bit3\Contao\ThemePlus\Asset\ExtendedFileAsset;
 use Bit3\Contao\ThemePlus\Event\CollectAssetsEvent;
+use Bit3\Contao\ThemePlus\Event\OrganizeAssetsEvent;
+use Bit3\Contao\ThemePlus\Event\RenderAssetHtmlEvent;
 use FrontendTemplate;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Template;
@@ -70,9 +66,9 @@ class ThemePlus
 
 			// the search and replace array
 			$sr = [
-				'[[TL_CSS]]'        => '',
+				'[[TL_CSS]]' => '',
 				'[[TL_THEME_PLUS]]' => '',
-				'[[TL_HEAD]]'       => '',
+				'[[TL_HEAD]]' => '',
 			];
 
 			// search for the layout
@@ -148,176 +144,27 @@ class ThemePlus
 
 		$collection = $event->getAssets();
 
-		if (ThemePlusEnvironment::isDesignerMode()) {
-			$sr['[[TL_CSS]]'] = $this->generateStylesheetDesignerModeHtml($collection);
+		/** @var AsseticFactory $asseticFactory */
+		$asseticFactory = $GLOBALS['container']['assetic.factory'];
+
+		// default filter
+		$defaultFilters = $asseticFactory->createFilterOrChain(
+			$layout->asseticStylesheetFilter,
+			ThemePlusEnvironment::isDesignerMode()
+		);
+
+		$event = new OrganizeAssetsEvent($objPage, $layout, $defaultFilters, $collection, $this->developerTool);
+		$eventDispatcher->dispatch(ThemePlusEvents::ORGANIZE_STYLESHEET_ASSETS, $event);
+
+		$collection = $event->getOrganizedAssets();
+		$assets     = $collection->all();
+
+		foreach ($assets as $asset) {
+			$event = new RenderAssetHtmlEvent($objPage, $layout, $defaultFilters, $asset, $this->developerTool);
+			$eventDispatcher->dispatch(ThemePlusEvents::RENDER_STYLESHEET_HTML, $event);
+
+			$sr['[[TL_CSS]]'] .= $event->getHtml();
 		}
-		else {
-			$combinedAssets   = new AssetCollection();
-			$standaloneAssets = new AssetCollection();
-
-			ThemePlusUtils::splitAssets($collection, $combinedAssets, $standaloneAssets);
-
-			/** @var AsseticFactory $asseticFactory */
-			$asseticFactory = $GLOBALS['container']['assetic.factory'];
-
-			// default filter
-			$defaultFilters = $asseticFactory->createFilterOrChain(
-				$layout->asseticStylesheetFilter,
-				ThemePlusEnvironment::isDesignerMode()
-			);
-
-			if (count($combinedAssets->all())) {
-				$sr['[[TL_CSS]]'] .= $this->generateStylesheetHtml($combinedAssets, $defaultFilters);
-			}
-
-			foreach ($standaloneAssets as $asset) {
-				$sr['[[TL_CSS]]'] .= $this->generateStylesheetHtml($asset, $defaultFilters);
-			}
-		}
-	}
-
-	/**
-	 * @param AssetCollectionInterface|AssetInterface[] $collection
-	 *
-	 * @return string
-	 */
-	protected function generateStylesheetDesignerModeHtml(AssetCollectionInterface $collection)
-	{
-		global $objPage;
-
-		// html mode
-		$xhtml     = ($objPage->outputFormat == 'xhtml');
-		$tagEnding = $xhtml ? ' />' : '>';
-
-		$html = '';
-
-		foreach ($collection as $asset) {
-			// deep link collections
-			if ($asset instanceof AssetCollectionInterface) {
-				$html .= $this->generateStylesheetDesignerModeHtml($asset);
-				continue;
-			}
-
-			// session id
-			$id = substr(md5($asset->getSourceRoot() . '/' . $asset->getSourcePath()), 0, 8);
-
-			// get the session object
-			$session = unserialize($_SESSION['THEME_PLUS_ASSETS'][$id]);
-
-			if (!$session || $asset->getLastModified() > $session->asset->getLastModified()) {
-				$session        = new \stdClass;
-				$session->page  = $objPage->id;
-				$session->asset = $asset;
-
-				$_SESSION['THEME_PLUS_ASSETS'][$id] = serialize($session);
-			}
-
-			$realAssets = $asset;
-			while ($realAssets instanceof DelegateAssetInterface) {
-				$realAssets = $realAssets->getAsset();
-			}
-
-			if ($realAssets instanceof FileAsset) {
-				$name = basename($realAssets->getSourcePath());
-			}
-			else if ($realAssets instanceof HttpAsset) {
-				$class    = new \ReflectionClass($realAssets);
-				$property = $class->getProperty('sourceUrl');
-				$property->setAccessible(true);
-				$url  = $property->getValue($realAssets);
-				$name = 'url_' . basename(parse_url($url, PHP_URL_PATH));
-			}
-			else {
-				$name = 'asset_' . $id;
-			}
-
-			// generate the proxy url
-			$url = sprintf(
-				'assets/theme-plus/proxy.php/css/%s/%s',
-				$id,
-				$name
-			);
-
-			// overwrite the target path
-			$asset->setTargetPath($url);
-
-			// remember asset for debug tool
-			$this->developerTool->registerFile(
-				$id,
-				(object) [
-					'asset' => $realAssets,
-					'type'  => 'css',
-					'url'   => $url,
-				]
-			);
-
-			// generate html
-			$linkHtml = '<link';
-			$linkHtml .= sprintf(' id="%s"', $id);
-			$linkHtml .= sprintf(' href="%s"', $url);
-			if ($xhtml) {
-				$linkHtml .= ' type="text/css"';
-			}
-			$linkHtml .= ' rel="stylesheet"';
-			if ($asset instanceof ExtendedAssetInterface && $asset->getMediaQuery()) {
-				$linkHtml .= sprintf(' media="%s"', $asset->getMediaQuery());
-			}
-			$linkHtml .= $tagEnding;
-
-			// wrap cc around
-			if ($asset instanceof ExtendedAssetInterface && $asset->getConditionalComment()) {
-				$linkHtml = ThemePlusUtils::wrapCc($linkHtml, $asset->getConditionalComment());
-			}
-
-			// add debug information
-			$html .= ThemePlusUtils::getDebugComment($asset);
-
-			$html .= $linkHtml . PHP_EOL;
-		}
-
-		return $html;
-	}
-
-	protected function generateStylesheetHtml(AssetInterface $asset, $defaultFilters)
-	{
-		$targetPath = ThemePlusUtils::getAssetPath($asset, 'css');
-
-		if (!file_exists(TL_ROOT . DIRECTORY_SEPARATOR . $targetPath)) {
-			// overwrite the target path
-			$asset->setTargetPath($targetPath);
-
-			// load and dump the collection
-			$asset->load($defaultFilters);
-			$css = $asset->dump($defaultFilters);
-
-			// write the asset
-			file_put_contents($targetPath, $css);
-		}
-
-		global $objPage;
-
-		// html mode
-		$xhtml     = ($objPage->outputFormat == 'xhtml');
-		$tagEnding = $xhtml ? ' />' : '>';
-
-		// generate html
-		$linkHtml = '<link';
-		$linkHtml .= sprintf(' href="%s"', $targetPath);
-		if ($xhtml) {
-			$linkHtml .= ' type="text/css"';
-		}
-		$linkHtml .= ' rel="stylesheet"';
-		if ($asset instanceof ExtendedAssetInterface && $asset->getMediaQuery()) {
-			$linkHtml .= sprintf(' media="%s"', $asset->getMediaQuery());
-		}
-		$linkHtml .= $tagEnding . PHP_EOL;
-
-		// wrap cc around
-		if ($asset instanceof ExtendedAssetInterface && $asset->getConditionalComment()) {
-			$linkHtml = ThemePlusUtils::wrapCc($linkHtml, $asset->getConditionalComment());
-		}
-
-		return $linkHtml;
 	}
 
 	/**
@@ -355,23 +202,11 @@ class ThemePlus
 
 		$collection = $event->getAssets();
 
-		if (ThemePlusEnvironment::isDesignerMode()) {
-			$sr['[[TL_HEAD]]'] = $this->generateJavaScriptDesignerModeHtml($collection, $layout);
-		}
-		else {
-			$combinedAssets   = new AssetCollection();
-			$standaloneAssets = new AssetCollection();
+		$event = new OrganizeAssetsEvent($objPage, $layout, $defaultFilters, $collection, $this->developerTool);
+		$eventDispatcher->dispatch(ThemePlusEvents::ORGANIZE_JAVASCRIPT_ASSETS, $event);
 
-			ThemePlusUtils::splitAssets($collection, $combinedAssets, $standaloneAssets);
-
-			if (count($combinedAssets->all())) {
-				$sr['[[TL_HEAD]]'] .= $this->generateJavaScriptHtml($combinedAssets, $defaultFilters, $layout);
-			}
-
-			foreach ($standaloneAssets as $asset) {
-				$sr['[[TL_HEAD]]'] .= $this->generateJavaScriptHtml($asset, $defaultFilters, $layout);
-			}
-		}
+		$collection = $event->getOrganizedAssets();
+		$headAssets = $collection->all();
 
 		// collect body javascript assets
 		$event = new CollectAssetsEvent($objPage, $layout);
@@ -379,197 +214,59 @@ class ThemePlus
 
 		$collection = $event->getAssets();
 
-		if (ThemePlusEnvironment::isDesignerMode()) {
-			$sr['[[TL_THEME_PLUS]]'] = $this->generateJavaScriptDesignerModeHtml($collection, $layout);
-		}
-		else {
-			$combinedAssets   = new AssetCollection();
-			$standaloneAssets = new AssetCollection();
+		$event = new OrganizeAssetsEvent($objPage, $layout, $defaultFilters, $collection, $this->developerTool);
+		$eventDispatcher->dispatch(ThemePlusEvents::ORGANIZE_JAVASCRIPT_ASSETS, $event);
 
-			ThemePlusUtils::splitAssets($collection, $combinedAssets, $standaloneAssets);
+		$collection = $event->getOrganizedAssets();
+		$bodyAssets = $collection->all();
 
-			if (count($combinedAssets->all())) {
-				$sr['[[TL_THEME_PLUS]]'] .= $this->generateJavaScriptHtml($combinedAssets, $defaultFilters, $layout);
-			}
+		$assetCount = count($headAssets) + count($bodyAssets);
 
-			foreach ($standaloneAssets as $asset) {
-				$sr['[[TL_THEME_PLUS]]'] .= $this->generateJavaScriptHtml($asset, $defaultFilters, $layout);
-			}
-		}
-	}
-
-	/**
-	 * @param AssetCollectionInterface|AssetInterface[] $collection
-	 *
-	 * @return string
-	 */
-	protected function generateJavaScriptDesignerModeHtml(AssetCollectionInterface $collection, \LayoutModel $layout)
-	{
-		global $objPage;
-
-		// html mode
-		$xhtml = ($objPage->outputFormat == 'xhtml');
-
-		$html = '';
-
-		foreach ($collection as $asset) {
-			// deep link collections
-			if ($asset instanceof AssetCollectionInterface) {
-				$html .= $this->generateStylesheetDesignerModeHtml($asset);
-				continue;
-			}
-
-			// session id
-			$id = substr(md5($asset->getSourceRoot() . '/' . $asset->getSourcePath()), 0, 8);
-
-			// get the session object
-			$session = unserialize($_SESSION['THEME_PLUS_ASSETS'][$id]);
-
-			if (!$session || $asset->getLastModified() > $session->asset->getLastModified()) {
-				$session        = new \stdClass;
-				$session->page  = $objPage->id;
-				$session->asset = $asset;
-
-				$_SESSION['THEME_PLUS_ASSETS'][$id] = serialize($session);
-			}
-
-			$realAssets = $asset;
-			while ($realAssets instanceof DelegateAssetInterface) {
-				$realAssets = $realAssets->getAsset();
-			}
-
-			if ($realAssets instanceof FileAsset) {
-				$name = basename($realAssets->getSourcePath());
-			}
-			else if ($realAssets instanceof HttpAsset) {
-				$class    = new \ReflectionClass($realAssets);
-				$property = $class->getProperty('sourceUrl');
-				$property->setAccessible(true);
-				$url  = $property->getValue($realAssets);
-				$name = 'url_' . basename(parse_url($url, PHP_URL_PATH));
+		// inject async.js if required
+		if ($layout->theme_plus_javascript_lazy_load && $assetCount) {
+			if ($assetCount > 1) {
+				$asyncScript = 'async_multi';
 			}
 			else {
-				$name = 'asset_' . $id;
+				$asyncScript = 'async_single';
 			}
 
-			// generate the proxy url
-			$url = sprintf(
-				'assets/theme-plus/proxy.php/js/%s/%s',
-				$id,
-				$name
+			if ($this->developerTool) {
+				$asyncScript .= '_dev';
+			}
+
+			$asset = new ExtendedFileAsset(
+				TL_ROOT . '/assets/theme-plus/js/' . $asyncScript . '.js',
+				[],
+				TL_ROOT,
+				'assets/theme-plus/js/' . $asyncScript . '.js'
 			);
+			$asset->setInline(true);
 
-			// overwrite the target path
-			$asset->setTargetPath($url);
+			$event = new RenderAssetHtmlEvent($objPage, $layout, $defaultFilters, $asset, $this->developerTool);
+			$eventDispatcher->dispatch(ThemePlusEvents::RENDER_JAVASCRIPT_HTML, $event);
 
-			// remember asset for debug tool
-			$this->developerTool->registerFile(
-				$id,
-				(object) [
-					'asset' => $realAssets,
-					'type'  => 'js',
-					'url'   => $url,
-				]
-			);
-
-			// generate html
-			if ($layout->theme_plus_javascript_lazy_load) {
-				$scriptHtml = '<script';
-				$scriptHtml .= sprintf(' id="%s"', $id);
-				if ($xhtml) {
-					$scriptHtml .= ' type="text/javascript"';
-				}
-				$scriptHtml .= '>';
-				$scriptHtml .= sprintf(
-					'var s=document.createElement("script");' .
-					's.addEventListener("load",function(){window.themePlusDevTool && window.themePlusDevTool.triggerAsyncLoad(this, %s);});' .
-					's.async=true;' .
-					's.src=%s;' .
-					'document.head.appendChild(s);',
-					json_encode($id),
-					json_encode($url)
-				);
-				$scriptHtml .= '</script>';
+			if ($layout->theme_plus_default_javascript_position == 'body') {
+				$sr['[[TL_THEME_PLUS]]'] .= $event->getHtml();
 			}
 			else {
-				$scriptHtml = '<script';
-				$scriptHtml .= sprintf(' id="%s"', $id);
-				$scriptHtml .= sprintf(' src="%s"', $url);
-				if ($xhtml) {
-					$scriptHtml .= ' type="text/javascript"';
-				}
-				$scriptHtml .= sprintf(
-					' onload="window.themePlusDevTool && window.themePlusDevTool.triggerAsyncLoad(this, \'%s\');"',
-					$id
-				);
-				$scriptHtml .= '></script>';
+				$sr['[[TL_HEAD]]'] .= $event->getHtml();
 			}
-
-			// wrap cc around
-			if ($asset instanceof ExtendedAssetInterface && $asset->getConditionalComment()) {
-				$scriptHtml = ThemePlusUtils::wrapCc($scriptHtml, $asset->getConditionalComment());
-			}
-
-			// add debug information
-			$html .= ThemePlusUtils::getDebugComment($asset);
-
-			$html .= $scriptHtml . PHP_EOL;
 		}
 
-		return $html;
-	}
+		// write assets html
+		foreach ($headAssets as $asset) {
+			$event = new RenderAssetHtmlEvent($objPage, $layout, $defaultFilters, $asset, $this->developerTool);
+			$eventDispatcher->dispatch(ThemePlusEvents::RENDER_JAVASCRIPT_HTML, $event);
 
-	protected function generateJavaScriptHtml(AssetInterface $asset, $defaultFilters, \LayoutModel $layout)
-	{
-		$targetPath = ThemePlusUtils::getAssetPath($asset, 'js');
-
-		if (!file_exists(TL_ROOT . DIRECTORY_SEPARATOR . $targetPath)) {
-			// overwrite the target path
-			$asset->setTargetPath($targetPath);
-
-			// load and dump the collection
-			$asset->load($defaultFilters);
-			$css = $asset->dump($defaultFilters);
-
-			// write the asset
-			file_put_contents($targetPath, $css);
+			$sr['[[TL_HEAD]]'] .= $event->getHtml();
 		}
 
-		global $objPage;
+		foreach ($bodyAssets as $asset) {
+			$event = new RenderAssetHtmlEvent($objPage, $layout, $defaultFilters, $asset, $this->developerTool);
+			$eventDispatcher->dispatch(ThemePlusEvents::RENDER_JAVASCRIPT_HTML, $event);
 
-		// html mode
-		$xhtml = ($objPage->outputFormat == 'xhtml');
-
-		// generate html
-		if ($layout->theme_plus_javascript_lazy_load) {
-			$scriptHtml = '<script';
-			if ($xhtml) {
-				$scriptHtml .= ' type="text/javascript"';
-			}
-			$scriptHtml .= '>';
-			$scriptHtml .= sprintf(
-				'var s=document.createElement("script");' .
-				's.async=true;' .
-				's.src=%s;' .
-				'document.head.appendChild(s);',
-				json_encode($targetPath)
-			);
-			$scriptHtml .= '</script>';
+			$sr['[[TL_THEME_PLUS]]'] .= $event->getHtml();
 		}
-		else {
-			$scriptHtml = '<script';
-			$scriptHtml .= sprintf(' src="%s"', $targetPath);
-			if ($xhtml) {
-				$scriptHtml .= ' type="text/javascript"';
-			}
-			$scriptHtml .= '></script>';
-		}
-
-		// wrap cc around
-		if ($asset instanceof ExtendedAssetInterface && $asset->getConditionalComment()) {
-			$scriptHtml = ThemePlusUtils::wrapCc($scriptHtml, $asset->getConditionalComment());
-		}
-
-		return $scriptHtml;
 	}
 }
