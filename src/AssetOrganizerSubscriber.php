@@ -59,13 +59,13 @@ class AssetOrganizerSubscriber implements EventSubscriberInterface
 			$string = $filters;
 
 			foreach ($asset->all() as $child) {
-					$generateAssetPathEvent = new GenerateAssetPathEvent(
-						$event->getPage(),
-						$event->getLayout(),
-						$asset,
-						$event->getType()
-					);
-					$eventDispatcher->dispatch(ThemePlusEvents::GENERATE_ASSET_PATH, $generateAssetPathEvent);
+				$generateAssetPathEvent = new GenerateAssetPathEvent(
+					$event->getPage(),
+					$event->getLayout(),
+					$child,
+					$event->getType()
+				);
+				$eventDispatcher->dispatch(ThemePlusEvents::GENERATE_ASSET_PATH, $generateAssetPathEvent);
 
 				$string .= '-' . $generateAssetPathEvent->getPath();
 			}
