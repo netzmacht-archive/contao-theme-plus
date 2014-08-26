@@ -22,37 +22,6 @@ use Bit3\Contao\ThemePlus\Asset\ExtendedAssetInterface;
 class ThemePlusUtils
 {
 	/**
-	 * Store an asset.
-	 *
-	 * @param \Assetic\Asset\AssetInterface $asset
-	 * @param                               $suffix
-	 *
-	 * @return string
-	 */
-	public static function storeAsset(AssetInterface $asset, $suffix, $additionalFilters = null)
-	{
-		$path = static::getAssetPath(
-			$asset,
-			$suffix
-		);
-		$asset->setTargetPath($path);
-
-		if (!file_exists(TL_ROOT . '/' . $path)) {
-			$file = new \File($path);
-			$file->write(
-				$asset->dump(
-					$additionalFilters
-						? new \Assetic\Filter\FilterCollection($additionalFilters)
-						: null
-				)
-			);
-			$file->close();
-		}
-
-		return $path;
-	}
-
-	/**
 	 * Check filter settings.
 	 *
 	 * @param null   $system
