@@ -49,6 +49,11 @@ class JavaScript extends File
 		return $this->buildAsseticFilterOptions('js');
 	}
 
+	public function listFile($row)
+	{
+		return $this->listFileFor($row, 'theme_plus_javascripts');
+	}
+
 	public function loadLayouts($value, $dc)
 	{
 		return $this->loadLayoutsFor('theme_plus_javascripts', $dc);

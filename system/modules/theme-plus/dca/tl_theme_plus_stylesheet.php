@@ -39,7 +39,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = [
 		'ptable'           => 'tl_theme',
 		'enableVersioning' => true,
 		'onload_callback'  => [
-			['Bit3\Contao\ThemePlus\DataContainer\File', 'changeFileSource']
+			['Bit3\Contao\ThemePlus\DataContainer\Stylesheet', 'changeFileSource']
 		],
 		'sql'              => [
 			'keys' => [
@@ -56,7 +56,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = [
 			'fields'                => ['sorting'],
 			'panelLayout'           => 'filter;limit',
 			'headerFields'          => ['name', 'author', 'tstamp'],
-			'child_record_callback' => ['Bit3\Contao\ThemePlus\DataContainer\File', 'listFile'],
+			'child_record_callback' => ['Bit3\Contao\ThemePlus\DataContainer\Stylesheet', 'listFile'],
 			'child_record_class'    => 'no_padding'
 		],
 		'global_operations' => [
@@ -306,7 +306,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = [
 						'label'            => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['system'],
 						'exclude'          => true,
 						'inputType'        => 'select',
-						'options_callback' => ['Bit3\Contao\ThemePlus\DataContainer\File', 'getSystems'],
+						'options_callback' => ['Bit3\Contao\ThemePlus\DataContainer\Stylesheet', 'getSystems'],
 						'eval'             => [
 							'style'              => 'width:158px',
 							'includeBlankOption' => true
@@ -316,7 +316,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = [
 						'label'            => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['browser'],
 						'exclude'          => true,
 						'inputType'        => 'select',
-						'options_callback' => ['Bit3\Contao\ThemePlus\DataContainer\File', 'getBrowsers'],
+						'options_callback' => ['Bit3\Contao\ThemePlus\DataContainer\Stylesheet', 'getBrowsers'],
 						'eval'             => [
 							'style'              => 'width:158px',
 							'includeBlankOption' => true

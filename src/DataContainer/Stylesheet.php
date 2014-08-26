@@ -55,6 +55,11 @@ class Stylesheet extends File
 		return $this->buildAsseticFilterOptions('css');
 	}
 
+	public function listFile($row)
+	{
+		return $this->listFileFor($row, 'theme_plus_stylesheets');
+	}
+
 	public function loadLayouts($value, $dc)
 	{
 		return $this->loadLayoutsFor('theme_plus_stylesheets', $dc);
