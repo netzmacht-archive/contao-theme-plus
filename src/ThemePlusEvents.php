@@ -16,6 +16,17 @@ namespace Bit3\Contao\ThemePlus;
 class ThemePlusEvents
 {
 	/**
+	 * The GENERATE_ASSET_PATH event occurs when the script path for the compiled asset must be generated.
+	 *
+	 * The event listener method receives a Bit3\Contao\ThemePlus\Event\GenerateAssetPathEvent instance.
+	 *
+	 * @var string
+	 *
+	 * @api
+	 */
+	const GENERATE_ASSET_PATH = 'theme-plus.generate-asset-path';
+
+	/**
 	 * The COLLECT_STYLESHEET_ASSETS event occurs when the stylesheet assets for a page should be collected.
 	 *
 	 * The event listener method receives a Bit3\Contao\ThemePlus\Event\CollectAssetsEvent instance.
