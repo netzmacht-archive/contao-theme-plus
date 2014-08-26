@@ -19,7 +19,10 @@ use Assetic\Filter\CssRewriteFilter;
 use Bit3\Contao\ThemePlus\Asset\DatabaseAsset;
 use Bit3\Contao\ThemePlus\Asset\ExtendedFileAsset;
 use Bit3\Contao\ThemePlus\Event\CollectAssetsEvent;
+use Bit3\Contao\ThemePlus\Event\GenerateAssetPathEvent;
+use Bit3\Contao\ThemePlus\Event\StripStaticDomainEvent;
 use Bit3\Contao\ThemePlus\Model\StylesheetModel;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class StylesheetCollectorSubscriber implements EventSubscriberInterface
@@ -44,6 +47,10 @@ class StylesheetCollectorSubscriber implements EventSubscriberInterface
 	{
 		if (is_array($GLOBALS['TL_FRAMEWORK_CSS']) && !empty($GLOBALS['TL_FRAMEWORK_CSS'])) {
 			foreach (array_unique($GLOBALS['TL_FRAMEWORK_CSS']) as $stylesheet) {
+				$stripStaticDomainEvent = new StripStaticDomainEvent($event->getPage(), $event->getLayout(), $stylesheet);
+				$eventDispatcher->dispatch(ThemePlusEvents::STRIP_STATIC_DOMAIN, $stripStaticDomainEvent);
+				$stylesheet = $stripStaticDomainEvent->getUrl();
+
 				$asset = new FileAsset(TL_ROOT . DIRECTORY_SEPARATOR . $stylesheet, [new CssRewriteFilter()], TL_ROOT, $stylesheet);
 
 				$generateAssetPathEvent = new GenerateAssetPathEvent(
@@ -71,6 +78,10 @@ class StylesheetCollectorSubscriber implements EventSubscriberInterface
 				}
 				else {
 					list($source, $media, $mode) = explode('|', $stylesheet);
+
+					$stripStaticDomainEvent = new StripStaticDomainEvent($event->getPage(), $event->getLayout(), $source);
+					$eventDispatcher->dispatch(ThemePlusEvents::STRIP_STATIC_DOMAIN, $stripStaticDomainEvent);
+					$source = $stripStaticDomainEvent->getUrl();
 
 					$asset = new ExtendedFileAsset(TL_ROOT . '/' . $source, [new CssRewriteFilter()], TL_ROOT, $stylesheet);
 					$asset->setMediaQuery($media);
@@ -159,6 +170,10 @@ class StylesheetCollectorSubscriber implements EventSubscriberInterface
 				}
 				else {
 					list($source, $media, $mode, $version) = explode('|', $stylesheet);
+
+					$stripStaticDomainEvent = new StripStaticDomainEvent($event->getPage(), $event->getLayout(), $source);
+					$eventDispatcher->dispatch(ThemePlusEvents::STRIP_STATIC_DOMAIN, $stripStaticDomainEvent);
+					$source = $stripStaticDomainEvent->getUrl();
 
 					$asset = new ExtendedFileAsset(TL_ROOT . '/' . $source, [new CssRewriteFilter()], TL_ROOT, $stylesheet);
 					$asset->setMediaQuery($media);

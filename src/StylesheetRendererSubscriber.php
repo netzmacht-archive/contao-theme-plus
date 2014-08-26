@@ -18,6 +18,8 @@ use Assetic\Asset\FileAsset;
 use Assetic\Asset\HttpAsset;
 use Bit3\Contao\ThemePlus\Asset\DelegateAssetInterface;
 use Bit3\Contao\ThemePlus\Asset\ExtendedAssetInterface;
+use Bit3\Contao\ThemePlus\Event\AddStaticDomainEvent;
+use Bit3\Contao\ThemePlus\Event\GenerateAssetPathEvent;
 use Bit3\Contao\ThemePlus\Event\RenderAssetHtmlEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -219,15 +221,17 @@ class StylesheetRendererSubscriber implements EventSubscriberInterface
 					file_put_contents($targetPath, $css);
 				}
 
-				global $objPage;
+				$addStaticDomainEvent = new AddStaticDomainEvent($event->getPage(), $event->getLayout(), $targetPath);
+				$eventDispatcher->dispatch(ThemePlusEvents::ADD_STATIC_DOMAIN, $addStaticDomainEvent);
+				$targetUrl = $addStaticDomainEvent->getUrl();
 
 				// html mode
-				$xhtml     = ($objPage->outputFormat == 'xhtml');
+				$xhtml     = ($event->getPage()->outputFormat == 'xhtml');
 				$tagEnding = $xhtml ? ' />' : '>';
 
 				// generate html
 				$linkHtml = '<link';
-				$linkHtml .= sprintf(' href="%s"', $targetPath);
+				$linkHtml .= sprintf(' href="%s"', $targetUrl);
 				if ($xhtml) {
 					$linkHtml .= ' type="text/css"';
 				}

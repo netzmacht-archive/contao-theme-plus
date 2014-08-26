@@ -299,23 +299,6 @@ class ThemePlusUtils
 	}
 
 	/**
-	 * Strip static urls.
-	 */
-	public static function stripStaticURL($strUrl)
-	{
-		if (defined('TL_ASSETS_URL') &&
-			strlen(TL_ASSETS_URL) > 0 &&
-			strpos($strUrl, TL_ASSETS_URL) === 0
-		) {
-			return substr(
-				$strUrl,
-				strlen(TL_ASSETS_URL)
-			);
-		}
-		return $strUrl;
-	}
-
-	/**
 	 * Detect gzip data end decode it.
 	 *
 	 * @param mixed $varData

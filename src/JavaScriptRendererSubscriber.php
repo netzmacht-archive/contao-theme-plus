@@ -18,6 +18,8 @@ use Assetic\Asset\FileAsset;
 use Assetic\Asset\HttpAsset;
 use Bit3\Contao\ThemePlus\Asset\DelegateAssetInterface;
 use Bit3\Contao\ThemePlus\Asset\ExtendedAssetInterface;
+use Bit3\Contao\ThemePlus\Event\AddStaticDomainEvent;
+use Bit3\Contao\ThemePlus\Event\GenerateAssetPathEvent;
 use Bit3\Contao\ThemePlus\Event\RenderAssetHtmlEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -231,10 +233,12 @@ class JavaScriptRendererSubscriber implements EventSubscriberInterface
 					file_put_contents($targetPath, $js);
 				}
 
-				global $objPage;
+				$addStaticDomainEvent = new AddStaticDomainEvent($event->getPage(), $event->getLayout(), $targetPath);
+				$eventDispatcher->dispatch(ThemePlusEvents::ADD_STATIC_DOMAIN, $addStaticDomainEvent);
+				$targetUrl = $addStaticDomainEvent->getUrl();
 
 				// html mode
-				$xhtml = ($objPage->outputFormat == 'xhtml');
+				$xhtml = ($event->getPage()->outputFormat == 'xhtml');
 
 				// generate html
 				if ($event->getLayout()->theme_plus_javascript_lazy_load) {
@@ -245,13 +249,13 @@ class JavaScriptRendererSubscriber implements EventSubscriberInterface
 					$scriptHtml .= '>';
 					$scriptHtml .= sprintf(
 							'window.loadAsync(%s)',
-						json_encode($targetPath)
+						json_encode($targetUrl)
 					);
 					$scriptHtml .= '</script>';
 				}
 				else {
 					$scriptHtml = '<script';
-					$scriptHtml .= sprintf(' src="%s"', $targetPath);
+					$scriptHtml .= sprintf(' src="%s"', $targetUrl);
 					if ($xhtml) {
 						$scriptHtml .= ' type="text/javascript"';
 					}

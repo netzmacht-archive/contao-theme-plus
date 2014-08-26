@@ -16,6 +16,28 @@ namespace Bit3\Contao\ThemePlus;
 class ThemePlusEvents
 {
 	/**
+	 * The STRIP_STATIC_DOMAIN event occurs when the static URL must be removed from an url.
+	 *
+	 * The event listener method receives a Bit3\Contao\ThemePlus\Event\StripStaticDomainEvent instance.
+	 *
+	 * @var string
+	 *
+	 * @api
+	 */
+	const STRIP_STATIC_DOMAIN = 'theme-plus.strip-static-domain';
+
+	/**
+	 * The ADD_STATIC_DOMAIN event occurs when the static URL must be added to an url.
+	 *
+	 * The event listener method receives a Bit3\Contao\ThemePlus\Event\AddStaticDomainEvent instance.
+	 *
+	 * @var string
+	 *
+	 * @api
+	 */
+	const ADD_STATIC_DOMAIN = 'theme-plus.add-static-domain';
+
+	/**
 	 * The GENERATE_ASSET_PATH event occurs when the script path for the compiled asset must be generated.
 	 *
 	 * The event listener method receives a Bit3\Contao\ThemePlus\Event\GenerateAssetPathEvent instance.

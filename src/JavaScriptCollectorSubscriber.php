@@ -17,7 +17,10 @@ use Assetic\Asset\AssetInterface;
 use Bit3\Contao\ThemePlus\Asset\DatabaseAsset;
 use Bit3\Contao\ThemePlus\Asset\ExtendedFileAsset;
 use Bit3\Contao\ThemePlus\Event\CollectAssetsEvent;
+use Bit3\Contao\ThemePlus\Event\GenerateAssetPathEvent;
+use Bit3\Contao\ThemePlus\Event\StripStaticDomainEvent;
 use Bit3\Contao\ThemePlus\Model\JavaScriptModel;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class JavaScriptCollectorSubscriber implements EventSubscriberInterface
@@ -41,7 +44,7 @@ class JavaScriptCollectorSubscriber implements EventSubscriberInterface
 		];
 	}
 
-	public function collectRuntimeJavaScripts(CollectAssetsEvent $event, $eventName)
+	public function collectRuntimeJavaScripts(CollectAssetsEvent $event, $eventName, EventDispatcherInterface $eventDispatcher)
 	{
 		if (
 			$eventName == ThemePlusEvents::COLLECT_HEAD_JAVASCRIPT_ASSETS &&
@@ -59,6 +62,10 @@ class JavaScriptCollectorSubscriber implements EventSubscriberInterface
 				}
 				else {
 					list($javaScript, $mode) = explode('|', $javaScript);
+
+					$stripStaticDomainEvent = new StripStaticDomainEvent($event->getPage(), $event->getLayout(), $javaScript);
+					$eventDispatcher->dispatch(ThemePlusEvents::STRIP_STATIC_DOMAIN, $stripStaticDomainEvent);
+					$javaScript = $stripStaticDomainEvent->getUrl();
 
 					$asset = new ExtendedFileAsset(TL_ROOT . '/' . $javaScript, [], TL_ROOT, $javaScript);
 					$asset->setStandalone($mode != 'static');
