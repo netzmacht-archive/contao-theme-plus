@@ -140,10 +140,10 @@ class DeveloperTool
 				);
 			}
 
-			$strBuffer = str_replace(
-				'<head>',
+			$strBuffer = preg_replace(
+				'~<base[^>]+>~',
 				sprintf(
-					'<head>
+					'$0
 <link rel="stylesheet" href="assets/theme-plus/css/dev.css">
 <script src="assets/theme-plus/js/dev.js"></script>'
 				),
