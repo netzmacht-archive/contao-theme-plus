@@ -11,8 +11,9 @@
  * @license    http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  */
 
-
-$this->loadDataContainer('tl_layout');
+if (TL_MODE == 'BE') {
+	$this->loadDataContainer('tl_layout');
+}
 
 /**
  * Palettes
