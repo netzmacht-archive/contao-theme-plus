@@ -203,13 +203,21 @@ class JavaScriptRendererSubscriber implements EventSubscriberInterface
 		}
 	}
 
-	public function renderLinkHtml(RenderAssetHtmlEvent $event)
+	public function renderLinkHtml(RenderAssetHtmlEvent $event, $eventName, EventDispatcherInterface $eventDispatcher)
 	{
 		if (!$event->getHtml() && !$event->getDeveloperTool()) {
 			$asset = $event->getAsset();
 
 			if (!$asset instanceof ExtendedAssetInterface || !$asset->isInline()) {
-				$targetPath = ThemePlusUtils::getAssetPath($asset, 'js');
+				$generateAssetPathEvent = new GenerateAssetPathEvent(
+					$event->getPage(),
+					$event->getLayout(),
+					$asset,
+					'js'
+				);
+				$eventDispatcher->dispatch(ThemePlusEvents::GENERATE_ASSET_PATH, $generateAssetPathEvent);
+
+				$targetPath = $generateAssetPathEvent->getPath();
 
 				if (!file_exists(TL_ROOT . DIRECTORY_SEPARATOR . $targetPath)) {
 					// overwrite the target path

@@ -22,67 +22,6 @@ use Bit3\Contao\ThemePlus\Asset\ExtendedAssetInterface;
 class ThemePlusUtils
 {
 	/**
-	 * Calculate the target path for the asset.
-	 *
-	 * @param \Assetic\Asset\AssetInterface $asset
-	 * @param                               $suffix
-	 *
-	 * @return string
-	 */
-	public static function getAssetPath(AssetInterface $asset, $suffix)
-	{
-		$filters = [];
-		foreach ($asset->getFilters() as $v) {
-			$filters[] = get_class($v);
-		}
-		$filters = '[' . implode(
-				',',
-				$filters
-			) . ']';
-
-		while ($asset instanceof DelegateAssetInterface) {
-			$asset = $asset->getAsset();
-		}
-
-		// calculate path for collections
-		if ($asset instanceof AssetCollectionInterface) {
-			$string = $filters;
-			foreach ($asset->all() as $child) {
-				$string .= '-' . static::getAssetPath(
-						$child,
-						$suffix
-					);
-			}
-			return 'assets/css/' . substr(
-				md5($string),
-				0,
-				8
-			) . '-collection.' . $suffix;
-		}
-
-		// calculate cache path from content
-		else if ($asset instanceof StringAsset) {
-			return 'assets/css/' . substr(
-				md5($filters . '-' . $asset->getContent() . '-' . $asset->getLastModified()),
-				0,
-				8
-			) . '-' . basename($asset->getSourcePath()) . '.' . $suffix;
-		}
-
-		// calculate cache path from source path
-		else {
-			return 'assets/css/' . substr(
-				md5($filters . '-' . $asset->getSourcePath() . '-' . $asset->getLastModified()),
-				0,
-				8
-			) . '-' . basename(
-				$asset->getSourcePath(),
-				'.' . $suffix
-			) . '.' . $suffix;
-		}
-	}
-
-	/**
 	 * Store an asset.
 	 *
 	 * @param \Assetic\Asset\AssetInterface $asset

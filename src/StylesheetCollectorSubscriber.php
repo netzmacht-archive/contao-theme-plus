@@ -40,12 +40,21 @@ class StylesheetCollectorSubscriber implements EventSubscriberInterface
 		];
 	}
 
-	public function collectFrameworkStylesheets(CollectAssetsEvent $event)
+	public function collectFrameworkStylesheets(CollectAssetsEvent $event, $eventName, EventDispatcherInterface $eventDispatcher)
 	{
 		if (is_array($GLOBALS['TL_FRAMEWORK_CSS']) && !empty($GLOBALS['TL_FRAMEWORK_CSS'])) {
 			foreach (array_unique($GLOBALS['TL_FRAMEWORK_CSS']) as $stylesheet) {
 				$asset = new FileAsset(TL_ROOT . DIRECTORY_SEPARATOR . $stylesheet, [new CssRewriteFilter()], TL_ROOT, $stylesheet);
-				$asset->setTargetPath(ThemePlusUtils::getAssetPath($asset, 'css'));
+
+				$generateAssetPathEvent = new GenerateAssetPathEvent(
+					$event->getPage(),
+					$event->getLayout(),
+					$asset,
+					'css'
+				);
+				$eventDispatcher->dispatch(ThemePlusEvents::GENERATE_ASSET_PATH, $generateAssetPathEvent);
+
+				$asset->setTargetPath($generateAssetPathEvent->getPath());
 				$event->append($asset, -50);
 			}
 
@@ -53,7 +62,7 @@ class StylesheetCollectorSubscriber implements EventSubscriberInterface
 		}
 	}
 
-	public function collectRuntimeStylesheets(CollectAssetsEvent $event)
+	public function collectRuntimeStylesheets(CollectAssetsEvent $event, $eventName, EventDispatcherInterface $eventDispatcher)
 	{
 		if (is_array($GLOBALS['TL_CSS']) && !empty($GLOBALS['TL_CSS'])) {
 			foreach ($GLOBALS['TL_CSS'] as $stylesheet) {
@@ -64,9 +73,18 @@ class StylesheetCollectorSubscriber implements EventSubscriberInterface
 					list($source, $media, $mode) = explode('|', $stylesheet);
 
 					$asset = new ExtendedFileAsset(TL_ROOT . '/' . $source, [new CssRewriteFilter()], TL_ROOT, $stylesheet);
-					$asset->setTargetPath(ThemePlusUtils::getAssetPath($asset, 'css'));
 					$asset->setMediaQuery($media);
 					$asset->setStandalone($mode != 'static');
+
+					$generateAssetPathEvent = new GenerateAssetPathEvent(
+						$event->getPage(),
+						$event->getLayout(),
+						$asset,
+						'css'
+					);
+					$eventDispatcher->dispatch(ThemePlusEvents::GENERATE_ASSET_PATH, $generateAssetPathEvent);
+
+					$asset->setTargetPath($generateAssetPathEvent->getPath());
 					$event->append($asset);
 				}
 			}
@@ -132,7 +150,7 @@ class StylesheetCollectorSubscriber implements EventSubscriberInterface
 		}
 	}
 
-	public function collectUserStylesheets(CollectAssetsEvent $event)
+	public function collectUserStylesheets(CollectAssetsEvent $event, $eventName, EventDispatcherInterface $eventDispatcher)
 	{
 		if (is_array($GLOBALS['TL_USER_CSS']) && !empty($GLOBALS['TL_USER_CSS'])) {
 			foreach ($GLOBALS['TL_USER_CSS'] as $stylesheet) {
@@ -143,9 +161,18 @@ class StylesheetCollectorSubscriber implements EventSubscriberInterface
 					list($source, $media, $mode, $version) = explode('|', $stylesheet);
 
 					$asset = new ExtendedFileAsset(TL_ROOT . '/' . $source, [new CssRewriteFilter()], TL_ROOT, $stylesheet);
-					$asset->setTargetPath(ThemePlusUtils::getAssetPath($asset, 'css'));
 					$asset->setMediaQuery($media);
 					$asset->setStandalone($mode != 'static');
+
+					$generateAssetPathEvent = new GenerateAssetPathEvent(
+						$event->getPage(),
+						$event->getLayout(),
+						$asset,
+						'css'
+					);
+					$eventDispatcher->dispatch(ThemePlusEvents::GENERATE_ASSET_PATH, $generateAssetPathEvent);
+
+					$asset->setTargetPath($generateAssetPathEvent->getPath());
 					$event->append($asset, 150);
 				}
 			}

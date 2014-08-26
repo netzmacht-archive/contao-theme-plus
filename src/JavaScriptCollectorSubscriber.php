@@ -61,8 +61,17 @@ class JavaScriptCollectorSubscriber implements EventSubscriberInterface
 					list($javaScript, $mode) = explode('|', $javaScript);
 
 					$asset = new ExtendedFileAsset(TL_ROOT . '/' . $javaScript, [], TL_ROOT, $javaScript);
-					$asset->setTargetPath(ThemePlusUtils::getAssetPath($asset, 'css'));
 					$asset->setStandalone($mode != 'static');
+
+					$generateAssetPathEvent = new GenerateAssetPathEvent(
+						$event->getPage(),
+						$event->getLayout(),
+						$asset,
+						'js'
+					);
+					$eventDispatcher->dispatch(ThemePlusEvents::GENERATE_ASSET_PATH, $generateAssetPathEvent);
+
+					$asset->setTargetPath($generateAssetPathEvent->getPath());
 					$event->append($asset);
 				}
 			}
