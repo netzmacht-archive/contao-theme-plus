@@ -165,8 +165,9 @@ class ThemePlus
 		$eventDispatcher->dispatch(ThemePlusEvents::ORGANIZE_STYLESHEET_ASSETS, $event);
 
 		$collection = $event->getOrganizedAssets();
+		$assets     = $collection->all();
 
-		foreach ($collection as $asset) {
+		foreach ($assets as $asset) {
 			$event = new RenderAssetHtmlEvent($objPage, $layout, $defaultFilters, $asset, $this->developerTool);
 			$eventDispatcher->dispatch(ThemePlusEvents::RENDER_STYLESHEET_HTML, $event);
 
@@ -203,9 +204,46 @@ class ThemePlus
 			$defaultFilters = null;
 		}
 
+		// collect head javascript assets
+		$event = new CollectAssetsEvent($objPage, $layout);
+		$eventDispatcher->dispatch(ThemePlusEvents::COLLECT_HEAD_JAVASCRIPT_ASSETS, $event);
+
+		$collection = $event->getAssets();
+
+		$event = new OrganizeAssetsEvent($objPage, $layout, $defaultFilters, $collection, $this->developerTool);
+		$eventDispatcher->dispatch(ThemePlusEvents::ORGANIZE_JAVASCRIPT_ASSETS, $event);
+
+		$collection = $event->getOrganizedAssets();
+		$headAssets = $collection->all();
+
+		// collect body javascript assets
+		$event = new CollectAssetsEvent($objPage, $layout);
+		$eventDispatcher->dispatch(ThemePlusEvents::COLLECT_BODY_JAVASCRIPT_ASSETS, $event);
+
+		$collection = $event->getAssets();
+
+		$event = new OrganizeAssetsEvent($objPage, $layout, $defaultFilters, $collection, $this->developerTool);
+		$eventDispatcher->dispatch(ThemePlusEvents::ORGANIZE_JAVASCRIPT_ASSETS, $event);
+
+		$collection = $event->getOrganizedAssets();
+		$bodyAssets = $collection->all();
+
+		$assetCount = count($headAssets) + count($bodyAssets);
+
 		// inject async.js if required
-		if ($layout->theme_plus_javascript_lazy_load) {
-			$asset = new ExtendedFileAsset(TL_ROOT . '/assets/theme-plus/js/async.js', [], TL_ROOT, 'assets/theme-plus/js/async.js');
+		if ($layout->theme_plus_javascript_lazy_load && $assetCount) {
+			if ($assetCount > 1) {
+				$asyncScript = 'async_multi';
+			}
+			else {
+				$asyncScript = 'async_single';
+			}
+
+			if ($this->developerTool) {
+				$asyncScript .= '_dev';
+			}
+
+			$asset = new ExtendedFileAsset(TL_ROOT . '/assets/theme-plus/js/' . $asyncScript . '.js', [], TL_ROOT, 'assets/theme-plus/js/' . $asyncScript . '.js');
 			$asset->setInline(true);
 
 			$event = new RenderAssetHtmlEvent($objPage, $layout, $defaultFilters, $asset, $this->developerTool);
@@ -219,36 +257,15 @@ class ThemePlus
 			}
 		}
 
-		// collect head javascript assets
-		$event = new CollectAssetsEvent($objPage, $layout);
-		$eventDispatcher->dispatch(ThemePlusEvents::COLLECT_HEAD_JAVASCRIPT_ASSETS, $event);
-
-		$collection = $event->getAssets();
-
-		$event = new OrganizeAssetsEvent($objPage, $layout, $defaultFilters, $collection, $this->developerTool);
-		$eventDispatcher->dispatch(ThemePlusEvents::ORGANIZE_JAVASCRIPT_ASSETS, $event);
-
-		$collection = $event->getOrganizedAssets();
-
-		foreach ($collection as $asset) {
+		// write assets html
+		foreach ($headAssets as $asset) {
 			$event = new RenderAssetHtmlEvent($objPage, $layout, $defaultFilters, $asset, $this->developerTool);
 			$eventDispatcher->dispatch(ThemePlusEvents::RENDER_JAVASCRIPT_HTML, $event);
 
 			$sr['[[TL_HEAD]]'] .= $event->getHtml();
 		}
 
-		// collect body javascript assets
-		$event = new CollectAssetsEvent($objPage, $layout);
-		$eventDispatcher->dispatch(ThemePlusEvents::COLLECT_BODY_JAVASCRIPT_ASSETS, $event);
-
-		$collection = $event->getAssets();
-
-		$event = new OrganizeAssetsEvent($objPage, $layout, $defaultFilters, $collection, $this->developerTool);
-		$eventDispatcher->dispatch(ThemePlusEvents::ORGANIZE_JAVASCRIPT_ASSETS, $event);
-
-		$collection = $event->getOrganizedAssets();
-
-		foreach ($collection as $asset) {
+		foreach ($bodyAssets as $asset) {
 			$event = new RenderAssetHtmlEvent($objPage, $layout, $defaultFilters, $asset, $this->developerTool);
 			$eventDispatcher->dispatch(ThemePlusEvents::RENDER_JAVASCRIPT_HTML, $event);
 
