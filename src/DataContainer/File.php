@@ -167,7 +167,7 @@ class File
 
 			foreach ($themes as $theme) {
 				$assignedThemeLayouts = [];
-				$layouts = \LayoutModel::findBy('pid', $theme->id, ['order' => 'name']);
+				$layouts              = \LayoutModel::findBy('pid', $theme->id, ['order' => 'name']);
 
 				foreach ($layouts as $layout) {
 					$files = deserialize($layout->$layoutField, true);

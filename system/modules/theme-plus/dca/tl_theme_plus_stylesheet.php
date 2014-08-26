@@ -34,7 +34,7 @@ $this->loadLanguageFile('tl_theme_plus_filter');
  */
 $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = [
 	// Config
-	'config'          => [
+	'config'                => [
 		'dataContainer'    => 'Table',
 		'ptable'           => 'tl_theme',
 		'enableVersioning' => true,
@@ -49,7 +49,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = [
 		],
 	],
 	// List
-	'list'            => [
+	'list'                  => [
 		'sorting'           => [
 			'mode'                  => 4,
 			'flag'                  => 11,
@@ -116,11 +116,11 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = [
 		]
 	],
 	// Palettes
-	'palettes'        => [
+	'palettes'              => [
 		'__selector__' => ['type', 'filter']
 	],
 	// Meta palettes
-	'metapalettes'    => [
+	'metapalettes'          => [
 		'default' => [
 			'source' => ['type']
 		],
@@ -153,7 +153,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = [
 		],
 	],
 	// Meta sub palettes
-	'metasubpalettes' => [
+	'metasubpalettes'       => [
 		'filter' => ['filterRule'],
 	],
 	// Meta sub-select palettes
@@ -163,7 +163,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = [
 		],
 	],
 	// Fields
-	'fields'          => [
+	'fields'                => [
 		'id'                       => [
 			'sql' => "int(10) unsigned NOT NULL auto_increment"
 		],

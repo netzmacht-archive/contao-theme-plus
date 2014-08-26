@@ -37,8 +37,11 @@ class AssetOrganizerSubscriber implements EventSubscriberInterface
 		];
 	}
 
-	public function generateAssetPath(GenerateAssetPathEvent $event, $eventName, EventDispatcherInterface $eventDispatcher)
-	{
+	public function generateAssetPath(
+		GenerateAssetPathEvent $event,
+		$eventName,
+		EventDispatcherInterface $eventDispatcher
+	) {
 		$asset = $event->getAsset();
 
 		$filters = [];

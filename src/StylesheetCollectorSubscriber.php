@@ -43,15 +43,23 @@ class StylesheetCollectorSubscriber implements EventSubscriberInterface
 		];
 	}
 
-	public function collectFrameworkStylesheets(CollectAssetsEvent $event, $eventName, EventDispatcherInterface $eventDispatcher)
-	{
+	public function collectFrameworkStylesheets(
+		CollectAssetsEvent $event,
+		$eventName,
+		EventDispatcherInterface $eventDispatcher
+	) {
 		if (is_array($GLOBALS['TL_FRAMEWORK_CSS']) && !empty($GLOBALS['TL_FRAMEWORK_CSS'])) {
 			foreach (array_unique($GLOBALS['TL_FRAMEWORK_CSS']) as $stylesheet) {
 				$stripStaticDomainEvent = new StripStaticDomainEvent($event->getPage(), $event->getLayout(), $stylesheet);
 				$eventDispatcher->dispatch(ThemePlusEvents::STRIP_STATIC_DOMAIN, $stripStaticDomainEvent);
 				$stylesheet = $stripStaticDomainEvent->getUrl();
 
-				$asset = new FileAsset(TL_ROOT . DIRECTORY_SEPARATOR . $stylesheet, [new CssRewriteFilter()], TL_ROOT, $stylesheet);
+				$asset = new FileAsset(
+					TL_ROOT . DIRECTORY_SEPARATOR . $stylesheet,
+					[new CssRewriteFilter()],
+					TL_ROOT,
+					$stylesheet
+				);
 
 				$generateAssetPathEvent = new GenerateAssetPathEvent(
 					$event->getPage(),
@@ -69,8 +77,11 @@ class StylesheetCollectorSubscriber implements EventSubscriberInterface
 		}
 	}
 
-	public function collectRuntimeStylesheets(CollectAssetsEvent $event, $eventName, EventDispatcherInterface $eventDispatcher)
-	{
+	public function collectRuntimeStylesheets(
+		CollectAssetsEvent $event,
+		$eventName,
+		EventDispatcherInterface $eventDispatcher
+	) {
 		if (is_array($GLOBALS['TL_CSS']) && !empty($GLOBALS['TL_CSS'])) {
 			foreach ($GLOBALS['TL_CSS'] as $stylesheet) {
 				if ($stylesheet instanceof AssetInterface) {
@@ -123,7 +134,7 @@ class StylesheetCollectorSubscriber implements EventSubscriberInterface
 
 	public function collectPageStylesheets(CollectAssetsEvent $event)
 	{
-		$page          = $event->getPage();
+		$page = $event->getPage();
 		$stylesheetIds = [];
 
 		// add noinherit stylesheets from current page
@@ -161,8 +172,11 @@ class StylesheetCollectorSubscriber implements EventSubscriberInterface
 		}
 	}
 
-	public function collectUserStylesheets(CollectAssetsEvent $event, $eventName, EventDispatcherInterface $eventDispatcher)
-	{
+	public function collectUserStylesheets(
+		CollectAssetsEvent $event,
+		$eventName,
+		EventDispatcherInterface $eventDispatcher
+	) {
 		if (is_array($GLOBALS['TL_USER_CSS']) && !empty($GLOBALS['TL_USER_CSS'])) {
 			foreach ($GLOBALS['TL_USER_CSS'] as $stylesheet) {
 				if ($stylesheet instanceof AssetInterface) {

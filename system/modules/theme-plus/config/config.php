@@ -31,8 +31,14 @@ $GLOBALS['BE_MOD']['design']['themes']['tables'][] = 'tl_theme_plus_variable';
 /**
  * HOOKs
  */
-$GLOBALS['TL_HOOKS']['parseTemplate']['themeplus']            = ['Bit3\Contao\ThemePlus\ThemePlus', 'hookParseTemplate'];
-$GLOBALS['TL_HOOKS']['replaceDynamicScriptTags']['themeplus'] = ['Bit3\Contao\ThemePlus\ThemePlus', 'hookReplaceDynamicScriptTags'];
+$GLOBALS['TL_HOOKS']['parseTemplate']['themeplus']            = [
+	'Bit3\Contao\ThemePlus\ThemePlus',
+	'hookParseTemplate'
+];
+$GLOBALS['TL_HOOKS']['replaceDynamicScriptTags']['themeplus'] = [
+	'Bit3\Contao\ThemePlus\ThemePlus',
+	'hookReplaceDynamicScriptTags'
+];
 
 
 /**
@@ -50,25 +56,25 @@ $GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'Bit3\Contao\ThemePlus\JavaScriptRendererSu
  * easy_themes integration
  */
 $GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus_stylesheet'] = [
-    'label'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_stylesheet'][0],
-    'title'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_stylesheet'][1],
-    'href_fragment' => 'table=tl_theme_plus_stylesheet',
-    'icon'          => 'assets/theme-plus/images/stylesheet.png',
-    'appendRT'      => true,
+	'label'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_stylesheet'][0],
+	'title'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_stylesheet'][1],
+	'href_fragment' => 'table=tl_theme_plus_stylesheet',
+	'icon'          => 'assets/theme-plus/images/stylesheet.png',
+	'appendRT'      => true,
 ];
 $GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus_javascript'] = [
-    'label'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_javascript'][0],
-    'title'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_javascript'][1],
-    'href_fragment' => 'table=tl_theme_plus_javascript',
-    'icon'          => 'assets/theme-plus/images/javascript.png',
-    'appendRT'      => true,
+	'label'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_javascript'][0],
+	'title'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_javascript'][1],
+	'href_fragment' => 'table=tl_theme_plus_javascript',
+	'icon'          => 'assets/theme-plus/images/javascript.png',
+	'appendRT'      => true,
 ];
 $GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus_variable']   = [
-    'label'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_variable'][0],
-    'title'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_variable'][1],
-    'href_fragment' => 'table=tl_theme_plus_variable',
-    'icon'          => 'assets/theme-plus/images/variable.png',
-    'appendRT'      => true,
+	'label'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_variable'][0],
+	'title'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_variable'][1],
+	'href_fragment' => 'table=tl_theme_plus_variable',
+	'icon'          => 'assets/theme-plus/images/variable.png',
+	'appendRT'      => true,
 ];
 
 

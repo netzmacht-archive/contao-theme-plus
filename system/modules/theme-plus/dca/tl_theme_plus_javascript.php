@@ -34,7 +34,7 @@ $this->loadLanguageFile('tl_theme_plus_filter');
  */
 $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = [
 	// Config
-	'config'          => [
+	'config'                => [
 		'dataContainer'    => 'Table',
 		'ptable'           => 'tl_theme',
 		'enableVersioning' => true,
@@ -49,7 +49,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = [
 		],
 	],
 	// List
-	'list'            => [
+	'list'                  => [
 		'sorting'           => [
 			'mode'                  => 4,
 			'flag'                  => 11,
@@ -116,11 +116,11 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = [
 		]
 	],
 	// Palettes
-	'palettes'        => [
+	'palettes'              => [
 		'__selector__' => ['type', 'filter']
 	],
 	// Meta palettes
-	'metapalettes'    => [
+	'metapalettes'          => [
 		'default' => [
 			'source' => ['type']
 		],
@@ -150,7 +150,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = [
 		],
 	],
 	// Meta sub palettes
-	'metasubpalettes' => [
+	'metasubpalettes'       => [
 		'filter' => ['filterRule']
 	],
 	// Meta sub-select palettes
@@ -160,7 +160,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = [
 		],
 	],
 	// Fields
-	'fields'          => [
+	'fields'                => [
 		'id'                 => [
 			'sql' => "int(10) unsigned NOT NULL auto_increment"
 		],
@@ -364,7 +364,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = [
 			],
 			'sql'       => "blob NULL"
 		],
-		'inline'                   => [
+		'inline'             => [
 			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['inline'],
 			'exclude'   => true,
 			'filter'    => true,
@@ -372,7 +372,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = [
 			'eval'      => ['submitOnChange' => true, 'tl_class' => 'w50'],
 			'sql'       => "char(1) NOT NULL default ''"
 		],
-		'standalone'             => [
+		'standalone'         => [
 			'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['standalone'],
 			'exclude'   => true,
 			'filter'    => true,

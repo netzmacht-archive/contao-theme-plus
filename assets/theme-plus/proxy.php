@@ -14,15 +14,9 @@ define('TL_MODE', 'FE');
 require(dirname(dirname(dirname($_SERVER['SCRIPT_FILENAME']))) . '/system/initialize.php');
 
 use Assetic\Asset\AssetInterface;
-use Assetic\Asset\AssetCollection;
-use Assetic\Asset\FileAsset;
-use Assetic\Asset\HttpAsset;
 use Assetic\Asset\StringAsset;
-use Assetic\Filter\FilterCollection;
 use Bit3\Contao\Assetic\AsseticFactory;
 use Bit3\Contao\ThemePlus\ThemePlusEnvironment;
-use Bit3\Contao\ThemePlus\Model\StylesheetModel;
-use Bit3\Contao\ThemePlus\Model\JavaScriptModel;
 
 class proxy
 {

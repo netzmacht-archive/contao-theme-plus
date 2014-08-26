@@ -14,8 +14,6 @@
 namespace Bit3\Contao\ThemePlus\Event;
 
 use Assetic\Asset\AssetCollectionInterface;
-use Assetic\Asset\AssetInterface;
-use Assetic\Filter\FilterInterface;
 use Bit3\Contao\ThemePlus\DeveloperTool;
 use Symfony\Component\EventDispatcher\Event;
 

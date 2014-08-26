@@ -13,19 +13,11 @@
 
 namespace Bit3\Contao\ThemePlus;
 
-use Assetic\Asset\AssetCollection;
-use Assetic\Asset\AssetCollectionInterface;
-use Assetic\Asset\AssetInterface;
-use Assetic\Asset\FileAsset;
-use Assetic\Asset\HttpAsset;
 use Bit3\Contao\Assetic\AsseticFactory;
-use Bit3\Contao\ThemePlus\Asset\DelegateAssetInterface;
-use Bit3\Contao\ThemePlus\Asset\ExtendedAssetInterface;
 use Bit3\Contao\ThemePlus\Asset\ExtendedFileAsset;
-use Bit3\Contao\ThemePlus\DataContainer\File;
+use Bit3\Contao\ThemePlus\Event\CollectAssetsEvent;
 use Bit3\Contao\ThemePlus\Event\OrganizeAssetsEvent;
 use Bit3\Contao\ThemePlus\Event\RenderAssetHtmlEvent;
-use Bit3\Contao\ThemePlus\Event\CollectAssetsEvent;
 use FrontendTemplate;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Template;
@@ -74,9 +66,9 @@ class ThemePlus
 
 			// the search and replace array
 			$sr = [
-				'[[TL_CSS]]'        => '',
+				'[[TL_CSS]]' => '',
 				'[[TL_THEME_PLUS]]' => '',
-				'[[TL_HEAD]]'       => '',
+				'[[TL_HEAD]]' => '',
 			];
 
 			// search for the layout
@@ -243,7 +235,12 @@ class ThemePlus
 				$asyncScript .= '_dev';
 			}
 
-			$asset = new ExtendedFileAsset(TL_ROOT . '/assets/theme-plus/js/' . $asyncScript . '.js', [], TL_ROOT, 'assets/theme-plus/js/' . $asyncScript . '.js');
+			$asset = new ExtendedFileAsset(
+				TL_ROOT . '/assets/theme-plus/js/' . $asyncScript . '.js',
+				[],
+				TL_ROOT,
+				'assets/theme-plus/js/' . $asyncScript . '.js'
+			);
 			$asset->setInline(true);
 
 			$event = new RenderAssetHtmlEvent($objPage, $layout, $defaultFilters, $asset, $this->developerTool);

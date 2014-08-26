@@ -15,9 +15,7 @@ namespace Bit3\Contao\ThemePlus;
 
 use Assetic\Asset\AssetCollectionInterface;
 use Assetic\Asset\AssetInterface;
-use Assetic\Asset\StringAsset;
 use Bit3\Contao\ThemePlus\Asset\DelegateAssetInterface;
-use Bit3\Contao\ThemePlus\Asset\ExtendedAssetInterface;
 
 class ThemePlusUtils
 {

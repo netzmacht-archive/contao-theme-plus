@@ -87,7 +87,7 @@ class DeveloperTool
 			$javascriptsBuffer = '';
 
 			foreach ($this->files as $id => $file) {
-				$asset = $file->asset;
+				$asset   = $file->asset;
 				$files[] = $id;
 
 				while ($asset instanceof DelegateAssetInterface) {
@@ -114,14 +114,14 @@ class DeveloperTool
 					case 'css':
 						$icon   = '<img src="assets/theme-plus/images/stylesheet.png">';
 						$type   = 'css';
-						$buffer = & $stylesheetsBuffer;
+						$buffer = &$stylesheetsBuffer;
 						$stylesheetsCount++;
 						break;
 
 					case 'js':
 						$icon   = '<img src="assets/theme-plus/images/javascript.png">';
 						$type   = 'js';
-						$buffer = & $javascriptsBuffer;
+						$buffer = &$javascriptsBuffer;
 						$javascriptsCount++;
 						break;
 				}

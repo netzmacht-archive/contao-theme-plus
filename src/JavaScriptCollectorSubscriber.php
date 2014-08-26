@@ -44,8 +44,11 @@ class JavaScriptCollectorSubscriber implements EventSubscriberInterface
 		];
 	}
 
-	public function collectRuntimeJavaScripts(CollectAssetsEvent $event, $eventName, EventDispatcherInterface $eventDispatcher)
-	{
+	public function collectRuntimeJavaScripts(
+		CollectAssetsEvent $event,
+		$eventName,
+		EventDispatcherInterface $eventDispatcher
+	) {
 		if (
 			$eventName == ThemePlusEvents::COLLECT_HEAD_JAVASCRIPT_ASSETS &&
 			$event->getLayout()->theme_plus_default_javascript_position != 'head' ||
@@ -63,7 +66,9 @@ class JavaScriptCollectorSubscriber implements EventSubscriberInterface
 				else {
 					list($javaScript, $mode) = explode('|', $javaScript);
 
-					$stripStaticDomainEvent = new StripStaticDomainEvent($event->getPage(), $event->getLayout(), $javaScript);
+					$stripStaticDomainEvent = new StripStaticDomainEvent(
+						$event->getPage(), $event->getLayout(), $javaScript
+					);
 					$eventDispatcher->dispatch(ThemePlusEvents::STRIP_STATIC_DOMAIN, $stripStaticDomainEvent);
 					$javaScript = $stripStaticDomainEvent->getUrl();
 
@@ -137,7 +142,7 @@ class JavaScriptCollectorSubscriber implements EventSubscriberInterface
 
 	public function collectPageJavaScripts(CollectAssetsEvent $event, $eventName)
 	{
-		$page          = $event->getPage();
+		$page = $event->getPage();
 		$javaScriptIds = [];
 
 		// add noinherit javascripts from current page

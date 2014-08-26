@@ -13,9 +13,6 @@
 
 namespace Bit3\Contao\ThemePlus\Event;
 
-use Assetic\Asset\AssetCollection;
-use Assetic\Asset\AssetCollectionInterface;
-use Assetic\Asset\AssetInterface;
 use Symfony\Component\EventDispatcher\Event;
 
 class StripStaticDomainEvent extends Event
@@ -40,7 +37,7 @@ class StripStaticDomainEvent extends Event
 	{
 		$this->page   = $page;
 		$this->layout = $layout;
-		$this->url = (string) $url;
+		$this->url    = (string) $url;
 	}
 
 	/**

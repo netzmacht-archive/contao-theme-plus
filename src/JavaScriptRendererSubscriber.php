@@ -13,7 +13,6 @@
 
 namespace Bit3\Contao\ThemePlus;
 
-use Assetic\Asset\AssetCollectionInterface;
 use Assetic\Asset\FileAsset;
 use Assetic\Asset\HttpAsset;
 use Bit3\Contao\ThemePlus\Asset\DelegateAssetInterface;
@@ -41,8 +40,11 @@ class JavaScriptRendererSubscriber implements EventSubscriberInterface
 		];
 	}
 
-	public function renderDesignerModeHtml(RenderAssetHtmlEvent $event, $eventName, EventDispatcherInterface $eventDispatcher)
-	{
+	public function renderDesignerModeHtml(
+		RenderAssetHtmlEvent $event,
+		$eventName,
+		EventDispatcherInterface $eventDispatcher
+	) {
 		if (!$event->getHtml() && $event->getDeveloperTool()) {
 			$asset = $event->getAsset();
 
@@ -248,7 +250,7 @@ class JavaScriptRendererSubscriber implements EventSubscriberInterface
 					}
 					$scriptHtml .= '>';
 					$scriptHtml .= sprintf(
-							'window.loadAsync(%s)',
+						'window.loadAsync(%s)',
 						json_encode($targetUrl)
 					);
 					$scriptHtml .= '</script>';
