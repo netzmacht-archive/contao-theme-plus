@@ -126,6 +126,25 @@ class File
 				$label = '?';
 		}
 
+		if ($row['inline']) {
+			\Controller::loadLanguageFile('tl_theme_plus_file');
+
+			$label = sprintf(
+				'<span title="%s">&lsaquo;&rsaquo;</span> %s',
+				htmlentities($GLOBALS['TL_LANG']['tl_theme_plus_file']['inline'], ENT_QUOTES, 'UTF-8'),
+				$label
+			);
+		}
+		else if ($row['standalone']) {
+			\Controller::loadLanguageFile('tl_theme_plus_file');
+
+			$label = sprintf(
+				'<span title="%s">&times;</span> %s',
+				htmlentities($GLOBALS['TL_LANG']['tl_theme_plus_file']['standalone'], ENT_QUOTES, 'UTF-8'),
+				$label
+			);
+		}
+
 		if (strlen($row['position'])) {
 			$label = '[' . strtoupper($row['position']) . '] ' . $label;
 		}
