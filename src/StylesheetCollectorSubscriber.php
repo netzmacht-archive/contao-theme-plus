@@ -22,7 +22,7 @@ use Bit3\Contao\ThemePlus\Event\CollectAssetsEvent;
 use Bit3\Contao\ThemePlus\Model\StylesheetModel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class StylesheetCollector implements EventSubscriberInterface
+class StylesheetCollectorSubscriber implements EventSubscriberInterface
 {
 	/**
 	 * {@inheritdoc}

@@ -22,7 +22,7 @@ use Bit3\Contao\ThemePlus\Event\RenderAssetHtmlEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class JavaScriptRenderer implements EventSubscriberInterface
+class StylesheetRendererSubscriber implements EventSubscriberInterface
 {
 	/**
 	 * {@inheritdoc}
@@ -30,7 +30,7 @@ class JavaScriptRenderer implements EventSubscriberInterface
 	public static function getSubscribedEvents()
 	{
 		return [
-			ThemePlusEvents::RENDER_JAVASCRIPT_HTML => [
+			ThemePlusEvents::RENDER_STYLESHEET_HTML => [
 				['renderDesignerModeHtml'],
 				['renderDesignerModeInlineHtml'],
 				['renderLinkHtml'],
@@ -50,7 +50,8 @@ class JavaScriptRenderer implements EventSubscriberInterface
 				$html = '';
 
 				// html mode
-				$xhtml = ($objPage->outputFormat == 'xhtml');
+				$xhtml     = ($objPage->outputFormat == 'xhtml');
+				$tagEnding = $xhtml ? ' />' : '>';
 
 				// session id
 				$id = substr(md5($asset->getSourceRoot() . '/' . $asset->getSourcePath()), 0, 8);
@@ -87,7 +88,7 @@ class JavaScriptRenderer implements EventSubscriberInterface
 
 				// generate the proxy url
 				$url = sprintf(
-					'assets/theme-plus/proxy.php/js/%s/%s',
+					'assets/theme-plus/proxy.php/css/%s/%s',
 					$id,
 					$name
 				);
@@ -100,49 +101,33 @@ class JavaScriptRenderer implements EventSubscriberInterface
 					$id,
 					(object) [
 						'asset' => $realAssets,
-						'type'  => 'js',
+						'type'  => 'css',
 						'url'   => $url,
 					]
 				);
 
 				// generate html
-				if ($event->getLayout()->theme_plus_javascript_lazy_load) {
-					$scriptHtml = '<script';
-					$scriptHtml .= sprintf(' id="%s"', $id);
-					if ($xhtml) {
-						$scriptHtml .= ' type="text/javascript"';
-					}
-					$scriptHtml .= '>';
-					$scriptHtml .= sprintf(
-						'window.loadAsync(%s, %s)',
-						json_encode($url),
-						json_encode($id)
-					);
-					$scriptHtml .= '</script>';
+				$linkHtml = '<link';
+				$linkHtml .= sprintf(' id="%s"', $id);
+				$linkHtml .= sprintf(' href="%s"', $url);
+				if ($xhtml) {
+					$linkHtml .= ' type="text/css"';
 				}
-				else {
-					$scriptHtml = '<script';
-					$scriptHtml .= sprintf(' id="%s"', $id);
-					$scriptHtml .= sprintf(' src="%s"', $url);
-					if ($xhtml) {
-						$scriptHtml .= ' type="text/javascript"';
-					}
-					$scriptHtml .= sprintf(
-						' onload="window.themePlusDevTool && window.themePlusDevTool.triggerAsyncLoad(this, \'%s\');"',
-						$id
-					);
-					$scriptHtml .= '></script>';
+				$linkHtml .= ' rel="stylesheet"';
+				if ($asset instanceof ExtendedAssetInterface && $asset->getMediaQuery()) {
+					$linkHtml .= sprintf(' media="%s"', $asset->getMediaQuery());
 				}
+				$linkHtml .= $tagEnding;
 
 				// wrap cc around
 				if ($asset instanceof ExtendedAssetInterface && $asset->getConditionalComment()) {
-					$scriptHtml = ThemePlusUtils::wrapCc($scriptHtml, $asset->getConditionalComment());
+					$linkHtml = ThemePlusUtils::wrapCc($linkHtml, $asset->getConditionalComment());
 				}
 
 				// add debug information
 				$html .= ThemePlusUtils::getDebugComment($asset);
 
-				$html .= $scriptHtml . PHP_EOL;
+				$html .= $linkHtml . PHP_EOL;
 
 				$event->setHtml($html);
 			}
@@ -177,26 +162,29 @@ class JavaScriptRenderer implements EventSubscriberInterface
 
 				// load and dump the collection
 				$asset->load($event->getDefaultFilters());
-				$js = $asset->dump($event->getDefaultFilters());
+				$css = $asset->dump($event->getDefaultFilters());
 
 				// generate html
-				$scriptHtml = '<script';
+				$styleHtml = '<style';
 				if ($xhtml) {
-					$scriptHtml .= ' type="text/javascript"';
+					$styleHtml .= ' type="text/css"';
 				}
-				$scriptHtml .= '>';
-				$scriptHtml .= $js;
-				$scriptHtml .= '</script>';
+				if ($asset instanceof ExtendedAssetInterface && $asset->getMediaQuery()) {
+					$styleHtml .= sprintf(' media="%s"', $asset->getMediaQuery());
+				}
+				$styleHtml .= '>';
+				$styleHtml .= $css;
+				$styleHtml .= '</style>';
 
 				// wrap cc around
 				if ($asset instanceof ExtendedAssetInterface && $asset->getConditionalComment()) {
-					$scriptHtml = ThemePlusUtils::wrapCc($scriptHtml, $asset->getConditionalComment());
+					$styleHtml = ThemePlusUtils::wrapCc($styleHtml, $asset->getConditionalComment());
 				}
 
 				// add debug information
 				$html .= ThemePlusUtils::getDebugComment($asset);
 
-				$html .= $scriptHtml . PHP_EOL;
+				$html .= $styleHtml . PHP_EOL;
 
 				$event->setHtml($html);
 			}
@@ -209,7 +197,7 @@ class JavaScriptRenderer implements EventSubscriberInterface
 			$asset = $event->getAsset();
 
 			if (!$asset instanceof ExtendedAssetInterface || !$asset->isInline()) {
-				$targetPath = ThemePlusUtils::getAssetPath($asset, 'js');
+				$targetPath = ThemePlusUtils::getAssetPath($asset, 'css');
 
 				if (!file_exists(TL_ROOT . DIRECTORY_SEPARATOR . $targetPath)) {
 					// overwrite the target path
@@ -217,46 +205,38 @@ class JavaScriptRenderer implements EventSubscriberInterface
 
 					// load and dump the collection
 					$asset->load($event->getDefaultFilters());
-					$js = $asset->dump($event->getDefaultFilters());
+					$css = $asset->dump($event->getDefaultFilters());
 
 					// write the asset
-					file_put_contents($targetPath, $js);
+					file_put_contents($targetPath, $css);
 				}
 
 				global $objPage;
 
 				// html mode
-				$xhtml = ($objPage->outputFormat == 'xhtml');
+				$xhtml     = ($objPage->outputFormat == 'xhtml');
+				$tagEnding = $xhtml ? ' />' : '>';
 
 				// generate html
-				if ($event->getLayout()->theme_plus_javascript_lazy_load) {
-					$scriptHtml = '<script';
-					if ($xhtml) {
-						$scriptHtml .= ' type="text/javascript"';
-					}
-					$scriptHtml .= '>';
-					$scriptHtml .= sprintf(
-							'window.loadAsync(%s)',
-						json_encode($targetPath)
-					);
-					$scriptHtml .= '</script>';
+				$linkHtml = '<link';
+				$linkHtml .= sprintf(' href="%s"', $targetPath);
+				if ($xhtml) {
+					$linkHtml .= ' type="text/css"';
 				}
-				else {
-					$scriptHtml = '<script';
-					$scriptHtml .= sprintf(' src="%s"', $targetPath);
-					if ($xhtml) {
-						$scriptHtml .= ' type="text/javascript"';
-					}
-					$scriptHtml .= '></script>';
+				$linkHtml .= ' rel="stylesheet"';
+				if ($asset instanceof ExtendedAssetInterface && $asset->getMediaQuery()) {
+					$linkHtml .= sprintf(' media="%s"', $asset->getMediaQuery());
 				}
-				$scriptHtml .= PHP_EOL;
+				$linkHtml .= $tagEnding;
 
 				// wrap cc around
 				if ($asset instanceof ExtendedAssetInterface && $asset->getConditionalComment()) {
-					$scriptHtml = ThemePlusUtils::wrapCc($scriptHtml, $asset->getConditionalComment());
+					$linkHtml = ThemePlusUtils::wrapCc($linkHtml, $asset->getConditionalComment());
 				}
 
-				$event->setHtml($scriptHtml);
+				$linkHtml .= PHP_EOL;
+
+				$event->setHtml($linkHtml);
 			}
 		}
 	}
@@ -279,7 +259,7 @@ class JavaScriptRenderer implements EventSubscriberInterface
 
 				// load and dump the collection
 				$asset->load($event->getDefaultFilters());
-				$js = $asset->dump($event->getDefaultFilters());
+				$css = $asset->dump($event->getDefaultFilters());
 
 				global $objPage;
 
@@ -287,21 +267,25 @@ class JavaScriptRenderer implements EventSubscriberInterface
 				$xhtml = ($objPage->outputFormat == 'xhtml');
 
 				// generate html
-				$scriptHtml = '<script';
+				$styleHtml = '<style';
 				if ($xhtml) {
-					$scriptHtml .= ' type="text/javascript"';
+					$styleHtml .= ' type="text/css"';
 				}
-				$scriptHtml .= '>';
-				$scriptHtml .= $js;
-				$scriptHtml .= '</script>';
-				$scriptHtml .= PHP_EOL;
+				if ($asset instanceof ExtendedAssetInterface && $asset->getMediaQuery()) {
+					$styleHtml .= sprintf(' media="%s"', $asset->getMediaQuery());
+				}
+				$styleHtml .= '>';
+				$styleHtml .= $css;
+				$styleHtml .= '</style>';
 
 				// wrap cc around
 				if ($asset instanceof ExtendedAssetInterface && $asset->getConditionalComment()) {
-					$scriptHtml = ThemePlusUtils::wrapCc($scriptHtml, $asset->getConditionalComment());
+					$styleHtml = ThemePlusUtils::wrapCc($styleHtml, $asset->getConditionalComment());
 				}
 
-				$event->setHtml($scriptHtml);
+				$styleHtml .= PHP_EOL;
+
+				$event->setHtml($styleHtml);
 			}
 		}
 	}

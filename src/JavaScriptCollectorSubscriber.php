@@ -20,7 +20,7 @@ use Bit3\Contao\ThemePlus\Event\CollectAssetsEvent;
 use Bit3\Contao\ThemePlus\Model\JavaScriptModel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class JavaScriptCollector implements EventSubscriberInterface
+class JavaScriptCollectorSubscriber implements EventSubscriberInterface
 {
 	/**
 	 * {@inheritdoc}

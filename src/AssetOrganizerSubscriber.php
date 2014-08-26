@@ -19,7 +19,7 @@ use Bit3\Contao\ThemePlus\Asset\ExtendedAssetInterface;
 use Bit3\Contao\ThemePlus\Event\OrganizeAssetsEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class AssetOrganizer implements EventSubscriberInterface
+class AssetOrganizerSubscriber implements EventSubscriberInterface
 {
 	/**
 	 * {@inheritdoc}
