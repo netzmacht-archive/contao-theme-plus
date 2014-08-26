@@ -162,7 +162,7 @@ class ThemePlus
 		);
 
 		$event = new OrganizeAssetsEvent($objPage, $layout, $defaultFilters, $collection, $this->developerTool);
-		$eventDispatcher->dispatch(ThemePlusEvents::ORGANIZE_JAVASCRIPT_ASSETS, $event);
+		$eventDispatcher->dispatch(ThemePlusEvents::ORGANIZE_STYLESHEET_ASSETS, $event);
 
 		$collection = $event->getOrganizedAssets();
 
