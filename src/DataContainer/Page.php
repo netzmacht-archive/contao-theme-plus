@@ -1,14 +1,18 @@
 <?php
 
 /**
- * Theme+ - Theme extension for the Contao Open Source CMS
+ * This file is part of bit3/contao-theme-plus.
  *
- * Copyright (C) 2013 bit3 UG <http://bit3.de>
+ * (c) Tristan Lins <tristan.lins@bit3.de>
  *
- * @package    Theme+
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * @package    bit3/contao-theme-plus
  * @author     Tristan Lins <tristan.lins@bit3.de>
- * @link       http://www.themeplus.de
- * @license    http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ * @copyright  bit3 UG <https://bit3.de>
+ * @link       https://github.com/bit3/contao-theme-plus
+ * @license    http://opensource.org/licenses/LGPL-3.0 LGPL-3.0+
+ * @filesource
  */
 
 namespace Bit3\Contao\ThemePlus\DataContainer;
@@ -19,85 +23,84 @@ use ThemePlus\Model\StylesheetModel;
 /**
  * Class Page
  */
-class Page
-	extends \Backend
+class Page extends \Backend
 {
-	public function getStylesheets($dc)
-	{
-		$stylesheet = StylesheetModel::findAll(['order' => 'sorting']);
+    public function getStylesheets($dc)
+    {
+        $stylesheet = StylesheetModel::findAll(['order' => 'sorting']);
 
-		return $stylesheet
-			? $this->buildOptions($stylesheet)
-			: [];
-	}
+        return $stylesheet
+            ? $this->buildOptions($stylesheet)
+            : [];
+    }
 
-	public function getJavaScripts($dc)
-	{
-		$javascripts = JavaScriptModel::findAll(['order' => 'sorting']);
+    public function getJavaScripts($dc)
+    {
+        $javascripts = JavaScriptModel::findAll(['order' => 'sorting']);
 
-		return $javascripts
-			? $this->buildOptions($javascripts)
-			: [];
-	}
+        return $javascripts
+            ? $this->buildOptions($javascripts)
+            : [];
+    }
 
-	protected function buildOptions(\Model\Collection $collection)
-	{
-		while ($collection->next()) {
-			$theme = \ThemeModel::findByPk($collection->pid);
+    protected function buildOptions(\Model\Collection $collection)
+    {
+        while ($collection->next()) {
+            $theme = \ThemeModel::findByPk($collection->pid);
 
-			switch ($collection->type) {
-				case 'code':
-					$label = $collection->code_snippet_title;
-					break;
+            switch ($collection->type) {
+                case 'code':
+                    $label = $collection->code_snippet_title;
+                    break;
 
-				case 'url':
-					$label = preg_replace('#/([^/]+)$#', '/<strong>$1</strong>', $collection->url);
-					break;
+                case 'url':
+                    $label = preg_replace('#/([^/]+)$#', '/<strong>$1</strong>', $collection->url);
+                    break;
 
-				case 'file':
-					if ($collection->filesource == $GLOBALS['TL_CONFIG']['uploadPath'] && version_compare(
-							VERSION,
-							'3',
-							'>='
-						)
-					) {
-						$file = (version_compare(VERSION, '3.2', '>=') ? \FilesModel::findByUuid($collection->file)
-							: \FilesModel::findByPk($collection->file));
+                case 'file':
+                    if ($collection->filesource == $GLOBALS['TL_CONFIG']['uploadPath']
+                        && version_compare(
+                            VERSION,
+                            '3',
+                            '>='
+                        )
+                    ) {
+                        $file = (version_compare(VERSION, '3.2', '>=') ? \FilesModel::findByUuid($collection->file)
+                            : \FilesModel::findByPk($collection->file));
 
-						if ($file) {
-							$label = preg_replace('#/([^/]+)$#', '/<strong>$1</strong>', $file->path);
-							break;
-						}
-					}
-					else {
-						$label = preg_replace('#/([^/]+)$#', '/<strong>$1</strong>', $collection->file);
-						break;
-					}
+                        if ($file) {
+                            $label = preg_replace('#/([^/]+)$#', '/<strong>$1</strong>', $file->path);
+                            break;
+                        }
+                    } else {
+                        $label = preg_replace('#/([^/]+)$#', '/<strong>$1</strong>', $collection->file);
+                        break;
+                    }
 
-				default:
-					$label = '?';
-			}
+                default:
+                    $label = '?';
+            }
 
-			if (strlen($collection->cc)) {
-				$label .= ' <span style="padding-left: 3px; color: #B3B3B3;">[' . $collection->cc . ']</span>';
-			}
+            if (strlen($collection->cc)) {
+                $label .= ' <span style="padding-left: 3px; color: #B3B3B3;">[' . $collection->cc . ']</span>';
+            }
 
-			$filterRules = File::renderFilterRules($collection->row());
-			if ($filterRules) {
-				$label .= ' <span style="padding-left: 3px; color: #B3B3B3;">' . $filterRules . '</span>';
-			}
+            $filterRules = File::renderFilterRules($collection->row());
+            if ($filterRules) {
+                $label .= ' <span style="padding-left: 3px; color: #B3B3B3;">' . $filterRules . '</span>';
+            }
 
-			$image = 'assets/theme-plus/images/' . $collection->type . '.png';
+            $image = 'assets/theme-plus/images/' . $collection->type . '.png';
 
-			$options[$theme->name][$collection->id] = ($image
-					? $this->generateImage(
-						$image,
-						$label,
-						'style="vertical-align:-3px"'
-					) . ' '
-					: '') . $label;
-		}
+            $options[$theme->name][$collection->id] = ($image
+                    ? $this->generateImage(
+                        $image,
+                        $label,
+                        'style="vertical-align:-3px"'
+                    ) . ' '
+                    : '') . $label;
+        }
 
-		return $options;
-	}
+        return $options;
+    }
 }

@@ -1,14 +1,18 @@
 <?php
 
 /**
- * Theme+ - Theme extension for the Contao Open Source CMS
+ * This file is part of bit3/contao-theme-plus.
  *
- * Copyright (C) 2013 bit3 UG <http://bit3.de>
+ * (c) Tristan Lins <tristan.lins@bit3.de>
  *
- * @package    Theme+
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * @package    bit3/contao-theme-plus
  * @author     Tristan Lins <tristan.lins@bit3.de>
- * @link       http://www.themeplus.de
- * @license    http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ * @copyright  bit3 UG <https://bit3.de>
+ * @link       https://github.com/bit3/contao-theme-plus
+ * @license    http://opensource.org/licenses/LGPL-3.0 LGPL-3.0+
+ * @filesource
  */
 
 
@@ -32,12 +36,12 @@ $GLOBALS['BE_MOD']['design']['themes']['tables'][] = 'tl_theme_plus_variable';
  * HOOKs
  */
 $GLOBALS['TL_HOOKS']['parseTemplate']['themeplus']            = [
-	'Bit3\Contao\ThemePlus\ThemePlus',
-	'hookParseTemplate'
+    'Bit3\Contao\ThemePlus\ThemePlus',
+    'hookParseTemplate'
 ];
 $GLOBALS['TL_HOOKS']['replaceDynamicScriptTags']['themeplus'] = [
-	'Bit3\Contao\ThemePlus\ThemePlus',
-	'hookReplaceDynamicScriptTags'
+    'Bit3\Contao\ThemePlus\ThemePlus',
+    'hookReplaceDynamicScriptTags'
 ];
 
 
@@ -56,33 +60,35 @@ $GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'Bit3\Contao\ThemePlus\JavaScriptRendererSu
  * easy_themes integration
  */
 $GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus_stylesheet'] = [
-	'label'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_stylesheet'][0],
-	'title'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_stylesheet'][1],
-	'href_fragment' => 'table=tl_theme_plus_stylesheet',
-	'icon'          => 'assets/theme-plus/images/stylesheet.png',
-	'appendRT'      => true,
+    'label'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_stylesheet'][0],
+    'title'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_stylesheet'][1],
+    'href_fragment' => 'table=tl_theme_plus_stylesheet',
+    'icon'          => 'assets/theme-plus/images/stylesheet.png',
+    'appendRT'      => true,
 ];
 $GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus_javascript'] = [
-	'label'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_javascript'][0],
-	'title'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_javascript'][1],
-	'href_fragment' => 'table=tl_theme_plus_javascript',
-	'icon'          => 'assets/theme-plus/images/javascript.png',
-	'appendRT'      => true,
+    'label'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_javascript'][0],
+    'title'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_javascript'][1],
+    'href_fragment' => 'table=tl_theme_plus_javascript',
+    'icon'          => 'assets/theme-plus/images/javascript.png',
+    'appendRT'      => true,
 ];
 $GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus_variable']   = [
-	'label'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_variable'][0],
-	'title'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_variable'][1],
-	'href_fragment' => 'table=tl_theme_plus_variable',
-	'icon'          => 'assets/theme-plus/images/variable.png',
-	'appendRT'      => true,
+    'label'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_variable'][0],
+    'title'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_variable'][1],
+    'href_fragment' => 'table=tl_theme_plus_variable',
+    'icon'          => 'assets/theme-plus/images/variable.png',
+    'appendRT'      => true,
 ];
 
 
 /**
  * Assetic compiler filter
  */
-$GLOBALS['ASSETIC']['compiler']['contaoReplaceVariable']          = 'Bit3\Contao\ThemePlus\Filter\ContaoReplaceVariableFilter';
-$GLOBALS['ASSETIC']['compiler']['contaoReplaceThemePlusVariable'] = 'Bit3\Contao\ThemePlus\Filter\ContaoReplaceThemePlusVariableFilter';
+$GLOBALS['ASSETIC']['compiler']['contaoReplaceVariable']          =
+    'Bit3\Contao\ThemePlus\Filter\ContaoReplaceVariableFilter';
+$GLOBALS['ASSETIC']['compiler']['contaoReplaceThemePlusVariable'] =
+    'Bit3\Contao\ThemePlus\Filter\ContaoReplaceThemePlusVariableFilter';
 
 
 /**

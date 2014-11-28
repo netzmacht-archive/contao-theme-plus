@@ -1,14 +1,18 @@
 <?php
 
 /**
- * Theme+ - Theme extension for the Contao Open Source CMS
+ * This file is part of bit3/contao-theme-plus.
  *
- * Copyright (C) 2013 bit3 UG <http://bit3.de>
+ * (c) Tristan Lins <tristan.lins@bit3.de>
  *
- * @package    Theme+
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * @package    bit3/contao-theme-plus
  * @author     Tristan Lins <tristan.lins@bit3.de>
- * @link       http://www.themeplus.de
- * @license    http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ * @copyright  bit3 UG <https://bit3.de>
+ * @link       https://github.com/bit3/contao-theme-plus
+ * @license    http://opensource.org/licenses/LGPL-3.0 LGPL-3.0+
+ * @filesource
  */
 
 
@@ -23,10 +27,10 @@ MetaPalettes::appendAfter('tl_user', 'extend', 'theme', ['frontend' => [':hide',
 MetaPalettes::appendAfter('tl_user', 'custom', 'theme', ['frontend' => [':hide', 'themePlusDesignerMode']]);
 
 $GLOBALS['TL_DCA']['tl_user']['fields']['themePlusDesignerMode'] = [
-	'label'     => &$GLOBALS['TL_LANG']['tl_user']['themePlusDesignerMode'],
-	'exclude'   => true,
-	'inputType' => 'checkbox',
-	'sql'       => "char(1) NOT NULL default ''"
+    'label'     => &$GLOBALS['TL_LANG']['tl_user']['themePlusDesignerMode'],
+    'exclude'   => true,
+    'inputType' => 'checkbox',
+    'sql'       => "char(1) NOT NULL default ''"
 ];
 
 $GLOBALS['TL_DCA']['tl_user']['fields']['themes']['options'][] = 'theme_plus_stylesheet';

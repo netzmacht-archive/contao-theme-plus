@@ -1,14 +1,18 @@
 <?php
 
 /**
- * Assetic for Contao Open Source CMS
+ * This file is part of bit3/contao-theme-plus.
  *
- * Copyright (C) 2013 bit3 UG
+ * (c) Tristan Lins <tristan.lins@bit3.de>
  *
- * @package Assetic
- * @author  Tristan Lins <tristan.lins@bit3.de>
- * @link    http://bit3.de
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * @package    bit3/contao-theme-plus
+ * @author     Tristan Lins <tristan.lins@bit3.de>
+ * @copyright  bit3 UG <https://bit3.de>
+ * @link       https://github.com/bit3/contao-theme-plus
+ * @license    http://opensource.org/licenses/LGPL-3.0 LGPL-3.0+
+ * @filesource
  */
 
 namespace Bit3\Contao\ThemePlus\Filter;
@@ -16,27 +20,25 @@ namespace Bit3\Contao\ThemePlus\Filter;
 use Bit3\Contao\Assetic\DefaultFilterFactory;
 use Bit3\Contao\Assetic\FilterFactory;
 
-class ThemePlusFilterFactory
-	extends DefaultFilterFactory
-	implements FilterFactory
+class ThemePlusFilterFactory extends DefaultFilterFactory implements FilterFactory
 {
-	public function createFilter(array $filterConfig)
-	{
-		$filter = null;
+    public function createFilter(array $filterConfig)
+    {
+        $filter = null;
 
-		switch ($filterConfig['type']) {
-			case 'contaoReplaceVariable':
-				$filter = new ContaoReplaceVariableFilter();
-				break;
-			case 'contaoInsertTag':
-				$filter = new ContaoInsertTagFilter();
-				break;
-		}
+        switch ($filterConfig['type']) {
+            case 'contaoReplaceVariable':
+                $filter = new ContaoReplaceVariableFilter();
+                break;
+            case 'contaoInsertTag':
+                $filter = new ContaoInsertTagFilter();
+                break;
+        }
 
-		if ($filter === null) {
-			$filter = parent::createFilter($filterConfig);
-		}
+        if ($filter === null) {
+            $filter = parent::createFilter($filterConfig);
+        }
 
-		return $filter;
-	}
+        return $filter;
+    }
 }

@@ -1,14 +1,18 @@
 <?php
 
 /**
- * Theme+ - Theme extension for the Contao Open Source CMS
+ * This file is part of bit3/contao-theme-plus.
  *
- * Copyright (C) 2013 bit3 UG <http://bit3.de>
+ * (c) Tristan Lins <tristan.lins@bit3.de>
  *
- * @package    Theme+
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * @package    bit3/contao-theme-plus
  * @author     Tristan Lins <tristan.lins@bit3.de>
- * @link       http://www.themeplus.de
- * @license    http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ * @copyright  bit3 UG <https://bit3.de>
+ * @link       https://github.com/bit3/contao-theme-plus
+ * @license    http://opensource.org/licenses/LGPL-3.0 LGPL-3.0+
+ * @filesource
  */
 
 
@@ -17,58 +21,58 @@
  */
 class EditorStyles extends ThemePlus
 {
-	public function __construct()
-	{
-		parent::__construct();
-		$this->import('Input');
-	}
+    public function __construct()
+    {
+        parent::__construct();
+        $this->import('Input');
+    }
 
-	/**
-	 * Get the editor content css files as string list.
-	 *
-	 * @param string $strEditor
-	 */
-	public static function getEditorContentCSS($strEditor)
-	{
-		return implode(',', self::getEditorContentCSSArray($strEditor));
-	}
+    /**
+     * Get the editor content css files as string list.
+     *
+     * @param string $strEditor
+     */
+    public static function getEditorContentCSS($strEditor)
+    {
+        return implode(',', self::getEditorContentCSSArray($strEditor));
+    }
 
-	/**
-	 * Get the editor content css files as array.
-	 *
-	 * @param string $strEditor
-	 */
-	public static function getEditorContentCSSArray($strEditor)
-	{
-		$objEditorStyles = new EditorStyles();
-		return $objEditorStyles->_getEditorContentCSSArray($strEditor);
-	}
+    /**
+     * Get the editor content css files as array.
+     *
+     * @param string $strEditor
+     */
+    public static function getEditorContentCSSArray($strEditor)
+    {
+        $objEditorStyles = new EditorStyles();
+        return $objEditorStyles->_getEditorContentCSSArray($strEditor);
+    }
 
-	/**
-	 * Get the editor content css files as array.
-	 *
-	 * @param string $strEditor
-	 */
-	protected function _getEditorContentCSSArray($strEditor)
-	{
-		$this->import('ThemePlus');
+    /**
+     * Get the editor content css files as array.
+     *
+     * @param string $strEditor
+     */
+    protected function _getEditorContentCSSArray($strEditor)
+    {
+        $this->import('ThemePlus');
 
-		$blnDesignerMode = $this->ThemePlus->isDesignerMode();
-		$this->ThemePlus->setLiveMode();
+        $blnDesignerMode = $this->ThemePlus->isDesignerMode();
+        $this->ThemePlus->setLiveMode();
 
-		$objPage   = false;
-		$intLayout = 0;
+        $objPage   = false;
+        $intLayout = 0;
 
-		switch ($this->Input->get('do')) {
-			/* Article mode */
-			case 'article':
-				switch ($this->Input->get('table')) {
-					/* Article editing */
-					case '':
-						switch ($this->Input->get('act')) {
-							case 'edit':
-								$objPage = $this->Database->prepare(
-									"
+        switch ($this->Input->get('do')) {
+            /* Article mode */
+            case 'article':
+                switch ($this->Input->get('table')) {
+                    /* Article editing */
+                    case '':
+                        switch ($this->Input->get('act')) {
+                            case 'edit':
+                                $objPage = $this->Database->prepare(
+                                    "
 										SELECT
 											p.*
 										FROM
@@ -79,22 +83,22 @@ class EditorStyles extends ThemePlus
 											p.id=a.pid
 										WHERE
 											a.id=?"
-								)
-									->execute($this->Input->get('id'));
-								if ($objPage->next()) {
-									$objPage   = $this->getPageDetails($objPage->id);
-									$intLayout = $objPage->layout;
-								}
-								break;
-						}
-						break;
+                                )
+                                    ->execute($this->Input->get('id'));
+                                if ($objPage->next()) {
+                                    $objPage   = $this->getPageDetails($objPage->id);
+                                    $intLayout = $objPage->layout;
+                                }
+                                break;
+                        }
+                        break;
 
-					/* Content element editing */
-					case 'tl_content':
-						switch ($this->Input->get('act')) {
-							case 'edit':
-								$objPage = $this->Database->prepare(
-									"
+                    /* Content element editing */
+                    case 'tl_content':
+                        switch ($this->Input->get('act')) {
+                            case 'edit':
+                                $objPage = $this->Database->prepare(
+                                    "
 										SELECT
 											p.*
 										FROM
@@ -109,27 +113,27 @@ class EditorStyles extends ThemePlus
 											a.id=c.pid
 										WHERE
 											c.id=?"
-								)
-									->execute($this->Input->get('id'));
-								if ($objPage->next()) {
-									$objPage   = $this->getPageDetails($objPage->id);
-									$intLayout = $objPage->layout;
-								}
-								break;
-						}
-						break;
-				}
-				break;
+                                )
+                                    ->execute($this->Input->get('id'));
+                                if ($objPage->next()) {
+                                    $objPage   = $this->getPageDetails($objPage->id);
+                                    $intLayout = $objPage->layout;
+                                }
+                                break;
+                        }
+                        break;
+                }
+                break;
 
-			/* News mode */
-			case 'news':
-				switch ($this->Input->get('table')) {
-					/* News editing */
-					case 'tl_news':
-						switch ($this->Input->get('act')) {
-							case 'edit':
-								$objPage = $this->Database->prepare(
-									"
+            /* News mode */
+            case 'news':
+                switch ($this->Input->get('table')) {
+                    /* News editing */
+                    case 'tl_news':
+                        switch ($this->Input->get('act')) {
+                            case 'edit':
+                                $objPage = $this->Database->prepare(
+                                    "
 										SELECT
 											p.*
 										FROM
@@ -144,28 +148,28 @@ class EditorStyles extends ThemePlus
 											a.id=n.pid
 										WHERE
 											n.id=?"
-								)
-									->execute($this->Input->get('id'));
-								if ($objPage->next()) {
-									$objPage   = $this->getPageDetails($objPage->id);
-									$intLayout = $objPage->layout;
-								}
-								break;
-								break;
-						}
-						break;
-				}
-				break;
+                                )
+                                    ->execute($this->Input->get('id'));
+                                if ($objPage->next()) {
+                                    $objPage   = $this->getPageDetails($objPage->id);
+                                    $intLayout = $objPage->layout;
+                                }
+                                break;
+                                break;
+                        }
+                        break;
+                }
+                break;
 
-			/* Calendar mode */
-			case 'calendar':
-				switch ($this->Input->get('table')) {
-					/* Calendar event editing */
-					case 'tl_calendar_events':
-						switch ($this->Input->get('act')) {
-							case 'edit':
-								$objPage = $this->Database->prepare(
-									"
+            /* Calendar mode */
+            case 'calendar':
+                switch ($this->Input->get('table')) {
+                    /* Calendar event editing */
+                    case 'tl_calendar_events':
+                        switch ($this->Input->get('act')) {
+                            case 'edit':
+                                $objPage = $this->Database->prepare(
+                                    "
 										SELECT
 											p.*
 										FROM
@@ -180,28 +184,28 @@ class EditorStyles extends ThemePlus
 											c.id=e.pid
 										WHERE
 											e.id=?"
-								)
-									->execute($this->Input->get('id'));
-								if ($objPage->next()) {
-									$objPage   = $this->getPageDetails($objPage->id);
-									$intLayout = $objPage->layout;
-								}
-								break;
-								break;
-						}
-						break;
-				}
-				break;
+                                )
+                                    ->execute($this->Input->get('id'));
+                                if ($objPage->next()) {
+                                    $objPage   = $this->getPageDetails($objPage->id);
+                                    $intLayout = $objPage->layout;
+                                }
+                                break;
+                                break;
+                        }
+                        break;
+                }
+                break;
 
-			/* Form generator mode */
-			case 'form':
-				switch ($this->Input->get('table')) {
-					/* Form field editing */
-					case 'tl_form_field':
-						switch ($this->Input->get('act')) {
-							case 'edit':
-								$objPage = $this->Database->prepare(
-									"
+            /* Form generator mode */
+            case 'form':
+                switch ($this->Input->get('table')) {
+                    /* Form field editing */
+                    case 'tl_form_field':
+                        switch ($this->Input->get('act')) {
+                            case 'edit':
+                                $objPage = $this->Database->prepare(
+                                    "
 										SELECT
 											p.*
 										FROM
@@ -216,27 +220,27 @@ class EditorStyles extends ThemePlus
 											f.id=e.pid
 										WHERE
 											e.id=?"
-								)
-									->execute($this->Input->get('id'));
-								if ($objPage->next()) {
-									$objPage   = $this->getPageDetails($objPage->id);
-									$intLayout = $objPage->layout;
-								}
-								break;
-						}
-						break;
-				}
-				break;
+                                )
+                                    ->execute($this->Input->get('id'));
+                                if ($objPage->next()) {
+                                    $objPage   = $this->getPageDetails($objPage->id);
+                                    $intLayout = $objPage->layout;
+                                }
+                                break;
+                        }
+                        break;
+                }
+                break;
 
-			/* Newsletter mode */
-			case 'newsletter':
-				switch ($this->Input->get('table')) {
-					/* Newsletter editing */
-					case 'tl_newsletter':
-						switch ($this->Input->get('act')) {
-							case 'edit':
-								$objPage = $this->Database->prepare(
-									"
+            /* Newsletter mode */
+            case 'newsletter':
+                switch ($this->Input->get('table')) {
+                    /* Newsletter editing */
+                    case 'tl_newsletter':
+                        switch ($this->Input->get('act')) {
+                            case 'edit':
+                                $objPage = $this->Database->prepare(
+                                    "
 										SELECT
 											p.*
 										FROM
@@ -251,88 +255,88 @@ class EditorStyles extends ThemePlus
 											c.id=n.pid
 										WHERE
 											n.id=?"
-								)
-									->execute($this->Input->get('id'));
-								if ($objPage->next()) {
-									$objPage   = $this->getPageDetails($objPage->id);
-									$intLayout = $objPage->layout;
-								}
-								break;
-						}
-						break;
-				}
-				break;
+                                )
+                                    ->execute($this->Input->get('id'));
+                                if ($objPage->next()) {
+                                    $objPage   = $this->getPageDetails($objPage->id);
+                                    $intLayout = $objPage->layout;
+                                }
+                                break;
+                        }
+                        break;
+                }
+                break;
 
-			/* Theme mode */
-			case 'themes':
-				switch ($this->Input->get('table')) {
-					/* Module editing */
-					case 'tl_module':
-						switch ($this->Input->get('act')) {
-							case 'edit':
-								$intLayout = $this->Input->get('id');
-								break;
-						}
-						break;
-				}
-				break;
-		}
+            /* Theme mode */
+            case 'themes':
+                switch ($this->Input->get('table')) {
+                    /* Module editing */
+                    case 'tl_module':
+                        switch ($this->Input->get('act')) {
+                            case 'edit':
+                                $intLayout = $this->Input->get('id');
+                                break;
+                        }
+                        break;
+                }
+                break;
+        }
 
-		if (!$intLayout) {
-			if (isset($GLOBALS['TL_HOOKS']['getEditorStylesLayout']) && is_array(
-					$GLOBALS['TL_HOOKS']['getEditorStylesLayout']
-				)
-			) {
-				foreach ($GLOBALS['TL_HOOKS']['getEditorStylesLayout'] as $callback) {
-					$this->import($callback[0]);
-					$intResult = $this->$callback[0]->$callback[1]($strEditor);
-					if ($intResult > 0) {
-						$intLayout = intval($intResult);
-						break;
-					}
-				}
-			}
-		}
+        if (!$intLayout) {
+            if (isset($GLOBALS['TL_HOOKS']['getEditorStylesLayout'])
+                && is_array(
+                    $GLOBALS['TL_HOOKS']['getEditorStylesLayout']
+                )
+            ) {
+                foreach ($GLOBALS['TL_HOOKS']['getEditorStylesLayout'] as $callback) {
+                    $this->import($callback[0]);
+                    $intResult = $this->$callback[0]->$callback[1]($strEditor);
+                    if ($intResult > 0) {
+                        $intLayout = intval($intResult);
+                        break;
+                    }
+                }
+            }
+        }
 
-		if (!$intLayout) {
-			$objLayout = $this->Database->execute(
-				"
+        if (!$intLayout) {
+            $objLayout = $this->Database->execute(
+                "
 					SELECT
 						*
 					FROM
 						tl_layout
 					WHERE
 						fallback='1'"
-			);
-			if (!$objLayout->next()) {
-				return [];
-			}
-		}
-		else {
-			$objLayout = $this->Database->prepare(
-				"
+            );
+            if (!$objLayout->next()) {
+                return [];
+            }
+        } else {
+            $objLayout = $this->Database->prepare(
+                "
 					SELECT
 						*
 					FROM
 						tl_layout
 					WHERE
 						id=?"
-			)
-				->execute($intLayout);
-			if (!$objLayout->next()) {
-				return [];
-			}
-		}
+            )
+                ->execute($intLayout);
+            if (!$objLayout->next()) {
+                return [];
+            }
+        }
 
-		$arrThemePlus = array_merge
-		(
-			['0'],
-			deserialize($objLayout->theme_plus_stylesheets, true),
-			$objPage ? $this->inheritFiles($objPage, 'stylesheets') : []
-		);
+        $arrThemePlus = array_merge
+        (
+            ['0'],
+            deserialize($objLayout->theme_plus_stylesheets, true),
+            $objPage ? $this->inheritFiles($objPage, 'stylesheets') : []
+        );
 
-		$objThemePlusFile = $this->Database->prepare(
-			"
+        $objThemePlusFile = $this->Database->prepare(
+            "
 				SELECT
 					*
 				FROM
@@ -343,30 +347,30 @@ class EditorStyles extends ThemePlus
 						OR	force_editor_integration='1')
 					AND (	type = 'css_url'
 						OR  type = 'css_file')"
-		)
-			->execute($objLayout->pid);
-		$arrIds           = [];
-		while ($objThemePlusFile->next()) {
-			if ($objThemePlusFile->force_editor_integration
-				|| in_array($strEditor, deserialize($objThemePlusFile->editor_integration, true))
-			) {
-				$arrIds[] = $objThemePlusFile->id;
-			}
-		}
+        )
+            ->execute($objLayout->pid);
+        $arrIds           = [];
+        while ($objThemePlusFile->next()) {
+            if ($objThemePlusFile->force_editor_integration
+                || in_array($strEditor, deserialize($objThemePlusFile->editor_integration, true))
+            ) {
+                $arrIds[] = $objThemePlusFile->id;
+            }
+        }
 
-		$arrSources = [];
-		if (count($arrIds) > 0) {
-			$arrThemePlusFile = $this->getCssFiles($arrIds);
-			foreach ($arrThemePlusFile as $objThemePlusFile) {
-				$arrSources[] = $objThemePlusFile->getFile();
-			}
-		}
+        $arrSources = [];
+        if (count($arrIds) > 0) {
+            $arrThemePlusFile = $this->getCssFiles($arrIds);
+            foreach ($arrThemePlusFile as $objThemePlusFile) {
+                $arrSources[] = $objThemePlusFile->getFile();
+            }
+        }
 
-		// restore designer mode
-		if ($blnDesignerMode) {
-			$this->ThemePlus->setDesignerMode();
-		}
+        // restore designer mode
+        if ($blnDesignerMode) {
+            $this->ThemePlus->setDesignerMode();
+        }
 
-		return $arrSources;
-	}
+        return $arrSources;
+    }
 }
