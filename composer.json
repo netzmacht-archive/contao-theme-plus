@@ -28,7 +28,8 @@
 		"contao-community-alliance/dependency-container": "~1.0",
 		"bit3/contao-meta-palettes":"~1.0",
 		"bit3/contao-assetic":"~2.0",
-		"ikimea/browser":"dev-master",
+        "bit3/contao-ikimea-browser-service": "~1.0",
+        "bit3/contao-browser-detect-service": "~1.0",
 		"mobiledetect/mobiledetectlib": "2.*"
 	},
 	"require-dev":{

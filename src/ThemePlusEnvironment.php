@@ -74,38 +74,6 @@ class ThemePlusEnvironment
 	}
 
 	/**
-	 * @var \Ikimea\Browser\Browser
-	 */
-	protected static $browserDetect;
-
-	/**
-	 * @return \Ikimea\Browser\Browser
-	 */
-	public static function getBrowserDetect()
-	{
-		if (static::$browserDetect === null) {
-			static::$browserDetect = new \Ikimea\Browser\Browser();
-		}
-		return static::$browserDetect;
-	}
-
-	/**
-	 * @var \Mobile_Detect
-	 */
-	protected static $mobileDetect;
-
-	/**
-	 * @return \Mobile_Detect
-	 */
-	public static function getMobileDetect()
-	{
-		if (static::$mobileDetect === null) {
-			static::$mobileDetect = new \Mobile_Detect();
-		}
-		return static::$mobileDetect;
-	}
-
-	/**
 	 * If is in live mode.
 	 */
 	protected $blnLiveMode = true;
@@ -181,55 +149,6 @@ class ThemePlusEnvironment
 	 */
 	public static function isInPreCompileMode()
 	{
-		return static::isDesignerMode() &&
-		\Input::get('theme_plus_compile_assets');
-	}
-
-	/**
-	 * Shorthand check if current request is from a desktop.
-	 *
-	 * @return bool
-	 */
-	public static function isDesktop()
-	{
-		$browserIdentOverwrite = json_decode(\Session::getInstance()->get(self::BROWSER_IDENT_OVERWRITE));
-
-		if ($browserIdentOverwrite && $browserIdentOverwrite->platform) {
-			return $browserIdentOverwrite->platform == 'desktop';
-		}
-
-		return !(static::getMobileDetect()->isTablet() || static::getMobileDetect()->isMobile());
-	}
-
-	/**
-	 * Shorthand check if current request is from a tablet.
-	 *
-	 * @return bool
-	 */
-	public static function isTabled()
-	{
-		$browserIdentOverwrite = json_decode(\Session::getInstance()->get(self::BROWSER_IDENT_OVERWRITE));
-
-		if ($browserIdentOverwrite && $browserIdentOverwrite->platform) {
-			return in_array($browserIdentOverwrite->platform, ['tablet', 'tablet-or-mobile']);
-		}
-
-		return static::getMobileDetect()->isTablet();
-	}
-
-	/**
-	 * Shorthand check if current request is from a mobile device.
-	 *
-	 * @return bool
-	 */
-	public static function isMobile()
-	{
-		$browserIdentOverwrite = json_decode(\Session::getInstance()->get(self::BROWSER_IDENT_OVERWRITE));
-
-		if ($browserIdentOverwrite && $browserIdentOverwrite->platform) {
-			return in_array($browserIdentOverwrite->platform, ['tablet-or-mobile', 'mobile']);
-		}
-
-		return static::getMobileDetect()->isMobile() || static::getMobileDetect()->isTablet();
+		return static::isDesignerMode() && \Input::get('theme_plus_compile_assets');
 	}
 }
