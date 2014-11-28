@@ -15,7 +15,7 @@ namespace Bit3\Contao\ThemePlus;
 
 use Assetic\Asset\AssetCollectionInterface;
 use Assetic\Asset\AssetInterface;
-use Bit3\Contao\ThemePlus\Asset\DelegateAssetInterface;
+use Bit3\Contao\ThemePlus\Asset\DelegatorAssetInterface;
 
 class ThemePlusUtils
 {
@@ -211,10 +211,10 @@ class ThemePlusUtils
 			return $buffer;
 		}
 
-		else if ($asset instanceof DelegateAssetInterface) {
+		else if ($asset instanceof DelegatorAssetInterface) {
 			/** @var AssetCollectionInterface $asset */
 			$buffer = $depth . 'delegator(' . get_class($asset) . ') {' . PHP_EOL;
-			if ($asset instanceof DelegateAssetInterface) {
+			if ($asset instanceof DelegatorAssetInterface) {
 				$buffer .= $depth . '  delegate: [' . PHP_EOL;
 				$buffer .= static::getAssetDebugString($asset->getAsset(), $depth . '    ') . PHP_EOL;
 				$buffer .= $depth . '  ]' . PHP_EOL;

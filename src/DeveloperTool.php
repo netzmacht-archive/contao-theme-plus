@@ -16,7 +16,7 @@ namespace Bit3\Contao\ThemePlus;
 use Assetic\Asset\AssetInterface;
 use Assetic\Asset\FileAsset;
 use Assetic\Asset\HttpAsset;
-use Bit3\Contao\ThemePlus\Asset\DelegateAssetInterface;
+use Bit3\Contao\ThemePlus\Asset\DelegatorAssetInterface;
 use Bit3\Contao\ThemePlus\DataContainer\File;
 
 class DeveloperTool
@@ -90,7 +90,7 @@ class DeveloperTool
 				$asset   = $file->asset;
 				$files[] = $id;
 
-				while ($asset instanceof DelegateAssetInterface) {
+				while ($asset instanceof DelegatorAssetInterface) {
 					$asset = $asset->getAsset();
 				}
 

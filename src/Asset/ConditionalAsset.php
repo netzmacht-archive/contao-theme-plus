@@ -19,7 +19,8 @@ use Assetic\Filter\FilterInterface;
 /**
  * Class ConditionalAsset
  */
-class ConditionalAsset extends AbstractDelegateAsset
+class ConditionalAsset
+   extends AbstractDelegatorAsset
 {
 
 	/**

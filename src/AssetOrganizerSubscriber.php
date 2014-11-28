@@ -16,7 +16,7 @@ namespace Bit3\Contao\ThemePlus;
 use Assetic\Asset\AssetCollection;
 use Assetic\Asset\AssetCollectionInterface;
 use Assetic\Asset\StringAsset;
-use Bit3\Contao\ThemePlus\Asset\DelegateAssetInterface;
+use Bit3\Contao\ThemePlus\Asset\DelegatorAssetInterface;
 use Bit3\Contao\ThemePlus\Asset\ExtendedAssetInterface;
 use Bit3\Contao\ThemePlus\Event\GenerateAssetPathEvent;
 use Bit3\Contao\ThemePlus\Event\OrganizeAssetsEvent;
@@ -53,7 +53,7 @@ class AssetOrganizerSubscriber implements EventSubscriberInterface
 				$filters
 			) . ']';
 
-		while ($asset instanceof DelegateAssetInterface) {
+		while ($asset instanceof DelegatorAssetInterface) {
 			$asset = $asset->getAsset();
 		}
 

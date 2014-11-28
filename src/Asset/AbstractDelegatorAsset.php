@@ -17,9 +17,9 @@ use Assetic\Asset\AssetInterface;
 use Assetic\Filter\FilterInterface;
 
 /**
- * Class AbstractDelegateAsset
+ * Class AbstractDelegatorAsset
  */
-class AbstractDelegateAsset implements DelegateAssetInterface
+class AbstractDelegatorAsset implements DelegatorAssetInterface
 {
 
 	/**

@@ -22,7 +22,7 @@ use Assetic\Filter\FilterInterface;
 use Bit3\Contao\Assetic\AsseticFactory;
 use Bit3\Contao\ThemePlus\ThemePlusEnvironment;
 
-class DatabaseAsset implements ExtendedAssetInterface, DelegateAssetInterface, \Serializable
+class DatabaseAsset implements ExtendedAssetInterface, DelegatorAssetInterface, \Serializable
 {
 
 	/**

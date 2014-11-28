@@ -15,7 +15,7 @@ namespace Bit3\Contao\ThemePlus\Asset;
 
 use Assetic\Asset\AssetInterface;
 
-interface DelegateAssetInterface extends AssetInterface
+interface DelegatorAssetInterface extends AssetInterface
 {
 	/**
 	 * @return AssetInterface

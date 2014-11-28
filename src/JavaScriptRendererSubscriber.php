@@ -15,7 +15,7 @@ namespace Bit3\Contao\ThemePlus;
 
 use Assetic\Asset\FileAsset;
 use Assetic\Asset\HttpAsset;
-use Bit3\Contao\ThemePlus\Asset\DelegateAssetInterface;
+use Bit3\Contao\ThemePlus\Asset\DelegatorAssetInterface;
 use Bit3\Contao\ThemePlus\Asset\ExtendedAssetInterface;
 use Bit3\Contao\ThemePlus\Event\AddStaticDomainEvent;
 use Bit3\Contao\ThemePlus\Event\GenerateAssetPathEvent;
@@ -71,7 +71,7 @@ class JavaScriptRendererSubscriber implements EventSubscriberInterface
 				}
 
 				$realAssets = $asset;
-				while ($realAssets instanceof DelegateAssetInterface) {
+				while ($realAssets instanceof DelegatorAssetInterface) {
 					$realAssets = $realAssets->getAsset();
 				}
 
