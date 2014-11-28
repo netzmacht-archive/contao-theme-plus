@@ -20,6 +20,9 @@ use Assetic\Asset\StringAsset;
 use Assetic\Filter\CssRewriteFilter;
 use Assetic\Filter\FilterInterface;
 use Bit3\Contao\Assetic\AsseticFactory;
+use Bit3\Contao\ThemePlus\Condition\AndConditionConjunction;
+use Bit3\Contao\ThemePlus\Condition\OrConditionConjunction;
+use Bit3\Contao\ThemePlus\Condition\PlatformCondition;
 use Bit3\Contao\ThemePlus\ThemePlusEnvironment;
 
 class DatabaseAsset implements ExtendedAssetInterface, DelegatorAssetInterface, \Serializable
@@ -109,10 +112,25 @@ class DatabaseAsset implements ExtendedAssetInterface, DelegatorAssetInterface, 
 					break;
 
 				case 'code':
-					$asset = new StringAsset($this->row['code'], $filter, TL_ROOT, 'string_asset');
-					$asset->setLastModified($this->row['tstamp']);
+					$this->asset = new StringAsset($this->row['code'], $filter, TL_ROOT, 'string_asset');
+					$this->asset->setLastModified($this->row['tstamp']);
 					break;
 			}
+
+          if ($this->row['filter']) {
+              $filterRules = deserialize($this->row['filterRule'], true);
+              $or          = new OrConditionConjunction();
+
+              foreach ($filterRules as $filterRule) {
+                  $and = new AndConditionConjunction();
+
+                  if ($filterRule['platform']) {
+                      $and->addCondition(new PlatformCondition($filterRule['platform']));
+                  }
+
+                  $or->addCondition($and);
+              }
+          }
 		}
 
 		return $this->asset;
