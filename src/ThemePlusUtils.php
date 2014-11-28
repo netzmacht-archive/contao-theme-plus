@@ -30,6 +30,8 @@ class ThemePlusUtils
 	 * @param bool   $invert
 	 *
 	 * @return bool
+     *
+     * @deprecated
 	 */
 	public static function checkFilter(
 		$system = null,
@@ -104,11 +106,11 @@ class ThemePlusUtils
 					break;
 
 				case 'tablet':
-					$match = $match && ThemePlusEnvironment::isTabled();
+					$match = $match && ThemePlusEnvironment::isTablet();
 					break;
 
 				case 'tablet-or-mobile':
-					$match = $match && (ThemePlusEnvironment::isTabled() || ThemePlusEnvironment::isMobile());
+					$match = $match && (ThemePlusEnvironment::isTablet() || ThemePlusEnvironment::isMobile());
 					break;
 
 				case 'mobile':
