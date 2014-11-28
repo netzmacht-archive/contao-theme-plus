@@ -54,7 +54,7 @@
 		"contao": {
 			"sources":{
 				"system/modules/theme-plus": "system/modules/theme-plus",
-				"assets/theme-plus": "assets/theme-plus"
+				"assets": "assets/theme-plus"
 			},
 			"runonce":[
 				"runonce/upgrade_to_contao3_2.php"

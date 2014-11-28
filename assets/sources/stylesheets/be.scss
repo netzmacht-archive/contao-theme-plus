@@ -1,0 +1,37 @@
+@charset "utf-8";
+
+/**
+ * This file is part of bit3/contao-theme-plus.
+ *
+ * (c) Tristan Lins <tristan.lins@bit3.de>
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * @package    bit3/contao-theme-plus
+ * @author     Tristan Lins <tristan.lins@bit3.de>
+ * @copyright  bit3 UG <https://bit3.de>
+ * @link       https://github.com/bit3/contao-theme-plus
+ * @license    http://opensource.org/licenses/LGPL-3.0 LGPL-3.0+
+ * @filesource
+ */
+
+.header_new_file,
+.header_new_url,
+.header_new_code {
+  padding: 2px 0 3px 20px;
+  background-position: left center;
+  background-repeat: no-repeat;
+  margin-left: 15px;
+}
+
+.header_new_file {
+  background: url(../images/file.png) no-repeat left center;
+}
+
+.header_new_url {
+  background: url(../images/url.png) no-repeat left center;
+}
+
+.header_new_code {
+  background: url(../images/code.png) no-repeat left center;
+}
