@@ -24,9 +24,6 @@ use Assetic\Asset\StringAsset;
 use Assetic\Filter\CssRewriteFilter;
 use Assetic\Filter\FilterInterface;
 use Bit3\Contao\Assetic\AsseticFactory;
-use Bit3\Contao\ThemePlus\Condition\AndConditionConjunction;
-use Bit3\Contao\ThemePlus\Condition\OrConditionConjunction;
-use Bit3\Contao\ThemePlus\Condition\PlatformCondition;
 use Bit3\Contao\ThemePlus\ThemePlusEnvironment;
 
 class DatabaseAsset implements ExtendedAssetInterface, DelegatorAssetInterface, \Serializable
@@ -118,21 +115,6 @@ class DatabaseAsset implements ExtendedAssetInterface, DelegatorAssetInterface, 
                     $this->asset = new StringAsset($this->row['code'], $filter, TL_ROOT, 'string_asset');
                     $this->asset->setLastModified($this->row['tstamp']);
                     break;
-            }
-
-            if ($this->row['filter']) {
-                $filterRules = deserialize($this->row['filterRule'], true);
-                $or          = new OrConditionConjunction();
-
-                foreach ($filterRules as $filterRule) {
-                    $and = new AndConditionConjunction();
-
-                    if ($filterRule['platform']) {
-                        $and->addCondition(new PlatformCondition($filterRule['platform']));
-                    }
-
-                    $or->addCondition($and);
-                }
             }
         }
 
@@ -297,23 +279,6 @@ class DatabaseAsset implements ExtendedAssetInterface, DelegatorAssetInterface, 
     public function setMediaQuery($mediaQuery)
     {
         $this->row['media'] = $mediaQuery;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCondition()
-    {
-        return $this->row['filter'] ? $this->row['filterRule'] : null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setCondition(ConditionInterface $condition = null)
-    {
-        $this->row['filter']     = (bool) $condition;
-        $this->row['filterRule'] = $condition;
     }
 
     /**

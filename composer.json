@@ -30,7 +30,8 @@
 		"bit3/contao-assetic":"~2.0",
         "bit3/contao-ikimea-browser-service": "~1.0",
         "bit3/contao-browser-detect-service": "~1.0",
-		"mobiledetect/mobiledetectlib": "2.*"
+		"mobiledetect/mobiledetectlib": "2.*",
+		"symfony/expression-language": "~2.4"
 	},
 	"require-dev":{
 		"squizlabs/php_codesniffer":"1.*",

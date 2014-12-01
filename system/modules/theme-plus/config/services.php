@@ -15,23 +15,11 @@
  * @filesource
  */
 
-namespace Bit3\Contao\ThemePlus\Condition;
 
-class AndConditionConjunction extends AbstractConditionConjunction
-{
+/** @var Pimple $container */
 
-    /**
-     * {@inheritdoc}
-     */
-    public function accept()
-    {
-        foreach ($this->conditions as $condition) {
-            if (!$condition->accept()) {
-                return false;
-            }
-        }
-
-        return true;
+$container['theme-plus-condition-compiler'] = $container->share(
+    function () {
+        return new \Bit3\Contao\ThemePlus\ConditionCompiler();
     }
-
-}
+);

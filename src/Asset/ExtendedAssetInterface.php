@@ -46,18 +46,6 @@ interface ExtendedAssetInterface extends AssetInterface
     public function setMediaQuery($mediaQuery);
 
     /**
-     * @return ConditionInterface|null
-     */
-    public function getCondition();
-
-    /**
-     * @param ConditionInterface|null $condition
-     *
-     * @return static
-     */
-    public function setCondition(ConditionInterface $condition = null);
-
-    /**
      * @return bool
      */
     public function isInline();

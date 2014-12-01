@@ -30,11 +30,6 @@ trait ExtendedAssetTrait
     protected $mediaQuery;
 
     /**
-     * @var ConditionInterface|null
-     */
-    protected $condition;
-
-    /**
      * @var bool
      */
     protected $inline = false;
@@ -75,23 +70,6 @@ trait ExtendedAssetTrait
     public function setMediaQuery($mediaQuery)
     {
         $this->mediaQuery = (string) $mediaQuery;
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCondition()
-    {
-        return $this->condition;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setCondition(ConditionInterface $condition = null)
-    {
-        $this->condition = $condition;
         return $this;
     }
 
