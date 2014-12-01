@@ -134,7 +134,6 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = [
             'file'    => ['file'],
             'layouts' => ['layouts'],
             'filter'  => [':hide', 'cc', 'filter'],
-            'editor'  => [':hide', 'editor_integration', 'force_editor_integration'],
             'assetic' => [':hide', 'asseticFilter'],
             'expert'  => [':hide', 'inline'],
         ],
@@ -143,7 +142,6 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = [
             'file'    => ['url', 'fetchUrl'],
             'layouts' => ['layouts'],
             'filter'  => [':hide', 'cc', 'filter'],
-            'editor'  => [':hide', 'editor_integration', 'force_editor_integration'],
             'assetic' => [':hide', 'asseticFilter'],
             'expert'  => [':hide', 'inline'],
         ],
@@ -152,7 +150,6 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = [
             'file'    => ['code'],
             'layouts' => ['layouts'],
             'filter'  => [':hide', 'cc', 'filter'],
-            'editor'  => [':hide', 'editor_integration', 'force_editor_integration'],
             'assetic' => [':hide', 'asseticFilter'],
             'expert'  => [':hide', 'inline'],
         ],
@@ -359,21 +356,6 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = [
                 ]
             ],
             'sql'       => "blob NULL"
-        ],
-        'editor_integration'       => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['editor_integration'],
-            'exclude'   => true,
-            'inputType' => 'checkbox',
-            'options'   => ['default', 'newsletter', 'flash'],
-            'reference' => &$GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['editors'],
-            'eval'      => ['multiple' => true],
-            'sql'       => "blob NULL"
-        ],
-        'force_editor_integration' => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['force_editor_integration'],
-            'exclude'   => true,
-            'inputType' => 'checkbox',
-            'sql'       => "char(1) NOT NULL default ''"
         ],
         'inline'                   => [
             'label'     => &$GLOBALS['TL_LANG']['tl_theme_plus_stylesheet']['inline'],

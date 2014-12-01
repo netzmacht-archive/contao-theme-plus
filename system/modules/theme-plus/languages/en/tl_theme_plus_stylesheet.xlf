@@ -68,18 +68,6 @@
       <trans-unit id="tl_theme_plus_stylesheet.filterRule.1">
         <source>Here you can select the server-side filters.</source>
       </trans-unit>
-      <trans-unit id="tl_theme_plus_stylesheet.editor_integration.0">
-        <source>WYSIWYG editor integration</source>
-      </trans-unit>
-      <trans-unit id="tl_theme_plus_stylesheet.editor_integration.1">
-        <source>Hier kann die Datei dem WYSIWYG Editor hinzugefügt werden. Lesen Sie hierzu die Hinweise im Handbuch.</source>
-      </trans-unit>
-      <trans-unit id="tl_theme_plus_stylesheet.force_editor_integration.0">
-        <source>Enforce WYSIWYG editor integration</source>
-      </trans-unit>
-      <trans-unit id="tl_theme_plus_stylesheet.force_editor_integration.1">
-        <source>HTML WYSIWYG editor added even if this was not assigned to the layout.</source>
-      </trans-unit>
       <trans-unit id="tl_theme_plus_stylesheet.asseticFilter.0">
         <source>Assetic filter</source>
       </trans-unit>
@@ -110,23 +98,11 @@
       <trans-unit id="tl_theme_plus_stylesheet.filter_legend">
         <source>Filter settings</source>
       </trans-unit>
-      <trans-unit id="tl_theme_plus_stylesheet.editor_legend">
-        <source>WYSIWYG editor integration</source>
-      </trans-unit>
       <trans-unit id="tl_theme_plus_stylesheet.assetic_legend">
         <source>Assetic settings</source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_stylesheet.expert_legend">
         <source>Expert settings</source>
-      </trans-unit>
-      <trans-unit id="tl_theme_plus_stylesheet.editors.default">
-        <source>Default editor</source>
-      </trans-unit>
-      <trans-unit id="tl_theme_plus_stylesheet.editors.newsletter">
-        <source>Newsletter Editor</source>
-      </trans-unit>
-      <trans-unit id="tl_theme_plus_stylesheet.editors.flash">
-        <source>Flash Editor</source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_stylesheet.positions.head">
         <source>In &amp;lt;head&amp;gt;</source>

@@ -90,22 +90,6 @@
         <source xml:lang="de">W&#xE4;hlen Sie hier die Serverseitigen Filter aus.</source>
         <target xml:lang="de">W&#xE4;hlen Sie hier die Serverseitigen Filter aus.</target>
       </trans-unit>
-      <trans-unit id="tl_theme_plus_stylesheet.editor_integration.0">
-        <source xml:lang="de">WYSIWYG Editor Integration</source>
-        <target xml:lang="de">WYSIWYG Editor Integration</target>
-      </trans-unit>
-      <trans-unit id="tl_theme_plus_stylesheet.editor_integration.1">
-        <source xml:lang="de">Hier kann die Datei dem WYSIWYG Editor hinzugef&#xFC;gt werden. Lesen Sie hierzu die Hinweise im Handbuch.</source>
-        <target xml:lang="de">Hier kann die Datei dem WYSIWYG Editor hinzugef&#xFC;gt werden. Lesen Sie hierzu die Hinweise im Handbuch.</target>
-      </trans-unit>
-      <trans-unit id="tl_theme_plus_stylesheet.force_editor_integration.0">
-        <source xml:lang="de">WYSIWYG Editor Integration erzwingen</source>
-        <target xml:lang="de">WYSIWYG Editor Integration erzwingen</target>
-      </trans-unit>
-      <trans-unit id="tl_theme_plus_stylesheet.force_editor_integration.1">
-        <source xml:lang="de">Datei dem WYSIWYG Editor hinzugef&#xFC;gt auch wenn diese nicht dem Layout zugewiesen wurde.</source>
-        <target xml:lang="de">Datei dem WYSIWYG Editor hinzugef&#xFC;gt auch wenn diese nicht dem Layout zugewiesen wurde.</target>
-      </trans-unit>
       <trans-unit id="tl_theme_plus_stylesheet.asseticFilter.0">
         <source xml:lang="de">Assetic Filter</source>
         <target xml:lang="de">Assetic Filter</target>
@@ -130,10 +114,6 @@
         <source xml:lang="de">Filter-Einstellungen</source>
         <target xml:lang="de">Filter-Einstellungen</target>
       </trans-unit>
-      <trans-unit id="tl_theme_plus_stylesheet.editor_legend">
-        <source xml:lang="de">WYSIWYG Editor Integration</source>
-        <target xml:lang="de">WYSIWYG Editor Integration</target>
-      </trans-unit>
       <trans-unit id="tl_theme_plus_stylesheet.assetic_legend">
         <source xml:lang="de">Assetic Einstellungen</source>
         <target xml:lang="de">Assetic Einstellungen</target>
@@ -141,18 +121,6 @@
       <trans-unit id="tl_theme_plus_stylesheet.expert_legend">
         <source xml:lang="de">Experten-Einstellungen</source>
         <target xml:lang="de">Experten-Einstellungen</target>
-      </trans-unit>
-      <trans-unit id="tl_theme_plus_stylesheet.editors.default">
-        <source xml:lang="de">Standard Editor</source>
-        <target xml:lang="de">Standard Editor</target>
-      </trans-unit>
-      <trans-unit id="tl_theme_plus_stylesheet.editors.newsletter">
-        <source xml:lang="de">Newsletter Editor</source>
-        <target xml:lang="de">Newsletter Editor</target>
-      </trans-unit>
-      <trans-unit id="tl_theme_plus_stylesheet.editors.flash">
-        <source xml:lang="de">Flash Editor</source>
-        <target xml:lang="de">Flash Editor</target>
       </trans-unit>
       <trans-unit id="tl_theme_plus_stylesheet.positions.head">
         <source xml:lang="de">im &amp;lt;head&amp;gt;</source>
