@@ -22,8 +22,6 @@ namespace Bit3\Contao\ThemePlus;
  */
 class ThemePlusEnvironment
 {
-    const BROWSER_IDENT_OVERWRITE = 'THEME_PLUS_BROWSER_IDENT_OVERWRITE';
-
     /**
      * Singleton
      */

@@ -33,8 +33,6 @@ use Template;
  */
 class ThemePlus
 {
-    const BROWSER_IDENT_OVERWRITE = 'THEME_PLUS_BROWSER_IDENT_OVERWRITE';
-
     /**
      * @var DeveloperTool
      */
