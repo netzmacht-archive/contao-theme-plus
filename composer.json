@@ -54,7 +54,7 @@
 	"extra":{
 		"contao": {
 			"sources":{
-				"system/modules/theme-plus": "system/modules/theme-plus",
+				"contao": "system/modules/theme-plus",
 				"assets": "assets/theme-plus"
 			},
 			"runonce":[
