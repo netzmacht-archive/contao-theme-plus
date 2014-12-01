@@ -17,8 +17,8 @@
 
 namespace Bit3\Contao\ThemePlus\DataContainer;
 
-use ThemePlus\Model\JavaScriptModel;
-use ThemePlus\Model\StylesheetModel;
+use Bit3\Contao\ThemePlus\Model\JavaScriptModel;
+use Bit3\Contao\ThemePlus\Model\StylesheetModel;
 
 /**
  * Class Page
