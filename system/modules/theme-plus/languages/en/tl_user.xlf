@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+	<file original="system/modules/theme-plus/languages/en/tl_page.php" source-language="en" datatype="php"
+		  date="2012-11-08T21:49:41+00:00" target-language="en">
+		<body>
+			<trans-unit id="tl_user.frontend_legend">
+				<source xml:lang="en">Frontend theme</source>
+			</trans-unit>
+			<trans-unit id="tl_user.themePlusDesignerMode.0">
+				<source xml:lang="en">Frontend designer mode</source>
+			</trans-unit>
+			<trans-unit id="tl_user.themePlusDesignerMode.1">
+				<source xml:lang="en">Enable designer mode in frontend. Concatenation of assets is disabled and some filters are not applied when they are disabled in debug mode.</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

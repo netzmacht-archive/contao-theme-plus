@@ -294,14 +294,14 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = [
                         'exclude'   => true,
                         'inputType' => 'select',
                         'options'   => [
-                            'desktop'          => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['desktop'],
-                            'tablet-or-mobile' => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['tablet-or-mobile'],
-                            'tablet'           => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['tablet'],
-                            'mobile'           => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['mobile'],
+                            'desktop' => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['desktop'],
+                            'mobile'  => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['mobile'],
+                            'tablet'  => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['tablet'],
+                            'phone'   => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['phone'],
                         ],
                         'eval'      => [
                             'includeBlankOption' => true,
-                            'style'              => 'width:180px',
+                            'style'              => 'width:90px',
                         ]
                     ],
                     'system'          => [
@@ -310,7 +310,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = [
                         'inputType'        => 'select',
                         'options_callback' => ['Bit3\Contao\ThemePlus\DataContainer\Stylesheet', 'getSystems'],
                         'eval'             => [
-                            'style'              => 'width:158px',
+                            'style'              => 'width:140px',
                             'includeBlankOption' => true
                         ]
                     ],
@@ -320,7 +320,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = [
                         'inputType'        => 'select',
                         'options_callback' => ['Bit3\Contao\ThemePlus\DataContainer\Stylesheet', 'getBrowsers'],
                         'eval'             => [
-                            'style'              => 'width:158px',
+                            'style'              => 'width:140px',
                             'includeBlankOption' => true
                         ]
                     ],
@@ -330,6 +330,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_stylesheet'] = [
                         'options'   => [
                             'lt'  => '<',
                             'lte' => '<=',
+                            'ne'  => '<>',
                             'gte' => '>=',
                             'gt'  => '>'
                         ],

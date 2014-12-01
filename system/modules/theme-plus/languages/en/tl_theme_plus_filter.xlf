@@ -20,14 +20,14 @@
       <trans-unit id="tl_theme_plus_filter.desktop">
         <source>Desktop</source>
       </trans-unit>
-      <trans-unit id="tl_theme_plus_filter.tablet">
-        <source>Tablet</source>
-      </trans-unit>
-      <trans-unit id="tl_theme_plus_filter.tablet-or-mobile">
-        <source>Tablet or Mobile</source>
-      </trans-unit>
       <trans-unit id="tl_theme_plus_filter.mobile">
-        <source>Mobile</source>
+        <source>Mobiles</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_filter.tablet">
+        <source>Tablets</source>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_filter.phone">
+        <source>Phones</source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_filter.invert">
         <source>Deny</source>

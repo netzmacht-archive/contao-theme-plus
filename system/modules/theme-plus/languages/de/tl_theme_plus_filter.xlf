@@ -26,17 +26,17 @@
         <source xml:lang="de">Desktop</source>
         <target xml:lang="de">Desktop</target>
       </trans-unit>
+      <trans-unit id="tl_theme_plus_filter.mobile">
+        <source xml:lang="de">Mobilgeräte</source>
+        <target xml:lang="de">Mobilgeräte</target>
+      </trans-unit>
       <trans-unit id="tl_theme_plus_filter.tablet">
         <source xml:lang="de">Tablet</source>
         <target xml:lang="de">Tablet</target>
       </trans-unit>
-      <trans-unit id="tl_theme_plus_filter.tablet-or-mobile">
-        <source xml:lang="de">Tablet oder Mobiltelefon</source>
-        <target xml:lang="de">Tablet oder Mobiltelefon</target>
-      </trans-unit>
-      <trans-unit id="tl_theme_plus_filter.mobile">
-        <source xml:lang="de">Mobile</source>
-        <target xml:lang="de">Mobile</target>
+      <trans-unit id="tl_theme_plus_filter.phone">
+        <source xml:lang="de">Telefone</source>
+        <target xml:lang="de">Telefone</target>
       </trans-unit>
       <trans-unit id="tl_theme_plus_filter.invert">
         <source xml:lang="de">Negieren</source>
