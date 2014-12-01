@@ -78,19 +78,7 @@ class ThemePlusEnvironment
     /**
      * If is in live mode.
      */
-    protected $blnLiveMode = true;
-
-    /**
-     * Cached be login status.
-     */
-    protected $blnBeLoginStatus = null;
-
-    /**
-     * List of all added files.
-     *
-     * @var array
-     */
-    protected $files = [];
+    private $liveModeEnabled = true;
 
     /**
      * Singleton constructor.
@@ -104,40 +92,36 @@ class ThemePlusEnvironment
      */
     public static function isLiveMode()
     {
-        return static::getInstance()->blnLiveMode
+        return static::getInstance()->liveModeEnabled
             ? true
             : false;
     }
-
 
     /**
      * Set productive mode.
      */
     public static function setLiveMode($liveMode = true)
     {
-        static::getInstance()->blnLiveMode = $liveMode;
+        static::getInstance()->liveModeEnabled = $liveMode;
     }
-
 
     /**
      * Get productive mode status.
      */
     public static function isDesignerMode()
     {
-        return static::getInstance()->blnLiveMode
+        return static::getInstance()->liveModeEnabled
             ? false
             : true;
     }
-
 
     /**
      * Set designer mode.
      */
     public static function setDesignerMode($designerMode = true)
     {
-        static::getInstance()->blnLiveMode = !$designerMode;
+        static::getInstance()->liveModeEnabled = !$designerMode;
     }
-
 
     /**
      * Determine if the pre-compile mode is enabled.

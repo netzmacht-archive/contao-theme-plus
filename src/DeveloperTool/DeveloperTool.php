@@ -31,12 +31,7 @@ class DeveloperTool
      *
      * @var AssetInterface[]
      */
-    protected $files = [];
-
-    /**
-     * @var array|string[]
-     */
-    protected $excludeList = [];
+    private $files = [];
 
     public function registerFile($id, $asset)
     {
