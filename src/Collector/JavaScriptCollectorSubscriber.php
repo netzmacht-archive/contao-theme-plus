@@ -28,7 +28,7 @@ use Bit3\Contao\ThemePlus\ThemePlusEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class JavaScriptCollectorSubscriber implements EventSubscriberInterface
+class JavaScriptCollectorSubscriber extends AbstractAssetCollector implements EventSubscriberInterface
 {
     /**
      * {@inheritdoc}
@@ -128,16 +128,13 @@ class JavaScriptCollectorSubscriber implements EventSubscriberInterface
             }
         }
 
-        $javascripts = JavaScriptModel::findBy(
+        $collection = JavaScriptModel::findBy(
             $columns,
             $values,
             ['order' => 'sorting']
         );
-        if ($javascripts) {
-            foreach ($javascripts as $javaScript) {
-                $asset = new DatabaseAsset($javaScript->row(), 'js');
-                $event->append($asset, 50);
-            }
+        if ($collection) {
+            $this->appendDatabaseAssets($event, $collection, 'js');
         }
     }
 
@@ -194,16 +191,13 @@ class JavaScriptCollectorSubscriber implements EventSubscriberInterface
             }
         }
 
-        $javascripts = JavaScriptModel::findBy(
+        $collection = JavaScriptModel::findBy(
             $columns,
             $values,
             ['order' => 'sorting']
         );
-        if ($javascripts) {
-            foreach ($javascripts as $javaScript) {
-                $asset = new DatabaseAsset($javaScript->row(), 'js');
-                $event->append($asset, 100);
-            }
+        if ($collection) {
+            $this->appendDatabaseAssets($event, $collection, 'js');
         }
     }
 }

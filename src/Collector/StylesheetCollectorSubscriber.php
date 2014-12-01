@@ -30,7 +30,7 @@ use Bit3\Contao\ThemePlus\ThemePlusEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class StylesheetCollectorSubscriber implements EventSubscriberInterface
+class StylesheetCollectorSubscriber extends AbstractAssetCollector implements EventSubscriberInterface
 {
     /**
      * {@inheritdoc}
@@ -124,18 +124,15 @@ class StylesheetCollectorSubscriber implements EventSubscriberInterface
 
     public function collectLayoutStylesheets(CollectAssetsEvent $event)
     {
-        $stylesheets = StylesheetModel::findByPks(
+        $collection = StylesheetModel::findByPks(
             deserialize(
                 $event->getLayout()->theme_plus_stylesheets,
                 true
             ),
             ['order' => 'sorting']
         );
-        if ($stylesheets) {
-            foreach ($stylesheets as $stylesheet) {
-                $asset = new DatabaseAsset($stylesheet->row(), 'css');
-                $event->append($asset, 50);
-            }
+        if ($collection) {
+            $this->appendDatabaseAssets($event, $collection, 'css');
         }
     }
 
@@ -167,15 +164,12 @@ class StylesheetCollectorSubscriber implements EventSubscriberInterface
             $page = \PageModel::findByPk($page->pid);
         }
 
-        $stylesheets = StylesheetModel::findByPks(
+        $collection = StylesheetModel::findByPks(
             $stylesheetIds,
             ['order' => 'sorting']
         );
-        if ($stylesheets) {
-            foreach ($stylesheets as $stylesheet) {
-                $asset = new DatabaseAsset($stylesheet->row(), 'css');
-                $event->append($asset, 100);
-            }
+        if ($collection) {
+            $this->appendDatabaseAssets($event, $collection, 'css');
         }
     }
 
