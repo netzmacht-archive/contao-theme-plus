@@ -15,13 +15,14 @@
  * @filesource
  */
 
-namespace Bit3\Contao\ThemePlus;
+namespace Bit3\Contao\ThemePlus\DeveloperTool;
 
+use Assetic\Asset\AssetCollectionInterface;
 use Assetic\Asset\AssetInterface;
 use Assetic\Asset\FileAsset;
 use Assetic\Asset\HttpAsset;
 use Bit3\Contao\ThemePlus\Asset\DelegatorAssetInterface;
-use Bit3\Contao\ThemePlus\DataContainer\File;
+use Bit3\Contao\ThemePlus\ThemePlusEnvironment;
 
 class DeveloperTool
 {

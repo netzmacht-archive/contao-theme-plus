@@ -15,7 +15,7 @@
  * @filesource
  */
 
-namespace Bit3\Contao\ThemePlus;
+namespace Bit3\Contao\ThemePlus\Renderer;
 
 use Assetic\Asset\FileAsset;
 use Assetic\Asset\HttpAsset;
@@ -24,6 +24,8 @@ use Bit3\Contao\ThemePlus\Asset\ExtendedAssetInterface;
 use Bit3\Contao\ThemePlus\Event\AddStaticDomainEvent;
 use Bit3\Contao\ThemePlus\Event\GenerateAssetPathEvent;
 use Bit3\Contao\ThemePlus\Event\RenderAssetHtmlEvent;
+use Bit3\Contao\ThemePlus\ThemePlusEvents;
+use Bit3\Contao\ThemePlus\ThemePlusUtils;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 

@@ -15,7 +15,7 @@
  * @filesource
  */
 
-namespace Bit3\Contao\ThemePlus;
+namespace Bit3\Contao\ThemePlus\Organizer;
 
 use Assetic\Asset\AssetCollection;
 use Assetic\Asset\AssetCollectionInterface;
@@ -24,6 +24,7 @@ use Bit3\Contao\ThemePlus\Asset\DelegatorAssetInterface;
 use Bit3\Contao\ThemePlus\Asset\ExtendedAssetInterface;
 use Bit3\Contao\ThemePlus\Event\GenerateAssetPathEvent;
 use Bit3\Contao\ThemePlus\Event\OrganizeAssetsEvent;
+use Bit3\Contao\ThemePlus\ThemePlusEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 

@@ -18,7 +18,7 @@
 namespace Bit3\Contao\ThemePlus\Event;
 
 use Assetic\Asset\AssetCollectionInterface;
-use Bit3\Contao\ThemePlus\DeveloperTool;
+use Bit3\Contao\ThemePlus\DeveloperTool\DeveloperTool;
 use Symfony\Component\EventDispatcher\Event;
 
 class OrganizeAssetsEvent extends Event

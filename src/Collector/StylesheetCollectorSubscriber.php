@@ -15,7 +15,7 @@
  * @filesource
  */
 
-namespace Bit3\Contao\ThemePlus;
+namespace Bit3\Contao\ThemePlus\Collector;
 
 use Assetic\Asset\AssetInterface;
 use Assetic\Asset\FileAsset;
@@ -26,6 +26,7 @@ use Bit3\Contao\ThemePlus\Event\CollectAssetsEvent;
 use Bit3\Contao\ThemePlus\Event\GenerateAssetPathEvent;
 use Bit3\Contao\ThemePlus\Event\StripStaticDomainEvent;
 use Bit3\Contao\ThemePlus\Model\StylesheetModel;
+use Bit3\Contao\ThemePlus\ThemePlusEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
