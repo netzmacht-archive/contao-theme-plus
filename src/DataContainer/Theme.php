@@ -22,7 +22,7 @@ namespace Bit3\Contao\ThemePlus\DataContainer;
  */
 class Theme extends \Backend
 {
-    protected function __construct()
+    public function __construct()
     {
         parent::__construct();
 
