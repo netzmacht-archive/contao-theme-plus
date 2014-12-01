@@ -44,17 +44,6 @@ $GLOBALS['TL_HOOKS']['replaceDynamicScriptTags']['themeplus'] = [
 
 
 /**
- * Event subscriber
- */
-$GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'Bit3\Contao\ThemePlus\AssetOrganizerSubscriber';
-$GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'Bit3\Contao\ThemePlus\StaticUrlSubscriber';
-$GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'Bit3\Contao\ThemePlus\StylesheetCollectorSubscriber';
-$GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'Bit3\Contao\ThemePlus\StylesheetRendererSubscriber';
-$GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'Bit3\Contao\ThemePlus\JavaScriptCollectorSubscriber';
-$GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'Bit3\Contao\ThemePlus\JavaScriptRendererSubscriber';
-
-
-/**
  * easy_themes integration
  */
 $GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus_stylesheet'] = [
