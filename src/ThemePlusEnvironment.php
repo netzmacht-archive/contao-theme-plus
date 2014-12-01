@@ -88,11 +88,6 @@ class ThemePlusEnvironment
     protected $blnBeLoginStatus = null;
 
     /**
-     * The variables cache.
-     */
-    protected $arrVariables = null;
-
-    /**
      * List of all added files.
      *
      * @var array

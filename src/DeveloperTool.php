@@ -28,11 +28,6 @@ class DeveloperTool
     const BROWSER_IDENT_OVERWRITE = 'THEME_PLUS_BROWSER_IDENT_OVERWRITE';
 
     /**
-     * The variables cache.
-     */
-    protected $arrVariables = null;
-
-    /**
      * List of all added files.
      *
      * @var AssetInterface[]

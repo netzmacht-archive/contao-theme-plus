@@ -18,14 +18,6 @@
         <source xml:lang="de">Weitere JavaScripts in das Theme ID %s einbinden.</source>
         <target xml:lang="de">Weitere JavaScripts in das Theme ID %s einbinden.</target>
       </trans-unit>
-      <trans-unit id="tl_theme.theme_plus_variable.0">
-        <source xml:lang="de">Variablen</source>
-        <target xml:lang="de">Variablen</target>
-      </trans-unit>
-      <trans-unit id="tl_theme.theme_plus_variable.1">
-        <source xml:lang="de">Variablen f&#xFC;r weitere Dateien definieren.</source>
-        <target xml:lang="de">Variablen f&#xFC;r weitere Dateien definieren.</target>
-      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -21,7 +21,6 @@
  */
 $GLOBALS['TL_DCA']['tl_theme']['config']['ctable'][] = 'tl_theme_plus_stylesheet';
 $GLOBALS['TL_DCA']['tl_theme']['config']['ctable'][] = 'tl_theme_plus_javascript';
-$GLOBALS['TL_DCA']['tl_theme']['config']['ctable'][] = 'tl_theme_plus_variable';
 
 
 /**
@@ -50,12 +49,6 @@ $GLOBALS['TL_DCA']['tl_theme']['list']['operations'] = array_merge
             'icon'            => 'assets/theme-plus/images/javascript.png',
             'button_callback' => ['Bit3\Contao\ThemePlus\DataContainer\Theme', 'editJavaScript']
         ],
-        'theme_plus_variable'   => [
-            'label'           => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_variable'],
-            'href'            => 'table=tl_theme_plus_variable',
-            'icon'            => 'assets/theme-plus/images/variable.png',
-            'button_callback' => ['Bit3\Contao\ThemePlus\DataContainer\Theme', 'editVariable']
-        ]
     ],
     array_slice($GLOBALS['TL_DCA']['tl_theme']['list']['operations'], $intOffset)
 );

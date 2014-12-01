@@ -21,7 +21,6 @@
  */
 $GLOBALS['TL_MODELS']['tl_theme_plus_javascript'] = 'Bit3\Contao\ThemePlus\Model\JavaScriptModel';
 $GLOBALS['TL_MODELS']['tl_theme_plus_stylesheet'] = 'Bit3\Contao\ThemePlus\Model\StylesheetModel';
-$GLOBALS['TL_MODELS']['tl_theme_plus_variable']   = 'Bit3\Contao\ThemePlus\Model\VariableModel';
 
 
 /**
@@ -29,7 +28,6 @@ $GLOBALS['TL_MODELS']['tl_theme_plus_variable']   = 'Bit3\Contao\ThemePlus\Model
  */
 $GLOBALS['BE_MOD']['design']['themes']['tables'][] = 'tl_theme_plus_stylesheet';
 $GLOBALS['BE_MOD']['design']['themes']['tables'][] = 'tl_theme_plus_javascript';
-$GLOBALS['BE_MOD']['design']['themes']['tables'][] = 'tl_theme_plus_variable';
 
 
 /**
@@ -73,36 +71,6 @@ $GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus_javascript'] = [
     'icon'          => 'assets/theme-plus/images/javascript.png',
     'appendRT'      => true,
 ];
-$GLOBALS['TL_EASY_THEMES_MODULES']['theme_plus_variable']   = [
-    'label'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_variable'][0],
-    'title'         => &$GLOBALS['TL_LANG']['tl_theme']['theme_plus_variable'][1],
-    'href_fragment' => 'table=tl_theme_plus_variable',
-    'icon'          => 'assets/theme-plus/images/variable.png',
-    'appendRT'      => true,
-];
-
-
-/**
- * Assetic compiler filter
- */
-$GLOBALS['ASSETIC']['compiler']['contaoReplaceVariable']          =
-    'Bit3\Contao\ThemePlus\Filter\ContaoReplaceVariableFilter';
-$GLOBALS['ASSETIC']['compiler']['contaoReplaceThemePlusVariable'] =
-    'Bit3\Contao\ThemePlus\Filter\ContaoReplaceThemePlusVariableFilter';
-
-
-/**
- * Assetic css compatible filters
- */
-$GLOBALS['ASSETIC']['css'][] = 'contaoReplaceVariable';
-$GLOBALS['ASSETIC']['css'][] = 'contaoReplaceThemePlusVariable';
-
-
-/**
- * Assetic js compatible filters
- */
-$GLOBALS['ASSETIC']['js'][] = 'contaoReplaceVariable';
-$GLOBALS['ASSETIC']['js'][] = 'contaoReplaceThemePlusVariable';
 
 
 /**

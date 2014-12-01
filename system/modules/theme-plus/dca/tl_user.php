@@ -35,4 +35,3 @@ $GLOBALS['TL_DCA']['tl_user']['fields']['themePlusDesignerMode'] = [
 
 $GLOBALS['TL_DCA']['tl_user']['fields']['themes']['options'][] = 'theme_plus_stylesheet';
 $GLOBALS['TL_DCA']['tl_user']['fields']['themes']['options'][] = 'theme_plus_javascript';
-$GLOBALS['TL_DCA']['tl_user']['fields']['themes']['options'][] = 'theme_plus_variable';

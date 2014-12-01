@@ -48,14 +48,4 @@ class Theme extends \Backend
         }
         return $this->generateImage(preg_replace('/\.png$/i', '_.png', $icon)) . ' ';
     }
-
-    public function editVariable($row, $href, $label, $title, $icon, $attributes)
-    {
-        if ($this->User->isAdmin || $this->User->hasAccess('theme_plus_variable', 'themes')) {
-            return '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars(
-                $title
-            ) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ';
-        }
-        return $this->generateImage(preg_replace('/\.png$/i', '_.png', $icon)) . ' ';
-    }
 }
