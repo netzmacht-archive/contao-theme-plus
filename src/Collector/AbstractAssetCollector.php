@@ -33,7 +33,7 @@ class AbstractAssetCollector
         foreach ($collection as $model) {
             if (
                 $model->filter
-                && !$conditionCompiler->evaluate(deserialize($model->filterRules, true))
+                && !$conditionCompiler->evaluate(deserialize($model->filterRule, true))
             ) {
                 continue;
             }
