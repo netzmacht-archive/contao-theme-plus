@@ -1,7 +1,7 @@
 <?php
 
 if (version_compare(VERSION, '3.2', '<')) {
-	return;
+    return;
 }
 
 /**
@@ -9,40 +9,46 @@ if (version_compare(VERSION, '3.2', '<')) {
  */
 class upgrade_to_contao3_2
 {
-	public function run()
-	{
-		$this->updateFileField('tl_theme_plus_javascript');
-		$this->updateFileField('tl_theme_plus_stylesheet');
-		$this->updateFileField('tl_theme_plus_variable');
-	}
+    public function run()
+    {
+        $this->updateFileField('tl_theme_plus_javascript');
+        $this->updateFileField('tl_theme_plus_stylesheet');
+        $this->updateFileField('tl_theme_plus_variable');
+    }
 
-	protected function updateFileField($table)
-	{
-		$database = \Database::getInstance();
+    protected function updateFileField($table)
+    {
+        $database = \Database::getInstance();
 
-		// get the field description
-		$desc = $database->query('DESC ' . $table . ' file');
+        if (!$database->tableExists($table)) {
+            return;
+        }
 
-		// convert the field into a blob
-		if ($desc->Type != 'blob') {
-			$database->query('ALTER TABLE `' . $table . '` CHANGE `file` `file` blob NULL');
-			$database->query('UPDATE `' . $table . '` SET `file`=NULL WHERE `file`=\'\' OR `file`=0');
-		}
+        if ($database->fieldExists('file', $table)) {
+            // get the field description
+            $desc = $database->query('DESC ' . $table . ' file');
 
-		// select fields with numeric values
-		$resultSet = $database->query('SELECT id, file FROM ' . $table . ' WHERE file REGEXP \'^[0-9]+$\'');
+            // convert the field into a blob
+            if ($desc->Type != 'blob') {
+                $database->query('ALTER TABLE `' . $table . '` CHANGE `file` `file` blob NULL');
+                $database->query('UPDATE `' . $table . '` SET `file`=NULL WHERE `file`=\'\' OR `file`=0');
+            }
 
-		while ($resultSet->next()) {
-			// Numeric ID to UUID
-			$file = \FilesModel::findByPk($resultSet->file);
+            // select fields with numeric values
+            $resultSet = $database->query('SELECT id, file FROM ' . $table . ' WHERE file REGEXP \'^[0-9]+$\'');
 
-			if ($file) {
-				$database
-					->prepare('UPDATE `' . $table . '` SET file=? WHERE id=?')
-					->execute($file->uuid, $resultSet->id);
-			}
-		}
-	}
+            while ($resultSet->next()) {
+                // Numeric ID to UUID
+                $file = \FilesModel::findByPk($resultSet->file);
+
+                if ($file) {
+                    $database
+                        ->prepare('UPDATE `' . $table . '` SET file=? WHERE id=?')
+                        ->execute($file->uuid, $resultSet->id);
+                }
+            }
+        }
+    }
 }
 
 $upgrade_to_contao3_2 = new upgrade_to_contao3_2();
