@@ -50,12 +50,6 @@
     height: 50px;
     overflow: hidden;
   }
-  &.theme-plus-dev-tool-collapsed #theme-plus-dev-tool-stylesheets,
-  &.theme-plus-dev-tool-collapsed #theme-plus-dev-tool-javascripts,
-  &.theme-plus-dev-tool-collapsed #theme-plus-dev-tool-filter,
-  &.theme-plus-dev-tool-collapsed #theme-plus-dev-tool-exception {
-    display: none;
-  }
 
   #theme-plus-dev-tool img {
     vertical-align: middle;
@@ -73,7 +67,6 @@
   }
   #theme-plus-dev-tool-stylesheets,
   #theme-plus-dev-tool-javascripts,
-  #theme-plus-dev-tool-filter,
   #theme-plus-dev-tool-exception {
     position: relative;
     float: left;
@@ -83,8 +76,7 @@
     padding: 0 10px;
   }
   #theme-plus-dev-tool-stylesheets,
-  #theme-plus-dev-tool-javascripts,
-  #theme-plus-dev-tool-filter {
+  #theme-plus-dev-tool-javascripts {
     cursor: pointer;
   }
   #theme-plus-dev-tool-exception {
@@ -96,7 +88,6 @@
 
   #theme-plus-dev-tool-stylesheets,
   #theme-plus-dev-tool-javascripts,
-  #theme-plus-dev-tool-filter,
   #theme-plus-dev-tool-exception {
     &:hover,
     &.theme-plus-dev-tool-expanded {
@@ -179,50 +170,5 @@
     color: inherit;
     text-align: center;
     vertical-align: -3px;
-  }
-
-  #theme-plus-dev-tool-filter-system,
-  #theme-plus-dev-tool-filter-browser,
-  #theme-plus-dev-tool-filter-comparator,
-  #theme-plus-dev-tool-filter-version,
-  #theme-plus-dev-tool-filter-platform {
-    display: inline-block;
-    font-family: sans-serif;
-    font-weight: normal;
-    font-size: 12px;
-    margin: 0;
-    padding: 2px 3px;
-    height: 24px;
-    line-height: 24px;
-    width: auto;
-    border-width: 1px;
-    border-style: solid;
-    border-color: #eee;
-    box-shadow: none;
-    border-radius: 0;
-    background-image: none;
-    background-color: #fff;
-    color: #000;
-    box-sizing: border-box;
-  }
-  #theme-plus-dev-tool-filter-apply {
-    font-family: sans-serif;
-    font-weight: normal;
-    font-size: 12px;
-    margin: 0;
-    padding: 0;
-    height: auto;
-    line-height: 1em;
-    width: auto;
-    border-width: 0;
-    border-style: none;
-    border-color: transparent;
-    box-shadow: none;
-    border-radius: 0;
-    background-image: none;
-    background-color: transparent;
-    color: #000;
-    box-sizing: border-box;
-    cursor: pointer;
   }
 }

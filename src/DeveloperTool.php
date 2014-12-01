@@ -143,8 +143,8 @@ class DeveloperTool
                 '~<base[^>]+>~',
                 sprintf(
                     '$0
-<link rel="stylesheet" href="assets/theme-plus/css/dev.css">
-<script src="assets/theme-plus/js/dev.js"></script>'
+<link rel="stylesheet" href="assets/theme-plus/stylesheets/dev.css">
+<script src="assets/theme-plus/javascripts/dev.js"></script>'
                 ),
                 $strBuffer
             );

@@ -238,10 +238,10 @@ class ThemePlus
             }
 
             $asset = new ExtendedFileAsset(
-                TL_ROOT . '/assets/theme-plus/js/' . $asyncScript . '.js',
+                TL_ROOT . '/assets/theme-plus/javascripts/' . $asyncScript . '.js',
                 [],
                 TL_ROOT,
-                'assets/theme-plus/js/' . $asyncScript . '.js'
+                'assets/theme-plus/javascripts/' . $asyncScript . '.js'
             );
             $asset->setInline(true);
 

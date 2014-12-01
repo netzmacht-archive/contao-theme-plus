@@ -17,7 +17,7 @@
 
 
 if (TL_MODE == 'BE') {
-    $GLOBALS['TL_CSS']['theme_plus_be'] = 'assets/theme-plus/css/be.css';
+    $GLOBALS['TL_CSS']['theme_plus_be'] = 'assets/theme-plus/stylesheets/be.css';
 }
 
 $session = \Session::getInstance();
