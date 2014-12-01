@@ -19,6 +19,7 @@ namespace Bit3\Contao\ThemePlus;
 
 use Bit3\Contao\Assetic\AsseticFactory;
 use Bit3\Contao\ThemePlus\Asset\ExtendedFileAsset;
+use Bit3\Contao\ThemePlus\DeveloperTool\DeveloperTool;
 use Bit3\Contao\ThemePlus\Event\CollectAssetsEvent;
 use Bit3\Contao\ThemePlus\Event\OrganizeAssetsEvent;
 use Bit3\Contao\ThemePlus\Event\RenderAssetHtmlEvent;
