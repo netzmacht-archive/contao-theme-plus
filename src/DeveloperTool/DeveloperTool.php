@@ -247,4 +247,93 @@ class DeveloperTool
 
         return $strBuffer;
     }
+
+    /**
+     * Generate a debug comment from an asset.
+     *
+     * @return string
+     */
+    public function getDebugComment(AssetInterface $asset)
+    {
+        return '<!-- ' . PHP_EOL . static::getAssetDebugString($asset, '  ') . PHP_EOL . '-->' . PHP_EOL;
+    }
+
+    /**
+     * Generate a debug string for the asset.
+     *
+     * @param \Assetic\Asset\AssetInterface $asset
+     * @param string                        $depth
+     *
+     * @return string
+     */
+    public function getAssetDebugString(AssetInterface $asset, $depth = '')
+    {
+        $filters = [];
+        foreach ($asset->getFilters() as $v) {
+            $filters[] = get_class($v);
+        }
+
+        if ($asset instanceof AssetCollectionInterface) {
+            /** @var AssetCollectionInterface $asset */
+            $buffer = $depth . 'collection(' . get_class($asset) . ') {' . PHP_EOL;
+
+            if ($asset->getTargetPath()) {
+                $buffer .= $depth . '  target path: ' . $asset->getTargetPath() . PHP_EOL;
+            }
+            if (count($asset->getFilters())) {
+                $buffer .= $depth . '  filters: [' . PHP_EOL;
+
+                foreach ($asset->getFilters() as $filter) {
+                    $buffer .= $depth . '    ' . get_class($filter) . PHP_EOL;
+                }
+
+                $buffer .= $depth . '  ]' . PHP_EOL;
+            }
+            $buffer .= $depth . '  last modified: ' . $asset->getLastModified() . PHP_EOL;
+
+            $buffer .= $depth . '  elements: [' . PHP_EOL;
+            foreach ($asset->all() as $child) {
+                $buffer .= static::getAssetDebugString($child, $depth . '    ') . PHP_EOL;
+            }
+
+            $buffer .= $depth . '}';
+            return $buffer;
+        } else {
+            if ($asset instanceof DelegatorAssetInterface) {
+                /** @var AssetCollectionInterface $asset */
+                $buffer = $depth . 'delegator(' . get_class($asset) . ') {' . PHP_EOL;
+                if ($asset instanceof DelegatorAssetInterface) {
+                    /** @var DelegatorAssetInterface $asset */
+                    $buffer .= $depth . '  delegate: [' . PHP_EOL;
+                    $buffer .= static::getAssetDebugString($asset->getAsset(), $depth . '    ') . PHP_EOL;
+                    $buffer .= $depth . '  ]' . PHP_EOL;
+                }
+                $buffer .= $depth . '}';
+                return $buffer;
+            } else {
+                /** @var AssetCollectionInterface $asset */
+                $buffer = $depth . 'asset(' . get_class($asset) . ') {' . PHP_EOL;
+                $buffer .= $depth . '  source path: ' . $asset->getSourcePath() . PHP_EOL;
+                $buffer .= $depth . '  source root: ' . $asset->getSourceRoot() . PHP_EOL;
+
+                if ($asset->getTargetPath()) {
+                    $buffer .= $depth . '  target path: ' . $asset->getTargetPath() . PHP_EOL;
+                }
+                if (count($asset->getFilters())) {
+                    $buffer .= $depth . '  filters: [' . PHP_EOL;
+
+                    foreach ($asset->getFilters() as $filter) {
+                        $buffer .= $depth . '    ' . get_class($filter) . PHP_EOL;
+                    }
+
+                    $buffer .= $depth . '  ]' . PHP_EOL;
+                }
+
+                $buffer .= $depth . '  last modified: ' . $asset->getLastModified() . PHP_EOL;
+
+                $buffer .= $depth . '}';
+                return $buffer;
+            }
+        }
+    }
 }

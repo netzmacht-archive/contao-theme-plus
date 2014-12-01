@@ -162,22 +162,14 @@ class ThemePlusUtils
     }
 
     /**
-     * Generate a debug comment from an asset.
-     *
-     * @return string
-     */
-    public static function getDebugComment(AssetInterface $asset)
-    {
-        return '<!-- ' . PHP_EOL . static::getAssetDebugString($asset, '  ') . PHP_EOL . '-->' . PHP_EOL;
-    }
-
-    /**
      * Generate a debug string for the asset.
      *
      * @param \Assetic\Asset\AssetInterface $asset
      * @param string                        $depth
      *
      * @return string
+     *
+     * @deprecated Still used in the proxy.php!!!
      */
     public static function getAssetDebugString(AssetInterface $asset, $depth = '')
     {

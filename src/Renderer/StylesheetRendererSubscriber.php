@@ -135,7 +135,7 @@ class StylesheetRendererSubscriber implements EventSubscriberInterface
                 }
 
                 // add debug information
-                $html .= ThemePlusUtils::getDebugComment($asset);
+                $html .= $event->getDeveloperTool()->getDebugComment($asset);
 
                 $html .= $linkHtml . PHP_EOL;
 
@@ -192,7 +192,7 @@ class StylesheetRendererSubscriber implements EventSubscriberInterface
                 }
 
                 // add debug information
-                $html .= ThemePlusUtils::getDebugComment($asset);
+                $html .= $event->getDeveloperTool()->getDebugComment($asset);
 
                 $html .= $styleHtml . PHP_EOL;
 

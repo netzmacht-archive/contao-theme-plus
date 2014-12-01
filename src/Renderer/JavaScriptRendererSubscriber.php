@@ -149,7 +149,7 @@ class JavaScriptRendererSubscriber implements EventSubscriberInterface
                 }
 
                 // add debug information
-                $html .= ThemePlusUtils::getDebugComment($asset);
+                $html .= $event->getDeveloperTool()->getDebugComment($asset);
 
                 $html .= $scriptHtml . PHP_EOL;
 
@@ -203,7 +203,7 @@ class JavaScriptRendererSubscriber implements EventSubscriberInterface
                 }
 
                 // add debug information
-                $html .= ThemePlusUtils::getDebugComment($asset);
+                $html .= $event->getDeveloperTool()->getDebugComment($asset);
 
                 $html .= $scriptHtml . PHP_EOL;
 
