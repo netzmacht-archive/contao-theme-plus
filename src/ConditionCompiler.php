@@ -17,6 +17,7 @@
 
 namespace Bit3\Contao\ThemePlus;
 
+use JMS\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 class ConditionCompiler
@@ -81,10 +82,10 @@ class ConditionCompiler
             $this->parseBrowserRule($filterRule, $and);
             $this->parseBrowserVersionRule($filterRule, $and);
 
-            $or[] = '(' . implode(' AND ', $and) . ')';
+            $or[] = implode(' and ', $and);
         }
 
-        return '(' . implode(' OR ', $or) . ')';
+        return empty($or) ? 'true' : implode(' or ', $or);
     }
 
     private function parsePlatformRule($filterRule, &$and)
@@ -95,7 +96,7 @@ class ConditionCompiler
                     $and[] = '!mobileDetect.isMobile()';
                     break;
 
-                case 'tablet-or-mobile':
+                case 'mobile':
                     $and[] = 'mobileDetect.isMobile()';
                     break;
 
@@ -103,9 +104,17 @@ class ConditionCompiler
                     $and[] = 'mobileDetect.isTablet()';
                     break;
 
-                case 'mobile':
-                    $and[] = 'mobileDetect.isMobile() AND NOT mobileDetect.isTablet()';
+                case 'phone':
+                    $and[] = 'mobileDetect.isMobile() and not mobileDetect.isTablet()';
                     break;
+
+                default:
+                    throw new InvalidArgumentException(
+                        sprintf(
+                            'Platform "%s" is not valid',
+                            $filterRule['platform']
+                        )
+                    );
             }
         }
     }
