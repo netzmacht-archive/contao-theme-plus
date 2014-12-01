@@ -102,9 +102,12 @@ class DatabaseAsset implements ExtendedAssetInterface, DelegatorAssetInterface, 
                         $filePath = $this->row['file'];
                     }
 
-                    $this->asset =
-                        new FileAsset(TL_ROOT . DIRECTORY_SEPARATOR . $filePath, $filter, TL_ROOT, $filePath);
-
+                    $this->asset = new FileAsset(
+                        TL_ROOT . DIRECTORY_SEPARATOR . $filePath,
+                        $filter,
+                        TL_ROOT,
+                        $filePath
+                    );
                     break;
 
                 case 'url':
