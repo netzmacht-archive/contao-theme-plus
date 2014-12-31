@@ -18,27 +18,27 @@
 namespace Bit3\Contao\ThemePlus\Collector;
 
 use Bit3\Contao\ThemePlus\Asset\DatabaseAsset;
-use Bit3\Contao\ThemePlus\ConditionCompiler;
 use Bit3\Contao\ThemePlus\Event\CollectAssetsEvent;
 
+/**
+ * Class AbstractAssetCollector.
+ */
 class AbstractAssetCollector
 {
+    /**
+     * Append models as database assets to the event collection.
+     *
+     * @param CollectAssetsEvent $event      The collect event.
+     * @param \Model\Collection  $collection The model collection.
+     * @param string             $type       The file type.
+     *
+     * @return void
+     */
     protected function appendDatabaseAssets(CollectAssetsEvent $event, \Model\Collection $collection, $type)
     {
-        global $container;
-
-        /** @var ConditionCompiler $conditionCompiler */
-        $conditionCompiler = $container['theme-plus-condition-compiler'];
-
         foreach ($collection as $model) {
-            if (
-                $model->filter
-                && !$conditionCompiler->evaluate(deserialize($model->filterRule, true))
-            ) {
-                continue;
-            }
-
             $asset = new DatabaseAsset($model->row(), $type);
+
             $event->append($asset, 100);
         }
     }

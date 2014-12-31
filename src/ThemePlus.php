@@ -23,6 +23,7 @@ use Bit3\Contao\ThemePlus\DeveloperTool\DeveloperTool;
 use Bit3\Contao\ThemePlus\Event\CollectAssetsEvent;
 use Bit3\Contao\ThemePlus\Event\OrganizeAssetsEvent;
 use Bit3\Contao\ThemePlus\Event\RenderAssetHtmlEvent;
+use Doctrine\Common\Cache\Cache;
 use FrontendTemplate;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Template;
@@ -77,17 +78,33 @@ class ThemePlus
             // search for the layout
             $layout = \LayoutModel::findByPk($objPage->layout);
 
-            // parse stylesheets
-            $this->parseStylesheets(
-                $layout,
-                $sr
-            );
+            if (ThemePlusEnvironment::isLiveMode()) {
+                // load cached stylesheets
+                $this->loadStylesheets(
+                    $layout,
+                    $sr
+                );
+            } else {
+                // dynamically parse stylesheets
+                $this->parseStylesheets(
+                    $layout,
+                    $sr
+                );
+            }
 
-            // parse javascripts
-            $this->parseJavaScripts(
-                $layout,
-                $sr
-            );
+            if (ThemePlusEnvironment::isLiveMode()) {
+                // load cached javascripts
+                $this->loadJavaScripts(
+                    $layout,
+                    $sr
+                );
+            } else {
+                // dynamically parse javascripts
+                $this->parseJavaScripts(
+                    $layout,
+                    $sr
+                );
+            }
 
             /*
             $this->excludeList = [];
@@ -124,6 +141,25 @@ class ThemePlus
         }
 
         return $buffer;
+    }
+
+    /**
+     * Parse all stylesheets and add them to the search and replace array.
+     *
+     * @param \LayoutModel $layout
+     * @param array        $sr The search and replace array.
+     *
+     * @return mixed
+     */
+    protected function loadStylesheets(\LayoutModel $layout, array &$sr)
+    {
+        global $container;
+
+        /** @var Cache $cache */
+        $cache = $container['theme-plus-assets-cache'];
+
+        $key    = $layout->id;
+        $assets = $cache->fetch($key);
     }
 
     /**

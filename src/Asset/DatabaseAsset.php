@@ -24,11 +24,12 @@ use Assetic\Asset\StringAsset;
 use Assetic\Filter\CssRewriteFilter;
 use Assetic\Filter\FilterInterface;
 use Bit3\Contao\Assetic\AsseticFactory;
+use Bit3\Contao\ThemePlus\Filter\FilterRules;
+use Bit3\Contao\ThemePlus\Filter\FilterRulesFactory;
 use Bit3\Contao\ThemePlus\ThemePlusEnvironment;
 
 class DatabaseAsset implements ExtendedAssetInterface, DelegatorAssetInterface, \Serializable
 {
-
     /**
      * @var array
      */
@@ -39,7 +40,17 @@ class DatabaseAsset implements ExtendedAssetInterface, DelegatorAssetInterface, 
      */
     protected $type;
 
+    /**
+     * @var AssetInterface
+     */
     protected $asset;
+
+    /**
+     * The filter rules.
+     *
+     * @var FilterRules
+     */
+    protected $filterRules;
 
     public function __construct(array $row, $type)
     {
@@ -64,64 +75,136 @@ class DatabaseAsset implements ExtendedAssetInterface, DelegatorAssetInterface, 
     }
 
     /**
-     * @return AssetInterface
+     * {@inheritdoc}
      */
     public function getAsset()
     {
         if (!$this->asset) {
-            $filter = [];
-
-            if ($this->type == 'css') {
-                $filter[] = new CssRewriteFilter();
-            }
-
-            if ($this->row['asseticFilter']) {
-                /** @var AsseticFactory $asseticFactory */
-                $asseticFactory = $GLOBALS['container']['assetic.factory'];
-
-                $temp = $asseticFactory->createFilterOrChain(
-                    $this->row['asseticFilter'],
-                    ThemePlusEnvironment::isDesignerMode()
-                );
-                if ($temp) {
-                    $filter[] = $temp;
-                }
-            }
-
-            switch ($this->row['type']) {
-                case 'file':
-                    if ($this->row['filesource'] == $GLOBALS['TL_CONFIG']['uploadPath']) {
-                        $file = \FilesModel::findByUuid($this->row['file']);
-
-                        if ($file) {
-                            $filePath = $file->path;
-                        } else {
-                            $filePath = $this->row['file'];
-                        }
-                    } else {
-                        $filePath = $this->row['file'];
-                    }
-
-                    $this->asset = new FileAsset(
-                        TL_ROOT . DIRECTORY_SEPARATOR . $filePath,
-                        $filter,
-                        TL_ROOT,
-                        $filePath
-                    );
-                    break;
-
-                case 'url':
-                    $this->asset = new HttpAsset($this->row['url'], $filter);
-                    break;
-
-                case 'code':
-                    $this->asset = new StringAsset($this->row['code'], $filter, TL_ROOT, 'string_asset');
-                    $this->asset->setLastModified($this->row['tstamp']);
-                    break;
-            }
+            $this->asset = $this->createAsset();
         }
 
         return $this->asset;
+    }
+
+    /**
+     * Create the delegated asset.
+     *
+     * @return AssetInterface
+     */
+    private function createAsset()
+    {
+        $filters = $this->createFilters();
+
+        switch ($this->row['type']) {
+            case 'file':
+                return $this->createFileAsset($filters);
+
+            case 'url':
+                return $this->createHttpAsset($filters);
+
+            case 'code':
+                return $this->createStringAsset($filters);
+
+            default:
+                throw new \RuntimeException(
+                    sprintf(
+                        'Unsupported asset type "%s" [ID %s]',
+                        $this->row['type'],
+                        $this->row['id']
+                    )
+                );
+        }
+    }
+
+    /**
+     * Create filters for the asset.
+     *
+     * @return array
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    private function createFilters()
+    {
+        $filters = [];
+
+        if ($this->type == 'css') {
+            $filters[] = new CssRewriteFilter();
+        }
+
+        if ($this->row['asseticFilter']) {
+            /** @var AsseticFactory $asseticFactory */
+            $asseticFactory = $GLOBALS['container']['assetic.factory'];
+
+            $temp = $asseticFactory->createFilterOrChain(
+                $this->row['asseticFilter'],
+                ThemePlusEnvironment::isDesignerMode()
+            );
+            if ($temp) {
+                $filters[] = $temp;
+            }
+        }
+
+        return $filters;
+    }
+
+    /**
+     * Create a file asset.
+     *
+     * @param array $filters The filters.
+     *
+     * @return FileAsset
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    private function createFileAsset(array $filters)
+    {
+        if ($this->row['filesource'] == $GLOBALS['TL_CONFIG']['uploadPath']) {
+            $file = \FilesModel::findByUuid($this->row['file']);
+
+            if ($file) {
+                $filePath = $file->path;
+            } else {
+                $filePath = $this->row['file'];
+            }
+        } else {
+            $filePath = $this->row['file'];
+        }
+
+        $asset = new FileAsset(
+            TL_ROOT . DIRECTORY_SEPARATOR . $filePath,
+            $filters,
+            TL_ROOT,
+            $filePath
+        );
+
+        return $asset;
+    }
+
+    /**
+     * Create a http asset.
+     *
+     * @param array $filters The filters.
+     *
+     * @return HttpAsset
+     */
+    private function createHttpAsset(array $filters)
+    {
+        return new HttpAsset($this->row['url'], $filters);
+    }
+
+    /**
+     * Create a string asset.
+     *
+     * @param array $filters The filters.
+     *
+     * @return StringAsset
+     */
+    private function createStringAsset(array $filters)
+    {
+        $asset = new StringAsset($this->row['code'], $filters, TL_ROOT, 'string_asset');
+        $asset->setLastModified($this->row['tstamp']);
+
+        return $asset;
     }
 
     /**
@@ -314,6 +397,52 @@ class DatabaseAsset implements ExtendedAssetInterface, DelegatorAssetInterface, 
     public function setInline($inline)
     {
         $this->row['inline'] = (bool) $inline;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFilterRules()
+    {
+        if (!$this->row['filter']) {
+            return null;
+        }
+
+        if (!$this->filterRules) {
+            global $container;
+
+            /** @var FilterRulesFactory $rulesFactory */
+            $rulesFactory = $container['theme-plus-filter-rules-factory'];
+
+            $this->filterRules = $rulesFactory->createRules(
+                deserialize($this->row['filterRule'], true)
+            );
+        }
+
+        return $this->filterRules;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setFilterRules(FilterRules $filterRules = null)
+    {
+        $this->row['filter'] = (bool) $filterRules;
+
+        if ($filterRules) {
+            global $container;
+
+            /** @var FilterRulesFactory $filterRulesFactory */
+            $filterRulesFactory = $container['theme-plus-filter-rules-factory'];
+
+            $this->row['filterRule'] = serialize($filterRulesFactory->createRulesArray($filterRules));
+        } else {
+            $this->row['filterRule'] = serialize([]);
+        }
+
+        $this->filterRules = $filterRules;
+
+        return $this;
     }
 
     /**

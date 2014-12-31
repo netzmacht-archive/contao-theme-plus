@@ -17,30 +17,49 @@
 
 namespace Bit3\Contao\ThemePlus\Asset;
 
+use Bit3\Contao\ThemePlus\Filter\FilterRules;
+
 trait ExtendedAssetTrait
 {
     /**
+     * The conditional comment.
+     *
      * @var string
      */
     protected $conditionalComment;
 
     /**
+     * The media query.
+     *
      * @var string
      */
     protected $mediaQuery;
 
     /**
+     * Embed inline.
+     *
      * @var bool
      */
     protected $inline = false;
 
     /**
+     * Do not combine.
+     *
      * @var bool
      */
     protected $standalone = false;
 
     /**
+     * The filter rules.
+     *
+     * @var FilterRules|null
+     */
+    protected $filterRules = null;
+
+    /**
      * {@inheritdoc}
+     *
+     * @see ExtendedAssetInterface::getConditionalComment()
      */
     public function getConditionalComment()
     {
@@ -49,6 +68,8 @@ trait ExtendedAssetTrait
 
     /**
      * {@inheritdoc}
+     *
+     * @see ExtendedAssetInterface::setConditionalComment()
      */
     public function setConditionalComment($conditionalComment)
     {
@@ -58,6 +79,8 @@ trait ExtendedAssetTrait
 
     /**
      * {@inheritdoc}
+     *
+     * @see ExtendedAssetInterface::getMediaQuery()
      */
     public function getMediaQuery()
     {
@@ -66,6 +89,8 @@ trait ExtendedAssetTrait
 
     /**
      * {@inheritdoc}
+     *
+     * @see ExtendedAssetInterface::setMediaQuery()
      */
     public function setMediaQuery($mediaQuery)
     {
@@ -74,7 +99,9 @@ trait ExtendedAssetTrait
     }
 
     /**
-     * @return bool
+     * {@inheritdoc}
+     *
+     * @see ExtendedAssetInterface::isInline()
      */
     public function isInline()
     {
@@ -82,9 +109,9 @@ trait ExtendedAssetTrait
     }
 
     /**
-     * @param bool $inline
+     * {@inheritdoc}
      *
-     * @return static
+     * @see ExtendedAssetInterface::setInline()
      */
     public function setInline($inline)
     {
@@ -94,6 +121,8 @@ trait ExtendedAssetTrait
 
     /**
      * {@inheritdoc}
+     *
+     * @see ExtendedAssetInterface::isStandalone()
      */
     public function isStandalone()
     {
@@ -102,10 +131,33 @@ trait ExtendedAssetTrait
 
     /**
      * {@inheritdoc}
+     *
+     * @see ExtendedAssetInterface::setStandalone()
      */
     public function setStandalone($standalone)
     {
         $this->standalone = (bool) $standalone;
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @see ExtendedAssetInterface::getFilterRules()
+     */
+    public function getFilterRules()
+    {
+        return $this->filterRules;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @see ExtendedAssetInterface::setFilterRules()
+     */
+    public function setFilterRules(FilterRules $filterRules = null)
+    {
+        $this->filterRules = $filterRules;
         return $this;
     }
 }

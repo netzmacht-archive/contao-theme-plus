@@ -123,7 +123,7 @@ class DeveloperTool
             $strBuffer = preg_replace(
                 '|<body[^>]*>|',
                 sprintf(
-                    '
+                    '$0
 <!-- indexer::stop -->
 <div id="theme-plus-dev-tool" class="%s">
 <div id="theme-plus-dev-tool-toggler" title="Theme+ developers tool">T+</div>

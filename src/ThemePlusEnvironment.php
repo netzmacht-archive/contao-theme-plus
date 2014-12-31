@@ -63,9 +63,12 @@ class ThemePlusEnvironment
                             $user   = \UserModel::findByPk($userId);
 
                             if ($user) {
-                                static::setDesignerMode(
-                                    $user->themePlusDesignerMode || \Input::get('theme_plus_compile_assets')
-                                );
+                                if (\Input::get('theme_plus_compile_assets')) {
+                                    static::setDesignerMode(false);
+                                    static::$instance->preCompileModeEnabled = true;
+                                } elseif ($user->themePlusDesignerMode) {
+                                    static::setDesignerMode(true);
+                                }
                             }
                         }
                     }
@@ -77,8 +80,17 @@ class ThemePlusEnvironment
 
     /**
      * If is in live mode.
+     *
+     * @var bool
      */
     private $liveModeEnabled = true;
+
+    /**
+     * If is in pre-compile mode.
+     *
+     * @var bool
+     */
+    private $preCompileModeEnabled = false;
 
     /**
      * Singleton constructor.
@@ -130,6 +142,6 @@ class ThemePlusEnvironment
      */
     public static function isInPreCompileMode()
     {
-        return static::isDesignerMode() && \Input::get('theme_plus_compile_assets');
+        return static::getInstance()->preCompileModeEnabled;
     }
 }

@@ -18,6 +18,7 @@
 namespace Bit3\Contao\ThemePlus\Event;
 
 use Assetic\Asset\AssetCollectionInterface;
+use Assetic\Asset\AssetInterface;
 use Bit3\Contao\ThemePlus\DeveloperTool\DeveloperTool;
 use Symfony\Component\EventDispatcher\Event;
 
@@ -35,12 +36,12 @@ class OrganizeAssetsEvent extends Event
     protected $layout;
 
     /**
-     * @var AssetCollectionInterface
+     * @var AssetCollectionInterface|AssetInterface[]
      */
     protected $assets;
 
     /**
-     * @var AssetCollectionInterface|null
+     * @var AssetCollectionInterface|AssetInterface[]|null
      */
     protected $organizedAssets;
 
@@ -83,7 +84,7 @@ class OrganizeAssetsEvent extends Event
     }
 
     /**
-     * @return AssetCollectionInterface
+     * @return AssetCollectionInterface|AssetInterface[]
      */
     public function getAssets()
     {
@@ -99,7 +100,7 @@ class OrganizeAssetsEvent extends Event
     }
 
     /**
-     * @return AssetCollectionInterface|null
+     * @return AssetCollectionInterface|AssetInterface[]|null
      */
     public function getOrganizedAssets()
     {
@@ -107,7 +108,7 @@ class OrganizeAssetsEvent extends Event
     }
 
     /**
-     * @param AssetCollectionInterface|null $organizedAssets
+     * @param AssetCollectionInterface|AssetInterface[]|null $organizedAssets
      *
      * @return static
      */

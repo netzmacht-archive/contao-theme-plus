@@ -18,8 +18,22 @@
 
 /** @var Pimple $container */
 
-$container['theme-plus-condition-compiler'] = $container->share(
+$container['theme-plus-assets-cache'] = $container->share(
     function () {
-        return new \Bit3\Contao\ThemePlus\ConditionCompiler();
+        return new \Doctrine\Common\Cache\FilesystemCache(
+            implode(DIRECTORY_SEPARATOR, [TL_ROOT, 'system', 'cache', 'assets'])
+        );
+    }
+);
+
+$container['theme-plus-filter-rules-factory'] = $container->share(
+    function () {
+        return new \Bit3\Contao\ThemePlus\Filter\FilterRulesFactory();
+    }
+);
+
+$container['theme-plus-filter-rules-compiler'] = $container->share(
+    function () {
+        return new \Bit3\Contao\ThemePlus\Filter\FilterRulesCompiler();
     }
 );

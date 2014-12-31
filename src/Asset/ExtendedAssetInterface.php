@@ -18,6 +18,7 @@
 namespace Bit3\Contao\ThemePlus\Asset;
 
 use Assetic\Asset\AssetInterface;
+use Bit3\Contao\ThemePlus\Filter\FilterRules;
 
 interface ExtendedAssetInterface extends AssetInterface
 {
@@ -68,4 +69,20 @@ interface ExtendedAssetInterface extends AssetInterface
      * @return static
      */
     public function setStandalone($standalone);
+
+    /**
+     * Return the filter rules.
+     *
+     * @return null|FilterRules
+     */
+    public function getFilterRules();
+
+    /**
+     * Set the filter rules.
+     *
+     * @param null|FilterRules $filterRule
+     *
+     * @return static
+     */
+    public function setFilterRules(FilterRules $filterRule = null);
 }
