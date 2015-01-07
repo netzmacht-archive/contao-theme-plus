@@ -18,6 +18,21 @@
 
 /** @var Pimple $container */
 
+$container['theme-plus-render-mode-determiner'] = $container->share(
+    function () {
+        return new \Bit3\Contao\ThemePlus\RenderModeDeterminer(
+            \Input::getInstance(),
+            \Environment::getInstance()
+        );
+    }
+);
+
+$container['theme-plus-developer-tools'] = $container->share(
+    function () {
+        return new \Bit3\Contao\ThemePlus\DeveloperTool\DeveloperTool();
+    }
+);
+
 $container['theme-plus-assets-cache'] = $container->share(
     function () {
         return new \Doctrine\Common\Cache\FilesystemCache(

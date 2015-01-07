@@ -23,12 +23,13 @@ use Assetic\Asset\AssetInterface;
 use Assetic\Asset\StringAsset;
 use Assetic\Filter\CssRewriteFilter;
 use Bit3\Contao\ThemePlus\Asset\DelegatorAssetInterface;
+use Bit3\Contao\ThemePlus\Asset\ExtendedAssetCollection;
 use Bit3\Contao\ThemePlus\Asset\ExtendedAssetInterface;
 use Bit3\Contao\ThemePlus\Event\GenerateAssetPathEvent;
 use Bit3\Contao\ThemePlus\Event\OrganizeAssetsEvent;
+use Bit3\Contao\ThemePlus\Event\OrganizePreCompiledAssetsEvent;
 use Bit3\Contao\ThemePlus\Filter\FilterRules;
 use Bit3\Contao\ThemePlus\Filter\FilterRulesCompiler;
-use Bit3\Contao\ThemePlus\ThemePlusEnvironment;
 use Bit3\Contao\ThemePlus\ThemePlusEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -36,14 +37,26 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class AssetOrganizerSubscriber implements EventSubscriberInterface
 {
     /**
+     * @var FilterRulesCompiler
+     */
+    private $filterRulesCompiler;
+
+    public function __construct(FilterRulesCompiler $filterRulesCompiler)
+    {
+        $this->filterRulesCompiler = $filterRulesCompiler;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
         return [
-            ThemePlusEvents::GENERATE_ASSET_PATH        => 'generateAssetPath',
-            ThemePlusEvents::ORGANIZE_STYLESHEET_ASSETS => 'organizeStylesheets',
-            ThemePlusEvents::ORGANIZE_JAVASCRIPT_ASSETS => 'organizeJavaScripts',
+            ThemePlusEvents::GENERATE_ASSET_PATH                     => 'generateAssetPath',
+            ThemePlusEvents::ORGANIZE_STYLESHEET_ASSETS              => 'organizeStylesheets',
+            ThemePlusEvents::ORGANIZE_PRE_COMPILED_STYLESHEET_ASSETS => 'organizePreCompiledStylesheets',
+            ThemePlusEvents::ORGANIZE_JAVASCRIPT_ASSETS              => 'organizeJavaScripts',
+            ThemePlusEvents::ORGANIZE_PRE_COMPILED_JAVASCRIPT_ASSETS => 'organizePreCompiledJavaScripts',
         ];
     }
 
@@ -74,9 +87,11 @@ class AssetOrganizerSubscriber implements EventSubscriberInterface
 
             foreach ($asset->all() as $child) {
                 $generateAssetPathEvent = new GenerateAssetPathEvent(
+                    $event->getRenderMode(),
                     $event->getPage(),
                     $event->getLayout(),
                     $child,
+                    $event->getDefaultFilters(),
                     $event->getType()
                 );
                 $eventDispatcher->dispatch(ThemePlusEvents::GENERATE_ASSET_PATH, $generateAssetPathEvent);
@@ -165,6 +180,14 @@ class AssetOrganizerSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * @param OrganizeAssetsEvent $event
+     */
+    public function organizePreCompiledStylesheets(OrganizePreCompiledAssetsEvent $event)
+    {
+        $this->organizePreCompiledAssets($event);
+    }
+
+    /**
      * Organize javascripts into collections.
      *
      * @param OrganizeAssetsEvent $event The event.
@@ -172,6 +195,14 @@ class AssetOrganizerSubscriber implements EventSubscriberInterface
     public function organizeJavaScripts(OrganizeAssetsEvent $event)
     {
         $this->organizeAssets($event);
+    }
+
+    /**
+     * @param OrganizeAssetsEvent $event
+     */
+    public function organizePreCompiledJavaScripts(OrganizePreCompiledAssetsEvent $event)
+    {
+        $this->organizePreCompiledAssets($event);
     }
 
     /**
@@ -183,31 +214,24 @@ class AssetOrganizerSubscriber implements EventSubscriberInterface
     {
         if (!$event->getOrganizedAssets()) {
             // list of organized assets
-            $organizedAssets = new AssetCollection();
+            $organizedAssets = new AssetCollection([], [], TL_ROOT);
 
             // distribute the assets over the combined and organized collections
-            $this->splitAssets($event->getAssets(), $organizedAssets, $event);
+            $this->splitAssets($event->getCollection(), $organizedAssets, $event);
 
-            if ($event->getDeveloperTool()) {
-                $assets = new AssetCollection();
-
-                foreach ($organizedAssets as $asset) {
-                    /** @var AssetInterface $asset */
-
-                    if ($asset instanceof AssetCollectionInterface) {
-                        foreach ($asset as $collectionAsset) {
-                            $assets->add($collectionAsset);
-                        }
-                    } else {
-                        $assets->add($asset);
-                    }
-                }
-
-                $event->setOrganizedAssets($assets);
-            } else {
-                $event->setOrganizedAssets($organizedAssets);
-            }
+            $event->setOrganizedAssets($organizedAssets);
         }
+    }
+
+    private function organizePreCompiledAssets(OrganizePreCompiledAssetsEvent $event)
+    {
+        $this->buildPreCompiledCollections(
+            [],
+            new FilterRules(),
+            new FilterRules(),
+            $event->getCollection()->all(),
+            $event->getCollections()
+        );
     }
 
     /**
@@ -231,8 +255,8 @@ class AssetOrganizerSubscriber implements EventSubscriberInterface
         FilterRules $inheritedFilterRules = null,
         array $inheritedFilters = []
     ) {
-        foreach ($assets as $asset) {
-            if ($this->determineSkip($asset)) {
+        foreach ($assets->all() as $asset) {
+            if ($this->determineSkip($asset, $event)) {
                 continue;
             }
 
@@ -255,7 +279,7 @@ class AssetOrganizerSubscriber implements EventSubscriberInterface
                 $combinedAssets = null;
             } else {
                 if (!$combinedAssets) {
-                    $combinedAssets = new AssetCollection();
+                    $combinedAssets = new AssetCollection([], [], TL_ROOT);
                     $organizedAssets->add($combinedAssets);
                 }
 
@@ -264,6 +288,101 @@ class AssetOrganizerSubscriber implements EventSubscriberInterface
         }
 
         return $combinedAssets;
+    }
+
+    /**
+     * Inherit rules and build multiple collections with rules.
+     *
+     * @param array|AssetInterface[]                  $assets
+     * @param FilterRules                             $inheritedFilterRules
+     * @param FilterRules                             $ignoredFilterRules
+     * @param array|AssetInterface[]                  $remainingAssets
+     * @param \ArrayObject|AssetCollectionInterface[] $collections
+     *
+     */
+    protected function buildPreCompiledCollections(
+        array $assets,
+        FilterRules $inheritedFilterRules,
+        FilterRules $ignoredFilterRules,
+        array $remainingAssets,
+        \ArrayObject $collections
+    ) {
+        if (empty($remainingAssets)) {
+            if (count($assets)) {
+                $collection = new ExtendedAssetCollection($assets, [], TL_ROOT);
+                $collection->setFilterRules($inheritedFilterRules);
+
+                $collections->append($collection);
+            }
+
+            return;
+        }
+
+        $asset = array_shift($remainingAssets);
+
+        $isExtended = $asset instanceof ExtendedAssetInterface;
+        $hasRules   = $isExtended && $asset->getFilterRules() && !$asset->getFilterRules()->isEmpty();
+        $isIgnored  = $hasRules && $ignoredFilterRules->containsAll($asset->getFilterRules());
+
+        if ($isExtended && $hasRules && !$isIgnored) {
+            if ($inheritedFilterRules->isEmpty() || $inheritedFilterRules == $asset->getFilterRules()) {
+                $clone = clone $asset;
+                $clone->setFilterRules(null);
+
+                // build path WITH the filtered asset
+                $extendedAssets = array_merge($assets, [$clone]);
+                $filterRules    = clone $inheritedFilterRules;
+                $filterRules->addAll($asset->getFilterRules());
+
+                $this->buildPreCompiledCollections(
+                    $extendedAssets,
+                    $filterRules,
+                    $ignoredFilterRules,
+                    $remainingAssets,
+                    $collections
+                );
+
+                // build path WITHOUT the filtered asset
+                if ($inheritedFilterRules->isEmpty()) {
+                    $ignoredFilterRules = clone $ignoredFilterRules;
+                    $ignoredFilterRules->addAll($asset->getFilterRules());
+
+                    $this->buildPreCompiledCollections(
+                        $assets,
+                        $inheritedFilterRules,
+                        $ignoredFilterRules,
+                        $remainingAssets,
+                        $collections
+                    );
+                }
+            } else {
+                // build path WITHOUT the filtered asset
+                $this->buildPreCompiledCollections(
+                    $assets,
+                    $inheritedFilterRules,
+                    $ignoredFilterRules,
+                    $remainingAssets,
+                    $collections
+                );
+            }
+        } elseif ($isIgnored) {
+            $this->buildPreCompiledCollections(
+                $assets,
+                $inheritedFilterRules,
+                $ignoredFilterRules,
+                $remainingAssets,
+                $collections
+            );
+        } else {
+            $assets[] = $asset;
+            $this->buildPreCompiledCollections(
+                $assets,
+                $inheritedFilterRules,
+                $ignoredFilterRules,
+                $remainingAssets,
+                $collections
+            );
+        }
     }
 
     /**
@@ -323,13 +442,13 @@ class AssetOrganizerSubscriber implements EventSubscriberInterface
      *
      * @return bool
      */
-    private function determineSkip(AssetInterface $asset)
+    private function determineSkip(AssetInterface $asset, OrganizeAssetsEvent $event)
     {
         if (!$asset instanceof ExtendedAssetInterface) {
             return false;
         }
 
-        if (ThemePlusEnvironment::isInPreCompileMode()) {
+        if ($event->isInPreCompileMode()) {
             return false;
         }
 
@@ -349,12 +468,7 @@ class AssetOrganizerSubscriber implements EventSubscriberInterface
      */
     private function evaluateRules(FilterRules $filterRules)
     {
-        global $container;
-
-        /** @var FilterRulesCompiler $filterRulesCompiler */
-        $filterRulesCompiler = $container['theme-plus-filter-rules-compiler'];
-
-        return !$filterRulesCompiler->evaluate($filterRules);
+        return !$this->filterRulesCompiler->evaluate($filterRules);
     }
 
     /**
@@ -376,8 +490,12 @@ class AssetOrganizerSubscriber implements EventSubscriberInterface
      *
      * @return bool
      */
-    private function determineIsStandalone(AssetInterface $asset)
+    private function determineIsStandalone(AssetInterface $asset, OrganizeAssetsEvent $event)
     {
+        if ($event->isDesignerMode() || $event->isInPreCompileMode()) {
+            return true;
+        }
+
         if (!$asset instanceof ExtendedAssetInterface) {
             return false;
         }

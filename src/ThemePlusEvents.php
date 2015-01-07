@@ -75,6 +75,41 @@ class ThemePlusEvents
     const ORGANIZE_STYLESHEET_ASSETS = 'theme-plus.organize-stylesheet-assets';
 
     /**
+     * The ORGANIZE_PRE_COMPILED_STYLESHEET_ASSETS event occurs when the stylesheet assets must be organized into
+     * multiple collections depending on the filters for pre-compiled caching.
+     *
+     * The event listener method receives a Bit3\Contao\ThemePlus\Event\OrganizePreCompiledAssetsEvent instance.
+     *
+     * @var string
+     *
+     * @api
+     */
+    const ORGANIZE_PRE_COMPILED_STYLESHEET_ASSETS = 'theme-plus.organize-pre-compiled-stylesheet-assets';
+
+    /**
+     * The COMPILE_STYLESHEET event occurs when the stylesheet asset is compiled and stored as file.
+     *
+     * The event listener method receives a Bit3\Contao\ThemePlus\Event\CompileAssetEvent instance.
+     *
+     * @var string
+     *
+     * @api
+     */
+    const COMPILE_STYLESHEET = 'theme-plus.compile-stylesheet';
+
+    /**
+     * The GENERATE_PRE_COMPILED_STYLESHEET_ASSETS_CACHE event occurs when the caching php code for the pre-compiled
+     * stylesheet assets must be generated.
+     *
+     * The event listener method receives a Bit3\Contao\ThemePlus\Event\GeneratePreCompiledAssetsCacheEvent instance.
+     *
+     * @var string
+     *
+     * @api
+     */
+    const GENERATE_PRE_COMPILED_STYLESHEET_ASSETS_CACHE = 'theme-plus.generate-pre-compiled-stylesheet-assets-cache';
+
+    /**
      * The RENDER_STYLESHEET_HTML event occurs when the stylesheet asset is rendered into html.
      *
      * The event listener method receives a Bit3\Contao\ThemePlus\Event\RenderAssetHtmlEvent instance.
@@ -117,6 +152,41 @@ class ThemePlusEvents
      * @api
      */
     const ORGANIZE_JAVASCRIPT_ASSETS = 'theme-plus.organize-javascript-assets';
+
+    /**
+     * The ORGANIZE_PRE_COMPILED_JAVASCRIPT_ASSETS event occurs when the javascript assets must be organized into
+     * multiple collections depending on the filters for pre-compiled caching.
+     *
+     * The event listener method receives a Bit3\Contao\ThemePlus\Event\OrganizePreCompiledAssetsEvent instance.
+     *
+     * @var string
+     *
+     * @api
+     */
+    const ORGANIZE_PRE_COMPILED_JAVASCRIPT_ASSETS = 'theme-plus.organize-pre-compiled-javascript-assets';
+
+    /**
+     * The COMPILE_JAVASCRIPT event occurs when the javascript asset is compiled and stored as file.
+     *
+     * The event listener method receives a Bit3\Contao\ThemePlus\Event\CompileAssetEvent instance.
+     *
+     * @var string
+     *
+     * @api
+     */
+    const COMPILE_JAVASCRIPT = 'theme-plus.compile-javascript';
+
+    /**
+     * The GENERATE_PRE_COMPILED_JAVASCRIPT_ASSETS_CACHE event occurs when the caching php code for the pre-compiled
+     * javascript assets must be generated.
+     *
+     * The event listener method receives a Bit3\Contao\ThemePlus\Event\GeneratePreCompiledAssetsCacheEvent instance.
+     *
+     * @var string
+     *
+     * @api
+     */
+    const GENERATE_PRE_COMPILED_JAVASCRIPT_ASSETS_CACHE = 'theme-plus.generate-pre-compiled-javascript-assets-cache';
 
     /**
      * The RENDER_JAVASCRIPT_HTML event occurs when the javascript asset is rendered into html.

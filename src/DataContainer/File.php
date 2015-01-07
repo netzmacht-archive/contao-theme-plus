@@ -23,7 +23,7 @@ use Bit3\Contao\Assetic\Model\FilterModel;
 /**
  * Class ThemePlus
  */
-abstract class File extends \Backend
+class File extends \Backend
 {
     public function __construct()
     {

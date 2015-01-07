@@ -35,3 +35,41 @@
 .header_new_code {
   background: url(../images/code.png) no-repeat left center;
 }
+
+.theme_plus_build_asset_cache_indicators {
+  > li {
+    color: #aaa;
+    height: 16px;
+    line-height: 16px;
+    text-indent: 22px;
+    margin-bottom: 4px;
+    background-image: url(../images/waiting.gif);
+    background-position: left center;
+    background-repeat: no-repeat;
+  }
+  > li.running {
+    color: #ffc737;
+    background-image: url(../images/running.gif);
+  }
+  > li.succeed {
+    color: #06c43a;
+    background-image: url(../images/loaded.png);
+  }
+  > li.failed {
+    color: #c4280d;
+    background-image: url(../images/failed.png);
+  }
+  > li.divider {
+    margin-top: 12px;
+    border-top: 1px solid #aaa;
+    margin-bottom: 12px;
+    height: 0;
+    line-height: 0;
+    overflow: hidden;
+  }
+}
+
+table.theme_plus_analyse_asset_cache_tree {
+  table-layout: fixed;
+  width: 100%;
+}

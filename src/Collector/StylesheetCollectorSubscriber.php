@@ -20,7 +20,6 @@ namespace Bit3\Contao\ThemePlus\Collector;
 use Assetic\Asset\AssetInterface;
 use Assetic\Asset\FileAsset;
 use Assetic\Filter\CssRewriteFilter;
-use Bit3\Contao\ThemePlus\Asset\DatabaseAsset;
 use Bit3\Contao\ThemePlus\Asset\ExtendedFileAsset;
 use Bit3\Contao\ThemePlus\Event\CollectAssetsEvent;
 use Bit3\Contao\ThemePlus\Event\GenerateAssetPathEvent;
@@ -56,7 +55,12 @@ class StylesheetCollectorSubscriber extends AbstractAssetCollector implements Ev
         if (is_array($GLOBALS['TL_FRAMEWORK_CSS']) && !empty($GLOBALS['TL_FRAMEWORK_CSS'])) {
             foreach (array_unique($GLOBALS['TL_FRAMEWORK_CSS']) as $stylesheet) {
                 $stripStaticDomainEvent =
-                    new StripStaticDomainEvent($event->getPage(), $event->getLayout(), $stylesheet);
+                    new StripStaticDomainEvent(
+                        $event->getRenderMode(),
+                        $event->getPage(),
+                        $event->getLayout(),
+                        $stylesheet
+                    );
                 $eventDispatcher->dispatch(ThemePlusEvents::STRIP_STATIC_DOMAIN, $stripStaticDomainEvent);
                 $stylesheet = $stripStaticDomainEvent->getUrl();
 
@@ -68,9 +72,11 @@ class StylesheetCollectorSubscriber extends AbstractAssetCollector implements Ev
                 );
 
                 $generateAssetPathEvent = new GenerateAssetPathEvent(
+                    $event->getRenderMode(),
                     $event->getPage(),
                     $event->getLayout(),
                     $asset,
+                    $event->getDefaultFilters(),
                     'css'
                 );
                 $eventDispatcher->dispatch(ThemePlusEvents::GENERATE_ASSET_PATH, $generateAssetPathEvent);
@@ -96,19 +102,30 @@ class StylesheetCollectorSubscriber extends AbstractAssetCollector implements Ev
                     list($source, $media, $mode) = explode('|', $stylesheet);
 
                     $stripStaticDomainEvent =
-                        new StripStaticDomainEvent($event->getPage(), $event->getLayout(), $source);
+                        new StripStaticDomainEvent(
+                            $event->getRenderMode(),
+                            $event->getPage(),
+                            $event->getLayout(),
+                            $source
+                        );
                     $eventDispatcher->dispatch(ThemePlusEvents::STRIP_STATIC_DOMAIN, $stripStaticDomainEvent);
                     $source = $stripStaticDomainEvent->getUrl();
 
-                    $asset =
-                        new ExtendedFileAsset(TL_ROOT . '/' . $source, [new CssRewriteFilter()], TL_ROOT, $stylesheet);
+                    $asset = new ExtendedFileAsset(
+                        TL_ROOT . '/' . $source,
+                        [new CssRewriteFilter()],
+                        TL_ROOT,
+                        $source
+                    );
                     $asset->setMediaQuery($media);
                     $asset->setStandalone($mode != 'static');
 
                     $generateAssetPathEvent = new GenerateAssetPathEvent(
+                        $event->getRenderMode(),
                         $event->getPage(),
                         $event->getLayout(),
                         $asset,
+                        $event->getDefaultFilters(),
                         'css'
                     );
                     $eventDispatcher->dispatch(ThemePlusEvents::GENERATE_ASSET_PATH, $generateAssetPathEvent);
@@ -185,20 +202,30 @@ class StylesheetCollectorSubscriber extends AbstractAssetCollector implements Ev
                 } else {
                     list($source, $media, $mode, $version) = explode('|', $stylesheet);
 
-                    $stripStaticDomainEvent =
-                        new StripStaticDomainEvent($event->getPage(), $event->getLayout(), $source);
+                    $stripStaticDomainEvent = new StripStaticDomainEvent(
+                        $event->getRenderMode(),
+                        $event->getPage(),
+                        $event->getLayout(),
+                        $source
+                    );
                     $eventDispatcher->dispatch(ThemePlusEvents::STRIP_STATIC_DOMAIN, $stripStaticDomainEvent);
                     $source = $stripStaticDomainEvent->getUrl();
 
-                    $asset =
-                        new ExtendedFileAsset(TL_ROOT . '/' . $source, [new CssRewriteFilter()], TL_ROOT, $stylesheet);
+                    $asset = new ExtendedFileAsset(
+                        TL_ROOT . '/' . $source,
+                        [new CssRewriteFilter()],
+                        TL_ROOT,
+                        $stylesheet
+                    );
                     $asset->setMediaQuery($media);
                     $asset->setStandalone($mode != 'static');
 
                     $generateAssetPathEvent = new GenerateAssetPathEvent(
+                        $event->getRenderMode(),
                         $event->getPage(),
                         $event->getLayout(),
                         $asset,
+                        $event->getDefaultFilters(),
                         'css'
                     );
                     $eventDispatcher->dispatch(ThemePlusEvents::GENERATE_ASSET_PATH, $generateAssetPathEvent);

@@ -20,16 +20,29 @@ require(dirname(dirname(dirname($_SERVER['SCRIPT_FILENAME']))) . '/system/initia
 
 use Assetic\Asset\AssetInterface;
 use Assetic\Asset\StringAsset;
+use Assetic\Filter\CssRewriteFilter;
+use Doctrine\Common\Cache\Cache;
 use Bit3\Contao\Assetic\AsseticFactory;
-use Bit3\Contao\ThemePlus\ThemePlusEnvironment;
+use Bit3\Contao\ThemePlus\DeveloperTool\DeveloperTool;
+use Bit3\Contao\ThemePlus\RenderMode;
+use Bit3\Contao\ThemePlus\RenderModeDeterminer;
+use Bit3\Contao\ThemePlus\ThemePlus;
 
 class proxy
 {
     public function run()
     {
-        if (ThemePlusEnvironment::isDesignerMode()) {
+        /** @var RenderModeDeterminer $renderModeDeterminer */
+        $renderModeDeterminer = $GLOBALS['container']['theme-plus-render-mode-determiner'];
+
+        $renderMode = $renderModeDeterminer->determineMode();
+
+        if (RenderMode::DESIGN == $renderMode) {
             $user = FrontendUser::getInstance();
             $user->authenticate();
+
+            /** @var DeveloperTool $developerTool */
+            $developerTool = $GLOBALS['container']['theme-plus-developer-tools'];
 
             $pathInfo = \Environment::get('pathInfo');
 
@@ -74,13 +87,20 @@ class proxy
                 // default filter
                 $defaultFilters = $asseticFactory->createFilterOrChain($page->layout->asseticStylesheetFilter, true);
 
+                // remove css rewrite filter
+                foreach ($defaultFilters as $index => $filter) {
+                    if ($filter instanceof CssRewriteFilter) {
+                        unset($defaultFilters[$index]);
+                    }
+                }
+
                 // update the target path
                 $asset->setTargetPath('assets/theme-plus/proxy.php/:type/:id/:name');
 
                 // create debug informations
                 $buffer = '/*' . PHP_EOL;
                 $buffer .= ' * DEBUG' . PHP_EOL;
-                $buffer .= \Bit3\Contao\ThemePlus\ThemePlusUtils::getAssetDebugString($asset, ' * ') . PHP_EOL;
+                $buffer .= $developerTool->getAssetDebugString($asset, ' * ') . PHP_EOL;
                 $buffer .= ' * END' . PHP_EOL;
                 $buffer .= ' */' . PHP_EOL . PHP_EOL;
 
@@ -94,6 +114,18 @@ class proxy
 
                 $session->cache                     = $cachedAsset;
                 $_SESSION['THEME_PLUS_ASSETS'][$id] = serialize($session);
+
+                // update advanced asset cache meta
+                if (!$GLOBALS['TL_CONFIG']['theme_plus_disabled_advanced_asset_caching']) {
+                    /** @var Cache $cache */
+                    $cache = $GLOBALS['container']['theme-plus-assets-cache'];
+
+                    $latestTimestamp = $cache->fetch(ThemePlus::CACHE_LATEST_ASSET_TIMESTAMP);
+
+                    if (!$latestTimestamp || $latestTimestamp < $asset->getLastModified()) {
+                        $cache->save(ThemePlus::CACHE_LATEST_ASSET_TIMESTAMP, $asset->getLastModified());
+                    }
+                }
 
                 echo $buffer;
                 ob_flush();

@@ -21,7 +21,9 @@ use Assetic\Asset\FileAsset;
 use Assetic\Asset\HttpAsset;
 use Bit3\Contao\ThemePlus\Asset\DelegatorAssetInterface;
 use Bit3\Contao\ThemePlus\Asset\ExtendedAssetInterface;
+use Bit3\Contao\ThemePlus\DeveloperTool\DeveloperTool;
 use Bit3\Contao\ThemePlus\Event\AddStaticDomainEvent;
+use Bit3\Contao\ThemePlus\Event\CompileAssetEvent;
 use Bit3\Contao\ThemePlus\Event\GenerateAssetPathEvent;
 use Bit3\Contao\ThemePlus\Event\RenderAssetHtmlEvent;
 use Bit3\Contao\ThemePlus\ThemePlusEvents;
@@ -32,11 +34,24 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class StylesheetRendererSubscriber implements EventSubscriberInterface
 {
     /**
+     * @var DeveloperTool
+     */
+    private $developerTool;
+
+    public function __construct(DeveloperTool $developerTool)
+    {
+        $this->developerTool = $developerTool;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
         return [
+            ThemePlusEvents::COMPILE_STYLESHEET     => [
+                ['compileAsset']
+            ],
             ThemePlusEvents::RENDER_STYLESHEET_HTML => [
                 ['renderDesignerModeHtml'],
                 ['renderDesignerModeInlineHtml'],
@@ -46,12 +61,48 @@ class StylesheetRendererSubscriber implements EventSubscriberInterface
         ];
     }
 
+    public function compileAsset(
+        CompileAssetEvent $event,
+        $eventName,
+        EventDispatcherInterface $eventDispatcher
+    ) {
+        if (!$event->getTargetPath()) {
+            $asset = $event->getAsset();
+
+            $generateAssetPathEvent = new GenerateAssetPathEvent(
+                $event->getRenderMode(),
+                $event->getPage(),
+                $event->getLayout(),
+                $asset,
+                $event->getDefaultFilters(),
+                'css'
+            );
+            $eventDispatcher->dispatch(ThemePlusEvents::GENERATE_ASSET_PATH, $generateAssetPathEvent);
+
+            $targetPath = $generateAssetPathEvent->getPath();
+
+            if ($event->isOverwrite() || !file_exists(TL_ROOT . DIRECTORY_SEPARATOR . $targetPath)) {
+                // overwrite the target path
+                $asset->setTargetPath($targetPath);
+
+                // load and dump the collection
+                $asset->load($event->getDefaultFilters());
+                $css = $asset->dump($event->getDefaultFilters());
+
+                // write the asset
+                file_put_contents($targetPath, $css);
+            }
+
+            $event->setTargetPath($targetPath);
+        }
+    }
+
     public function renderDesignerModeHtml(
         RenderAssetHtmlEvent $event,
         $eventName,
         EventDispatcherInterface $eventDispatcher
     ) {
-        if (!$event->getHtml() && $event->getDeveloperTool()) {
+        if (!$event->getHtml() && $event->isDesignerMode()) {
             $asset = $event->getAsset();
 
             if (!$asset instanceof ExtendedAssetInterface || !$asset->isInline()) {
@@ -107,7 +158,7 @@ class StylesheetRendererSubscriber implements EventSubscriberInterface
                 $asset->setTargetPath($url);
 
                 // remember asset for debug tool
-                $event->getDeveloperTool()->registerFile(
+                $this->developerTool->registerFile(
                     $id,
                     (object) [
                         'asset' => $realAssets,
@@ -135,7 +186,7 @@ class StylesheetRendererSubscriber implements EventSubscriberInterface
                 }
 
                 // add debug information
-                $html .= $event->getDeveloperTool()->getDebugComment($asset);
+                $html .= $this->developerTool->getDebugComment($asset);
 
                 $html .= $linkHtml . PHP_EOL;
 
@@ -149,7 +200,7 @@ class StylesheetRendererSubscriber implements EventSubscriberInterface
         $eventName,
         EventDispatcherInterface $eventDispatcher
     ) {
-        if (!$event->getHtml() && $event->getDeveloperTool()) {
+        if (!$event->getHtml() && $event->isDesignerMode()) {
             $asset = $event->getAsset();
 
             if ($asset instanceof ExtendedAssetInterface && $asset->isInline()) {
@@ -192,7 +243,7 @@ class StylesheetRendererSubscriber implements EventSubscriberInterface
                 }
 
                 // add debug information
-                $html .= $event->getDeveloperTool()->getDebugComment($asset);
+                $html .= $developerTools->getDebugComment($asset);
 
                 $html .= $styleHtml . PHP_EOL;
 
@@ -203,33 +254,27 @@ class StylesheetRendererSubscriber implements EventSubscriberInterface
 
     public function renderLinkHtml(RenderAssetHtmlEvent $event, $eventName, EventDispatcherInterface $eventDispatcher)
     {
-        if (!$event->getHtml() && !$event->getDeveloperTool()) {
+        if (!$event->getHtml() && !$event->isDesignerMode()) {
             $asset = $event->getAsset();
 
             if (!$asset instanceof ExtendedAssetInterface || !$asset->isInline()) {
-                $generateAssetPathEvent = new GenerateAssetPathEvent(
+                $compileEvent = new CompileAssetEvent(
+                    $event->getRenderMode(),
                     $event->getPage(),
                     $event->getLayout(),
                     $asset,
-                    'css'
+                    $event->getDefaultFilters()
                 );
-                $eventDispatcher->dispatch(ThemePlusEvents::GENERATE_ASSET_PATH, $generateAssetPathEvent);
+                $eventDispatcher->dispatch(ThemePlusEvents::COMPILE_STYLESHEET, $compileEvent);
 
-                $targetPath = $generateAssetPathEvent->getPath();
+                $targetPath = $compileEvent->getTargetPath();
 
-                if (!file_exists(TL_ROOT . DIRECTORY_SEPARATOR . $targetPath)) {
-                    // overwrite the target path
-                    $asset->setTargetPath($targetPath);
-
-                    // load and dump the collection
-                    $asset->load($event->getDefaultFilters());
-                    $css = $asset->dump($event->getDefaultFilters());
-
-                    // write the asset
-                    file_put_contents($targetPath, $css);
-                }
-
-                $addStaticDomainEvent = new AddStaticDomainEvent($event->getPage(), $event->getLayout(), $targetPath);
+                $addStaticDomainEvent = new AddStaticDomainEvent(
+                    $event->getRenderMode(),
+                    $event->getPage(),
+                    $event->getLayout(),
+                    $targetPath
+                );
                 $eventDispatcher->dispatch(ThemePlusEvents::ADD_STATIC_DOMAIN, $addStaticDomainEvent);
                 $targetUrl = $addStaticDomainEvent->getUrl();
 
@@ -263,7 +308,7 @@ class StylesheetRendererSubscriber implements EventSubscriberInterface
 
     public function renderInlineHtml(RenderAssetHtmlEvent $event)
     {
-        if (!$event->getHtml() && !$event->getDeveloperTool()) {
+        if (!$event->getHtml() && !$event->isDesignerMode()) {
             $asset = $event->getAsset();
 
             if ($asset instanceof ExtendedAssetInterface && $asset->isInline()) {

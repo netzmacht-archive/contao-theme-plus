@@ -1,7 +1,6 @@
 var gulp = require('gulp'),
 // gulp modules
     autoprefixer = require('gulp-autoprefixer'),
-    minifyCss = require('gulp-minify-css'),
     plumber = require('gulp-plumber'),
     sass = require('gulp-sass'),
     sourcemaps = require('gulp-sourcemaps'),
@@ -17,14 +16,15 @@ var gulp = require('gulp'),
 gulp.task('build-stylesheets', function () {
     return gulp.src('assets/sources/stylesheets/*.scss')
         .pipe(wait(500))
-        .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(plumber())
-        .pipe(sass())
+        .pipe(sourcemaps.init())
+        .pipe(sass({
+            outputStyle: 'compressed'
+        }))
         .pipe(autoprefixer({
             browsers: ['last 2 versions'],
             cascade: false
         }))
-        .pipe(minifyCss({ keepSpecialComments: 0 }))
         .pipe(sourcemaps.write('.', { sourceRoot: '../sources/stylesheets' }))
         .pipe(gulp.dest('assets/stylesheets'));
 });
@@ -35,8 +35,8 @@ gulp.task('build-stylesheets', function () {
 gulp.task('build-javascripts', function () {
     return gulp.src('assets/sources/javascripts/*.js')
         .pipe(wait(500))
-        .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(plumber())
+        .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(uglifyJs())
         .pipe(sourcemaps.write('.', { sourceRoot: '../sources/javascripts' }))
         .pipe(gulp.dest('assets/javascripts'));

@@ -18,7 +18,6 @@
 namespace Bit3\Contao\ThemePlus\Collector;
 
 use Assetic\Asset\AssetInterface;
-use Bit3\Contao\ThemePlus\Asset\DatabaseAsset;
 use Bit3\Contao\ThemePlus\Asset\ExtendedFileAsset;
 use Bit3\Contao\ThemePlus\Event\CollectAssetsEvent;
 use Bit3\Contao\ThemePlus\Event\GenerateAssetPathEvent;
@@ -58,7 +57,7 @@ class JavaScriptCollectorSubscriber extends AbstractAssetCollector implements Ev
             $eventName == ThemePlusEvents::COLLECT_HEAD_JAVASCRIPT_ASSETS
             && $event->getLayout()->theme_plus_default_javascript_position != 'head'
             || $eventName == ThemePlusEvents::COLLECT_BODY_JAVASCRIPT_ASSETS
-               && $event->getLayout()->theme_plus_default_javascript_position != 'body'
+            && $event->getLayout()->theme_plus_default_javascript_position != 'body'
         ) {
             return;
         }
@@ -71,7 +70,10 @@ class JavaScriptCollectorSubscriber extends AbstractAssetCollector implements Ev
                     list($javaScript, $mode) = explode('|', $javaScript);
 
                     $stripStaticDomainEvent = new StripStaticDomainEvent(
-                        $event->getPage(), $event->getLayout(), $javaScript
+                        $event->getRenderMode(),
+                        $event->getPage(),
+                        $event->getLayout(),
+                        $javaScript
                     );
                     $eventDispatcher->dispatch(ThemePlusEvents::STRIP_STATIC_DOMAIN, $stripStaticDomainEvent);
                     $javaScript = $stripStaticDomainEvent->getUrl();
@@ -80,9 +82,11 @@ class JavaScriptCollectorSubscriber extends AbstractAssetCollector implements Ev
                     $asset->setStandalone($mode != 'static');
 
                     $generateAssetPathEvent = new GenerateAssetPathEvent(
+                        $event->getRenderMode(),
                         $event->getPage(),
                         $event->getLayout(),
                         $asset,
+                        $event->getDefaultFilters(),
                         'js'
                     );
                     $eventDispatcher->dispatch(ThemePlusEvents::GENERATE_ASSET_PATH, $generateAssetPathEvent);

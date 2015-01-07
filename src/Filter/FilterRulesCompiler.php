@@ -83,6 +83,20 @@ class FilterRulesCompiler
     }
 
     /**
+     * Compile the filter rules.
+     *
+     * @param FilterRules $filterRules The filter rules.
+     *
+     * @return string
+     */
+    public function compile(FilterRules $filterRules)
+    {
+        $expression = $this->parse($filterRules);
+
+        return $this->language->compile($expression, array_keys($this->variables));
+    }
+
+    /**
      * Evaluate the filter rules.
      *
      * @param FilterRules $filterRules The filter rules.

@@ -22,18 +22,22 @@ if (TL_MODE == 'BE') {
 /**
  * Palettes
  */
+$GLOBALS['TL_DCA']['tl_page']['palettes']['__selector__'][] = 'theme_plus_include_stylesheets';
+$GLOBALS['TL_DCA']['tl_page']['palettes']['__selector__'][] = 'theme_plus_include_javascripts';
+$GLOBALS['TL_DCA']['tl_page']['palettes']['__selector__'][] = 'theme_plus_include_stylesheets_noinherit';
+$GLOBALS['TL_DCA']['tl_page']['palettes']['__selector__'][] = 'theme_plus_include_javascripts_noinherit';
+
 foreach (['regular', 'forward', 'redirect', 'root'] as $strType) {
-    $GLOBALS['TL_DCA']['tl_page']['palettes']['__selector__'][] = 'theme_plus_include_stylesheets';
-    $GLOBALS['TL_DCA']['tl_page']['palettes']['__selector__'][] = 'theme_plus_include_javascripts';
-    $GLOBALS['TL_DCA']['tl_page']['palettes']['__selector__'][] = 'theme_plus_include_stylesheets_noinherit';
-    $GLOBALS['TL_DCA']['tl_page']['palettes']['__selector__'][] = 'theme_plus_include_javascripts_noinherit';
 
     $GLOBALS['TL_DCA']['tl_page']['palettes'][$strType] = preg_replace(
         '#({layout_legend(:hide)?}.*);#U',
         '$1,theme_plus_include_stylesheets,theme_plus_include_stylesheets_noinherit,theme_plus_include_javascripts,theme_plus_include_javascripts_noinherit;',
         $GLOBALS['TL_DCA']['tl_page']['palettes'][$strType]
     );
+
+    MetaPalettes::appendFields('tl_page', $strType, 'expert', ['theme_plus_disable_assets_cache']);
 }
+
 $GLOBALS['TL_DCA']['tl_page']['subpalettes']['theme_plus_include_stylesheets']           = 'theme_plus_stylesheets';
 $GLOBALS['TL_DCA']['tl_page']['subpalettes']['theme_plus_include_javascripts']           = 'theme_plus_javascripts';
 $GLOBALS['TL_DCA']['tl_page']['subpalettes']['theme_plus_include_stylesheets_noinherit'] =
@@ -132,4 +136,11 @@ $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_javascripts_noinherit']     
         'tl_class'  => 'clr'
     ],
     'sql'              => 'blob NULL'
+];
+$GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_disable_assets_cache']          = [
+    'label'            => &$GLOBALS['TL_LANG']['tl_page']['theme_plus_disable_assets_cache'],
+    'exclude'          => true,
+    'inputType'        => 'checkbox',
+    'eval'             => ['tl_class'  => 'w50 m12'],
+    'sql'              => 'char(1) NOT NULL default \'\''
 ];

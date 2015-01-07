@@ -1,0 +1,174 @@
+{% import _self as self %}
+
+<div id="tl_maintenance_cache" class="maintenance_{% if isActive %}active{% else %}inactive{% endif %}">
+    <h2 class="sub_headline">{{ _lang.be_theme_plus.build_cache_headline }}</h2>
+
+    {% if message %}
+        <div class="tl_message">{{ message }}</div>
+    {% endif %}
+
+    <form action="{{ action }}" class="tl_form" method="post">
+        <div class="tl_formbody_edit">
+            <input type="hidden" name="REQUEST_TOKEN" value="{{ REQUEST_TOKEN }}">
+
+            <div class="tl_tbox">
+                <p class="tl_help tl_tip">{{ _lang.be_theme_plus.build_cache_explanation }}</p>
+            </div>
+
+            {% if guestUrls is defined and memberUrls is defined %}
+                <div class="tl_tbox">
+                    <ul class="theme_plus_build_asset_cache_indicators">
+                        <li data-url="switch_to_guest">
+                            {{ _lang.be_theme_plus.do_switch_guest }}
+                        </li>
+                        {% for url in guestUrls %}
+                            <li data-url="{{ url|e('html_attr') }}">
+                                {{ url }}
+                            </li>
+                        {% endfor %}
+                        {% if frontendUsername is not empty %}
+                            <li class="divider"></li>
+                            <li data-url="switch_to_member">
+                                {{ _lang.be_theme_plus.do_switch_member|format(frontendUsername) }}
+                            </li>
+                            {% for url in memberUrls %}
+                                <li data-url="{{ url|e('html_attr') }}">
+                                    {{ url }}
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+
+                <script src="assets/theme-plus/javascripts/maintenance.js"></script>
+                <script>
+                    window.addEvent('load', function() {
+                        var maintenance = new Maintenance(
+                                {{ guestUrls|json_encode }},
+                                {{ frontendUsername|json_encode }},
+                                {{ memberUrls|json_encode }}
+                        );
+                        maintenance.run();
+                    });
+                </script>
+            {% endif %}
+
+            {% if pages is defined %}
+                <div class="tl_tbox">
+                    <table class="theme_plus_analyse_asset_cache_tree">
+                        <colgroup>
+                            <col width="24">
+                            <col width="24">
+                            <col width="24">
+                            <col>
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th colspan="3">{{ _lang.be_theme_plus.analyse_table.headers.cache }}</th>
+                                <th>{{ _lang.be_theme_plus.analyse_table.headers.page }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{ self.renderTree(pages, 0) }}
+                        </tbody>
+                    </table>
+                </div>
+
+                <script src="assets/mootools/mediabox/{{ mediaboxVersion }}/js/Quickie.js"></script>
+                <script src="assets/mootools/mediabox/{{ mediaboxVersion }}/js/mediabox.js"></script>
+            {% endif %}
+        </div>
+        {% if guestUrls is not defined and memberUrls is not defined %}
+            <div class="tl_submit_container">
+                <input type="text" name="user" id="ctrl_user" list="userlist" class="tl_text user"
+                       placeholder="{{ _lang.MSC.username }}"
+                       value="{{ frontendUsername }}"
+                       autocomplete="off">
+                <input type="submit" name="tl_theme_plus_build_cache" class="tl_submit"
+                       value="{{ _lang.be_theme_plus.do_build_cache }}">
+                {% if not _config.theme_plus_disabled_advanced_asset_caching %}
+                    <input type="submit" name="tl_theme_plus_analyse_cache" class="tl_submit"
+                           value="{{ _lang.be_theme_plus.do_analyse_cache }}">
+                {% endif %}
+            </div>
+
+            <datalist id="userlist">
+              <option value="-"></option>
+            </datalist>
+
+            <script src="assets/theme-plus/javascripts/userlist.js"></script>
+            <script>new Userlist('ctrl_user');</script>
+        {% endif %}
+    </form>
+</div>
+
+{% macro renderTree(pages, depth) %}
+    {% import _self as self %}
+
+    {% for page in pages %}
+        <tr>
+            <td>
+                {% if page.hasCache %}
+                    {% if page.cssCache is not empty %}
+                        <a href="#mb_cache_css_{{ page.id }}"
+                           onclick="Mediabox.open(this.getAttribute('href'), '{{ page.title|json_encode|e('html_attr') }}', Math.min(960, parseInt(window.innerWidth * .9)) + ' ' + parseInt(window.innerHeight * .8)); return false">
+                            <img src="assets/theme-plus/images/stylesheet.png" width="16" height="16"
+                                 alt="{{ _lang.be_theme_plus.cachedStylesheets }}"
+                                 title="{{ _lang.be_theme_plus.cachedStylesheets }}">
+                        </a>
+                    {% else %}
+                        <img src="assets/theme-plus/images/stylesheet_.png" width="16" height="16"
+                             alt="{{ _lang.be_theme_plus.cachedStylesheets }}"
+                             title="{{ _lang.be_theme_plus.cachedStylesheets }}">
+                    {% endif %}
+                {% endif %}
+            </td>
+            <td>
+                {% if page.hasCache %}
+                    {% if page.headJsCache is not empty %}
+                        <a href="#mb_cache_head_js_{{ page.id }}"
+                           onclick="Mediabox.open(this.getAttribute('href'), '{{ page.title|json_encode|e('html_attr') }}', Math.min(960, parseInt(window.innerWidth * .9)) + ' ' + parseInt(window.innerHeight * .8)); return false">
+                            <img src="assets/theme-plus/images/javascript.png" width="16" height="16"
+                                 alt="{{ _lang.be_theme_plus.cachedHeadJavascripts }}"
+                                 title="{{ _lang.be_theme_plus.cachedHeadJavascripts }}">
+                        </a>
+                    {% else %}
+                        <img src="assets/theme-plus/images/javascript_.png" width="16" height="16"
+                             alt="{{ _lang.be_theme_plus.cachedHeadJavascripts }}"
+                             title="{{ _lang.be_theme_plus.cachedHeadJavascripts }}">
+                    {% endif %}
+                {% endif %}
+            </td>
+            <td>
+                {% if page.hasCache %}
+                    {% if page.bodyJsCache is not empty %}
+                        <a href="#mb_cache_body_js_{{ page.id }}"
+                           onclick="Mediabox.open(this.getAttribute('href'), '{{ page.title|json_encode|e('html_attr') }}', Math.min(960, parseInt(window.innerWidth * .9)) + ' ' + parseInt(window.innerHeight * .8)); return false">
+                            <img src="assets/theme-plus/images/javascript.png" width="16" height="16"
+                                 alt="{{ _lang.be_theme_plus.cachedBodyJavascripts }}"
+                                 title="{{ _lang.be_theme_plus.cachedBodyJavascripts }}">
+                        </a>
+                    {% else %}
+                        <img src="assets/theme-plus/images/javascript_.png" width="16" height="16"
+                             alt="{{ _lang.be_theme_plus.cachedBodyJavascripts }}"
+                             title="{{ _lang.be_theme_plus.cachedBodyJavascripts }}">
+                    {% endif %}
+                {% endif %}
+            </td>
+            <td style="text-indent: {{ depth * 12 }}px">
+                &#8735; {{ page.title }} [ID {{ page.id }}]
+
+                <div id="mb_cache_css_{{ page.id }}" style="display: none;">
+                    <div style="width: 100%; height: 100%; overflow: auto">{{ page.cssCache }}</div>
+                </div>
+                <div id="mb_cache_head_js_{{ page.id }}" style="display: none;">
+                    <div style="width: 100%; height: 100%; overflow: auto">{{ page.headJsCache }}</div>
+                </div>
+                <div id="mb_cache_body_js_{{ page.id }}" style="display: none;">
+                    <div style="width: 100%; height: 100%; overflow: auto">{{ page.bodyJsCache }}</div>
+                </div>
+            </td>
+        </tr>
+        {{ self.renderTree(page.children, depth + 1) }}
+    {% endfor %}
+{% endmacro %}

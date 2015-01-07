@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="system/modules/theme-plus/languages/en/be_theme_plus.php" source-language="en" datatype="php" date="2012-11-08T21:49:41+00:00">
+    <body>
+      <trans-unit id="be_theme_plus.build_cache_headline">
+        <source>Build assets cache</source>
+      </trans-unit>
+      <trans-unit id="be_theme_plus.build_cache_explanation">
+        <source>The assets cache improve raise the frontend performance. Assets will be precompiled and stored in the cache.</source>
+      </trans-unit>
+      <trans-unit id="be_theme_plus.outdated_cache">
+        <source><![CDATA[The assets cache is not up to date!<br>Build the assets cache to improve the performance.]]></source>
+      </trans-unit>
+      <trans-unit id="be_theme_plus.do_build_cache">
+        <source>Build cache</source>
+      </trans-unit>
+      <trans-unit id="be_theme_plus.do_analyse_cache">
+        <source>Analyse cache</source>
+      </trans-unit>
+      <trans-unit id="be_theme_plus.do_switch_guest">
+        <source>Switch frontend member to &lt;strong&gt;guest&lt;/strong&gt;</source>
+      </trans-unit>
+      <trans-unit id="be_theme_plus.do_switch_member">
+        <source>Switch frontend member to &lt;strong&gt;%s&lt;/strong&gt;</source>
+      </trans-unit>
+      <trans-unit id="be_theme_plus.analyse_table.headers.cache">
+        <source>Status</source>
+      </trans-unit>
+      <trans-unit id="be_theme_plus.analyse_table.headers.page">
+        <source>Page</source>
+      </trans-unit>
+      <trans-unit id="be_theme_plus.cachedStylesheets">
+        <source>Cached Stylesheets</source>
+      </trans-unit>
+      <trans-unit id="be_theme_plus.cachedHeadJavascripts">
+        <source><![CDATA[Cached &amp;lt;head&amp;gt; JavaScripts]]></source>
+      </trans-unit>
+      <trans-unit id="be_theme_plus.cachedBodyJavascripts">
+        <source><![CDATA[Cached &amp;lt;body&amp;gt; JavaScripts]]></source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

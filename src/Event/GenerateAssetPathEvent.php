@@ -17,27 +17,10 @@
 
 namespace Bit3\Contao\ThemePlus\Event;
 
-use Assetic\Asset\AssetInterface;
-use Symfony\Component\EventDispatcher\Event;
+use Assetic\Filter\FilterCollection;
 
-class GenerateAssetPathEvent extends Event
+class GenerateAssetPathEvent extends AssetAwareEvent
 {
-
-    /**
-     * @var \PageModel
-     */
-    protected $page;
-
-    /**
-     * @var \LayoutModel
-     */
-    protected $layout;
-
-    /**
-     * @var AssetInterface
-     */
-    protected $asset;
-
     /**
      * @var string
      */
@@ -48,36 +31,16 @@ class GenerateAssetPathEvent extends Event
      */
     protected $path;
 
-    public function __construct(\PageModel $page, \LayoutModel $layout, AssetInterface $asset, $type)
-    {
-        $this->page   = $page;
-        $this->layout = $layout;
-        $this->asset  = $asset;
-        $this->type   = (string) $type;
-    }
-
-    /**
-     * @return \PageModel
-     */
-    public function getPage()
-    {
-        return $this->page;
-    }
-
-    /**
-     * @return \LayoutModel
-     */
-    public function getLayout()
-    {
-        return $this->layout;
-    }
-
-    /**
-     * @return AssetInterface
-     */
-    public function getAsset()
-    {
-        return $this->asset;
+    public function __construct(
+        $renderMode,
+        \PageModel $page,
+        \LayoutModel $layout,
+        $asset,
+        FilterCollection $defaultFilters = null,
+        $type
+    ) {
+        parent::__construct($renderMode, $page, $layout, $asset, $defaultFilters);
+        $this->type = (string) $type;
     }
 
     /**

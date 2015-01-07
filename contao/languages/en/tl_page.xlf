@@ -50,6 +50,12 @@
       <trans-unit id="tl_page.theme_plus_javascripts_noinherit.1">
         <source>Select the JavaScripts that are to be included on this page.</source>
       </trans-unit>
+      <trans-unit id="tl_page.theme_plus_disable_assets_cache.0">
+        <source>Do not cache assets</source>
+      </trans-unit>
+      <trans-unit id="tl_page.theme_plus_disable_assets_cache.1">
+        <source>Do not cache assets for this page. This may be necessary, if you dynamically add assets or include special modules like the "Automatic logout"!.</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

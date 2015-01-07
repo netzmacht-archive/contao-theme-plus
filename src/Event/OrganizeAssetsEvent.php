@@ -19,85 +19,13 @@ namespace Bit3\Contao\ThemePlus\Event;
 
 use Assetic\Asset\AssetCollectionInterface;
 use Assetic\Asset\AssetInterface;
-use Bit3\Contao\ThemePlus\DeveloperTool\DeveloperTool;
-use Symfony\Component\EventDispatcher\Event;
 
-class OrganizeAssetsEvent extends Event
+class OrganizeAssetsEvent extends AssetCollectionAwareEvent
 {
-
-    /**
-     * @var \PageModel
-     */
-    protected $page;
-
-    /**
-     * @var \LayoutModel
-     */
-    protected $layout;
-
-    /**
-     * @var AssetCollectionInterface|AssetInterface[]
-     */
-    protected $assets;
-
     /**
      * @var AssetCollectionInterface|AssetInterface[]|null
      */
     protected $organizedAssets;
-
-    public function __construct(
-        \PageModel $page,
-        \LayoutModel $layout,
-        $defaultFilters,
-        AssetCollectionInterface $assets,
-        DeveloperTool $developerTool = null
-    ) {
-        $this->page           = $page;
-        $this->layout         = $layout;
-        $this->defaultFilters = $defaultFilters;
-        $this->assets         = $assets;
-        $this->developerTool  = $developerTool;
-    }
-
-    /**
-     * @return \PageModel
-     */
-    public function getPage()
-    {
-        return $this->page;
-    }
-
-    /**
-     * @return \LayoutModel
-     */
-    public function getLayout()
-    {
-        return $this->layout;
-    }
-
-    /**
-     * @return \Assetic\Filter\FilterInterface[]|null
-     */
-    public function getDefaultFilters()
-    {
-        return $this->defaultFilters;
-    }
-
-    /**
-     * @return AssetCollectionInterface|AssetInterface[]
-     */
-    public function getAssets()
-    {
-        return $this->assets;
-    }
-
-    /**
-     * @return DeveloperTool|null
-     */
-    public function getDeveloperTool()
-    {
-        return $this->developerTool;
-    }
 
     /**
      * @return AssetCollectionInterface|AssetInterface[]|null

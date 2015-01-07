@@ -17,6 +17,12 @@
 
 
 /**
+ * Configuration
+ */
+$GLOBALS['TL_CONFIG']['theme_plus_disabled_advanced_asset_caching'] = false;
+
+
+/**
  * Models
  */
 $GLOBALS['TL_MODELS']['tl_theme_plus_javascript'] = 'Bit3\Contao\ThemePlus\Model\JavaScriptModel';
@@ -33,14 +39,40 @@ $GLOBALS['BE_MOD']['design']['themes']['tables'][] = 'tl_theme_plus_javascript';
 /**
  * HOOKs
  */
-$GLOBALS['TL_HOOKS']['parseTemplate']['themeplus']            = [
-    'Bit3\Contao\ThemePlus\ThemePlus',
+$GLOBALS['TL_HOOKS']['initializeSystem']['theme_plus_backend']                 = [
+    'Bit3\Contao\ThemePlus\BackendIntegration',
+    'hookInitializeSystem'
+];
+$GLOBALS['TL_HOOKS']['parseTemplate']['theme_plus_javascripts']                = [
+    'Bit3\Contao\ThemePlus\JavaScriptsHandler',
     'hookParseTemplate'
 ];
-$GLOBALS['TL_HOOKS']['replaceDynamicScriptTags']['themeplus'] = [
+$GLOBALS['TL_HOOKS']['replaceDynamicScriptTags']['theme_plus_stylesheets']     = [
+    'Bit3\Contao\ThemePlus\StylesheetsHandler',
+    'hookReplaceDynamicScriptTags'
+];
+$GLOBALS['TL_HOOKS']['replaceDynamicScriptTags']['theme_plus_javascripts']     = [
+    'Bit3\Contao\ThemePlus\JavaScriptsHandler',
+    'hookReplaceDynamicScriptTags'
+];
+$GLOBALS['TL_HOOKS']['replaceDynamicScriptTags']['theme_plus_developer_tools'] = [
     'Bit3\Contao\ThemePlus\ThemePlus',
     'hookReplaceDynamicScriptTags'
 ];
+$GLOBALS['TL_HOOKS']['outputBackendTemplate']['theme_plus_backend']            = [
+    'Bit3\Contao\ThemePlus\BackendIntegration',
+    'hookOutputBackendTemplate'
+];
+
+
+/**
+ * Maintenance
+ */
+$GLOBALS['TL_MAINTENANCE'] = array_merge(
+    array_slice($GLOBALS['TL_MAINTENANCE'], 0, 2),
+    ['theme_plus' => 'Bit3\Contao\ThemePlus\Maintenance\BuildAssetCache'],
+    array_slice($GLOBALS['TL_MAINTENANCE'], 2)
+);
 
 
 /**

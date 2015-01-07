@@ -15,12 +15,15 @@
  * @filesource
  */
 
+$compiler      = $GLOBALS['container']['theme-plus-filter-rules-compiler'];
+$developerTool = $GLOBALS['container']['theme-plus-developer-tools'];
 
 return [
+    new Bit3\Contao\ThemePlus\Cache\CacheGeneratorSubscriber($compiler, $developerTool),
     new Bit3\Contao\ThemePlus\Collector\StylesheetCollectorSubscriber(),
     new Bit3\Contao\ThemePlus\Collector\JavaScriptCollectorSubscriber(),
-    new Bit3\Contao\ThemePlus\Renderer\StylesheetRendererSubscriber(),
-    new Bit3\Contao\ThemePlus\Renderer\JavaScriptRendererSubscriber(),
-    new Bit3\Contao\ThemePlus\Organizer\AssetOrganizerSubscriber(),
+    new Bit3\Contao\ThemePlus\Renderer\StylesheetRendererSubscriber($developerTool),
+    new Bit3\Contao\ThemePlus\Renderer\JavaScriptRendererSubscriber($developerTool),
+    new Bit3\Contao\ThemePlus\Organizer\AssetOrganizerSubscriber($compiler),
     new Bit3\Contao\ThemePlus\StaticUrlSubscriber(),
 ];

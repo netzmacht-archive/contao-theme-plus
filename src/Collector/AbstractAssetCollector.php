@@ -37,7 +37,7 @@ class AbstractAssetCollector
     protected function appendDatabaseAssets(CollectAssetsEvent $event, \Model\Collection $collection, $type)
     {
         foreach ($collection as $model) {
-            $asset = new DatabaseAsset($model->row(), $type);
+            $asset = new DatabaseAsset($model->row(), $type, $event->getRenderMode());
 
             $event->append($asset, 100);
         }

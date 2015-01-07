@@ -26,7 +26,7 @@ use Assetic\Filter\FilterInterface;
 use Bit3\Contao\Assetic\AsseticFactory;
 use Bit3\Contao\ThemePlus\Filter\FilterRules;
 use Bit3\Contao\ThemePlus\Filter\FilterRulesFactory;
-use Bit3\Contao\ThemePlus\ThemePlusEnvironment;
+use Bit3\Contao\ThemePlus\RenderMode;
 
 class DatabaseAsset implements ExtendedAssetInterface, DelegatorAssetInterface, \Serializable
 {
@@ -41,6 +41,11 @@ class DatabaseAsset implements ExtendedAssetInterface, DelegatorAssetInterface, 
     protected $type;
 
     /**
+     * @var string
+     */
+    protected $renderMode;
+
+    /**
      * @var AssetInterface
      */
     protected $asset;
@@ -52,10 +57,11 @@ class DatabaseAsset implements ExtendedAssetInterface, DelegatorAssetInterface, 
      */
     protected $filterRules;
 
-    public function __construct(array $row, $type)
+    public function __construct(array $row, $type, $renderMode)
     {
         $this->row  = $row;
         $this->type = (string) $type;
+        $this->renderMode = $renderMode;
     }
 
     /**
@@ -137,7 +143,7 @@ class DatabaseAsset implements ExtendedAssetInterface, DelegatorAssetInterface, 
 
             $temp = $asseticFactory->createFilterOrChain(
                 $this->row['asseticFilter'],
-                ThemePlusEnvironment::isDesignerMode()
+                RenderMode::DESIGN == $this->renderMode
             );
             if ($temp) {
                 $filters[] = $temp;
@@ -450,7 +456,7 @@ class DatabaseAsset implements ExtendedAssetInterface, DelegatorAssetInterface, 
      */
     public function serialize()
     {
-        return serialize([$this->row, $this->type]);
+        return serialize([$this->row, $this->type, $this->renderMode]);
     }
 
     /**
@@ -458,6 +464,16 @@ class DatabaseAsset implements ExtendedAssetInterface, DelegatorAssetInterface, 
      */
     public function unserialize($serialized)
     {
-        list($this->row, $this->type) = unserialize($serialized);
+        list($this->row, $this->type, $this->renderMode) = unserialize($serialized);
+    }
+
+    /**
+     * Clone the database asset by cloning the delegate asset.
+     */
+    public function __clone()
+    {
+        if ($this->asset) {
+            $this->asset = clone $this->asset;
+        }
     }
 }

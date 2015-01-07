@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="system/modules/theme-plus/languages/en/tl_settings.php" source-language="en" datatype="php" date="2012-11-08T21:49:41+00:00">
+    <body>
+      <trans-unit id="tl_settings.theme_plus_legend">
+        <source>Theme+ settings</source>
+      </trans-unit>
+      <trans-unit id="tl_settings.theme_plus_disabled_advanced_asset_caching.0">
+        <source>Disable advanced asset caching</source>
+      </trans-unit>
+      <trans-unit id="tl_settings.theme_plus_disabled_advanced_asset_caching.1">
+        <source>Disable the advanced asset caching ability. This formally disable all page-asset-association caching.</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

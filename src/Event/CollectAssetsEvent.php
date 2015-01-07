@@ -20,20 +20,15 @@ namespace Bit3\Contao\ThemePlus\Event;
 use Assetic\Asset\AssetCollection;
 use Assetic\Asset\AssetCollectionInterface;
 use Assetic\Asset\AssetInterface;
-use Symfony\Component\EventDispatcher\Event;
+use Assetic\Filter\FilterCollection;
+use Assetic\Filter\FilterInterface;
 
-class CollectAssetsEvent extends Event
+class CollectAssetsEvent extends LayoutAwareEvent
 {
-
     /**
-     * @var \PageModel
+     * @var FilterCollection|FilterInterface[]|null
      */
-    protected $page;
-
-    /**
-     * @var \LayoutModel
-     */
-    protected $layout;
+    protected $defaultFilters;
 
     /**
      * @var AssetInterface[][]
@@ -50,26 +45,22 @@ class CollectAssetsEvent extends Event
      */
     protected $dirty = true;
 
-    public function __construct(\PageModel $page, \LayoutModel $layout)
-    {
-        $this->page   = $page;
-        $this->layout = $layout;
+    public function __construct(
+        $renderMode,
+        \PageModel $page,
+        \LayoutModel $layout,
+        FilterCollection $defaultFilters = null
+    ) {
+        parent::__construct($renderMode, $page, $layout);
+        $this->defaultFilters = $defaultFilters;
     }
 
     /**
-     * @return \PageModel
+     * @return FilterCollection|FilterInterface[]|null
      */
-    public function getPage()
+    public function getDefaultFilters()
     {
-        return $this->page;
-    }
-
-    /**
-     * @return \LayoutModel
-     */
-    public function getLayout()
-    {
-        return $this->layout;
+        return $this->defaultFilters;
     }
 
     /**
@@ -78,7 +69,7 @@ class CollectAssetsEvent extends Event
     public function getAssets()
     {
         if ($this->dirty) {
-            $this->assets = new AssetCollection();
+            $this->assets = new AssetCollection([], [], TL_ROOT);
 
             ksort($this->sortedAssets);
             foreach ($this->sortedAssets as $assets) {
@@ -108,7 +99,7 @@ class CollectAssetsEvent extends Event
         foreach ($this->sortedAssets as $assets) {
             if (isset($assets[$hash])) {
                 throw new \InvalidArgumentException(
-                    sprintf('Asset was %s [%s] already collected', $hash, get_class($asset))
+                    sprintf('Asset %s [%s] was already collected', $hash, get_class($asset))
                 );
             }
         }
@@ -142,7 +133,7 @@ class CollectAssetsEvent extends Event
         foreach ($this->sortedAssets as $assets) {
             if (isset($assets[$hash])) {
                 throw new \InvalidArgumentException(
-                    sprintf('Asset was %s [%s] already collected', $hash, get_class($asset))
+                    sprintf('Asset %s [%s] was already collected', $hash, get_class($asset))
                 );
             }
         }

@@ -17,47 +17,18 @@
 
 namespace Bit3\Contao\ThemePlus\Event;
 
-use Symfony\Component\EventDispatcher\Event;
-
-class StripStaticDomainEvent extends Event
+class StripStaticDomainEvent extends LayoutAwareEvent
 {
-
-    /**
-     * @var \PageModel
-     */
-    protected $page;
-
-    /**
-     * @var \LayoutModel
-     */
-    protected $layout;
 
     /**
      * @var string
      */
     protected $url;
 
-    public function __construct(\PageModel $page, \LayoutModel $layout, $url)
+    public function __construct($renderMode, \PageModel $page, \LayoutModel $layout, $url)
     {
-        $this->page   = $page;
-        $this->layout = $layout;
-        $this->url    = (string) $url;
-    }
-
-    /**
-     * @return \PageModel
-     */
-    public function getPage()
-    {
-        return $this->page;
-    }
-
-    /**
-     * @return \LayoutModel
-     */
-    public function getLayout()
-    {
-        return $this->layout;
+        parent::__construct($renderMode, $page, $layout);
+        $this->url = (string) $url;
     }
 
     /**
