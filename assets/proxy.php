@@ -18,6 +18,8 @@
 define('TL_MODE', 'FE');
 require(dirname(dirname(dirname($_SERVER['SCRIPT_FILENAME']))) . '/system/initialize.php');
 
+chdir(TL_ROOT);
+
 use Assetic\Asset\AssetInterface;
 use Assetic\Asset\StringAsset;
 use Assetic\Filter\CssRewriteFilter;
