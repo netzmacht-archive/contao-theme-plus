@@ -200,22 +200,28 @@ class JavaScriptsHandler
         /** @var Cache $cache */
         $cache = $container['theme-plus-assets-cache'];
 
-        $key        = 'js:head:' . $page->id;
-        $headAssets = $cache->fetch($key);
+        $headKey    = 'js:head:' . $page->id;
+        $headAssets = $cache->fetch($headKey);
 
-        $key        = 'js:body:' . $page->id;
-        $bodyAssets = $cache->fetch($key);
+        $bodyKey    = 'js:body:' . $page->id;
+        $bodyAssets = $cache->fetch($bodyKey);
 
         if ($headAssets && $bodyAssets) {
-            /** @var FilterRulesCompiler $compiler */
-            $compiler  = $container['theme-plus-filter-rules-compiler'];
-            $variables = $compiler->getVariables();
+            if ($page->cache) {
+                $headScripts .= sprintf('{{theme_plus_cached_asset::%s|uncached}}', $headKey);
+                $bodyScripts .= sprintf('{{theme_plus_cached_asset::%s|uncached}}', $bodyKey);
+            } else {
+                /** @var FilterRulesCompiler $compiler */
+                $compiler  = $container['theme-plus-filter-rules-compiler'];
+                $variables = $compiler->getVariables();
 
-            extract($variables);
+                extract($variables);
 
-            $headScripts .= eval($headAssets);
-            $bodyScripts .= eval($bodyAssets);
+                $headScripts .= eval($headAssets);
+                $bodyScripts .= eval($bodyAssets);
+            }
         } else {
+            $page->cache = false;
             $this->parseJavaScripts(RenderMode::LIVE, $page, $layout, $headScripts, $bodyScripts);
         }
     }

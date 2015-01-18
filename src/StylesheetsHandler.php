@@ -173,17 +173,23 @@ class StylesheetsHandler
         $cache = $container['theme-plus-assets-cache'];
 
         $key    = 'css:' . $page->id;
+
         $assets = $cache->fetch($key);
 
         if ($assets) {
-            /** @var FilterRulesCompiler $compiler */
-            $compiler = $container['theme-plus-filter-rules-compiler'];
-            $variables = $compiler->getVariables();
+            if ($page->cache) {
+                $stylesheets .= sprintf('{{theme_plus_cached_asset::%s|uncached}}', $key);
+            } else {
+                /** @var FilterRulesCompiler $compiler */
+                $compiler  = $container['theme-plus-filter-rules-compiler'];
+                $variables = $compiler->getVariables();
 
-            extract($variables);
+                extract($variables);
 
-            $stylesheets .= eval($assets);
+                $stylesheets .= eval($assets);
+            }
         } else {
+            $page->cache = false;
             $this->parseStylesheets(RenderMode::LIVE, $page, $layout, $stylesheets);
         }
     }

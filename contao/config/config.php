@@ -47,6 +47,14 @@ $GLOBALS['TL_HOOKS']['parseTemplate']['theme_plus_javascripts']                =
     'Bit3\Contao\ThemePlus\JavaScriptsHandler',
     'hookParseTemplate'
 ];
+$GLOBALS['TL_HOOKS']['replaceInsertTags']['theme_plus']                        = [
+    'Bit3\Contao\ThemePlus\ThemePlus',
+    'replaceCachedAssetInsertTag'
+];
+$GLOBALS['TL_HOOKS']['replaceDynamicScriptTags']['theme_plus'] = [
+    'Bit3\Contao\ThemePlus\ThemePlus',
+    'disablePageCache'
+];
 $GLOBALS['TL_HOOKS']['replaceDynamicScriptTags']['theme_plus_stylesheets']     = [
     'Bit3\Contao\ThemePlus\StylesheetsHandler',
     'hookReplaceDynamicScriptTags'
@@ -57,7 +65,7 @@ $GLOBALS['TL_HOOKS']['replaceDynamicScriptTags']['theme_plus_javascripts']     =
 ];
 $GLOBALS['TL_HOOKS']['replaceDynamicScriptTags']['theme_plus_developer_tools'] = [
     'Bit3\Contao\ThemePlus\ThemePlus',
-    'hookReplaceDynamicScriptTags'
+    'injectDeveloperTools'
 ];
 $GLOBALS['TL_HOOKS']['outputBackendTemplate']['theme_plus_backend']            = [
     'Bit3\Contao\ThemePlus\BackendIntegration',
