@@ -31,7 +31,6 @@ class BackendIntegration
     public function hookInitializeSystem()
     {
         if (!$GLOBALS['TL_CONFIG']['theme_plus_disabled_advanced_asset_caching']) {
-            unset($GLOBALS['TL_PURGE']['folders']['scripts']);
 
             foreach ($GLOBALS['TL_CRON']['weekly'] as $index => $callback) {
                 if (
