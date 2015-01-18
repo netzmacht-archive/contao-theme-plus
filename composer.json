@@ -43,9 +43,9 @@
         "doctrine/cache": "~1.0"
     },
     "require-dev": {
-        "squizlabs/php_codesniffer": "1.*",
-        "bit3/php-coding-standard": "@dev",
-        "pdepend/pdepend": "1.1.*"
+        "phpcq/phpcq": "~1.0",
+        "phpcq/all-tasks": "~1.0",
+        "phpcq/coding-standard": "~1.0"
     },
     "replace": {
         "contao-legacy/theme_plus": "self.version"
