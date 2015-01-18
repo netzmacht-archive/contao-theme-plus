@@ -31,6 +31,17 @@ class BackendIntegration
     public function hookInitializeSystem()
     {
         if (!$GLOBALS['TL_CONFIG']['theme_plus_disabled_advanced_asset_caching']) {
+            $index = 1 + array_search('scripts', array_keys($GLOBALS['TL_PURGE']['folders']));
+            $GLOBALS['TL_PURGE']['folders'] = array_merge(
+                array_slice($GLOBALS['TL_PURGE']['folders'], 0, $index),
+                [
+                    'theme_plus_aac' => [
+                        'callback' => ['Bit3\Contao\ThemePlus\BackendIntegration', 'purgeAdvancedAssetCache'],
+                        'affected' => []
+                    ],
+                ],
+                array_slice($GLOBALS['TL_PURGE']['folders'], $index)
+            );
 
             foreach ($GLOBALS['TL_CRON']['weekly'] as $index => $callback) {
                 if (
@@ -68,5 +79,22 @@ class BackendIntegration
         }
 
         return $content;
+    }
+
+    /**
+     * Purge the advanced asset cache.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    public function purgeAdvancedAssetCache()
+    {
+        $cache = $GLOBALS['container']['theme-plus-assets-cache'];
+
+        if ($cache instanceof CacheProvider) {
+            $cache->deleteAll();
+        } else {
+            $_SESSION['CLEAR_CACHE_CONFIRM'] = $GLOBALS['TL_LANG']['tl_maintenance_jobs']['theme_plus_aac'][2];
+            \Controller::reload();
+        }
     }
 }
