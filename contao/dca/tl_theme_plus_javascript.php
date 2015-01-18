@@ -111,7 +111,7 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = [
                 'href'       => 'act=delete',
                 'icon'       => 'delete.gif',
                 'attributes' => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm']
-                                . '\')) return false; Backend.getScrollOffset();"'
+                    . '\')) return false; Backend.getScrollOffset();"'
             ],
             'show'   => [
                 'label' => &$GLOBALS['TL_LANG']['tl_theme_plus_javascript']['show'],
@@ -306,15 +306,15 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = [
                         'exclude'   => true,
                         'inputType' => 'select',
                         'options'   => [
-                            'desktop'          => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['desktop'],
+                            'desktop' => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['desktop'],
                             'mobile'  => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['mobile'],
-                            'tablet'           => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['tablet'],
+                            'tablet'  => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['tablet'],
                             'phone'   => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['phone'],
                         ],
                         'eval'      => [
                             'includeBlankOption' => true,
-                                      'style'              => 'width:90px',
-              ]
+                            'style'              => 'width:90px',
+                        ]
                     ],
                     'system'          => [
                         'label'            => &$GLOBALS['TL_LANG']['tl_theme_plus_filter']['system'],
@@ -322,8 +322,8 @@ $GLOBALS['TL_DCA']['tl_theme_plus_javascript'] = [
                         'inputType'        => 'select',
                         'options_callback' => ['Bit3\Contao\ThemePlus\DataContainer\JavaScript', 'getSystems'],
                         'eval'             => [
-                                       'style'              => 'width:140px',
-                 'includeBlankOption' => true
+                            'style'              => 'width:140px',
+                            'includeBlankOption' => true
                         ]
                     ],
                     'browser'         => [

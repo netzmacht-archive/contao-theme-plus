@@ -41,7 +41,7 @@ class CacheGeneratorSubscriber implements EventSubscriberInterface
 
     public function __construct(FilterRulesCompiler $compiler, DeveloperTool $developerTool)
     {
-        $this->compiler = $compiler;
+        $this->compiler      = $compiler;
         $this->developerTool = $developerTool;
     }
 
@@ -148,7 +148,7 @@ PHP;
 PHP;
 
 
-                $html       = var_export($html, true);
+                $html = var_export($html, true);
 
                 $result .= <<<PHP
 

@@ -51,7 +51,7 @@ $GLOBALS['TL_HOOKS']['replaceInsertTags']['theme_plus']                        =
     'Bit3\Contao\ThemePlus\ThemePlus',
     'replaceCachedAssetInsertTag'
 ];
-$GLOBALS['TL_HOOKS']['replaceDynamicScriptTags']['theme_plus'] = [
+$GLOBALS['TL_HOOKS']['replaceDynamicScriptTags']['theme_plus']                 = [
     'Bit3\Contao\ThemePlus\ThemePlus',
     'disablePageCache'
 ];

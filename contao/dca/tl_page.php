@@ -138,9 +138,9 @@ $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_javascripts_noinherit']     
     'sql'              => 'blob NULL'
 ];
 $GLOBALS['TL_DCA']['tl_page']['fields']['theme_plus_disable_assets_cache']          = [
-    'label'            => &$GLOBALS['TL_LANG']['tl_page']['theme_plus_disable_assets_cache'],
-    'exclude'          => true,
-    'inputType'        => 'checkbox',
-    'eval'             => ['tl_class'  => 'w50 m12'],
-    'sql'              => 'char(1) NOT NULL default \'\''
+    'label'     => &$GLOBALS['TL_LANG']['tl_page']['theme_plus_disable_assets_cache'],
+    'exclude'   => true,
+    'inputType' => 'checkbox',
+    'eval'      => ['tl_class' => 'w50 m12'],
+    'sql'       => 'char(1) NOT NULL default \'\''
 ];

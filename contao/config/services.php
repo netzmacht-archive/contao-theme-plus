@@ -22,7 +22,7 @@ $container['theme-plus-render-mode-determiner'] = $container->share(
     function ($container) {
         $input       = $container['input'];
         $environment = $container['environment'];
-        $database = $container['database.connection'];
+        $database    = $container['database.connection'];
 
         return new \Bit3\Contao\ThemePlus\RenderModeDeterminer($input, $environment, $database);
     }

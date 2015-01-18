@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file original="system/modules/theme-plus/languages/de/tl_theme_plus_javascript.php" source-language="en" datatype="php" date="2012-11-08T21:49:41+00:00">
+  <file original="system/modules/theme-plus/languages/de/tl_theme_plus_javascript.php" source-language="en"
+        datatype="php" date="2012-11-08T21:49:41+00:00">
     <body>
       <trans-unit id="tl_theme_plus_javascript.type.0">
         <source>File type</source>
@@ -48,7 +49,8 @@
         <source>Position in HTML</source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_javascript.position.1">
-        <source>Please select whether to add the JavaScript in the &lt;head&gt; or at the end of the &lt;body&gt;.</source>
+        <source>Please select whether to add the JavaScript in the &lt;head&gt; or at the end of the &lt;body&gt;.
+        </source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_javascript.layouts.0">
         <source>Layouts</source>
@@ -60,13 +62,19 @@
         <source>Conditional Comment</source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_javascript.cc.1">
-        <source>Conditional Comments ermöglichen das Einbinden Internet Explorer-spezifischer Dateien. Hier muss nur die Bedingung z.B. &quot;lte IE 7&quot; oder &quot;IE 9&quot; eingefügt werden. Der Prefix &quot;&amp;lt;!--[if&quot; bzw. Sufix &quot;]&amp;gt;&quot; werden automatisch eingefügt.</source>
+        <source>Conditional Comments ermöglichen das Einbinden Internet Explorer-spezifischer Dateien. Hier muss
+          nur die Bedingung z.B. &quot;lte IE 7&quot; oder &quot;IE 9&quot; eingefügt werden. Der Prefix
+          &quot;&amp;lt;!--[if&quot; bzw. Sufix &quot;]&amp;gt;&quot; werden automatisch eingefügt.
+        </source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_javascript.filter.0">
         <source>Apply filter</source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_javascript.filter.1">
-        <source>Wählen Sie diese Option, können Sie verschiedene Serverseitige Filter anwenden. (Achtung: Dieses Feature ist inkompatibel zum Seitencache! Eine entsprechende Änderung an Contao wurde bereits beantragt.)</source>
+        <source>Wählen Sie diese Option, können Sie verschiedene Serverseitige Filter anwenden. (Achtung: Dieses
+          Feature ist inkompatibel zum Seitencache! Eine entsprechende Änderung an Contao wurde bereits
+          beantragt.)
+        </source>
       </trans-unit>
       <trans-unit id="tl_theme_plus_javascript.filterRule.0">
         <source>Filter</source>

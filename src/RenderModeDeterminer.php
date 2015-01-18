@@ -43,7 +43,7 @@ class RenderModeDeterminer
     {
         $this->input       = $input;
         $this->environment = $environment;
-        $this->database = $database;
+        $this->database    = $database;
     }
 
     /**

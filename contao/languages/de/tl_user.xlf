@@ -1,20 +1,24 @@
 <?xml version="1.0"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-	<file original="system/modules/theme-plus/languages/de/tl_page.php" source-language="de" datatype="php"
-		  date="2012-11-08T21:49:41+00:00" target-language="de">
-		<body>
-			<trans-unit id="tl_user.frontend_legend">
-				<source xml:lang="de">Frontend-Theme</source>
-				<target xml:lang="de">Frontend-Theme</target>
-			</trans-unit>
-			<trans-unit id="tl_user.themePlusDesignerMode.0">
-				<source xml:lang="de">Frontend Designer Modus</source>
-				<target xml:lang="de">Frontend Designer Modus</target>
-			</trans-unit>
-			<trans-unit id="tl_user.themePlusDesignerMode.1">
-				<source xml:lang="de">Aktiviert den Designer Modus im Frontend. Im Designer Modus werden die Dateien nicht zusammen geführt und bestimmte Filter abhängig ihrer Einstellung deaktiviert.</source>
-				<target xml:lang="de">Aktiviert den Designer Modus im Frontend. Im Designer Modus werden die Dateien nicht zusammen geführt und bestimmte Filter abhängig ihrer Einstellung deaktiviert.</target>
-			</trans-unit>
-		</body>
-	</file>
+  <file original="system/modules/theme-plus/languages/de/tl_page.php" source-language="de" datatype="php"
+        date="2012-11-08T21:49:41+00:00" target-language="de">
+    <body>
+      <trans-unit id="tl_user.frontend_legend">
+        <source xml:lang="de">Frontend-Theme</source>
+        <target xml:lang="de">Frontend-Theme</target>
+      </trans-unit>
+      <trans-unit id="tl_user.themePlusDesignerMode.0">
+        <source xml:lang="de">Frontend Designer Modus</source>
+        <target xml:lang="de">Frontend Designer Modus</target>
+      </trans-unit>
+      <trans-unit id="tl_user.themePlusDesignerMode.1">
+        <source xml:lang="de">Aktiviert den Designer Modus im Frontend. Im Designer Modus werden die Dateien
+          nicht zusammen geführt und bestimmte Filter abhängig ihrer Einstellung deaktiviert.
+        </source>
+        <target xml:lang="de">Aktiviert den Designer Modus im Frontend. Im Designer Modus werden die Dateien
+          nicht zusammen geführt und bestimmte Filter abhängig ihrer Einstellung deaktiviert.
+        </target>
+      </trans-unit>
+    </body>
+  </file>
 </xliff>

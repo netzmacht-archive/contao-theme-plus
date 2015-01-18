@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file original="system/modules/theme-plus/languages/de/tl_layout.php" source-language="en" datatype="php" date="2012-11-08T21:49:41+00:00">
+  <file original="system/modules/theme-plus/languages/de/tl_layout.php" source-language="en" datatype="php"
+        date="2012-11-08T21:49:41+00:00">
     <body>
       <trans-unit id="tl_maintenance_jobs.theme_plus.0">
         <source>Clear assets cache</source>

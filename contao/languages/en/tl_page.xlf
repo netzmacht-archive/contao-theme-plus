@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file original="system/modules/theme-plus/languages/de/tl_page.php" source-language="en" datatype="php" date="2012-11-08T21:49:41+00:00">
+  <file original="system/modules/theme-plus/languages/de/tl_page.php" source-language="en" datatype="php"
+        date="2012-11-08T21:49:41+00:00">
     <body>
       <trans-unit id="tl_page.theme_plus_include_stylesheets.0">
         <source>Add Stylesheets to this and all sub-pages</source>
@@ -54,7 +55,9 @@
         <source>Do not cache assets</source>
       </trans-unit>
       <trans-unit id="tl_page.theme_plus_disable_assets_cache.1">
-        <source>Do not cache assets for this page. This may be necessary, if you dynamically add assets or include special modules like the "Automatic logout"!.</source>
+        <source>Do not cache assets for this page. This may be necessary, if you dynamically add assets or
+          include special modules like the "Automatic logout"!.
+        </source>
       </trans-unit>
     </body>
   </file>

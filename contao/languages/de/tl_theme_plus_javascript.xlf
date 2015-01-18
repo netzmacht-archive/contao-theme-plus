@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file original="system/modules/theme-plus/languages/de/tl_theme_plus_javascript.php" source-language="de" datatype="php" date="2012-11-08T21:49:41+00:00" target-language="de">
+  <file original="system/modules/theme-plus/languages/de/tl_theme_plus_javascript.php" source-language="de"
+        datatype="php" date="2012-11-08T21:49:41+00:00" target-language="de">
     <body>
       <trans-unit id="tl_theme_plus_javascript.type.0">
         <source xml:lang="de">Dateityp</source>
@@ -15,8 +16,12 @@
         <target xml:lang="de">Quelle</target>
       </trans-unit>
       <trans-unit id="tl_theme_plus_javascript.filesource.1">
-        <source xml:lang="de">Bitte w&#xE4;hlen Sie hier aus welchem Verzeichnis die Datei bezogen werden soll.</source>
-        <target xml:lang="de">Bitte w&#xE4;hlen Sie hier aus welchem Verzeichnis die Datei bezogen werden soll.</target>
+        <source xml:lang="de">Bitte w&#xE4;hlen Sie hier aus welchem Verzeichnis die Datei bezogen werden
+          soll.
+        </source>
+        <target xml:lang="de">Bitte w&#xE4;hlen Sie hier aus welchem Verzeichnis die Datei bezogen werden
+          soll.
+        </target>
       </trans-unit>
       <trans-unit id="tl_theme_plus_javascript.code_snippet_title.0">
         <source xml:lang="de">Code-Snippet Title</source>
@@ -47,8 +52,12 @@
         <target xml:lang="de">URL laden</target>
       </trans-unit>
       <trans-unit id="tl_theme_plus_javascript.fetchUrl.1">
-        <source xml:lang="de">L&#xE4;dt die Datei und bindet diese lokal ein, anstatt sie als externe Datei einzubinden.</source>
-        <target xml:lang="de">L&#xE4;dt die Datei und bindet diese lokal ein, anstatt sie als externe Datei einzubinden.</target>
+        <source xml:lang="de">L&#xE4;dt die Datei und bindet diese lokal ein, anstatt sie als externe Datei
+          einzubinden.
+        </source>
+        <target xml:lang="de">L&#xE4;dt die Datei und bindet diese lokal ein, anstatt sie als externe Datei
+          einzubinden.
+        </target>
       </trans-unit>
       <trans-unit id="tl_theme_plus_javascript.code.0">
         <source xml:lang="de">Code-Snippet</source>
@@ -63,32 +72,52 @@
         <target xml:lang="de">Positionierung im HTML</target>
       </trans-unit>
       <trans-unit id="tl_theme_plus_javascript.position.1">
-        <source xml:lang="de">Bitte w&#xE4;hlen Sie hier, ob das JavaScript im &amp;lt;head&amp;gt; oder am Ende des &amp;lt;body&amp;gt; eingebunden werden soll.</source>
-        <target xml:lang="de">Bitte w&#xE4;hlen Sie hier, ob das JavaScript im &amp;lt;head&amp;gt; oder am Ende des &amp;lt;body&amp;gt; eingebunden werden soll.</target>
+        <source xml:lang="de">Bitte w&#xE4;hlen Sie hier, ob das JavaScript im &amp;lt;head&amp;gt; oder am Ende
+          des &amp;lt;body&amp;gt; eingebunden werden soll.
+        </source>
+        <target xml:lang="de">Bitte w&#xE4;hlen Sie hier, ob das JavaScript im &amp;lt;head&amp;gt; oder am Ende
+          des &amp;lt;body&amp;gt; eingebunden werden soll.
+        </target>
       </trans-unit>
       <trans-unit id="tl_theme_plus_javascript.layouts.0">
         <source xml:lang="de">Layouts</source>
         <target xml:lang="de">Layouts</target>
       </trans-unit>
       <trans-unit id="tl_theme_plus_javascript.layouts.1">
-        <source xml:lang="de">Bitte w&#xE4;hlen Sie hier die Layouts, in denen das JavaScript eingebunden werden soll.</source>
-        <target xml:lang="de">Bitte w&#xE4;hlen Sie hier die Layouts, in denen das JavaScript eingebunden werden soll.</target>
+        <source xml:lang="de">Bitte w&#xE4;hlen Sie hier die Layouts, in denen das JavaScript eingebunden werden
+          soll.
+        </source>
+        <target xml:lang="de">Bitte w&#xE4;hlen Sie hier die Layouts, in denen das JavaScript eingebunden werden
+          soll.
+        </target>
       </trans-unit>
       <trans-unit id="tl_theme_plus_javascript.cc.0">
         <source xml:lang="de">Conditional Comment</source>
         <target xml:lang="de">Conditional Comment</target>
       </trans-unit>
       <trans-unit id="tl_theme_plus_javascript.cc.1">
-        <source xml:lang="de">Conditional Comments erm&#xF6;glichen das Einbinden Internet Explorer-spezifischer Dateien. Hier muss nur die Bedingung z.B. "lte IE 7" oder "IE 9" eingef&#xFC;gt werden. Der Prefix "&amp;lt;!--[if" bzw. Sufix "]&amp;gt;" werden automatisch eingef&#xFC;gt.</source>
-        <target xml:lang="de">Conditional Comments erm&#xF6;glichen das Einbinden Internet Explorer-spezifischer Dateien. Hier muss nur die Bedingung z.B. "lte IE 7" oder "IE 9" eingef&#xFC;gt werden. Der Prefix "&amp;lt;!--[if" bzw. Sufix "]&amp;gt;" werden automatisch eingef&#xFC;gt.</target>
+        <source xml:lang="de">Conditional Comments erm&#xF6;glichen das Einbinden Internet Explorer-spezifischer
+          Dateien. Hier muss nur die Bedingung z.B. "lte IE 7" oder "IE 9" eingef&#xFC;gt werden. Der Prefix "&amp;lt;!--[if"
+          bzw. Sufix "]&amp;gt;" werden automatisch eingef&#xFC;gt.
+        </source>
+        <target xml:lang="de">Conditional Comments erm&#xF6;glichen das Einbinden Internet Explorer-spezifischer
+          Dateien. Hier muss nur die Bedingung z.B. "lte IE 7" oder "IE 9" eingef&#xFC;gt werden. Der Prefix "&amp;lt;!--[if"
+          bzw. Sufix "]&amp;gt;" werden automatisch eingef&#xFC;gt.
+        </target>
       </trans-unit>
       <trans-unit id="tl_theme_plus_javascript.filter.0">
         <source xml:lang="de">Filter anwenden</source>
         <target xml:lang="de">Filter anwenden</target>
       </trans-unit>
       <trans-unit id="tl_theme_plus_javascript.filter.1">
-        <source xml:lang="de">W&#xE4;hlen Sie diese Option, k&#xF6;nnen Sie verschiedene Serverseitige Filter anwenden. (Achtung: Dieses Feature ist inkompatibel zum Seitencache! Eine entsprechende &#xC4;nderung an Contao wurde bereits beantragt.)</source>
-        <target xml:lang="de">W&#xE4;hlen Sie diese Option, k&#xF6;nnen Sie verschiedene Serverseitige Filter anwenden. (Achtung: Dieses Feature ist inkompatibel zum Seitencache! Eine entsprechende &#xC4;nderung an Contao wurde bereits beantragt.)</target>
+        <source xml:lang="de">W&#xE4;hlen Sie diese Option, k&#xF6;nnen Sie verschiedene Serverseitige Filter
+          anwenden. (Achtung: Dieses Feature ist inkompatibel zum Seitencache! Eine entsprechende &#xC4;nderung
+          an Contao wurde bereits beantragt.)
+        </source>
+        <target xml:lang="de">W&#xE4;hlen Sie diese Option, k&#xF6;nnen Sie verschiedene Serverseitige Filter
+          anwenden. (Achtung: Dieses Feature ist inkompatibel zum Seitencache! Eine entsprechende &#xC4;nderung
+          an Contao wurde bereits beantragt.)
+        </target>
       </trans-unit>
       <trans-unit id="tl_theme_plus_javascript.filterRule.0">
         <source xml:lang="de">Filter</source>
@@ -103,8 +132,12 @@
         <target xml:lang="de">Assetic Filter</target>
       </trans-unit>
       <trans-unit id="tl_theme_plus_javascript.asseticFilter.1">
-        <source xml:lang="de">W&#xE4;hlen Sie hier einen Assetic Filter oder eine Filter Chain aus, die auf diese Datei angewendet werden.</source>
-        <target xml:lang="de">W&#xE4;hlen Sie hier einen Assetic Filter oder eine Filter Chain aus, die auf diese Datei angewendet werden.</target>
+        <source xml:lang="de">W&#xE4;hlen Sie hier einen Assetic Filter oder eine Filter Chain aus, die auf
+          diese Datei angewendet werden.
+        </source>
+        <target xml:lang="de">W&#xE4;hlen Sie hier einen Assetic Filter oder eine Filter Chain aus, die auf
+          diese Datei angewendet werden.
+        </target>
       </trans-unit>
       <trans-unit id="tl_theme_plus_javascript.source_legend">
         <source xml:lang="de">Dateityp</source>

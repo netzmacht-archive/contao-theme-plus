@@ -53,7 +53,7 @@ class BackendIntegration
     public function hookInitializeSystem()
     {
         if (!$GLOBALS['TL_CONFIG']['theme_plus_disabled_advanced_asset_caching']) {
-            $index = 1 + array_search('scripts', array_keys($GLOBALS['TL_PURGE']['folders']));
+            $index                          = 1 + array_search('scripts', array_keys($GLOBALS['TL_PURGE']['folders']));
             $GLOBALS['TL_PURGE']['folders'] = array_merge(
                 array_slice($GLOBALS['TL_PURGE']['folders'], 0, $index),
                 [

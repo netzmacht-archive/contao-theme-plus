@@ -17,8 +17,6 @@
 
 namespace Bit3\Contao\ThemePlus\Filter;
 
-use Traversable;
-
 /**
  * Class FilterRules
  */

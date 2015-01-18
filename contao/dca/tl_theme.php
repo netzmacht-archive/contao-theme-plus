@@ -27,11 +27,11 @@ $GLOBALS['TL_DCA']['tl_theme']['config']['ctable'][] = 'tl_theme_plus_javascript
  * Operations
  */
 $intOffset = array_search(
-                 'css',
-                 array_keys(
-                     $GLOBALS['TL_DCA']['tl_theme']['list']['operations']
-                 )
-             ) + 1;
+        'css',
+        array_keys(
+            $GLOBALS['TL_DCA']['tl_theme']['list']['operations']
+        )
+    ) + 1;
 
 $GLOBALS['TL_DCA']['tl_theme']['list']['operations'] = array_merge
 (

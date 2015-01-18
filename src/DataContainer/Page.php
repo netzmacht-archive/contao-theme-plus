@@ -76,7 +76,7 @@ class Page extends \Backend
                         $label = preg_replace('#/([^/]+)$#', '/<strong>$1</strong>', $collection->file);
                         break;
                     }
-                    // no break
+                // no break
 
                 default:
                     $label = '?';
