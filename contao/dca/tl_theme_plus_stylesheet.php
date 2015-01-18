@@ -9,6 +9,7 @@
  *
  * @package    bit3/contao-theme-plus
  * @author     Tristan Lins <tristan.lins@bit3.de>
+ * @author     Oliver Hoff <oliver@hofff.com>
  * @copyright  bit3 UG <https://bit3.de>
  * @link       https://github.com/bit3/contao-theme-plus
  * @license    http://opensource.org/licenses/LGPL-3.0 LGPL-3.0+

@@ -18,11 +18,13 @@
 namespace Bit3\Contao\ThemePlus\Filter;
 
 /**
- * Class FilterRules
+ * A collection of filter rules.
  */
 class FilterRules implements \Countable, \IteratorAggregate, \Serializable
 {
     /**
+     * The filter rules.
+     *
      * @var array|FilterRule[]
      */
     private $rules = [];
@@ -32,7 +34,7 @@ class FilterRules implements \Countable, \IteratorAggregate, \Serializable
      *
      * This will only add the rule, if it is not already part of this set.
      *
-     * @param FilterRule $filterRule
+     * @param FilterRule $filterRule A filter rule.
      *
      * @return $this
      */
@@ -49,7 +51,7 @@ class FilterRules implements \Countable, \IteratorAggregate, \Serializable
      *
      * This will only add filter rules, that are not already part of this set.
      *
-     * @param FilterRules|array|FilterRule[] $filterRules
+     * @param FilterRules|array|FilterRule[] $filterRules A set of filter rules.
      *
      * @return $this
      */
@@ -63,6 +65,11 @@ class FilterRules implements \Countable, \IteratorAggregate, \Serializable
         return $this;
     }
 
+    /**
+     * Return all filter rules as array.
+     *
+     * @return array|FilterRule[]
+     */
     public function all()
     {
         return $this->rules;
@@ -71,7 +78,7 @@ class FilterRules implements \Countable, \IteratorAggregate, \Serializable
     /**
      * Determine if a filter rule exist in this rule set.
      *
-     * @param FilterRule $filterRule
+     * @param FilterRule $filterRule A filter rule.
      *
      * @return bool
      */
@@ -89,7 +96,7 @@ class FilterRules implements \Countable, \IteratorAggregate, \Serializable
     /**
      * Determine if all filter rules are existing in this rule set.
      *
-     * @param FilterRules|array|FilterRule[] $filterRules
+     * @param FilterRules|array|FilterRule[] $filterRules A set of filter rules.
      *
      * @return bool
      */

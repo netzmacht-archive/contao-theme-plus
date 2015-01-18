@@ -21,11 +21,13 @@ use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Cache\CacheProvider;
 
 /**
- * Class BackendIntegration
+ * Backend integration.
  */
 class BackendIntegration
 {
     /**
+     * The asset cache.
+     *
      * @var Cache
      */
     private $cache;
@@ -42,18 +44,28 @@ class BackendIntegration
         return $GLOBALS['container']['theme-plus-backend-integration'];
     }
 
+    /**
+     * Create a new object.
+     *
+     * @param Cache $cache The asset cache.
+     */
     public function __construct(Cache $cache)
     {
         $this->cache = $cache;
     }
 
     /**
+     * Register custom maintenance operation and remove weekly cleanup cron.
+     *
+     * @return void
+     *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function hookInitializeSystem()
     {
         if (!$GLOBALS['TL_CONFIG']['theme_plus_disabled_advanced_asset_caching']) {
-            $index                          = 1 + array_search('scripts', array_keys($GLOBALS['TL_PURGE']['folders']));
+            $index = (1 + array_search('scripts', array_keys($GLOBALS['TL_PURGE']['folders'])));
+
             $GLOBALS['TL_PURGE']['folders'] = array_merge(
                 array_slice($GLOBALS['TL_PURGE']['folders'], 0, $index),
                 [
@@ -77,7 +89,12 @@ class BackendIntegration
     }
 
     /**
-     * @SuppressWarnings(PHPMD.Superglobals)
+     * Inject a backend message, if the advanced asset cache is outdated.
+     *
+     * @param string $content      The output buffer.
+     * @param string $templateName The template name.
+     *
+     * @return string
      */
     public function hookOutputBackendTemplate($content, $templateName)
     {
@@ -102,6 +119,8 @@ class BackendIntegration
 
     /**
      * Purge the advanced asset cache.
+     *
+     * @return void
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
