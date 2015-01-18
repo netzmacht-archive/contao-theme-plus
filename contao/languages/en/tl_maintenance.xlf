@@ -10,10 +10,10 @@
       </trans-unit>
 
       <trans-unit id="tl_maintenance_jobs.theme_plus_aac.0">
-        <source>Advanced assets cache [Theme+]</source>
+        <source>Advanced assets cache</source>
       </trans-unit>
       <trans-unit id="tl_maintenance_jobs.theme_plus_aac.1">
-        <source>Clear the advanced asset cache.</source>
+        <source>[Theme+] Clear the advanced asset cache.</source>
       </trans-unit>
       <trans-unit id="tl_maintenance_jobs.theme_plus_aac.2">
         <source>The AAC cache implementation does not support to be cleared!</source>

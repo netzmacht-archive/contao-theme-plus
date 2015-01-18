@@ -19,6 +19,7 @@ namespace Bit3\Contao\ThemePlus;
 
 use Bit3\Contao\ThemePlus\DeveloperTool\DeveloperTool;
 use Bit3\Contao\ThemePlus\Filter\FilterRulesCompiler;
+use DependencyInjection\Container\PageProvider;
 use Doctrine\Common\Cache\Cache;
 
 /**
@@ -31,6 +32,57 @@ class ThemePlus
     const CACHE_LATEST_ASSET_TIMESTAMP = 'meta:cache:latest-asset-timestamp';
 
     /**
+     * @var PageProvider
+     */
+    private $pageProvider;
+
+    /**
+     * @var RenderModeDeterminer
+     */
+    private $renderModeDeterminer;
+
+    /**
+     * @var Cache
+     */
+    private $cache;
+
+    /**
+     * @var FilterRulesCompiler
+     */
+    private $compiler;
+
+    /**
+     * @var DeveloperTool
+     */
+    private $developerTool;
+
+    /**
+     * Singleton service.
+     *
+     * @return ThemePlus
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    public static function getInstance()
+    {
+        return $GLOBALS['container']['theme-plus-generic-handler'];
+    }
+
+    public function __construct(
+        PageProvider $pageProvider,
+        RenderModeDeterminer $renderModeDeterminer,
+        Cache $cache,
+        FilterRulesCompiler $compiler,
+        DeveloperTool $developerTool
+    ) {
+        $this->pageProvider         = $pageProvider;
+        $this->renderModeDeterminer = $renderModeDeterminer;
+        $this->cache                = $cache;
+        $this->compiler             = $compiler;
+        $this->developerTool        = $developerTool;
+    }
+
+    /**
      * Disable the page caching, if in pre-compile mode.
      *
      * @see \Contao\Controller::replaceDynamicScriptTags
@@ -38,22 +90,17 @@ class ThemePlus
      * @param string $buffer
      *
      * @return string
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function disablePageCache($buffer)
     {
-        global $objPage;
+        $page = $this->pageProvider->getPage();
 
-        if ($objPage) {
-            /** @var RenderModeDeterminer $renderModeDeterminer */
-            $renderModeDeterminer = $GLOBALS['container']['theme-plus-render-mode-determiner'];
-
-            $renderMode = $renderModeDeterminer->determineMode();
+        if ($page) {
+            $renderMode = $this->renderModeDeterminer->determineMode();
 
             if (RenderMode::PRE_COMPILE == $renderMode) {
                 // prevent caching of the page
-                $objPage->cache = false;
+                $page->cache = false;
             }
         }
 
@@ -68,8 +115,6 @@ class ThemePlus
      * @param $tag
      *
      * @return bool|mixed|string
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.EvalExpression)
      */
     public function replaceCachedAssetInsertTag($tag)
@@ -78,16 +123,11 @@ class ThemePlus
             /** @var string $cacheKey The cache key. */
             $cacheKey = substr($tag, 25);
 
-            /** @var Cache $cache The assets cache. */
-            $cache = $GLOBALS['container']['theme-plus-assets-cache'];
-
             /** @var string $assets */
-            $assets = $cache->fetch($cacheKey);
+            $assets = $this->cache->fetch($cacheKey);
 
             if ($assets) {
-                /** @var FilterRulesCompiler $compiler */
-                $compiler = $GLOBALS['container']['theme-plus-filter-rules-compiler'];
-                $variables = $compiler->getVariables();
+                $variables = $this->compiler->getVariables();
 
                 extract($variables);
 
@@ -108,23 +148,16 @@ class ThemePlus
      * @param string $buffer
      *
      * @return string
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function injectDeveloperTools($buffer)
     {
-        global $objPage;
+        $page = $this->pageProvider->getPage();
 
-        if ($objPage) {
-            /** @var RenderModeDeterminer $renderModeDeterminer */
-            $renderModeDeterminer = $GLOBALS['container']['theme-plus-render-mode-determiner'];
-
-            $renderMode = $renderModeDeterminer->determineMode();
+        if ($page) {
+            $renderMode = $this->renderModeDeterminer->determineMode();
 
             if (RenderMode::DESIGN == $renderMode) {
-                /** @var DeveloperTool $developerTools */
-                $developerTools = $GLOBALS['container']['theme-plus-developer-tools'];
-                $buffer         = $developerTools->inject($buffer);
+                $buffer = $this->developerTool->inject($buffer);
             }
         }
 

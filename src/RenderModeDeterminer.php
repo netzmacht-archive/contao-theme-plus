@@ -34,10 +34,16 @@ class RenderModeDeterminer
      */
     private $environment;
 
-    function __construct(\Input $input, \Environment $environment)
+    /**
+     * @var \Database
+     */
+    private $database;
+
+    public function __construct(\Input $input, \Environment $environment, \Database $database)
     {
         $this->input       = $input;
         $this->environment = $environment;
+        $this->database = $database;
     }
 
     /**
@@ -79,7 +85,7 @@ class RenderModeDeterminer
 
             // Check the cookie hash
             if ($this->validateHash($hash)) {
-                $session = \Database::getInstance()
+                $session = $this->database
                     ->prepare("SELECT * FROM tl_session WHERE hash=? AND name=?")
                     ->execute($hash, self::COOKIE_NAME);
 

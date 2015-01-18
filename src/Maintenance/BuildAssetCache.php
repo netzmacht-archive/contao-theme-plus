@@ -28,6 +28,34 @@ class BuildAssetCache implements \executable
 {
     const SESSION_LAST_USERNAME = 'theme-plus.maintenance.last-username';
 
+    /**
+     * @var \Session
+     */
+    private $session;
+
+    /**
+     * @var Cache
+     */
+    private $cache;
+
+    /**
+     * Singleton service.
+     *
+     * @return BuildAssetCache
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    public static function getInstance()
+    {
+        return $GLOBALS['container']['theme-plus-maintenance-build-asset-cache'];
+    }
+
+    public function __construct(\Session $session, Cache $cache)
+    {
+        $this->session = $session;
+        $this->cache   = $cache;
+    }
+
     public function run()
     {
         \System::loadLanguageFile('be_theme_plus');
@@ -37,15 +65,13 @@ class BuildAssetCache implements \executable
         /** @var Cache $cache */
         $cache = $GLOBALS['container']['theme-plus-assets-cache'];
 
-        $session = \Session::getInstance();
-
         $template                   = new \TwigBackendTemplate('bit3/theme-plus/be_maintenance_build_asset_cache');
         $template->isActive         = $this->isActive();
         $template->action           = ampersand(\Environment::get('request'));
-        $template->frontendUsername = $session->get(self::SESSION_LAST_USERNAME);
+        $template->frontendUsername = $this->session->get(self::SESSION_LAST_USERNAME);
 
         if ($this->isBuildActive()) {
-            $this->buildCache($template, $cache, $session);
+            $this->buildCache($template, $cache, $this->session);
         } elseif ($this->isAnalyseActive()) {
             $this->analyseCache($template, $cache);
         }
@@ -88,13 +114,13 @@ class BuildAssetCache implements \executable
             MEDIABOX
         );
 
-        $root = new \stdClass();
-        $root->id = 0;
+        $root           = new \stdClass();
+        $root->id       = 0;
         $root->children = new \ArrayObject();
 
         $this->buildPageTree($root, $cache);
 
-        $template->pages = $root->children;
+        $template->pages           = $root->children;
         $template->mediaboxVersion = MEDIABOX;
     }
 
@@ -144,10 +170,10 @@ class BuildAssetCache implements \executable
 
         if ($pageModels) {
             foreach ($pageModels as $pageModel) {
-                $pageObject = new \stdClass();
-                $pageObject->id             = $pageModel->id;
-                $pageObject->title          = $pageModel->title;
-                $pageObject->children       = new \ArrayObject();
+                $pageObject           = new \stdClass();
+                $pageObject->id       = $pageModel->id;
+                $pageObject->title    = $pageModel->title;
+                $pageObject->children = new \ArrayObject();
 
                 if (
                     $pageModel->theme_plus_disable_assets_cache
@@ -191,7 +217,7 @@ class BuildAssetCache implements \executable
     public function isActive()
     {
         return \Input::get('highlight') == 'theme_plus_build_assets_cache'
-            || $this->isBuildActive()
-            || $this->isAnalyseActive();
+        || $this->isBuildActive()
+        || $this->isAnalyseActive();
     }
 }

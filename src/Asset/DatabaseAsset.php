@@ -46,6 +46,16 @@ class DatabaseAsset implements ExtendedAssetInterface, DelegatorAssetInterface, 
     protected $renderMode;
 
     /**
+     * @var AsseticFactory
+     */
+    protected $asseticFactory;
+
+    /**
+     * @var FilterRulesFactory
+     */
+    protected $filterRulesFactory;
+
+    /**
      * @var AssetInterface
      */
     protected $asset;
@@ -57,11 +67,18 @@ class DatabaseAsset implements ExtendedAssetInterface, DelegatorAssetInterface, 
      */
     protected $filterRules;
 
-    public function __construct(array $row, $type, $renderMode)
-    {
-        $this->row  = $row;
-        $this->type = (string) $type;
-        $this->renderMode = $renderMode;
+    public function __construct(
+        array $row,
+        $type,
+        $renderMode,
+        AsseticFactory $asseticFactory,
+        FilterRulesFactory $filterRulesFactory
+    ) {
+        $this->row                = $row;
+        $this->type               = (string) $type;
+        $this->renderMode         = $renderMode;
+        $this->asseticFactory     = $asseticFactory;
+        $this->filterRulesFactory = $filterRulesFactory;
     }
 
     /**
@@ -126,8 +143,6 @@ class DatabaseAsset implements ExtendedAssetInterface, DelegatorAssetInterface, 
      * Create filters for the asset.
      *
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
      */
     private function createFilters()
     {
@@ -138,10 +153,7 @@ class DatabaseAsset implements ExtendedAssetInterface, DelegatorAssetInterface, 
         }
 
         if ($this->row['asseticFilter']) {
-            /** @var AsseticFactory $asseticFactory */
-            $asseticFactory = $GLOBALS['container']['assetic.factory'];
-
-            $temp = $asseticFactory->createFilterOrChain(
+            $temp = $this->asseticFactory->createFilterOrChain(
                 $this->row['asseticFilter'],
                 RenderMode::DESIGN == $this->renderMode
             );
@@ -415,12 +427,7 @@ class DatabaseAsset implements ExtendedAssetInterface, DelegatorAssetInterface, 
         }
 
         if (!$this->filterRules) {
-            global $container;
-
-            /** @var FilterRulesFactory $rulesFactory */
-            $rulesFactory = $container['theme-plus-filter-rules-factory'];
-
-            $this->filterRules = $rulesFactory->createRules(
+            $this->filterRules = $this->filterRulesFactory->createRules(
                 deserialize($this->row['filterRule'], true)
             );
         }
@@ -436,12 +443,7 @@ class DatabaseAsset implements ExtendedAssetInterface, DelegatorAssetInterface, 
         $this->row['filter'] = (bool) $filterRules;
 
         if ($filterRules) {
-            global $container;
-
-            /** @var FilterRulesFactory $filterRulesFactory */
-            $filterRulesFactory = $container['theme-plus-filter-rules-factory'];
-
-            $this->row['filterRule'] = serialize($filterRulesFactory->createRulesArray($filterRules));
+            $this->row['filterRule'] = serialize($this->filterRulesFactory->createRulesArray($filterRules));
         } else {
             $this->row['filterRule'] = serialize([]);
         }
@@ -456,7 +458,9 @@ class DatabaseAsset implements ExtendedAssetInterface, DelegatorAssetInterface, 
      */
     public function serialize()
     {
-        return serialize([$this->row, $this->type, $this->renderMode]);
+        return serialize(
+            [$this->row, $this->type, $this->renderMode, $this->asseticFactory, $this->filterRulesFactory]
+        );
     }
 
     /**
@@ -464,7 +468,8 @@ class DatabaseAsset implements ExtendedAssetInterface, DelegatorAssetInterface, 
      */
     public function unserialize($serialized)
     {
-        list($this->row, $this->type, $this->renderMode) = unserialize($serialized);
+        list($this->row, $this->type, $this->renderMode, $this->asseticFactory, $this->filterRulesFactory) =
+            unserialize($serialized);
     }
 
     /**

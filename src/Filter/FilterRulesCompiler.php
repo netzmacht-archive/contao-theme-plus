@@ -40,10 +40,8 @@ class FilterRulesCompiler
 
     /**
      * Create a new compiler.
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public function __construct()
+    public function __construct($mobileDetect, $ikimeaBrowser)
     {
         $this->language = new ExpressionLanguage();
         $this->language->register(
@@ -57,8 +55,8 @@ class FilterRulesCompiler
         );
 
         $this->variables = [
-            'mobileDetect'  => $GLOBALS['container']['mobile-detect'],
-            'ikimeaBrowser' => $GLOBALS['container']['ikimea-browser'],
+            'mobileDetect'  => $mobileDetect,
+            'ikimeaBrowser' => $ikimeaBrowser,
         ];
     }
 

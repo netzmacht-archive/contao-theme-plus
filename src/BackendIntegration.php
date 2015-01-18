@@ -26,6 +26,28 @@ use Doctrine\Common\Cache\CacheProvider;
 class BackendIntegration
 {
     /**
+     * @var Cache
+     */
+    private $cache;
+
+    /**
+     * Singleton service.
+     *
+     * @return BackendIntegration
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    public static function getInstance()
+    {
+        return $GLOBALS['container']['theme-plus-backend-integration'];
+    }
+
+    public function __construct(Cache $cache)
+    {
+        $this->cache = $cache;
+    }
+
+    /**
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function hookInitializeSystem()
@@ -63,11 +85,8 @@ class BackendIntegration
             !$GLOBALS['TL_CONFIG']['theme_plus_disabled_advanced_asset_caching']
             && $templateName == 'be_main'
         ) {
-            /** @var Cache $cache */
-            $cache = $GLOBALS['container']['theme-plus-assets-cache'];
-
-            $creationTime    = (int) $cache->fetch(ThemePlus::CACHE_CREATION_TIME);
-            $latestTimestamp = (int) $cache->fetch(ThemePlus::CACHE_LATEST_ASSET_TIMESTAMP);
+            $creationTime    = (int) $this->cache->fetch(ThemePlus::CACHE_CREATION_TIME);
+            $latestTimestamp = (int) $this->cache->fetch(ThemePlus::CACHE_LATEST_ASSET_TIMESTAMP);
 
             if (!$creationTime || $latestTimestamp > $creationTime) {
                 \System::loadLanguageFile('be_theme_plus');
@@ -88,10 +107,8 @@ class BackendIntegration
      */
     public function purgeAdvancedAssetCache()
     {
-        $cache = $GLOBALS['container']['theme-plus-assets-cache'];
-
-        if ($cache instanceof CacheProvider) {
-            $cache->deleteAll();
+        if ($this->cache instanceof CacheProvider) {
+            $this->cache->deleteAll();
         } else {
             $_SESSION['CLEAR_CACHE_CONFIRM'] = $GLOBALS['TL_LANG']['tl_maintenance_jobs']['theme_plus_aac'][2];
             \Controller::reload();

@@ -18,6 +18,7 @@
 namespace Bit3\Contao\ThemePlus;
 
 use Assetic\Asset\AssetCollectionInterface;
+use Assetic\Filter\CssRewriteFilter;
 use Assetic\Filter\FilterInterface;
 use Bit3\Contao\Assetic\AsseticFactory;
 use Bit3\Contao\ThemePlus\Asset\ExtendedFileAsset;
@@ -27,6 +28,7 @@ use Bit3\Contao\ThemePlus\Event\OrganizeAssetsEvent;
 use Bit3\Contao\ThemePlus\Event\OrganizePreCompiledAssetsEvent;
 use Bit3\Contao\ThemePlus\Event\RenderAssetHtmlEvent;
 use Bit3\Contao\ThemePlus\Filter\FilterRulesCompiler;
+use DependencyInjection\Container\PageProvider;
 use Doctrine\Common\Cache\Cache;
 use FrontendTemplate;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -37,6 +39,64 @@ use Template;
  */
 class JavaScriptsHandler
 {
+    /**
+     * @var PageProvider
+     */
+    private $pageProvider;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
+     * @var AsseticFactory
+     */
+    private $asseticFactory;
+
+    /**
+     * @var RenderModeDeterminer
+     */
+    private $renderModeDeterminer;
+
+    /**
+     * @var Cache
+     */
+    private $cache;
+
+    /**
+     * @var FilterRulesCompiler
+     */
+    private $compiler;
+
+    /**
+     * Singleton service.
+     *
+     * @return JavaScriptsHandler
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    public static function getInstance()
+    {
+        return $GLOBALS['container']['theme-plus-javascript-handler'];
+    }
+
+    public function __construct(
+        PageProvider $pageProvider,
+        EventDispatcherInterface $eventDispatcher,
+        AsseticFactory $asseticFactory,
+        RenderModeDeterminer $renderModeDeterminer,
+        Cache $cache,
+        FilterRulesCompiler $compiler
+    ) {
+        $this->pageProvider         = $pageProvider;
+        $this->eventDispatcher      = $eventDispatcher;
+        $this->asseticFactory       = $asseticFactory;
+        $this->renderModeDeterminer = $renderModeDeterminer;
+        $this->cache                = $cache;
+        $this->compiler             = $compiler;
+    }
+
     /**
      * @see \Contao\Template::parse
      *
@@ -59,29 +119,24 @@ class JavaScriptsHandler
      * @param string $buffer
      *
      * @return string
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function hookReplaceDynamicScriptTags($buffer)
     {
-        global $objPage;
+        $page = $this->pageProvider->getPage();
 
-        if ($objPage) {
+        if ($page) {
             $headScripts = '';
             $bodyScripts = '';
 
             // search for the layout
-            $layout = \LayoutModel::findByPk($objPage->layout);
+            $layout = \LayoutModel::findByPk($page->layout);
 
-            /** @var RenderModeDeterminer $renderModeDeterminer */
-            $renderModeDeterminer = $GLOBALS['container']['theme-plus-render-mode-determiner'];
-
-            $renderMode = $renderModeDeterminer->determineMode();
+            $renderMode = $this->renderModeDeterminer->determineMode();
 
             if (RenderMode::PRE_COMPILE == $renderMode) {
                 // pre-compile javascripts
                 $this->compileJavaScripts(
-                    $objPage,
+                    $page,
                     $layout
                 );
             } elseif (
@@ -90,7 +145,7 @@ class JavaScriptsHandler
             ) {
                 // load cached javascripts
                 $this->loadJavaScripts(
-                    $objPage,
+                    $page,
                     $layout,
                     $headScripts,
                     $bodyScripts
@@ -99,7 +154,7 @@ class JavaScriptsHandler
                 // dynamically parse javascripts
                 $this->parseJavaScripts(
                     $renderMode,
-                    $objPage,
+                    $page,
                     $layout,
                     $headScripts,
                     $bodyScripts
@@ -126,22 +181,15 @@ class JavaScriptsHandler
      * @param \LayoutModel $layout
      *
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
      */
     protected function compileJavaScripts(\PageModel $page, \LayoutModel $layout)
     {
-        /** @var Cache $cache */
-        $cache = $GLOBALS['container']['theme-plus-assets-cache'];
-
-        /** @var EventDispatcherInterface $eventDispatcher */
-        $eventDispatcher = $GLOBALS['container']['event-dispatcher'];
-
         $defaultFilters = $this->getDefaultFilters(RenderMode::PRE_COMPILE, $layout);
 
         /** @var AssetCollectionInterface $headAssets */
         /** @var AssetCollectionInterface $bodyAssets */
-        list($headAssets, $bodyAssets) = $this->collectJavaScripts(RenderMode::PRE_COMPILE, $page, $layout, $defaultFilters);
+        list($headAssets, $bodyAssets) =
+            $this->collectJavaScripts(RenderMode::PRE_COMPILE, $page, $layout, $defaultFilters);
 
         foreach (
             [
@@ -158,7 +206,7 @@ class JavaScriptsHandler
                 $assets,
                 $defaultFilters
             );
-            $eventDispatcher->dispatch(
+            $this->eventDispatcher->dispatch(
                 ThemePlusEvents::ORGANIZE_PRE_COMPILED_JAVASCRIPT_ASSETS,
                 $organizeEvent
             );
@@ -172,13 +220,13 @@ class JavaScriptsHandler
                 $collections,
                 $defaultFilters
             );
-            $eventDispatcher->dispatch(
+            $this->eventDispatcher->dispatch(
                 ThemePlusEvents::GENERATE_PRE_COMPILED_JAVASCRIPT_ASSETS_CACHE,
                 $generateCacheEvent
             );
 
             if (!$GLOBALS['TL_CONFIG']['theme_plus_disabled_advanced_asset_caching']) {
-                $cache->save($key, $generateCacheEvent->getCacheCode());
+                $this->cache->save($key, $generateCacheEvent->getCacheCode());
             }
         }
     }
@@ -195,25 +243,18 @@ class JavaScriptsHandler
      */
     protected function loadJavaScripts(\PageModel $page, \LayoutModel $layout, &$headScripts, &$bodyScripts)
     {
-        global $container;
-
-        /** @var Cache $cache */
-        $cache = $container['theme-plus-assets-cache'];
-
         $headKey    = 'js:head:' . $page->id;
-        $headAssets = $cache->fetch($headKey);
+        $headAssets = $this->cache->fetch($headKey);
 
         $bodyKey    = 'js:body:' . $page->id;
-        $bodyAssets = $cache->fetch($bodyKey);
+        $bodyAssets = $this->cache->fetch($bodyKey);
 
         if ($headAssets && $bodyAssets) {
             if ($page->cache) {
                 $headScripts .= sprintf('{{theme_plus_cached_asset::%s|uncached}}', $headKey);
                 $bodyScripts .= sprintf('{{theme_plus_cached_asset::%s|uncached}}', $bodyKey);
             } else {
-                /** @var FilterRulesCompiler $compiler */
-                $compiler  = $container['theme-plus-filter-rules-compiler'];
-                $variables = $compiler->getVariables();
+                $variables = $this->compiler->getVariables();
 
                 extract($variables);
 
@@ -233,14 +274,14 @@ class JavaScriptsHandler
      * @param array        $scripts The search and replace array.
      *
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
      */
-    protected function parseJavaScripts($renderMode, \PageModel $page, \LayoutModel $layout, &$headScripts, &$bodyScripts)
-    {
-        /** @var EventDispatcherInterface $eventDispatcher */
-        $eventDispatcher = $GLOBALS['container']['event-dispatcher'];
-
+    protected function parseJavaScripts(
+        $renderMode,
+        \PageModel $page,
+        \LayoutModel $layout,
+        &$headScripts,
+        &$bodyScripts
+    ) {
         $defaultFilters = $this->getDefaultFilters($renderMode, $layout);
         list($headAssets, $bodyAssets) = $this->collectJavaScripts($renderMode, $page, $layout, $defaultFilters);
 
@@ -267,7 +308,7 @@ class JavaScriptsHandler
             $asset->setInline(true);
 
             $event = new RenderAssetHtmlEvent($renderMode, $page, $layout, $asset, $defaultFilters);
-            $eventDispatcher->dispatch(ThemePlusEvents::RENDER_JAVASCRIPT_HTML, $event);
+            $this->eventDispatcher->dispatch(ThemePlusEvents::RENDER_JAVASCRIPT_HTML, $event);
 
             if ($layout->theme_plus_default_javascript_position == 'body') {
                 $bodyScripts .= $event->getHtml();
@@ -279,14 +320,14 @@ class JavaScriptsHandler
         // write assets html
         foreach ($headAssets as $asset) {
             $event = new RenderAssetHtmlEvent($renderMode, $page, $layout, $asset, $defaultFilters);
-            $eventDispatcher->dispatch(ThemePlusEvents::RENDER_JAVASCRIPT_HTML, $event);
+            $this->eventDispatcher->dispatch(ThemePlusEvents::RENDER_JAVASCRIPT_HTML, $event);
 
             $headScripts .= $event->getHtml();
         }
 
         foreach ($bodyAssets as $asset) {
             $event = new RenderAssetHtmlEvent($renderMode, $page, $layout, $asset, $defaultFilters);
-            $eventDispatcher->dispatch(ThemePlusEvents::RENDER_JAVASCRIPT_HTML, $event);
+            $this->eventDispatcher->dispatch(ThemePlusEvents::RENDER_JAVASCRIPT_HTML, $event);
 
             $bodyScripts .= $event->getHtml();
         }
@@ -298,16 +339,11 @@ class JavaScriptsHandler
      * @param \LayoutModel $layout
      *
      * @return \Assetic\Filter\FilterCollection|null
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
      */
     protected function getDefaultFilters($renderMode, \LayoutModel $layout)
     {
-        /** @var AsseticFactory $asseticFactory */
-        $asseticFactory = $GLOBALS['container']['assetic.factory'];
-
         // default filter
-        $filters = $asseticFactory->createFilterOrChain(
+        $filters = $this->asseticFactory->createFilterOrChain(
             $layout->asseticJavaScriptFilter,
             RenderMode::DESIGN == $renderMode
         );
@@ -329,34 +365,33 @@ class JavaScriptsHandler
      * @param array        $scripts The search and replace array.
      *
      * @return array|AssetCollectionInterface[]
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
      */
-    protected function collectJavaScripts($renderMode, \PageModel $page, \LayoutModel $layout, FilterInterface $defaultFilters)
-    {
-        /** @var EventDispatcherInterface $eventDispatcher */
-        $eventDispatcher = $GLOBALS['container']['event-dispatcher'];
-
+    protected function collectJavaScripts(
+        $renderMode,
+        \PageModel $page,
+        \LayoutModel $layout,
+        FilterInterface $defaultFilters
+    ) {
         // collect head javascript assets
         $event = new CollectAssetsEvent($renderMode, $page, $layout, $defaultFilters);
-        $eventDispatcher->dispatch(ThemePlusEvents::COLLECT_HEAD_JAVASCRIPT_ASSETS, $event);
+        $this->eventDispatcher->dispatch(ThemePlusEvents::COLLECT_HEAD_JAVASCRIPT_ASSETS, $event);
 
         $collection = $event->getAssets();
 
         $event = new OrganizeAssetsEvent($renderMode, $page, $layout, $collection, $defaultFilters);
-        $eventDispatcher->dispatch(ThemePlusEvents::ORGANIZE_JAVASCRIPT_ASSETS, $event);
+        $this->eventDispatcher->dispatch(ThemePlusEvents::ORGANIZE_JAVASCRIPT_ASSETS, $event);
 
         $collection = $event->getOrganizedAssets();
         $headAssets = $collection;
 
         // collect body javascript assets
         $event = new CollectAssetsEvent($renderMode, $page, $layout, $defaultFilters);
-        $eventDispatcher->dispatch(ThemePlusEvents::COLLECT_BODY_JAVASCRIPT_ASSETS, $event);
+        $this->eventDispatcher->dispatch(ThemePlusEvents::COLLECT_BODY_JAVASCRIPT_ASSETS, $event);
 
         $collection = $event->getAssets();
 
         $event = new OrganizeAssetsEvent($renderMode, $page, $layout, $collection, $defaultFilters);
-        $eventDispatcher->dispatch(ThemePlusEvents::ORGANIZE_JAVASCRIPT_ASSETS, $event);
+        $this->eventDispatcher->dispatch(ThemePlusEvents::ORGANIZE_JAVASCRIPT_ASSETS, $event);
 
         $collection = $event->getOrganizedAssets();
         $bodyAssets = $collection;

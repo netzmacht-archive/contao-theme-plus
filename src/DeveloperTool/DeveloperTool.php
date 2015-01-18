@@ -23,15 +23,26 @@ use Assetic\Asset\FileAsset;
 use Assetic\Asset\HttpAsset;
 use Bit3\Contao\ThemePlus\Asset\DatabaseAsset;
 use Bit3\Contao\ThemePlus\Asset\DelegatorAssetInterface;
+use DependencyInjection\Container\PageProvider;
 
 class DeveloperTool
 {
+    /**
+     * @var PageProvider
+     */
+    private $pageProvider;
+
     /**
      * List of all added files.
      *
      * @var AssetInterface[]
      */
     private $files = [];
+
+    public function __construct(PageProvider $pageProvider)
+    {
+        $this->pageProvider = $pageProvider;
+    }
 
     public function registerFile($id, $asset)
     {
@@ -43,11 +54,11 @@ class DeveloperTool
      */
     public function inject($strBuffer)
     {
-        global $objPage;
+        $page = $this->pageProvider->getPage();
 
-        if ($objPage) {
+        if ($page) {
             // search for the layout
-            $layout = \LayoutModel::findByPk($objPage->layout);
+            $layout = \LayoutModel::findByPk($page->layout);
 
             $files             = [];
             $stylesheetsCount  = 0;

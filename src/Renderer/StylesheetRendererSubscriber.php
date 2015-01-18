@@ -28,18 +28,25 @@ use Bit3\Contao\ThemePlus\Event\GenerateAssetPathEvent;
 use Bit3\Contao\ThemePlus\Event\RenderAssetHtmlEvent;
 use Bit3\Contao\ThemePlus\ThemePlusEvents;
 use Bit3\Contao\ThemePlus\ThemePlusUtils;
+use DependencyInjection\Container\PageProvider;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class StylesheetRendererSubscriber implements EventSubscriberInterface
 {
     /**
+     * @var PageProvider
+     */
+    private $pageProvider;
+
+    /**
      * @var DeveloperTool
      */
     private $developerTool;
 
-    public function __construct(DeveloperTool $developerTool)
+    public function __construct(PageProvider $pageProvider, DeveloperTool $developerTool)
     {
+        $this->pageProvider  = $pageProvider;
         $this->developerTool = $developerTool;
     }
 
@@ -106,12 +113,11 @@ class StylesheetRendererSubscriber implements EventSubscriberInterface
             $asset = $event->getAsset();
 
             if (!$asset instanceof ExtendedAssetInterface || !$asset->isInline()) {
-                global $objPage;
-
+                $page = $this->pageProvider->getPage();
                 $html = '';
 
                 // html mode
-                $xhtml     = ($objPage->outputFormat == 'xhtml');
+                $xhtml     = ($page->outputFormat == 'xhtml');
                 $tagEnding = $xhtml ? ' />' : '>';
 
                 // session id
@@ -122,7 +128,7 @@ class StylesheetRendererSubscriber implements EventSubscriberInterface
 
                 if (!$session || $asset->getLastModified() > $session->asset->getLastModified()) {
                     $session        = new \stdClass;
-                    $session->page  = $objPage->id;
+                    $session->page  = $page->id;
                     $session->asset = $asset;
 
                     $_SESSION['THEME_PLUS_ASSETS'][$id] = serialize($session);
@@ -204,12 +210,11 @@ class StylesheetRendererSubscriber implements EventSubscriberInterface
             $asset = $event->getAsset();
 
             if ($asset instanceof ExtendedAssetInterface && $asset->isInline()) {
-                global $objPage;
-
+                $page = $this->pageProvider->getPage();
                 $html = '';
 
                 // html mode
-                $xhtml = ($objPage->outputFormat == 'xhtml');
+                $xhtml = ($page->outputFormat == 'xhtml');
 
                 // retrieve page path
                 $targetPath = \Environment::get('requestUri');
@@ -243,7 +248,7 @@ class StylesheetRendererSubscriber implements EventSubscriberInterface
                 }
 
                 // add debug information
-                $html .= $developerTools->getDebugComment($asset);
+                $html .= $this->developerTools->getDebugComment($asset);
 
                 $html .= $styleHtml . PHP_EOL;
 
@@ -312,6 +317,8 @@ class StylesheetRendererSubscriber implements EventSubscriberInterface
             $asset = $event->getAsset();
 
             if ($asset instanceof ExtendedAssetInterface && $asset->isInline()) {
+                $page = $this->pageProvider->getPage();
+
                 // retrieve page path
                 $targetPath = \Environment::get('requestUri');
                 // remove query string
@@ -326,10 +333,8 @@ class StylesheetRendererSubscriber implements EventSubscriberInterface
                 $asset->load($event->getDefaultFilters());
                 $css = $asset->dump($event->getDefaultFilters());
 
-                global $objPage;
-
                 // html mode
-                $xhtml = ($objPage->outputFormat == 'xhtml');
+                $xhtml = ($page->outputFormat == 'xhtml');
 
                 // generate html
                 $styleHtml = '<style';

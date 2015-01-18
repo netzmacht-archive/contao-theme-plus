@@ -15,15 +15,15 @@
  * @filesource
  */
 
-$compiler      = $GLOBALS['container']['theme-plus-filter-rules-compiler'];
-$developerTool = $GLOBALS['container']['theme-plus-developer-tools'];
+/** @var \Pimple $container */
+global $container;
 
 return [
-    new Bit3\Contao\ThemePlus\Cache\CacheGeneratorSubscriber($compiler, $developerTool),
-    new Bit3\Contao\ThemePlus\Collector\StylesheetCollectorSubscriber(),
-    new Bit3\Contao\ThemePlus\Collector\JavaScriptCollectorSubscriber(),
-    new Bit3\Contao\ThemePlus\Renderer\StylesheetRendererSubscriber($developerTool),
-    new Bit3\Contao\ThemePlus\Renderer\JavaScriptRendererSubscriber($developerTool),
-    new Bit3\Contao\ThemePlus\Organizer\AssetOrganizerSubscriber($compiler),
-    new Bit3\Contao\ThemePlus\StaticUrlSubscriber(),
+    $container['theme-plus-cache-generator-subscriber'],
+    $container['theme-plus-stylesheet-collector-subscriber'],
+    $container['theme-plus-javascript-collector-subscriber'],
+    $container['theme-plus-stylesheet-renderer-subscriber'],
+    $container['theme-plus-javascript-renderer-subscriber'],
+    $container['theme-plus-asset-organizer-subscriber'],
+    $container['theme-plus-static-url-subscriber'],
 ];

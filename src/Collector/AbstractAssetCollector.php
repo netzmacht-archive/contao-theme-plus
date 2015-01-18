@@ -17,14 +17,32 @@
 
 namespace Bit3\Contao\ThemePlus\Collector;
 
+use Bit3\Contao\Assetic\AsseticFactory;
 use Bit3\Contao\ThemePlus\Asset\DatabaseAsset;
 use Bit3\Contao\ThemePlus\Event\CollectAssetsEvent;
+use Bit3\Contao\ThemePlus\Filter\FilterRulesFactory;
 
 /**
  * Class AbstractAssetCollector.
  */
 class AbstractAssetCollector
 {
+    /**
+     * @var AsseticFactory
+     */
+    protected $asseticFactory;
+
+    /**
+     * @var FilterRulesFactory
+     */
+    protected $filterRulesFactory;
+
+    public function __construct(AsseticFactory $asseticFactory, FilterRulesFactory $filterRulesFactory)
+    {
+        $this->asseticFactory     = $asseticFactory;
+        $this->filterRulesFactory = $filterRulesFactory;
+    }
+
     /**
      * Append models as database assets to the event collection.
      *
@@ -37,7 +55,13 @@ class AbstractAssetCollector
     protected function appendDatabaseAssets(CollectAssetsEvent $event, \Model\Collection $collection, $type)
     {
         foreach ($collection as $model) {
-            $asset = new DatabaseAsset($model->row(), $type, $event->getRenderMode());
+            $asset = new DatabaseAsset(
+                $model->row(),
+                $type,
+                $event->getRenderMode(),
+                $this->asseticFactory,
+                $this->filterRulesFactory
+            );
 
             $event->append($asset, 100);
         }

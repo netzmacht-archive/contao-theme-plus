@@ -19,14 +19,13 @@ namespace Bit3\Contao\ThemePlus;
 
 use Assetic\Filter\FilterInterface;
 use Bit3\Contao\Assetic\AsseticFactory;
-use Bit3\Contao\ThemePlus\Asset\ExtendedAssetInterface;
 use Bit3\Contao\ThemePlus\Event\CollectAssetsEvent;
 use Bit3\Contao\ThemePlus\Event\GeneratePreCompiledAssetsCacheEvent;
 use Bit3\Contao\ThemePlus\Event\OrganizeAssetsEvent;
 use Bit3\Contao\ThemePlus\Event\OrganizePreCompiledAssetsEvent;
 use Bit3\Contao\ThemePlus\Event\RenderAssetHtmlEvent;
 use Bit3\Contao\ThemePlus\Filter\FilterRulesCompiler;
-use Detection\MobileDetect;
+use DependencyInjection\Container\PageProvider;
 use Doctrine\Common\Cache\Cache;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -35,6 +34,64 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class StylesheetsHandler
 {
+    /**
+     * @var PageProvider
+     */
+    private $pageProvider;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
+     * @var AsseticFactory
+     */
+    private $asseticFactory;
+
+    /**
+     * @var RenderModeDeterminer
+     */
+    private $renderModeDeterminer;
+
+    /**
+     * @var Cache
+     */
+    private $cache;
+
+    /**
+     * @var FilterRulesCompiler
+     */
+    private $compiler;
+
+    /**
+     * Singleton service.
+     *
+     * @return StylesheetsHandler
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    public static function getInstance()
+    {
+        return $GLOBALS['container']['theme-plus-stylesheet-handler'];
+    }
+
+    public function __construct(
+        PageProvider $pageProvider,
+        EventDispatcherInterface $eventDispatcher,
+        AsseticFactory $asseticFactory,
+        RenderModeDeterminer $renderModeDeterminer,
+        Cache $cache,
+        FilterRulesCompiler $compiler
+    ) {
+        $this->pageProvider         = $pageProvider;
+        $this->eventDispatcher      = $eventDispatcher;
+        $this->asseticFactory       = $asseticFactory;
+        $this->renderModeDeterminer = $renderModeDeterminer;
+        $this->cache                = $cache;
+        $this->compiler             = $compiler;
+    }
+
     /**
      * Replace dynamic script tags.
      *
@@ -48,16 +105,13 @@ class StylesheetsHandler
      */
     public function hookReplaceDynamicScriptTags($buffer)
     {
-        global $objPage;
+        $page = $this->pageProvider->getPage();
 
-        if ($objPage) {
+        if ($page) {
             // search for the layout
-            $layout = \LayoutModel::findByPk($objPage->layout);
+            $layout = \LayoutModel::findByPk($page->layout);
 
-            /** @var RenderModeDeterminer $renderModeDeterminer */
-            $renderModeDeterminer = $GLOBALS['container']['theme-plus-render-mode-determiner'];
-
-            $renderMode = $renderModeDeterminer->determineMode();
+            $renderMode = $this->renderModeDeterminer->determineMode();
 
             // the stylesheets buffer
             $stylesheets = '';
@@ -65,7 +119,7 @@ class StylesheetsHandler
             if (RenderMode::PRE_COMPILE == $renderMode) {
                 // pre-compile stylesheets
                 $this->compileStylesheets(
-                    $objPage,
+                    $page,
                     $layout
                 );
             } elseif (
@@ -74,7 +128,7 @@ class StylesheetsHandler
             ) {
                 // load cached stylesheets
                 $this->loadStylesheets(
-                    $objPage,
+                    $page,
                     $layout,
                     $stylesheets
                 );
@@ -82,7 +136,7 @@ class StylesheetsHandler
                 // dynamically parse stylesheets
                 $this->parseStylesheets(
                     $renderMode,
-                    $objPage,
+                    $page,
                     $layout,
                     $stylesheets
                 );
@@ -115,12 +169,6 @@ class StylesheetsHandler
      */
     protected function compileStylesheets(\PageModel $page, \LayoutModel $layout)
     {
-        /** @var Cache $cache */
-        $cache = $GLOBALS['container']['theme-plus-assets-cache'];
-
-        /** @var EventDispatcherInterface $eventDispatcher */
-        $eventDispatcher = $GLOBALS['container']['event-dispatcher'];
-
         $defaultFilters = $this->getDefaultFilters(RenderMode::PRE_COMPILE, $layout);
         $assets         = $this->collectStylesheets(RenderMode::PRE_COMPILE, $page, $layout, $defaultFilters);
 
@@ -131,7 +179,7 @@ class StylesheetsHandler
             $assets,
             $defaultFilters
         );
-        $eventDispatcher->dispatch(
+        $this->eventDispatcher->dispatch(
             ThemePlusEvents::ORGANIZE_PRE_COMPILED_STYLESHEET_ASSETS,
             $organizeEvent
         );
@@ -145,13 +193,13 @@ class StylesheetsHandler
             $collections,
             $defaultFilters
         );
-        $eventDispatcher->dispatch(
+        $this->eventDispatcher->dispatch(
             ThemePlusEvents::GENERATE_PRE_COMPILED_STYLESHEET_ASSETS_CACHE,
             $generateCacheEvent
         );
 
         if (!$GLOBALS['TL_CONFIG']['theme_plus_disabled_advanced_asset_caching']) {
-            $cache->save('css:' . $page->id, $generateCacheEvent->getCacheCode());
+            $this->cache->save('css:' . $page->id, $generateCacheEvent->getCacheCode());
         }
     }
 
@@ -167,22 +215,15 @@ class StylesheetsHandler
      */
     protected function loadStylesheets(\PageModel $page, \LayoutModel $layout, &$stylesheets)
     {
-        global $container;
+        $key = 'css:' . $page->id;
 
-        /** @var Cache $cache */
-        $cache = $container['theme-plus-assets-cache'];
-
-        $key    = 'css:' . $page->id;
-
-        $assets = $cache->fetch($key);
+        $assets = $this->cache->fetch($key);
 
         if ($assets) {
             if ($page->cache) {
                 $stylesheets .= sprintf('{{theme_plus_cached_asset::%s|uncached}}', $key);
             } else {
-                /** @var FilterRulesCompiler $compiler */
-                $compiler  = $container['theme-plus-filter-rules-compiler'];
-                $variables = $compiler->getVariables();
+                $variables = $this->compiler->getVariables();
 
                 extract($variables);
 
@@ -201,20 +242,15 @@ class StylesheetsHandler
      * @param string       $stylesheets The search and replace array.
      *
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
      */
     protected function parseStylesheets($renderMode, \PageModel $page, \LayoutModel $layout, &$stylesheets)
     {
-        /** @var EventDispatcherInterface $eventDispatcher */
-        $eventDispatcher = $GLOBALS['container']['event-dispatcher'];
-
         $defaultFilters = $this->getDefaultFilters($renderMode, $layout);
         $assets         = $this->collectStylesheets($renderMode, $page, $layout, $defaultFilters);
 
         foreach ($assets as $asset) {
             $event = new RenderAssetHtmlEvent($renderMode, $page, $layout, $asset, $defaultFilters);
-            $eventDispatcher->dispatch(ThemePlusEvents::RENDER_STYLESHEET_HTML, $event);
+            $this->eventDispatcher->dispatch(ThemePlusEvents::RENDER_STYLESHEET_HTML, $event);
 
             $stylesheets .= $event->getHtml();
         }
@@ -226,16 +262,11 @@ class StylesheetsHandler
      * @param \LayoutModel $layout
      *
      * @return \Assetic\Filter\FilterCollection|null
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
      */
     protected function getDefaultFilters($renderMode, \LayoutModel $layout)
     {
-        /** @var AsseticFactory $asseticFactory */
-        $asseticFactory = $GLOBALS['container']['assetic.factory'];
-
         // default filter
-        $filters = $asseticFactory->createFilterOrChain(
+        $filters = $this->asseticFactory->createFilterOrChain(
             $layout->asseticStylesheetFilter,
             RenderMode::DESIGN == $renderMode
         );
@@ -257,22 +288,21 @@ class StylesheetsHandler
      * @param FilterInterface $defaultFilters
      *
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
      */
-    protected function collectStylesheets($renderMode, \PageModel $page, \LayoutModel $layout, FilterInterface $defaultFilters)
-    {
-        /** @var EventDispatcherInterface $eventDispatcher */
-        $eventDispatcher = $GLOBALS['container']['event-dispatcher'];
-
+    protected function collectStylesheets(
+        $renderMode,
+        \PageModel $page,
+        \LayoutModel $layout,
+        FilterInterface $defaultFilters
+    ) {
         // collect stylesheet assets
         $event = new CollectAssetsEvent($renderMode, $page, $layout, $defaultFilters);
-        $eventDispatcher->dispatch(ThemePlusEvents::COLLECT_STYLESHEET_ASSETS, $event);
+        $this->eventDispatcher->dispatch(ThemePlusEvents::COLLECT_STYLESHEET_ASSETS, $event);
 
         $collection = $event->getAssets();
 
         $event = new OrganizeAssetsEvent($renderMode, $page, $layout, $collection, $defaultFilters);
-        $eventDispatcher->dispatch(ThemePlusEvents::ORGANIZE_STYLESHEET_ASSETS, $event);
+        $this->eventDispatcher->dispatch(ThemePlusEvents::ORGANIZE_STYLESHEET_ASSETS, $event);
 
         $collection = $event->getOrganizedAssets();
 
