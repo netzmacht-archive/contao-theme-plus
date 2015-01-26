@@ -1,14 +1,18 @@
 <?php
 
 /**
- * Theme+ - Theme extension for the Contao Open Source CMS
+ * This file is part of bit3/contao-theme-plus.
  *
- * Copyright (C) 2013 bit3 UG <http://bit3.de>
+ * (c) Tristan Lins <tristan.lins@bit3.de>
  *
- * @package    Theme+
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * @package    bit3/contao-theme-plus
  * @author     Tristan Lins <tristan.lins@bit3.de>
- * @link       http://www.themeplus.de
- * @license    http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ * @copyright  bit3 UG <https://bit3.de>
+ * @link       https://github.com/bit3/contao-theme-plus
+ * @license    http://opensource.org/licenses/LGPL-3.0 LGPL-3.0+
+ * @filesource
  */
 
 namespace Bit3\Contao\ThemePlus\DataContainer;
@@ -18,40 +22,30 @@ namespace Bit3\Contao\ThemePlus\DataContainer;
  */
 class Theme extends \Backend
 {
-	protected function __construct()
-	{
-		parent::__construct();
+    public function __construct()
+    {
+        parent::__construct();
 
-		$this->import('BackendUser', 'User');
-	}
+        $this->import('BackendUser', 'User');
+    }
 
-	public function editStylesheet($row, $href, $label, $title, $icon, $attributes)
-	{
-		if ($this->User->isAdmin || $this->User->hasAccess('theme_plus_stylesheet', 'themes')) {
-			return '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars(
-				$title
-			) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ';
-		}
-		return $this->generateImage(preg_replace('/\.png$/i', '_.png', $icon)) . ' ';
-	}
+    public function editStylesheet($row, $href, $label, $title, $icon, $attributes)
+    {
+        if ($this->User->isAdmin || $this->User->hasAccess('theme_plus_stylesheet', 'themes')) {
+            return '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars(
+                $title
+            ) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ';
+        }
+        return $this->generateImage(preg_replace('/\.png$/i', '_.png', $icon)) . ' ';
+    }
 
-	public function editJavaScript($row, $href, $label, $title, $icon, $attributes)
-	{
-		if ($this->User->isAdmin || $this->User->hasAccess('theme_plus_javascript', 'themes')) {
-			return '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars(
-				$title
-			) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ';
-		}
-		return $this->generateImage(preg_replace('/\.png$/i', '_.png', $icon)) . ' ';
-	}
-
-	public function editVariable($row, $href, $label, $title, $icon, $attributes)
-	{
-		if ($this->User->isAdmin || $this->User->hasAccess('theme_plus_variable', 'themes')) {
-			return '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars(
-				$title
-			) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ';
-		}
-		return $this->generateImage(preg_replace('/\.png$/i', '_.png', $icon)) . ' ';
-	}
+    public function editJavaScript($row, $href, $label, $title, $icon, $attributes)
+    {
+        if ($this->User->isAdmin || $this->User->hasAccess('theme_plus_javascript', 'themes')) {
+            return '<a href="' . $this->addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars(
+                $title
+            ) . '"' . $attributes . '>' . $this->generateImage($icon, $label) . '</a> ';
+        }
+        return $this->generateImage(preg_replace('/\.png$/i', '_.png', $icon)) . ' ';
+    }
 }

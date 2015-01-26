@@ -1,6 +1,7 @@
 # OS
 .DS_Store
 Thumbs.db
+npm-debug.log
 
 # IDEs
 .buildpath
@@ -12,4 +13,5 @@ nbproject/
 
 # Vendor
 /vendor/
+/node_modules/
 

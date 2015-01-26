@@ -1,0 +1,252 @@
+<?xml version="1.0"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="system/modules/theme-plus/languages/de/tl_theme_plus_stylesheet.php" source-language="de"
+        datatype="php" date="2012-11-08T21:49:41+00:00" target-language="de">
+    <body>
+      <trans-unit id="tl_theme_plus_stylesheet.type.0">
+        <source xml:lang="de">Dateityp</source>
+        <target xml:lang="de">Dateityp</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.type.1">
+        <source xml:lang="de">Bitte w&#xE4;hlen Sie hier den Typ der Datei.</source>
+        <target xml:lang="de">Bitte w&#xE4;hlen Sie hier den Typ der Datei.</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.filesource.0">
+        <source xml:lang="de">Quelle</source>
+        <target xml:lang="de">Quelle</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.filesource.1">
+        <source xml:lang="de">Bitte w&#xE4;hlen Sie hier aus welchem Verzeichnis die Datei bezogen werden
+          soll.
+        </source>
+        <target xml:lang="de">Bitte w&#xE4;hlen Sie hier aus welchem Verzeichnis die Datei bezogen werden
+          soll.
+        </target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.code_snippet_title.0">
+        <source xml:lang="de">Code-Snippet Title</source>
+        <target xml:lang="de">Code-Snippet Title</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.code_snippet_title.1">
+        <source xml:lang="de">Bitte geben Sie einen Titel zu dem Code-Snippet ein.</source>
+        <target xml:lang="de">Bitte geben Sie einen Titel zu dem Code-Snippet ein.</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.file.0">
+        <source xml:lang="de">Datei</source>
+        <target xml:lang="de">Datei</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.file.1">
+        <source xml:lang="de">Bitte w&#xE4;hlen Sie hier die CSS Datei aus.</source>
+        <target xml:lang="de">Bitte w&#xE4;hlen Sie hier die CSS Datei aus.</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.url.0">
+        <source xml:lang="de">URL</source>
+        <target xml:lang="de">URL</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.url.1">
+        <source xml:lang="de">Bitte geben Sie die URL zur CSS Datei an.</source>
+        <target xml:lang="de">Bitte geben Sie die URL zur CSS Datei an.</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.fetchUrl.0">
+        <source xml:lang="de">URL laden</source>
+        <target xml:lang="de">URL laden</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.fetchUrl.1">
+        <source xml:lang="de">L&#xE4;dt die Datei und bindet diese lokal ein, anstatt sie als externe Datei
+          einzubinden.
+        </source>
+        <target xml:lang="de">L&#xE4;dt die Datei und bindet diese lokal ein, anstatt sie als externe Datei
+          einzubinden.
+        </target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.code.0">
+        <source xml:lang="de">Code-Snippet</source>
+        <target xml:lang="de">Code-Snippet</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.code.1">
+        <source xml:lang="de">Bitte geben Sie hier Ihr CSS Code-Snippet ein.</source>
+        <target xml:lang="de">Bitte geben Sie hier Ihr CSS Code-Snippet ein.</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.layouts.0">
+        <source xml:lang="de">Layouts</source>
+        <target xml:lang="de">Layouts</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.layouts.1">
+        <source xml:lang="de">Bitte w&#xE4;hlen Sie hier die Layouts, in denen das Stylesheet eingebunden werden
+          soll.
+        </source>
+        <target xml:lang="de">Bitte w&#xE4;hlen Sie hier die Layouts, in denen das Stylesheet eingebunden werden
+          soll.
+        </target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.cc.0">
+        <source xml:lang="de">Conditional Comment</source>
+        <target xml:lang="de">Conditional Comment</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.cc.1">
+        <source xml:lang="de">Conditional Comments erm&#xF6;glichen das Einbinden Internet Explorer-spezifischer
+          Dateien. Hier muss nur die Bedingung z.B. "lte IE 7" oder "IE 9" eingef&#xFC;gt werden. Der Prefix "&amp;lt;!--[if"
+          bzw. Sufix "]&amp;gt;" werden automatisch eingef&#xFC;gt.
+        </source>
+        <target xml:lang="de">Conditional Comments erm&#xF6;glichen das Einbinden Internet Explorer-spezifischer
+          Dateien. Hier muss nur die Bedingung z.B. "lte IE 7" oder "IE 9" eingef&#xFC;gt werden. Der Prefix "&amp;lt;!--[if"
+          bzw. Sufix "]&amp;gt;" werden automatisch eingef&#xFC;gt.
+        </target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.filter.0">
+        <source xml:lang="de">Filter anwenden</source>
+        <target xml:lang="de">Filter anwenden</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.filter.1">
+        <source xml:lang="de">W&#xE4;hlen Sie diese Option, k&#xF6;nnen Sie verschiedene Serverseitige Filter
+          anwenden. (Achtung: Dieses Feature ist inkompatibel zum Seitencache! Eine entsprechende &#xC4;nderung
+          an Contao wurde bereits beantragt.)
+        </source>
+        <target xml:lang="de">W&#xE4;hlen Sie diese Option, k&#xF6;nnen Sie verschiedene Serverseitige Filter
+          anwenden. (Achtung: Dieses Feature ist inkompatibel zum Seitencache! Eine entsprechende &#xC4;nderung
+          an Contao wurde bereits beantragt.)
+        </target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.filterRule.0">
+        <source xml:lang="de">Filter</source>
+        <target xml:lang="de">Filter</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.filterRule.1">
+        <source xml:lang="de">W&#xE4;hlen Sie hier die Serverseitigen Filter aus.</source>
+        <target xml:lang="de">W&#xE4;hlen Sie hier die Serverseitigen Filter aus.</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.asseticFilter.0">
+        <source xml:lang="de">Assetic Filter</source>
+        <target xml:lang="de">Assetic Filter</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.asseticFilter.1">
+        <source xml:lang="de">W&#xE4;hlen Sie hier einen Assetic Filter oder eine Filter Chain aus, die auf
+          diese Datei angewendet werden.
+        </source>
+        <target xml:lang="de">W&#xE4;hlen Sie hier einen Assetic Filter oder eine Filter Chain aus, die auf
+          diese Datei angewendet werden.
+        </target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.source_legend">
+        <source xml:lang="de">Dateityp</source>
+        <target xml:lang="de">Dateityp</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.file_legend">
+        <source xml:lang="de">Dateiquelle</source>
+        <target xml:lang="de">Dateiquelle</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.layouts_legend">
+        <source xml:lang="de">Layoutzuweisung</source>
+        <target xml:lang="de">Layoutzuweisung</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.filter_legend">
+        <source xml:lang="de">Filter-Einstellungen</source>
+        <target xml:lang="de">Filter-Einstellungen</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.assetic_legend">
+        <source xml:lang="de">Assetic Einstellungen</source>
+        <target xml:lang="de">Assetic Einstellungen</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.expert_legend">
+        <source xml:lang="de">Experten-Einstellungen</source>
+        <target xml:lang="de">Experten-Einstellungen</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.positions.head">
+        <source xml:lang="de">im &amp;lt;head&amp;gt;</source>
+        <target xml:lang="de">im &amp;lt;head&amp;gt;</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.positions.body">
+        <source xml:lang="de">am Ende des &amp;lt;body&amp;gt;</source>
+        <target xml:lang="de">am Ende des &amp;lt;body&amp;gt;</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.new.0">
+        <source xml:lang="de">Neues CSS</source>
+        <target xml:lang="de">Neues CSS</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.new.1">
+        <source xml:lang="de">Eine neue CSS einbinden</source>
+        <target xml:lang="de">Eine neue CSS einbinden</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.newUrl.0">
+        <source xml:lang="de">URL</source>
+        <target xml:lang="de">URL</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.newUrl.1">
+        <source xml:lang="de">Eine neue CSS URL anlegen</source>
+        <target xml:lang="de">Eine neue CSS URL anlegen</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.newFile.0">
+        <source xml:lang="de">Datei</source>
+        <target xml:lang="de">Datei</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.newFile.1">
+        <source xml:lang="de">Eine neue CSS Datei anlegen</source>
+        <target xml:lang="de">Eine neue CSS Datei anlegen</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.newCode.0">
+        <source xml:lang="de">Code</source>
+        <target xml:lang="de">Code</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.newCode.1">
+        <source xml:lang="de">Eine neue CSS Code-Snippet anlegen</source>
+        <target xml:lang="de">Eine neue CSS Code-Snippet anlegen</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.show.0">
+        <source xml:lang="de">Details</source>
+        <target xml:lang="de">Details</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.show.1">
+        <source xml:lang="de">Details der Datei ID %s anzeigen</source>
+        <target xml:lang="de">Details der Datei ID %s anzeigen</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.edit.0">
+        <source xml:lang="de">Datei bearbeiten</source>
+        <target xml:lang="de">Datei bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.edit.1">
+        <source xml:lang="de">Datei ID %s bearbeiten</source>
+        <target xml:lang="de">Datei ID %s bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.delete.0">
+        <source xml:lang="de">Datei l&#xF6;schen</source>
+        <target xml:lang="de">Datei l&#xF6;schen</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.delete.1">
+        <source xml:lang="de">Datei ID %s l&#xF6;schen</source>
+        <target xml:lang="de">Datei ID %s l&#xF6;schen</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.cut.0">
+        <source xml:lang="de">Datei verschieben</source>
+        <target xml:lang="de">Datei verschieben</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.cut.1">
+        <source xml:lang="de">Datei ID %s verschieben</source>
+        <target xml:lang="de">Datei ID %s verschieben</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.copy.0">
+        <source xml:lang="de">Datei duplizieren</source>
+        <target xml:lang="de">Datei duplizieren</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.copy.1">
+        <source xml:lang="de">Datei ID %s duplizieren</source>
+        <target xml:lang="de">Datei ID %s duplizieren</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.pasteafter.0">
+        <source xml:lang="de">Oben einf&#xFC;gen</source>
+        <target xml:lang="de">Oben einf&#xFC;gen</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.pasteafter.1">
+        <source xml:lang="de">Nach der Datei ID %s einf&#xFC;gen</source>
+        <target xml:lang="de">Nach der Datei ID %s einf&#xFC;gen</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.pastenew.0">
+        <source xml:lang="de">Neue Datei oben erstellen</source>
+        <target xml:lang="de">Neue Datei oben erstellen</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_stylesheet.pastenew.1">
+        <source xml:lang="de">Neues Element nach der Datei ID %s erstellen</source>
+        <target xml:lang="de">Neues Element nach der Datei ID %s erstellen</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

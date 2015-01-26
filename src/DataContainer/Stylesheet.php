@@ -1,14 +1,18 @@
 <?php
 
 /**
- * Theme+ - Theme extension for the Contao Open Source CMS
+ * This file is part of bit3/contao-theme-plus.
  *
- * Copyright (C) 2013 bit3 UG <http://bit3.de>
+ * (c) Tristan Lins <tristan.lins@bit3.de>
  *
- * @package    Theme+
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * @package    bit3/contao-theme-plus
  * @author     Tristan Lins <tristan.lins@bit3.de>
- * @link       http://www.themeplus.de
- * @license    http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ * @copyright  bit3 UG <https://bit3.de>
+ * @link       https://github.com/bit3/contao-theme-plus
+ * @license    http://opensource.org/licenses/LGPL-3.0 LGPL-3.0+
+ * @filesource
  */
 
 namespace Bit3\Contao\ThemePlus\DataContainer;
@@ -19,54 +23,54 @@ namespace Bit3\Contao\ThemePlus\DataContainer;
 class Stylesheet extends File
 {
 
-	/**
-	 * @var \BackendUser
-	 */
-	protected $User;
+    /**
+     * @var \BackendUser
+     */
+    protected $User;
 
-	/**
-	 * Check permissions to edit the table
-	 */
-	public function checkPermission()
-	{
-		if ($this->User->isAdmin) {
-			return;
-		}
+    /**
+     * Check permissions to edit the table
+     */
+    public function checkPermission()
+    {
+        if ($this->User->isAdmin) {
+            return;
+        }
 
-		if (!$this->User->hasAccess('theme_plus_stylesheet', 'themes')) {
-			$this->log(
-				'Not enough permissions to access the style sheets module',
-				'tl_theme_plus_stylesheet checkPermission',
-				TL_ERROR
-			);
-			$this->redirect('contao/main.php?act=error');
-		}
-	}
+        if (!$this->User->hasAccess('theme_plus_stylesheet', 'themes')) {
+            $this->log(
+                'Not enough permissions to access the style sheets module',
+                'tl_theme_plus_stylesheet checkPermission',
+                TL_ERROR
+            );
+            $this->redirect('contao/main.php?act=error');
+        }
+    }
 
-	public function rememberType($varValue)
-	{
-		\Session::getInstance()->set('THEME_PLUS_LAST_CSS_TYPE', $varValue);
+    public function rememberType($varValue)
+    {
+        \Session::getInstance()->set('THEME_PLUS_LAST_CSS_TYPE', $varValue);
 
-		return $varValue;
-	}
+        return $varValue;
+    }
 
-	public function getAsseticFilterOptions()
-	{
-		return $this->buildAsseticFilterOptions('css');
-	}
+    public function getAsseticFilterOptions()
+    {
+        return $this->buildAsseticFilterOptions('css');
+    }
 
-	public function listFile($row)
-	{
-		return $this->listFileFor($row, 'theme_plus_stylesheets');
-	}
+    public function listFile($row)
+    {
+        return $this->listFileFor($row, 'theme_plus_stylesheets');
+    }
 
-	public function loadLayouts($value, $dc)
-	{
-		return $this->loadLayoutsFor('theme_plus_stylesheets', $dc);
-	}
+    public function loadLayouts($value, $dc)
+    {
+        return $this->loadLayoutsFor('theme_plus_stylesheets', $dc);
+    }
 
-	public function saveLayouts($value, $dc)
-	{
-		return $this->saveLayoutsFor('theme_plus_stylesheets', $value, $dc);
-	}
+    public function saveLayouts($value, $dc)
+    {
+        return $this->saveLayoutsFor('theme_plus_stylesheets', $value, $dc);
+    }
 }

@@ -1,14 +1,18 @@
 <?php
 
 /**
- * Theme+ - Theme extension for the Contao Open Source CMS
+ * This file is part of bit3/contao-theme-plus.
  *
- * Copyright (C) 2013 bit3 UG <http://bit3.de>
+ * (c) Tristan Lins <tristan.lins@bit3.de>
  *
- * @package    Theme+
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * @package    bit3/contao-theme-plus
  * @author     Tristan Lins <tristan.lins@bit3.de>
- * @link       http://www.themeplus.de
- * @license    http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ * @copyright  bit3 UG <https://bit3.de>
+ * @link       https://github.com/bit3/contao-theme-plus
+ * @license    http://opensource.org/licenses/LGPL-3.0 LGPL-3.0+
+ * @filesource
  */
 
 namespace Bit3\Contao\ThemePlus\Asset;
@@ -20,326 +24,461 @@ use Assetic\Asset\StringAsset;
 use Assetic\Filter\CssRewriteFilter;
 use Assetic\Filter\FilterInterface;
 use Bit3\Contao\Assetic\AsseticFactory;
-use Bit3\Contao\ThemePlus\ThemePlusEnvironment;
+use Bit3\Contao\ThemePlus\Filter\FilterRules;
+use Bit3\Contao\ThemePlus\Filter\FilterRulesFactory;
+use Bit3\Contao\ThemePlus\RenderMode;
 
-class DatabaseAsset implements ExtendedAssetInterface, DelegateAssetInterface, \Serializable
+class DatabaseAsset implements ExtendedAssetInterface, DelegatorAssetInterface, \Serializable
 {
+    /**
+     * @var array
+     */
+    protected $row;
 
-	/**
-	 * @var array
-	 */
-	protected $row;
+    /**
+     * @var string
+     */
+    protected $type;
 
-	/**
-	 * @var string
-	 */
-	protected $type;
+    /**
+     * @var string
+     */
+    protected $renderMode;
 
-	protected $asset;
+    /**
+     * @var AsseticFactory
+     */
+    protected $asseticFactory;
 
-	public function __construct(array $row, $type)
-	{
-		$this->row  = $row;
-		$this->type = (string) $type;
-	}
+    /**
+     * @var FilterRulesFactory
+     */
+    protected $filterRulesFactory;
 
-	/**
-	 * @return array
-	 */
-	public function getRow()
-	{
-		return $this->row;
-	}
+    /**
+     * @var AssetInterface
+     */
+    protected $asset;
 
-	/**
-	 * @return string
-	 */
-	public function getType()
-	{
-		return $this->type;
-	}
+    /**
+     * The filter rules.
+     *
+     * @var FilterRules
+     */
+    protected $filterRules;
 
-	/**
-	 * @return AssetInterface
-	 */
-	public function getAsset()
-	{
-		if (!$this->asset) {
-			$filter = [];
+    public function __construct(
+        array $row,
+        $type,
+        $renderMode,
+        AsseticFactory $asseticFactory,
+        FilterRulesFactory $filterRulesFactory
+    ) {
+        $this->row                = $row;
+        $this->type               = (string) $type;
+        $this->renderMode         = $renderMode;
+        $this->asseticFactory     = $asseticFactory;
+        $this->filterRulesFactory = $filterRulesFactory;
+    }
 
-			if ($this->type == 'css') {
-				$filter[] = new CssRewriteFilter();
-			}
+    /**
+     * @return array
+     */
+    public function getRow()
+    {
+        return $this->row;
+    }
 
-			if ($this->row['asseticFilter']) {
-				/** @var AsseticFactory $asseticFactory */
-				$asseticFactory = $GLOBALS['container']['assetic.factory'];
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
 
-				$temp = $asseticFactory->createFilterOrChain(
-					$this->row['asseticFilter'],
-					ThemePlusEnvironment::isDesignerMode()
-				);
-				if ($temp) {
-					$filter[] = $temp;
-				}
-			}
+    /**
+     * {@inheritdoc}
+     */
+    public function getAsset()
+    {
+        if (!$this->asset) {
+            $this->asset = $this->createAsset();
+        }
 
-			switch ($this->row['type']) {
-				case 'file':
-					if ($this->row['filesource'] == $GLOBALS['TL_CONFIG']['uploadPath']) {
-						$file = \FilesModel::findByUuid($this->row['file']);
+        return $this->asset;
+    }
 
-						if ($file) {
-							$filePath = $file->path;
-						}
-						else {
-							$filePath = $this->row['file'];
-						}
-					}
-					else {
-						$filePath = $this->row['file'];
-					}
+    /**
+     * Create the delegated asset.
+     *
+     * @return AssetInterface
+     */
+    private function createAsset()
+    {
+        $filters = $this->createFilters();
 
-					$this->asset = new FileAsset(TL_ROOT . DIRECTORY_SEPARATOR . $filePath, $filter, TL_ROOT, $filePath);
+        switch ($this->row['type']) {
+            case 'file':
+                return $this->createFileAsset($filters);
 
-					break;
+            case 'url':
+                return $this->createHttpAsset($filters);
 
-				case 'url':
-					$this->asset = new HttpAsset($this->row['url'], $filter);
-					break;
+            case 'code':
+                return $this->createStringAsset($filters);
 
-				case 'code':
-					$asset = new StringAsset($this->row['code'], $filter, TL_ROOT, 'string_asset');
-					$asset->setLastModified($this->row['tstamp']);
-					break;
-			}
-		}
+            default:
+                throw new \RuntimeException(
+                    sprintf(
+                        'Unsupported asset type "%s" [ID %s]',
+                        $this->row['type'],
+                        $this->row['id']
+                    )
+                );
+        }
+    }
 
-		return $this->asset;
-	}
+    /**
+     * Create filters for the asset.
+     *
+     * @return array
+     */
+    private function createFilters()
+    {
+        $filters = [];
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function ensureFilter(FilterInterface $filter)
-	{
-		$this->getAsset()->ensureFilter($filter);
-	}
+        if ($this->type == 'css') {
+            $filters[] = new CssRewriteFilter();
+        }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getFilters()
-	{
-		return $this->getAsset()->getFilters();
-	}
+        if ($this->row['asseticFilter']) {
+            $temp = $this->asseticFactory->createFilterOrChain(
+                $this->row['asseticFilter'],
+                RenderMode::DESIGN == $this->renderMode
+            );
+            if ($temp) {
+                $filters[] = $temp;
+            }
+        }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function clearFilters()
-	{
-		return $this->getAsset()->clearFilters();
-	}
+        return $filters;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function load(FilterInterface $additionalFilter = null)
-	{
-		return $this->getAsset()->load($additionalFilter);
-	}
+    /**
+     * Create a file asset.
+     *
+     * @param array $filters The filters.
+     *
+     * @return FileAsset
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    private function createFileAsset(array $filters)
+    {
+        if ($this->row['filesource'] == $GLOBALS['TL_CONFIG']['uploadPath']) {
+            $file = \FilesModel::findByUuid($this->row['file']);
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function dump(FilterInterface $additionalFilter = null)
-	{
-		return $this->getAsset()->dump($additionalFilter);
-	}
+            if ($file) {
+                $filePath = $file->path;
+            } else {
+                $filePath = $this->row['file'];
+            }
+        } else {
+            $filePath = $this->row['file'];
+        }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getContent()
-	{
-		return $this->getAsset()->getContent();
-	}
+        $asset = new FileAsset(
+            TL_ROOT . DIRECTORY_SEPARATOR . $filePath,
+            $filters,
+            TL_ROOT,
+            $filePath
+        );
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function setContent($content)
-	{
-		return $this->getAsset()->setContent($content);
-	}
+        return $asset;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getSourceRoot()
-	{
-		return $this->getAsset()->getSourceRoot();
-	}
+    /**
+     * Create a http asset.
+     *
+     * @param array $filters The filters.
+     *
+     * @return HttpAsset
+     */
+    private function createHttpAsset(array $filters)
+    {
+        return new HttpAsset($this->row['url'], $filters);
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getSourcePath()
-	{
-		return $this->getAsset()->getSourcePath();
-	}
+    /**
+     * Create a string asset.
+     *
+     * @param array $filters The filters.
+     *
+     * @return StringAsset
+     */
+    private function createStringAsset(array $filters)
+    {
+        $asset = new StringAsset($this->row['code'], $filters, TL_ROOT, 'string_asset');
+        $asset->setLastModified($this->row['tstamp']);
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getSourceDirectory()
-	{
-		return $this->getAsset()->getSourceDirectory();
-	}
+        return $asset;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getTargetPath()
-	{
-		return $this->getAsset()->getTargetPath();
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function ensureFilter(FilterInterface $filter)
+    {
+        $this->getAsset()->ensureFilter($filter);
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function setTargetPath($targetPath)
-	{
-		return $this->getAsset()->setTargetPath($targetPath);
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function getFilters()
+    {
+        return $this->getAsset()->getFilters();
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getLastModified()
-	{
-		return $this->getAsset()->getLastModified();
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function clearFilters()
+    {
+        return $this->getAsset()->clearFilters();
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getVars()
-	{
-		return $this->getAsset()->getVars();
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function load(FilterInterface $additionalFilter = null)
+    {
+        return $this->getAsset()->load($additionalFilter);
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function setValues(array $values)
-	{
-		return $this->getAsset()->setValues($values);
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function dump(FilterInterface $additionalFilter = null)
+    {
+        return $this->getAsset()->dump($additionalFilter);
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getValues()
-	{
-		return $this->getAsset()->getValues();
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function getContent()
+    {
+        return $this->getAsset()->getContent();
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getConditionalComment()
-	{
-		return $this->row['cc'];
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function setContent($content)
+    {
+        return $this->getAsset()->setContent($content);
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function setConditionalComment($conditionalComment)
-	{
-		$this->row['cc'] = $conditionalComment;
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function getSourceRoot()
+    {
+        return $this->getAsset()->getSourceRoot();
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getMediaQuery()
-	{
-		return $this->row['media'];
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function getSourcePath()
+    {
+        return $this->getAsset()->getSourcePath();
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function setMediaQuery($mediaQuery)
-	{
-		$this->row['media'] = $mediaQuery;
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function getSourceDirectory()
+    {
+        return $this->getAsset()->getSourceDirectory();
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getCondition()
-	{
-		return $this->row['filter'] ? $this->row['filterRule'] : null;
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function getTargetPath()
+    {
+        return $this->getAsset()->getTargetPath();
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function setCondition(ConditionInterface $condition = null)
-	{
-		$this->row['filter']     = (bool) $condition;
-		$this->row['filterRule'] = $condition;
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function setTargetPath($targetPath)
+    {
+        return $this->getAsset()->setTargetPath($targetPath);
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function isStandalone()
-	{
-		return $this->row['standalone'];
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function getLastModified()
+    {
+        return $this->getAsset()->getLastModified();
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function setStandalone($standalone)
-	{
-		$this->row['standalone'] = (bool) $standalone;
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function getVars()
+    {
+        return $this->getAsset()->getVars();
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function isInline()
-	{
-		return $this->row['inline'];
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function setValues(array $values)
+    {
+        return $this->getAsset()->setValues($values);
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function setInline($inline)
-	{
-		$this->row['inline'] = (bool) $inline;
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function getValues()
+    {
+        return $this->getAsset()->getValues();
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function serialize()
-	{
-		return serialize([$this->row, $this->type]);
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function getConditionalComment()
+    {
+        return $this->row['cc'];
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function unserialize($serialized)
-	{
-		list($this->row, $this->type) = unserialize($serialized);
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function setConditionalComment($conditionalComment)
+    {
+        $this->row['cc'] = $conditionalComment;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMediaQuery()
+    {
+        return $this->row['media'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setMediaQuery($mediaQuery)
+    {
+        $this->row['media'] = $mediaQuery;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isStandalone()
+    {
+        return $this->row['standalone'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setStandalone($standalone)
+    {
+        $this->row['standalone'] = (bool) $standalone;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isInline()
+    {
+        return $this->row['inline'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setInline($inline)
+    {
+        $this->row['inline'] = (bool) $inline;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFilterRules()
+    {
+        if (!$this->row['filter']) {
+            return null;
+        }
+
+        if (!$this->filterRules) {
+            $this->filterRules = $this->filterRulesFactory->createRules(
+                deserialize($this->row['filterRule'], true)
+            );
+        }
+
+        return $this->filterRules;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setFilterRules(FilterRules $filterRules = null)
+    {
+        $this->row['filter'] = (bool) $filterRules;
+
+        if ($filterRules) {
+            $this->row['filterRule'] = serialize($this->filterRulesFactory->createRulesArray($filterRules));
+        } else {
+            $this->row['filterRule'] = serialize([]);
+        }
+
+        $this->filterRules = $filterRules;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function serialize()
+    {
+        return serialize(
+            [$this->row, $this->type, $this->renderMode, $this->asseticFactory, $this->filterRulesFactory]
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function unserialize($serialized)
+    {
+        list($this->row, $this->type, $this->renderMode, $this->asseticFactory, $this->filterRulesFactory) =
+            unserialize($serialized);
+    }
+
+    /**
+     * Clone the database asset by cloning the delegate asset.
+     */
+    public function __clone()
+    {
+        if ($this->asset) {
+            $this->asset = clone $this->asset;
+        }
+    }
 }

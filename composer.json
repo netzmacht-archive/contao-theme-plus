@@ -1,67 +1,79 @@
 {
-	"name":"bit3/contao-theme-plus",
-	"description":"Theme+ for Contao OpenSource CMS",
-	"keywords":["contao", "theme", "css", "js", "stylesheet", "javascript", "assets"],
-	"type":"contao-module",
-	"homepage":"http://bit3.de",
-	"license":"LGPL-3.0+",
-	"authors":[
-		{
-			"name":"Tristan Lins",
-			"email":"tristan.lins@bit3.de",
-			"homepage":"http://bit3.de",
-			"role":"Developer"
-		}
-	],
-	"support":{
-		"email":"info@bit3.de",
-		"issues":"https://github.com/bit3/contao-theme-plus/issues",
-		"wiki":"https://github.com/bit3/contao-theme-plus/wiki",
-		"irc":"irc://irc.freenode.org/contao.dev",
-		"source":"https://github.com/bit3/contao-theme-plus"
-	},
-	"require":{
-		"php":">=5.4",
-		"contao/core":">=3.2,<3.5-dev",
-		"contao-community-alliance/composer-plugin": "~2.0",
-		"contao-community-alliance/event-dispatcher": "~1.0",
-		"contao-community-alliance/dependency-container": "~1.0",
-		"bit3/contao-meta-palettes":"~1.0",
-		"bit3/contao-assetic":"~2.0",
-		"ikimea/browser":"dev-master",
-		"mobiledetect/mobiledetectlib": "2.*"
-	},
-	"require-dev":{
-		"squizlabs/php_codesniffer":"1.*",
-		"bit3/php-coding-standard":"@dev",
-		"pdepend/pdepend": "1.1.*"
-	},
-	"replace": {
-		"contao-legacy/theme_plus": "self.version"
-	},
-	"conflict": {
-		"symfony/event-dispatcher": "<2.4"
-	},
-	"minimum-stability": "dev",
-	"prefer-stable": true,
-	"autoload":{
-		"psr-4": {
-			"Bit3\\Contao\\ThemePlus\\": "src"
-		}
-	},
-	"extra":{
-		"contao": {
-			"sources":{
-				"system/modules/theme-plus": "system/modules/theme-plus",
-				"assets/theme-plus": "assets/theme-plus"
-			},
-			"runonce":[
-				"runonce/upgrade_to_contao3_2.php"
-			]
-		},
-		"branch-alias": {
-			"dev-master": "5.0.x-dev",
-			"dev-develop": "5.1.x-dev"
-		}
-	}
+    "name": "bit3/contao-theme-plus",
+    "description": "Theme+ for Contao OpenSource CMS",
+    "keywords": [
+        "contao",
+        "theme",
+        "css",
+        "js",
+        "stylesheet",
+        "javascript",
+        "assets"
+    ],
+    "type": "contao-module",
+    "homepage": "http://bit3.de",
+    "license": "LGPL-3.0+",
+    "authors": [
+        {
+            "name": "Tristan Lins",
+            "email": "tristan.lins@bit3.de",
+            "homepage": "http://bit3.de",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "email": "info@bit3.de",
+        "issues": "https://github.com/bit3/contao-theme-plus/issues",
+        "wiki": "https://github.com/bit3/contao-theme-plus/wiki",
+        "irc": "irc://irc.freenode.org/contao.dev",
+        "source": "https://github.com/bit3/contao-theme-plus"
+    },
+    "require": {
+        "php": ">=5.4",
+        "contao/core": ">=3.2,<3.5-dev",
+        "contao-community-alliance/composer-plugin": "~2.0",
+        "contao-community-alliance/event-dispatcher": "~1.3",
+        "contao-community-alliance/dependency-container": "~1.7",
+        "bit3/contao-meta-palettes": "~1.0",
+        "bit3/contao-assetic": "~2.0",
+        "bit3/contao-ikimea-browser-service": "~1.0",
+        "bit3/contao-mobile-detect-service": "~1.0",
+        "bit3/contao-twig": "~1.0",
+        "symfony/expression-language": "~2.4",
+        "doctrine/cache": "~1.0"
+    },
+    "require-dev": {
+        "phpcq/phpcq": "~1.0",
+        "phpcq/all-tasks": "~1.0",
+        "phpcq/coding-standard": "~1.0"
+    },
+    "replace": {
+        "contao-legacy/theme_plus": "self.version"
+    },
+    "conflict": {
+        "symfony/event-dispatcher": "<2.4"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "Bit3\\Contao\\ThemePlus\\": "src"
+        }
+    },
+    "extra": {
+        "contao": {
+            "sources": {
+                "contao": "system/modules/theme-plus",
+                "assets": "assets/theme-plus"
+            },
+            "runonce": [
+                "runonce/upgrade_to_contao3_2.php",
+                "runonce/upgrade_version5_0_0.php"
+            ]
+        },
+        "branch-alias": {
+            "dev-master": "5.0.x-dev",
+            "dev-develop": "5.1.x-dev"
+        }
+    }
 }

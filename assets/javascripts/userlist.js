@@ -1,0 +1,2 @@
+var Userlist=function(){if(!document.createElement("datalist")||!window.HTMLDataListElement)return void(console&&console.log("HTMLDataList support is not available!"));var e=$("ctrl_user"),t=$("userlist"),n=new Request.JSON({url:location.pathname.replace("/main.php","/switch.php"),onSuccess:function(e,n){t.empty()&&JSON.decode(n).each(function(e){new Element("option",{value:e}).inject(t)})}});e.addEvent("keyup",function(){e.value.length<2||n.post({value:e.value,REQUEST_TOKEN:Contao.request_token})})};
+//# sourceMappingURL=userlist.js.map

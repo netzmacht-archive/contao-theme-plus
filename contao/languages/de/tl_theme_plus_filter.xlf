@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="system/modules/theme-plus/languages/de/tl_theme_plus_filter.php" source-language="de" datatype="php"
+        date="2012-11-08T21:49:41+00:00" target-language="de">
+    <body>
+      <trans-unit id="tl_theme_plus_filter.system">
+        <source xml:lang="de">System</source>
+        <target xml:lang="de">System</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_filter.browser">
+        <source xml:lang="de">Browser</source>
+        <target xml:lang="de">Browser</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_filter.comparator">
+        <source xml:lang="de">Operator</source>
+        <target xml:lang="de">Operator</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_filter.browser_version">
+        <source xml:lang="de">Version</source>
+        <target xml:lang="de">Version</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_filter.platform">
+        <source xml:lang="de">Platform</source>
+        <target xml:lang="de">Platform</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_filter.desktop">
+        <source xml:lang="de">Desktop</source>
+        <target xml:lang="de">Desktop</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_filter.mobile">
+        <source xml:lang="de">Mobilgeräte</source>
+        <target xml:lang="de">Mobilgeräte</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_filter.tablet">
+        <source xml:lang="de">Tablet</source>
+        <target xml:lang="de">Tablet</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_filter.phone">
+        <source xml:lang="de">Telefone</source>
+        <target xml:lang="de">Telefone</target>
+      </trans-unit>
+      <trans-unit id="tl_theme_plus_filter.invert">
+        <source xml:lang="de">Negieren</source>
+        <target xml:lang="de">Negieren</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

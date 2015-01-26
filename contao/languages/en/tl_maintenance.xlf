@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="system/modules/theme-plus/languages/de/tl_layout.php" source-language="en" datatype="php"
+        date="2012-11-08T21:49:41+00:00">
+    <body>
+      <trans-unit id="tl_maintenance_jobs.theme_plus.0">
+        <source>Clear assets cache</source>
+      </trans-unit>
+      <trans-unit id="tl_maintenance_jobs.theme_plus.1">
+        <source>Clear compiled assets (stylesheets and javascripts) and all relevant caches.</source>
+      </trans-unit>
+
+      <trans-unit id="tl_maintenance_jobs.theme_plus_aac.0">
+        <source>Advanced assets cache</source>
+      </trans-unit>
+      <trans-unit id="tl_maintenance_jobs.theme_plus_aac.1">
+        <source>[Theme+] Clear the advanced asset cache.</source>
+      </trans-unit>
+      <trans-unit id="tl_maintenance_jobs.theme_plus_aac.2">
+        <source>The AAC cache implementation does not support to be cleared!</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

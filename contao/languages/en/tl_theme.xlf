@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="system/modules/theme-plus/languages/de/tl_theme.php" source-language="en" datatype="php"
+        date="2012-11-08T21:49:41+00:00">
+    <body>
+      <trans-unit id="tl_theme.theme_plus_stylesheet.0">
+        <source>Stylesheets+</source>
+      </trans-unit>
+      <trans-unit id="tl_theme.theme_plus_stylesheet.1">
+        <source>Add more stylesheets to the theme ID %s.</source>
+      </trans-unit>
+      <trans-unit id="tl_theme.theme_plus_javascript.0">
+        <source>JavaScripts+</source>
+      </trans-unit>
+      <trans-unit id="tl_theme.theme_plus_javascript.1">
+        <source>Add more JavaScripts to the theme ID %s.</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -1,272 +1,168 @@
 <?php
 
 /**
- * Theme+ - Theme extension for the Contao Open Source CMS
+ * This file is part of bit3/contao-theme-plus.
  *
- * Copyright (C) 2013 bit3 UG <http://bit3.de>
+ * (c) Tristan Lins <tristan.lins@bit3.de>
  *
- * @package    Theme+
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * @package    bit3/contao-theme-plus
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Tristan Lins <tristan.lins@bit3.de>
- * @link       http://www.themeplus.de
- * @license    http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ * @author     Stefan heimes <stefan_heimes@hotmail.com>
+ * @copyright  bit3 UG <https://bit3.de>
+ * @link       https://github.com/bit3/contao-theme-plus
+ * @license    http://opensource.org/licenses/LGPL-3.0 LGPL-3.0+
+ * @filesource
  */
 
 namespace Bit3\Contao\ThemePlus;
 
-use Bit3\Contao\Assetic\AsseticFactory;
-use Bit3\Contao\ThemePlus\Asset\ExtendedFileAsset;
-use Bit3\Contao\ThemePlus\Event\CollectAssetsEvent;
-use Bit3\Contao\ThemePlus\Event\OrganizeAssetsEvent;
-use Bit3\Contao\ThemePlus\Event\RenderAssetHtmlEvent;
-use FrontendTemplate;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Template;
+use Bit3\Contao\ThemePlus\DeveloperTool\DeveloperTool;
+use Bit3\Contao\ThemePlus\Filter\FilterRulesCompiler;
+use DependencyInjection\Container\PageProvider;
+use Doctrine\Common\Cache\Cache;
 
 /**
  * Class ThemePlus
- *
- * Adding files to the page layout.
  */
 class ThemePlus
 {
-	const BROWSER_IDENT_OVERWRITE = 'THEME_PLUS_BROWSER_IDENT_OVERWRITE';
+    const CACHE_CREATION_TIME = 'meta:cache:creation-time';
 
-	/**
-	 * @var DeveloperTool
-	 */
-	protected $developerTool;
+    const CACHE_LATEST_ASSET_TIMESTAMP = 'meta:cache:latest-asset-timestamp';
 
-	/**
-	 * @see \Contao\Template::parse
-	 *
-	 * @param \Template $template
-	 */
-	public function hookParseTemplate(Template $template)
-	{
-		if ($template instanceof FrontendTemplate) {
-			if (substr($template->getName(), 0, 3) == 'fe_') {
-				$template->mootools = '[[TL_THEME_PLUS]]' . "\n" . $template->mootools;
-			}
-		}
-	}
+    /**
+     * @var PageProvider
+     */
+    private $pageProvider;
 
-	/**
-	 * @see \Contao\Controller::replaceDynamicScriptTags
-	 *
-	 * @param $buffer
-	 */
-	public function hookReplaceDynamicScriptTags($buffer)
-	{
-		global $objPage;
+    /**
+     * @var RenderModeDeterminer
+     */
+    private $renderModeDeterminer;
 
-		if ($objPage) {
-			if (ThemePlusEnvironment::isDesignerMode()) {
-				$this->developerTool = new DeveloperTool();
-			}
+    /**
+     * @var Cache
+     */
+    private $cache;
 
-			// the search and replace array
-			$sr = [
-				'[[TL_CSS]]' => '',
-				'[[TL_THEME_PLUS]]' => '',
-				'[[TL_HEAD]]' => '',
-			];
+    /**
+     * @var FilterRulesCompiler
+     */
+    private $compiler;
 
-			// search for the layout
-			$layout = \LayoutModel::findByPk($objPage->layout);
+    /**
+     * @var DeveloperTool
+     */
+    private $developerTool;
 
-			// parse stylesheets
-			$this->parseStylesheets(
-				$layout,
-				$sr
-			);
+    /**
+     * Singleton service.
+     *
+     * @return ThemePlus
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    public static function getInstance()
+    {
+        return $GLOBALS['container']['theme-plus-generic-handler'];
+    }
 
-			// parse javascripts
-			$this->parseJavaScripts(
-				$layout,
-				$sr
-			);
+    public function __construct(
+        PageProvider $pageProvider,
+        RenderModeDeterminer $renderModeDeterminer,
+        Cache $cache,
+        FilterRulesCompiler $compiler,
+        DeveloperTool $developerTool
+    ) {
+        $this->pageProvider         = $pageProvider;
+        $this->renderModeDeterminer = $renderModeDeterminer;
+        $this->cache                = $cache;
+        $this->compiler             = $compiler;
+        $this->developerTool        = $developerTool;
+    }
 
-			/*
-			$this->excludeList = [];
+    /**
+     * Disable the page caching, if in pre-compile mode.
+     *
+     * @see \Contao\Controller::replaceDynamicScriptTags
+     *
+     * @param string $buffer
+     *
+     * @return string
+     */
+    public function disablePageCache($buffer)
+    {
+        $page = $this->pageProvider->getPage();
 
-			// build exclude list
-			if (is_array($GLOBALS['TL_THEME_EXCLUDE'])) {
-				$this->excludeList = array_merge($this->excludeList, $GLOBALS['TL_THEME_EXCLUDE']);
-			}
-			if (!is_array($layout->theme_plus_exclude_files)) {
-				$layout->theme_plus_exclude_files = deserialize(
-					$layout->theme_plus_exclude_files,
-					true
-				);
-			}
-			if (count($layout->theme_plus_exclude_files) > 0) {
-				foreach ($layout->theme_plus_exclude_files as $v) {
-					if ($v[0]) {
-						$this->excludeList[] = $v[0];
-					}
-				}
-			}
-			*/
+        if ($page) {
+            $renderMode = $this->renderModeDeterminer->determineMode();
 
-			if (ThemePlusEnvironment::isDesignerMode()) {
-				$buffer = $this->developerTool->inject($buffer);
-			}
+            if (RenderMode::PRE_COMPILE == $renderMode) {
+                // prevent caching of the page
+                $page->cache = false;
+            }
+        }
 
-			// replace dynamic scripts
-			return str_replace(
-				array_keys($sr),
-				array_values($sr),
-				$buffer
-			);
-		}
+        return $buffer;
+    }
 
-		return $buffer;
-	}
+    /**
+     * Replace the {{theme_plus_cached_asset::*}} insert tag.
+     *
+     * @see \Contao\Controller::replaceInsertTags
+     *
+     * @param $tag
+     *
+     * @return bool|mixed|string
+     * @SuppressWarnings(PHPMD.EvalExpression)
+     */
+    public function replaceCachedAssetInsertTag($tag)
+    {
+        if ('theme_plus_cached_asset::' === substr($tag, 0, 25)) {
+            /** @var string $cacheKey The cache key. */
+            $cacheKey = substr($tag, 25);
 
-	/**
-	 * Parse all stylesheets and add them to the search and replace array.
-	 *
-	 * @param \LayoutModel $layout
-	 * @param array        $sr The search and replace array.
-	 *
-	 * @return mixed
-	 */
-	protected function parseStylesheets(\LayoutModel $layout, array &$sr)
-	{
-		global $objPage;
+            /** @var string $assets */
+            $assets = $this->cache->fetch($cacheKey);
 
-		/** @var EventDispatcherInterface $eventDispatcher */
-		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
+            if ($assets) {
+                $variables = $this->compiler->getVariables();
 
-		// collect stylesheet assets
-		$event = new CollectAssetsEvent($objPage, $layout);
-		$eventDispatcher->dispatch(ThemePlusEvents::COLLECT_STYLESHEET_ASSETS, $event);
+                extract($variables);
 
-		$collection = $event->getAssets();
+                return eval($assets);
+            }
 
-		/** @var AsseticFactory $asseticFactory */
-		$asseticFactory = $GLOBALS['container']['assetic.factory'];
+            return '';
+        }
 
-		// default filter
-		$defaultFilters = $asseticFactory->createFilterOrChain(
-			$layout->asseticStylesheetFilter,
-			ThemePlusEnvironment::isDesignerMode()
-		);
+        return false;
+    }
 
-		$event = new OrganizeAssetsEvent($objPage, $layout, $defaultFilters, $collection, $this->developerTool);
-		$eventDispatcher->dispatch(ThemePlusEvents::ORGANIZE_STYLESHEET_ASSETS, $event);
+    /**
+     * Inject the developer tools in designer mode.
+     *
+     * @see \Contao\Controller::replaceDynamicScriptTags
+     *
+     * @param string $buffer
+     *
+     * @return string
+     */
+    public function injectDeveloperTools($buffer)
+    {
+        $page = $this->pageProvider->getPage();
 
-		$collection = $event->getOrganizedAssets();
-		$assets     = $collection->all();
+        if ($page) {
+            $renderMode = $this->renderModeDeterminer->determineMode();
 
-		foreach ($assets as $asset) {
-			$event = new RenderAssetHtmlEvent($objPage, $layout, $defaultFilters, $asset, $this->developerTool);
-			$eventDispatcher->dispatch(ThemePlusEvents::RENDER_STYLESHEET_HTML, $event);
+            if (RenderMode::DESIGN == $renderMode) {
+                $buffer = $this->developerTool->inject($buffer);
+            }
+        }
 
-			$sr['[[TL_CSS]]'] .= $event->getHtml();
-		}
-	}
-
-	/**
-	 * Parse all javascripts and add them to the search and replace array.
-	 *
-	 * @param \LayoutModel $layout
-	 * @param array        $sr The search and replace array.
-	 *
-	 * @return mixed
-	 */
-	protected function parseJavaScripts(\LayoutModel $layout, array &$sr)
-	{
-		global $objPage;
-
-		/** @var EventDispatcherInterface $eventDispatcher */
-		$eventDispatcher = $GLOBALS['container']['event-dispatcher'];
-
-		if (!ThemePlusEnvironment::isDesignerMode()) {
-			/** @var AsseticFactory $asseticFactory */
-			$asseticFactory = $GLOBALS['container']['assetic.factory'];
-
-			// default filter
-			$defaultFilters = $asseticFactory->createFilterOrChain(
-				$layout->asseticJavaScriptFilter,
-				ThemePlusEnvironment::isDesignerMode()
-			);
-		}
-		else {
-			$defaultFilters = null;
-		}
-
-		// collect head javascript assets
-		$event = new CollectAssetsEvent($objPage, $layout);
-		$eventDispatcher->dispatch(ThemePlusEvents::COLLECT_HEAD_JAVASCRIPT_ASSETS, $event);
-
-		$collection = $event->getAssets();
-
-		$event = new OrganizeAssetsEvent($objPage, $layout, $defaultFilters, $collection, $this->developerTool);
-		$eventDispatcher->dispatch(ThemePlusEvents::ORGANIZE_JAVASCRIPT_ASSETS, $event);
-
-		$collection = $event->getOrganizedAssets();
-		$headAssets = $collection->all();
-
-		// collect body javascript assets
-		$event = new CollectAssetsEvent($objPage, $layout);
-		$eventDispatcher->dispatch(ThemePlusEvents::COLLECT_BODY_JAVASCRIPT_ASSETS, $event);
-
-		$collection = $event->getAssets();
-
-		$event = new OrganizeAssetsEvent($objPage, $layout, $defaultFilters, $collection, $this->developerTool);
-		$eventDispatcher->dispatch(ThemePlusEvents::ORGANIZE_JAVASCRIPT_ASSETS, $event);
-
-		$collection = $event->getOrganizedAssets();
-		$bodyAssets = $collection->all();
-
-		$assetCount = count($headAssets) + count($bodyAssets);
-
-		// inject async.js if required
-		if ($layout->theme_plus_javascript_lazy_load && $assetCount) {
-			if ($assetCount > 1) {
-				$asyncScript = 'async_multi';
-			}
-			else {
-				$asyncScript = 'async_single';
-			}
-
-			if ($this->developerTool) {
-				$asyncScript .= '_dev';
-			}
-
-			$asset = new ExtendedFileAsset(
-				TL_ROOT . '/assets/theme-plus/js/' . $asyncScript . '.js',
-				[],
-				TL_ROOT,
-				'assets/theme-plus/js/' . $asyncScript . '.js'
-			);
-			$asset->setInline(true);
-
-			$event = new RenderAssetHtmlEvent($objPage, $layout, $defaultFilters, $asset, $this->developerTool);
-			$eventDispatcher->dispatch(ThemePlusEvents::RENDER_JAVASCRIPT_HTML, $event);
-
-			if ($layout->theme_plus_default_javascript_position == 'body') {
-				$sr['[[TL_THEME_PLUS]]'] .= $event->getHtml();
-			}
-			else {
-				$sr['[[TL_HEAD]]'] .= $event->getHtml();
-			}
-		}
-
-		// write assets html
-		foreach ($headAssets as $asset) {
-			$event = new RenderAssetHtmlEvent($objPage, $layout, $defaultFilters, $asset, $this->developerTool);
-			$eventDispatcher->dispatch(ThemePlusEvents::RENDER_JAVASCRIPT_HTML, $event);
-
-			$sr['[[TL_HEAD]]'] .= $event->getHtml();
-		}
-
-		foreach ($bodyAssets as $asset) {
-			$event = new RenderAssetHtmlEvent($objPage, $layout, $defaultFilters, $asset, $this->developerTool);
-			$eventDispatcher->dispatch(ThemePlusEvents::RENDER_JAVASCRIPT_HTML, $event);
-
-			$sr['[[TL_THEME_PLUS]]'] .= $event->getHtml();
-		}
-	}
+        return $buffer;
+    }
 }

@@ -1,105 +1,72 @@
 <?php
 
 /**
- * Theme+ - Theme extension for the Contao Open Source CMS
+ * This file is part of bit3/contao-theme-plus.
  *
- * Copyright (C) 2013 bit3 UG <http://bit3.de>
+ * (c) Tristan Lins <tristan.lins@bit3.de>
  *
- * @package    Theme+
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * @package    bit3/contao-theme-plus
  * @author     Tristan Lins <tristan.lins@bit3.de>
- * @link       http://www.themeplus.de
- * @license    http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ * @copyright  bit3 UG <https://bit3.de>
+ * @link       https://github.com/bit3/contao-theme-plus
+ * @license    http://opensource.org/licenses/LGPL-3.0 LGPL-3.0+
+ * @filesource
  */
 
 namespace Bit3\Contao\ThemePlus\Event;
 
-use Assetic\Asset\AssetInterface;
-use Symfony\Component\EventDispatcher\Event;
+use Assetic\Filter\FilterCollection;
 
-class GenerateAssetPathEvent extends Event
+class GenerateAssetPathEvent extends AssetAwareEvent
 {
+    /**
+     * @var string
+     */
+    protected $type;
 
-	/**
-	 * @var \PageModel
-	 */
-	protected $page;
+    /**
+     * @var string
+     */
+    protected $path;
 
-	/**
-	 * @var \LayoutModel
-	 */
-	protected $layout;
+    public function __construct(
+        $renderMode,
+        \PageModel $page,
+        \LayoutModel $layout,
+        $asset,
+        FilterCollection $defaultFilters = null,
+        $type
+    ) {
+        parent::__construct($renderMode, $page, $layout, $asset, $defaultFilters);
+        $this->type = (string) $type;
+    }
 
-	/**
-	 * @var AssetInterface
-	 */
-	protected $asset;
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
 
-	/**
-	 * @var string
-	 */
-	protected $type;
+    /**
+     * @return string
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
 
-	/**
-	 * @var string
-	 */
-	protected $path;
-
-	public function __construct(\PageModel $page, \LayoutModel $layout, AssetInterface $asset, $type)
-	{
-		$this->page   = $page;
-		$this->layout = $layout;
-		$this->asset  = $asset;
-		$this->type   = (string) $type;
-	}
-
-	/**
-	 * @return \PageModel
-	 */
-	public function getPage()
-	{
-		return $this->page;
-	}
-
-	/**
-	 * @return \LayoutModel
-	 */
-	public function getLayout()
-	{
-		return $this->layout;
-	}
-
-	/**
-	 * @return AssetInterface
-	 */
-	public function getAsset()
-	{
-		return $this->asset;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getType()
-	{
-		return $this->type;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getPath()
-	{
-		return $this->path;
-	}
-
-	/**
-	 * @param string $path
-	 *
-	 * @return static
-	 */
-	public function setPath($path)
-	{
-		$this->path = (string) $path;
-		return $this;
-	}
+    /**
+     * @param string $path
+     *
+     * @return static
+     */
+    public function setPath($path)
+    {
+        $this->path = (string) $path;
+        return $this;
+    }
 }

@@ -1,16 +1,12 @@
-<?xml version="1.0"?>
-<project name="Example" default="test">
-	<target name="phpcs">
-		<exec dir="${basedir}" executable="vendor/bin/phpcs" failonerror="true">
-			<arg line="--standard=${basedir}/vendor/bit3/php-coding-standard/phpcs/Bit3/ruleset.xml ${basedir}/src"/>
-		</exec>
-	</target>
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ This project is using the PHP code quality project (PHPCQ).
 
-	<target name="phpmd">
-		<exec dir="${basedir}" executable="vendor/bin/phpmd" failonerror="true">
-			<arg line="${basedir}/src text ${basedir}/vendor/bit3/php-coding-standard/phpmd/ruleset.xml"/>
-		</exec>
-	</target>
+ For documentation visit:
+   https://github.com/phpcq/phpcq
 
-	<target name="test" depends="phpcs,phpmd"/>
+-->
+<project name="contao-theme-plus" default="build">
+    <!-- import the main tasks definition -->
+    <import file="vendor/phpcq/phpcq/phpcq.main.xml"/>
 </project>
