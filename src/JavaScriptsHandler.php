@@ -166,7 +166,7 @@ class JavaScriptsHandler
             // replace dynamic scripts
             return str_replace(
                 ['[[TL_HEAD]]', '[[TL_SCRIPTS]]'],
-                [$headScripts, $bodyScripts],
+                [$headScripts . '[[TL_HEAD]]', $bodyScripts],
                 $buffer
             );
         }
