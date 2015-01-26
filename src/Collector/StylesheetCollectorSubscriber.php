@@ -101,6 +101,10 @@ class StylesheetCollectorSubscriber extends AbstractAssetCollector implements Ev
                 } else {
                     list($source, $media, $mode) = explode('|', $stylesheet);
 
+                    if (empty($source)) {
+                        continue;
+                    }
+
                     $stripStaticDomainEvent =
                         new StripStaticDomainEvent(
                             $event->getRenderMode(),
