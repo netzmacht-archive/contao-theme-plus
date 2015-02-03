@@ -1,5 +1,5 @@
 {
-    "name": "bit3/contao-theme-plus",
+    "name": "netzmacht/contao-theme-plus",
     "description": "Theme+ for Contao OpenSource CMS",
     "keywords": [
         "contao",
@@ -11,9 +11,15 @@
         "assets"
     ],
     "type": "contao-module",
-    "homepage": "http://bit3.de",
+    "homepage": "http://netzmacht.de",
     "license": "LGPL-3.0+",
     "authors": [
+        {
+            "name": "David Molineus",
+            "email": "david.molineus@netzmacht.de",
+            "homepage": "http://netzmacht.de",
+            "role": "Developer"
+        },
         {
             "name": "Tristan Lins",
             "email": "tristan.lins@bit3.de",
@@ -23,10 +29,10 @@
     ],
     "support": {
         "email": "info@bit3.de",
-        "issues": "https://github.com/bit3/contao-theme-plus/issues",
-        "wiki": "https://github.com/bit3/contao-theme-plus/wiki",
+        "issues": "https://github.com/netzmacht/contao-theme-plus/issues",
+        "wiki": "https://github.com/netzmacht/contao-theme-plus/wiki",
         "irc": "irc://irc.freenode.org/contao.dev",
-        "source": "https://github.com/bit3/contao-theme-plus"
+        "source": "https://github.com/netzmacht/contao-theme-plus"
     },
     "require": {
         "php": ">=5.4",
@@ -34,7 +40,7 @@
         "contao-community-alliance/composer-plugin": "~2.0",
         "contao-community-alliance/event-dispatcher": "~1.3",
         "contao-community-alliance/dependency-container": "~1.7",
-        "bit3/contao-meta-palettes": "~1.0",
+        "contao-community-alliance/meta-palettes": "~1.0",
         "bit3/contao-assetic": "~2.0",
         "bit3/contao-ikimea-browser-service": "~1.0",
         "bit3/contao-mobile-detect-service": "~1.0",
@@ -43,12 +49,11 @@
         "doctrine/cache": "~1.0"
     },
     "require-dev": {
-        "phpcq/phpcq": "~1.0",
-        "phpcq/all-tasks": "~1.0",
-        "phpcq/coding-standard": "~1.0"
+        "netzmacht/contao-build-tools": "~1.1"
     },
     "replace": {
-        "contao-legacy/theme_plus": "self.version"
+        "contao-legacy/theme_plus": "self.version",
+        "bit3/contao-theme-plus": "self.version"
     },
     "conflict": {
         "symfony/event-dispatcher": "<2.4"
