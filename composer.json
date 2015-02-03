@@ -52,7 +52,8 @@
         "netzmacht/contao-build-tools": "~1.1"
     },
     "replace": {
-        "contao-legacy/theme_plus": "self.version"
+        "contao-legacy/theme_plus": "self.version",
+        "bit3/contao-theme-plus": "self.version"
     },
     "conflict": {
         "symfony/event-dispatcher": "<2.4"
