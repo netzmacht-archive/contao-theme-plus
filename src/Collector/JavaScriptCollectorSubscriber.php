@@ -19,6 +19,7 @@ namespace Bit3\Contao\ThemePlus\Collector;
 
 use Assetic\Asset\AssetInterface;
 use Bit3\Contao\ThemePlus\Asset\ExtendedFileAsset;
+use Bit3\Contao\ThemePlus\Asset\ExtendedHttpAsset;
 use Bit3\Contao\ThemePlus\Event\CollectAssetsEvent;
 use Bit3\Contao\ThemePlus\Event\GenerateAssetPathEvent;
 use Bit3\Contao\ThemePlus\Event\StripStaticDomainEvent;
@@ -78,7 +79,12 @@ class JavaScriptCollectorSubscriber extends AbstractAssetCollector implements Ev
                     $eventDispatcher->dispatch(ThemePlusEvents::STRIP_STATIC_DOMAIN, $stripStaticDomainEvent);
                     $javaScript = $stripStaticDomainEvent->getUrl();
 
-                    $asset = new ExtendedFileAsset(TL_ROOT . '/' . $javaScript, [], TL_ROOT, $javaScript);
+                    if ($this->isLocalAssets($javaScript)) {
+                        $asset = new ExtendedFileAsset(TL_ROOT . '/' . $javaScript, [], TL_ROOT, $javaScript);
+                    } else {
+                        $asset = new ExtendedHttpAsset($javaScript);
+                    }
+
                     $asset->setStandalone($mode != 'static');
 
                     $generateAssetPathEvent = new GenerateAssetPathEvent(

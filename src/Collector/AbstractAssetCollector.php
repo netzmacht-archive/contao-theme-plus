@@ -66,4 +66,18 @@ class AbstractAssetCollector
             $event->append($asset, 100);
         }
     }
+
+    /**
+     * Check if asset is a local assets.
+     *
+     * @param string $javaScript Javascript path.
+     *
+     * @return bool
+     */
+    protected function isLocalAssets($javaScript)
+    {
+        preg_match('~^http://|https://|//.*~Ui', $javaScript, $matches);
+
+        return empty($matches);
+    }
 }

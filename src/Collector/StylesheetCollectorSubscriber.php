@@ -21,6 +21,7 @@ use Assetic\Asset\AssetInterface;
 use Assetic\Asset\FileAsset;
 use Assetic\Filter\CssRewriteFilter;
 use Bit3\Contao\ThemePlus\Asset\ExtendedFileAsset;
+use Bit3\Contao\ThemePlus\Asset\ExtendedHttpAsset;
 use Bit3\Contao\ThemePlus\Event\CollectAssetsEvent;
 use Bit3\Contao\ThemePlus\Event\GenerateAssetPathEvent;
 use Bit3\Contao\ThemePlus\Event\StripStaticDomainEvent;
@@ -115,12 +116,17 @@ class StylesheetCollectorSubscriber extends AbstractAssetCollector implements Ev
                     $eventDispatcher->dispatch(ThemePlusEvents::STRIP_STATIC_DOMAIN, $stripStaticDomainEvent);
                     $source = $stripStaticDomainEvent->getUrl();
 
-                    $asset = new ExtendedFileAsset(
-                        TL_ROOT . '/' . $source,
-                        [new CssRewriteFilter()],
-                        TL_ROOT,
-                        $source
-                    );
+                    if ($this->isLocalAssets($source)) {
+                        $asset = new ExtendedFileAsset(
+                            TL_ROOT . '/' . $source,
+                            [new CssRewriteFilter()],
+                            TL_ROOT,
+                            $source
+                        );
+                    } else {
+                        $asset = new ExtendedHttpAsset($source);
+                    }
+
                     $asset->setMediaQuery($media);
                     $asset->setStandalone($mode != 'static');
 
