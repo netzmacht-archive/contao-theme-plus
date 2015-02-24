@@ -7,6 +7,17 @@
 
 -->
 <project name="contao-theme-plus" default="build">
+    <!-- Not able to use the autoload-validation as we use the autoload type files -->
+    <!-- autoload-validation -->
+    <target
+            name="verify"
+            depends="
+                phplint,
+                composer-validate,
+                author-validation"
+            description="Verify the quality of the code"
+            />
+
     <!-- import the main tasks definition -->
     <import file="vendor/phpcq/phpcq/phpcq.main.xml"/>
 </project>
