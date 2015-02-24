@@ -76,7 +76,7 @@ class AbstractAssetCollector
      */
     protected function isLocalAssets($javaScript)
     {
-        preg_match('~^http://|https://|//.*~Ui', $javaScript, $matches);
+        preg_match('~^(http:|https:)?//.*~Ui', $javaScript, $matches);
 
         return empty($matches);
     }
