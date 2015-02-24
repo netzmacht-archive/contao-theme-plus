@@ -441,7 +441,7 @@ class ThemePlus
 
 				case 'mobile':
 					$match = $match && ThemePlusEnvironment::isMobile();
-					break;gi
+					break;
 			}
 		}
 
