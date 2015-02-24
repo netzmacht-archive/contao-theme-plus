@@ -20,6 +20,7 @@ namespace Bit3\Contao\ThemePlus\Organizer;
 use Assetic\Asset\AssetCollection;
 use Assetic\Asset\AssetCollectionInterface;
 use Assetic\Asset\AssetInterface;
+use Assetic\Asset\HttpAsset;
 use Assetic\Asset\StringAsset;
 use Assetic\Filter\CssRewriteFilter;
 use Bit3\Contao\ThemePlus\Asset\DelegatorAssetInterface;
@@ -125,6 +126,11 @@ class AssetOrganizerSubscriber implements EventSubscriberInterface
                 );
             } else {
                 // calculate cache path from source path
+                $fileName = $asset->getSourcePath();
+                if ($asset instanceof HttpAsset) {
+                    $fileName = parse_url($asset->getSourcePath(), PHP_URL_PATH);
+                }
+
                 $assetPath = sprintf(
                     'assets/%s/%s-%s.%s',
                     $event->getType(),
@@ -133,10 +139,7 @@ class AssetOrganizerSubscriber implements EventSubscriberInterface
                         0,
                         8
                     ),
-                    basename(
-                        $asset->getSourcePath(),
-                        '.' . $event->getType()
-                    ),
+                    basename($fileName, '.' . $event->getType()),
                     $event->getType()
                 );
             }
