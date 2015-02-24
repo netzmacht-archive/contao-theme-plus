@@ -293,7 +293,7 @@ class ThemePlus
 	 *
 	 * @return bool
 	 */
-	public static function isTabled()
+	public static function isTablet()
 	{
 		$browserIdentOverwrite = json_decode(
 			\Session::getInstance()->get(self::BROWSER_IDENT_OVERWRITE)
@@ -441,7 +441,7 @@ class ThemePlus
 
 				case 'mobile':
 					$match = $match && ThemePlusEnvironment::isMobile();
-					break;
+					break;gi
 			}
 		}
 
