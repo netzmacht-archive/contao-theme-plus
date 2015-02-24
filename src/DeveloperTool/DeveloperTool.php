@@ -79,7 +79,7 @@ class DeveloperTool
                     $fileName   = basename($asset->getSourcePath());
                 } else {
                     if ($asset instanceof HttpAsset) {
-                        $class    = new \ReflectionClass($asset);
+                        $class    = new \ReflectionClass('Assetic\Asset\HttpAsset');
                         $property = $class->getProperty('sourceUrl');
                         $property->setAccessible(true);
                         $sourcePath = $property->getValue($asset);

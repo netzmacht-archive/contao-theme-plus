@@ -142,7 +142,7 @@ class JavaScriptRendererSubscriber implements EventSubscriberInterface
                     $name = basename($realAssets->getSourcePath());
                 } else {
                     if ($realAssets instanceof HttpAsset) {
-                        $class    = new \ReflectionClass($realAssets);
+                        $class    = new \ReflectionClass('Assetic\Asset\HttpAsset');
                         $property = $class->getProperty('sourceUrl');
                         $property->setAccessible(true);
                         $url  = $property->getValue($realAssets);

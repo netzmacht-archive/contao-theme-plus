@@ -68,6 +68,13 @@ class StylesheetRendererSubscriber implements EventSubscriberInterface
         ];
     }
 
+    /**
+     * Compile assets.
+     *
+     * @param CompileAssetEvent        $event           The subscribed event.
+     * @param string                   $eventName
+     * @param EventDispatcherInterface $eventDispatcher
+     */
     public function compileAsset(
         CompileAssetEvent $event,
         $eventName,
@@ -143,7 +150,7 @@ class StylesheetRendererSubscriber implements EventSubscriberInterface
                     $name = basename($realAssets->getSourcePath());
                 } else {
                     if ($realAssets instanceof HttpAsset) {
-                        $class    = new \ReflectionClass($realAssets);
+                        $class    = new \ReflectionClass('Assetic\Asset\HttpAsset');
                         $property = $class->getProperty('sourceUrl');
                         $property->setAccessible(true);
                         $url  = $property->getValue($realAssets);
