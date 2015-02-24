@@ -293,6 +293,17 @@ class ThemePlus
 	 *
 	 * @return bool
 	 */
+	public static function isTabled()
+	{
+		trigger_error('Typo in method. Use isTablet instead.', E_USER_DEPRECATED);
+		return static::isTablet();
+	}
+
+	/**
+	 * Shorthand check if current request is from a tablet.
+	 *
+	 * @return bool
+	 */
 	public static function isTablet()
 	{
 		$browserIdentOverwrite = json_decode(
@@ -432,7 +443,7 @@ class ThemePlus
 					break;
 
 				case 'tablet':
-					$match = $match && ThemePlusEnvironment::isTabled();
+					$match = $match && ThemePlusEnvironment::isTablet();
 					break;
 
 				case 'smartphone':
