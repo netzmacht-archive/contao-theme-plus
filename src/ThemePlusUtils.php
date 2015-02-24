@@ -26,6 +26,8 @@ class ThemePlusUtils
      * @param string $cc   The cc that should wrapped.
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.ShortVariable)
      */
     public static function wrapCc($html, $cc)
     {
