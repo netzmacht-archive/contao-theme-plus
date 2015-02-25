@@ -303,6 +303,7 @@ class AssetOrganizerSubscriber implements EventSubscriberInterface
      * @param array|AssetInterface[]                  $remainingAssets
      * @param \ArrayObject|AssetCollectionInterface[] $collections
      *
+     * @return void
      */
     protected function buildPreCompiledCollections(
         array $assets,

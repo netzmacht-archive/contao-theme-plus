@@ -9,6 +9,7 @@
  *
  * @package    bit3/contao-theme-plus
  * @author     Tristan Lins <tristan.lins@bit3.de>
+ * @author     David Molneus <david.molineus@netzmacht.de>
  * @copyright  bit3 UG <https://bit3.de>
  * @link       https://github.com/bit3/contao-theme-plus
  * @license    http://opensource.org/licenses/LGPL-3.0 LGPL-3.0+
@@ -114,11 +115,12 @@ class JavaScriptsHandler
     /**
      * Replace dynamic script tags.
      *
-     * @see \Contao\Controller::replaceDynamicScriptTags
-     *
      * @param string $buffer
      *
      * @return string
+     * @see    \Contao\Controller::replaceDynamicScriptTags
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function hookReplaceDynamicScriptTags($buffer)
     {
@@ -181,6 +183,8 @@ class JavaScriptsHandler
      * @param \LayoutModel $layout
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     protected function compileJavaScripts(\PageModel $page, \LayoutModel $layout)
     {

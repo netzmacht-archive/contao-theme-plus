@@ -9,6 +9,7 @@
  *
  * @package    bit3/contao-theme-plus
  * @author     Tristan Lins <tristan.lins@bit3.de>
+ * @author     David Molneus <david.molineus@netzmacht.de>
  * @copyright  bit3 UG <https://bit3.de>
  * @link       https://github.com/bit3/contao-theme-plus
  * @license    http://opensource.org/licenses/LGPL-3.0 LGPL-3.0+
@@ -56,6 +57,13 @@ class BuildAssetCache implements \executable
         $this->cache   = $cache;
     }
 
+    /**
+     * Run build asset cache backend module.
+     *
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     public function run()
     {
         \System::loadLanguageFile('be_theme_plus');
@@ -107,6 +115,16 @@ class BuildAssetCache implements \executable
         $cache->save(ThemePlus::CACHE_CREATION_TIME, time());
     }
 
+    /**
+     * Analyse the cache and build the page tree.
+     *
+     * @param \TwigBackendTemplate $template The template.
+     * @param Cache                $cache    The asset cache.
+     *
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     protected function analyseCache(\TwigBackendTemplate $template, Cache $cache)
     {
         $GLOBALS['TL_CSS']['mediabox'] = sprintf(

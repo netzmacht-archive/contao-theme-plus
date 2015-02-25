@@ -9,6 +9,7 @@
  *
  * @package    bit3/contao-theme-plus
  * @author     Tristan Lins <tristan.lins@bit3.de>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  bit3 UG <https://bit3.de>
  * @link       https://github.com/bit3/contao-theme-plus
  * @license    http://opensource.org/licenses/LGPL-3.0 LGPL-3.0+
@@ -97,6 +98,8 @@ class File extends \Backend
      * @param array
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function listFileFor($row, $layoutField = false)
     {
@@ -216,6 +219,13 @@ class File extends \Backend
 
     }
 
+    /**
+     * @param $type
+     *
+     * @return array
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     protected function buildAsseticFilterOptions($type)
     {
         $this->loadLanguageFile('assetic');
@@ -286,15 +296,22 @@ class File extends \Backend
         return $options;
     }
 
-    public function changeFileSource($dc)
+    /**
+     * @param $dataContainer
+     *
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    public function changeFileSource($dataContainer)
     {
         $file = \Database::getInstance()
-            ->query('SELECT * FROM ' . $dc->table . ' WHERE id=' . intval($dc->id));
+            ->query('SELECT * FROM ' . $dataContainer->table . ' WHERE id=' . intval($dataContainer->id));
         if ($file->type == 'file') {
             if ($file->filesource != $GLOBALS['TL_CONFIG']['uploadPath'] && version_compare(VERSION, '3', '>=')) {
-                $GLOBALS['TL_DCA'][$dc->table]['fields']['file']['inputType'] = 'fileSelector';
+                $GLOBALS['TL_DCA'][$dataContainer->table]['fields']['file']['inputType'] = 'fileSelector';
             }
-            $GLOBALS['TL_DCA'][$dc->table]['fields']['file']['eval']['path'] = $file->filesource;
+            $GLOBALS['TL_DCA'][$dataContainer->table]['fields']['file']['eval']['path'] = $file->filesource;
         }
     }
 
@@ -328,7 +345,7 @@ class File extends \Backend
         return $options;
     }
 
-    public function loadLayoutsFor($field, $dc)
+    public function loadLayoutsFor($field, $dataContainer)
     {
         $layout = \Database::getInstance()
             ->query('SELECT * FROM tl_layout');
@@ -337,7 +354,7 @@ class File extends \Backend
 
         while ($layout->next()) {
             $selected = deserialize($layout->$field, true);
-            if (in_array($dc->id, $selected)) {
+            if (in_array($dataContainer->id, $selected)) {
                 $values[] = $layout->id;
             }
         }
@@ -345,7 +362,7 @@ class File extends \Backend
         return $values;
     }
 
-    public function saveLayoutsFor($field, $value, $dc)
+    public function saveLayoutsFor($field, $value, $dataContainer)
     {
         $layouts = deserialize($value, true);
 
@@ -356,12 +373,12 @@ class File extends \Backend
             $selected = deserialize($layout->$field, true);
 
             // select a new layout
-            if (in_array($layout->id, $layouts) && !in_array($dc->id, $selected)) {
-                $selected[] = $dc->id;
+            if (in_array($layout->id, $layouts) && !in_array($dataContainer->id, $selected)) {
+                $selected[] = $dataContainer->id;
             } // deselect a layout
             else {
-                if (!in_array($layout->id, $layouts) && in_array($dc->id, $selected)) {
-                    $index = array_search($dc->id, $selected);
+                if (!in_array($layout->id, $layouts) && in_array($dataContainer->id, $selected)) {
+                    $index = array_search($dataContainer->id, $selected);
                     unset($selected[$index]);
                 } // nothing changed
                 else {

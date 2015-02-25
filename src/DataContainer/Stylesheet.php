@@ -9,6 +9,7 @@
  *
  * @package    bit3/contao-theme-plus
  * @author     Tristan Lins <tristan.lins@bit3.de>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  bit3 UG <https://bit3.de>
  * @link       https://github.com/bit3/contao-theme-plus
  * @license    http://opensource.org/licenses/LGPL-3.0 LGPL-3.0+
@@ -64,13 +65,13 @@ class Stylesheet extends File
         return $this->listFileFor($row, 'theme_plus_stylesheets');
     }
 
-    public function loadLayouts($value, $dc)
+    public function loadLayouts($value, $dataContainer)
     {
-        return $this->loadLayoutsFor('theme_plus_stylesheets', $dc);
+        return $this->loadLayoutsFor('theme_plus_stylesheets', $dataContainer);
     }
 
-    public function saveLayouts($value, $dc)
+    public function saveLayouts($value, $dataContainer)
     {
-        return $this->saveLayoutsFor('theme_plus_stylesheets', $value, $dc);
+        return $this->saveLayoutsFor('theme_plus_stylesheets', $value, $dataContainer);
     }
 }

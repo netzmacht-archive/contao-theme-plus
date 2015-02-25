@@ -44,9 +44,9 @@ class DeveloperTool
         $this->pageProvider = $pageProvider;
     }
 
-    public function registerFile($id, $asset)
+    public function registerFile($fileId, $asset)
     {
-        $this->files[$id] = $asset;
+        $this->files[$fileId] = $asset;
     }
 
     /**
@@ -76,17 +76,15 @@ class DeveloperTool
 
                 if ($asset instanceof FileAsset) {
                     $sourcePath = $asset->getSourcePath();
-                    $fileName   = basename($asset->getSourcePath());
                 } else {
                     if ($asset instanceof HttpAsset) {
                         $class    = new \ReflectionClass('Assetic\Asset\HttpAsset');
                         $property = $class->getProperty('sourceUrl');
                         $property->setAccessible(true);
                         $sourcePath = $property->getValue($asset);
-                        $fileName   = parse_url($sourcePath, PHP_URL_PATH);
                     } else {
+                        /** @var AssetInterface $asset */
                         $sourcePath = $asset->getTargetPath();
-                        $fileName   = basename($sourcePath);
                     }
                 }
 
@@ -121,48 +119,15 @@ class DeveloperTool
                 );
             }
 
-            $strBuffer = preg_replace(
-                '~<base[^>]+>~',
-                sprintf(
-                    '$0
-<link rel="stylesheet" href="assets/theme-plus/stylesheets/dev.css">
-<script src="assets/theme-plus/javascripts/dev.js"></script>'
-                ),
-                $strBuffer
-            );
-
-            $strBuffer = preg_replace(
-                '|<body[^>]*>|',
-                sprintf(
-                    '$0
-<!-- indexer::stop -->
-<div id="theme-plus-dev-tool" class="%s">
-<div id="theme-plus-dev-tool-toggler" title="Theme+ developers tool">T+</div>
-<div id="theme-plus-dev-tool-stylesheets">
-  <div id="theme-plus-dev-tool-stylesheets-counter">%s <span id="theme-plus-dev-tool-stylesheets-count">0</span> / <span id="theme-plus-dev-tool-stylesheets-total">%d</span></div>
-  <div id="theme-plus-dev-tool-stylesheets-files">%s</div>
-</div>
-<div id="theme-plus-dev-tool-javascripts">
-  <div id="theme-plus-dev-tool-javascripts-counter">%s <span id="theme-plus-dev-tool-javascripts-count">0</span> / <span id="theme-plus-dev-tool-javascripts-total">%d</span></div>
-  <div id="theme-plus-dev-tool-javascripts-files">%s</div>
-</div>
-<div id="theme-plus-dev-tool-exception"></div>
-</div>
-<script>initThemePlusDevTool(%s, %s);</script>
-<!-- indexer::continue -->',
-                    \Input::cookie('THEME_PLUS_DEV_TOOL_COLLAPES') == 'no'
-                        ? ''
-                        : 'theme-plus-dev-tool-collapsed',
-                    \Image::getHtml('assets/theme-plus/images/stylesheet.png'),
-                    $stylesheetsCount,
-                    $stylesheetsBuffer,
-                    \Image::getHtml('assets/theme-plus/images/javascript.png'),
-                    $javascriptsCount,
-                    $javascriptsBuffer,
-                    json_encode($files),
-                    json_encode((bool) $layout->theme_plus_javascript_lazy_load)
-                ),
-                $strBuffer
+            $strBuffer = $this->injectDeveloperToolAssets($strBuffer);
+            $strBuffer = $this->injectDeveloperToolToolbar(
+                $strBuffer,
+                $stylesheetsCount,
+                $stylesheetsBuffer,
+                $javascriptsCount,
+                $javascriptsBuffer,
+                $files,
+                $layout
             );
         }
 
@@ -278,5 +243,82 @@ class DeveloperTool
             $buffer .= $depth . '}';
             return $buffer;
         }
+    }
+
+    /**
+     * @param $strBuffer
+     *
+     * @return mixed
+     */
+    private function injectDeveloperToolAssets($strBuffer)
+    {
+        $strBuffer = preg_replace(
+            '~<base[^>]+>~',
+            sprintf(
+                '$0
+<link rel="stylesheet" href="assets/theme-plus/stylesheets/dev.css">
+<script src="assets/theme-plus/javascripts/dev.js"></script>'
+            ),
+            $strBuffer
+        );
+
+        return $strBuffer;
+    }
+
+    /**
+     * @param $strBuffer
+     * @param $stylesheetsCount
+     * @param $stylesheetsBuffer
+     * @param $javascriptsCount
+     * @param $javascriptsBuffer
+     * @param $files
+     * @param $layout
+     *
+     * @return mixed
+     */
+    private function injectDeveloperToolToolbar(
+        $strBuffer,
+        $stylesheetsCount,
+        $stylesheetsBuffer,
+        $javascriptsCount,
+        $javascriptsBuffer,
+        $files,
+        $layout
+    ) {
+        $strBuffer = preg_replace(
+            '|<body[^>]*>|',
+            sprintf(
+                '$0
+<!-- indexer::stop -->
+<div id="theme-plus-dev-tool" class="%s">
+<div id="theme-plus-dev-tool-toggler" title="Theme+ developers tool">T+</div>
+<div id="theme-plus-dev-tool-stylesheets">
+  <div id="theme-plus-dev-tool-stylesheets-counter">%s <span id="theme-plus-dev-tool-stylesheets-count">0</span> / <span id="theme-plus-dev-tool-stylesheets-total">%d</span></div>
+  <div id="theme-plus-dev-tool-stylesheets-files">%s</div>
+</div>
+<div id="theme-plus-dev-tool-javascripts">
+  <div id="theme-plus-dev-tool-javascripts-counter">%s <span id="theme-plus-dev-tool-javascripts-count">0</span> / <span id="theme-plus-dev-tool-javascripts-total">%d</span></div>
+  <div id="theme-plus-dev-tool-javascripts-files">%s</div>
+</div>
+<div id="theme-plus-dev-tool-exception"></div>
+</div>
+<script>initThemePlusDevTool(%s, %s);</script>
+<!-- indexer::continue -->',
+                \Input::cookie('THEME_PLUS_DEV_TOOL_COLLAPES') == 'no'
+                    ? ''
+                    : 'theme-plus-dev-tool-collapsed',
+                \Image::getHtml('assets/theme-plus/images/stylesheet.png'),
+                $stylesheetsCount,
+                $stylesheetsBuffer,
+                \Image::getHtml('assets/theme-plus/images/javascript.png'),
+                $javascriptsCount,
+                $javascriptsBuffer,
+                json_encode($files),
+                json_encode((bool)$layout->theme_plus_javascript_lazy_load)
+            ),
+            $strBuffer
+        );
+
+        return $strBuffer;
     }
 }

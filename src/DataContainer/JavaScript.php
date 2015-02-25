@@ -9,6 +9,7 @@
  *
  * @package    bit3/contao-theme-plus
  * @author     Tristan Lins <tristan.lins@bit3.de>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  bit3 UG <https://bit3.de>
  * @link       https://github.com/bit3/contao-theme-plus
  * @license    http://opensource.org/licenses/LGPL-3.0 LGPL-3.0+
@@ -58,13 +59,13 @@ class JavaScript extends File
         return $this->listFileFor($row, 'theme_plus_javascripts');
     }
 
-    public function loadLayouts($value, $dc)
+    public function loadLayouts($value, $dataContainer)
     {
-        return $this->loadLayoutsFor('theme_plus_javascripts', $dc);
+        return $this->loadLayoutsFor('theme_plus_javascripts', $dataContainer);
     }
 
-    public function saveLayouts($value, $dc)
+    public function saveLayouts($value, $dataContainer)
     {
-        return $this->saveLayoutsFor('theme_plus_javascripts', $value, $dc);
+        return $this->saveLayoutsFor('theme_plus_javascripts', $value, $dataContainer);
     }
 }
