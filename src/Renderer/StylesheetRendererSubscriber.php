@@ -9,6 +9,7 @@
  *
  * @package    bit3/contao-theme-plus
  * @author     Tristan Lins <tristan.lins@bit3.de>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  bit3 UG <https://bit3.de>
  * @link       https://github.com/bit3/contao-theme-plus
  * @license    http://opensource.org/licenses/LGPL-3.0 LGPL-3.0+
@@ -21,35 +22,17 @@ use Assetic\Asset\FileAsset;
 use Assetic\Asset\HttpAsset;
 use Bit3\Contao\ThemePlus\Asset\DelegatorAssetInterface;
 use Bit3\Contao\ThemePlus\Asset\ExtendedAssetInterface;
-use Bit3\Contao\ThemePlus\DeveloperTool\DeveloperTool;
 use Bit3\Contao\ThemePlus\Event\AddStaticDomainEvent;
 use Bit3\Contao\ThemePlus\Event\CompileAssetEvent;
 use Bit3\Contao\ThemePlus\Event\GenerateAssetPathEvent;
 use Bit3\Contao\ThemePlus\Event\RenderAssetHtmlEvent;
 use Bit3\Contao\ThemePlus\ThemePlusEvents;
 use Bit3\Contao\ThemePlus\ThemePlusUtils;
-use DependencyInjection\Container\PageProvider;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class StylesheetRendererSubscriber implements EventSubscriberInterface
+class StylesheetRendererSubscriber extends AbstractRendererSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var PageProvider
-     */
-    private $pageProvider;
-
-    /**
-     * @var DeveloperTool
-     */
-    private $developerTool;
-
-    public function __construct(PageProvider $pageProvider, DeveloperTool $developerTool)
-    {
-        $this->pageProvider  = $pageProvider;
-        $this->developerTool = $developerTool;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -72,14 +55,15 @@ class StylesheetRendererSubscriber implements EventSubscriberInterface
      * Compile assets.
      *
      * @param CompileAssetEvent        $event           The subscribed event.
-     * @param string                   $eventName
-     * @param EventDispatcherInterface $eventDispatcher
+     * @param string                   $eventName       The event name.
+     * @param EventDispatcherInterface $eventDispatcher The event dispatcher.
+     *
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function compileAsset(
-        CompileAssetEvent $event,
-        $eventName,
-        EventDispatcherInterface $eventDispatcher
-    ) {
+    public function compileAsset(CompileAssetEvent $event, $eventName, EventDispatcherInterface $eventDispatcher)
+    {
         if (!$event->getTargetPath()) {
             $asset = $event->getAsset();
 
@@ -111,68 +95,32 @@ class StylesheetRendererSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function renderDesignerModeHtml(
-        RenderAssetHtmlEvent $event,
-        $eventName,
-        EventDispatcherInterface $eventDispatcher
-    ) {
+    /**
+     * Render designer mode html.
+     *
+     * @param RenderAssetHtmlEvent $event The subscribed event.
+     *
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    public function renderDesignerModeHtml(RenderAssetHtmlEvent $event)
+    {
         if (!$event->getHtml() && $event->isDesignerMode()) {
             $asset = $event->getAsset();
 
             if (!$asset instanceof ExtendedAssetInterface || !$asset->isInline()) {
-                $page = $this->pageProvider->getPage();
-                $html = '';
-
-                // html mode
-                $xhtml     = ($page->outputFormat == 'xhtml');
-                $tagEnding = $xhtml ? ' />' : '>';
-
                 // session id
-                $id = substr(md5($asset->getSourceRoot() . '/' . $asset->getSourcePath()), 0, 8);
-
-                // get the session object
-                $session = unserialize($_SESSION['THEME_PLUS_ASSETS'][$id]);
-
-                if (!$session || $asset->getLastModified() > $session->asset->getLastModified()) {
-                    $session        = new \stdClass;
-                    $session->page  = $page->id;
-                    $session->asset = $asset;
-
-                    $_SESSION['THEME_PLUS_ASSETS'][$id] = serialize($session);
-                }
-
-                $realAssets = $asset;
-                while ($realAssets instanceof DelegatorAssetInterface) {
-                    $realAssets = $realAssets->getAsset();
-                }
-
-                if ($realAssets instanceof FileAsset) {
-                    $name = basename($realAssets->getSourcePath());
-                } else {
-                    if ($realAssets instanceof HttpAsset) {
-                        $class    = new \ReflectionClass('Assetic\Asset\HttpAsset');
-                        $property = $class->getProperty('sourceUrl');
-                        $property->setAccessible(true);
-                        $url  = $property->getValue($realAssets);
-                        $name = 'url_' . basename(parse_url($url, PHP_URL_PATH));
-                    } else {
-                        $name = 'asset_' . $id;
-                    }
-                }
-
-                // generate the proxy url
-                $url = sprintf(
-                    'assets/theme-plus/proxy.php/css/%s/%s',
-                    $id,
-                    $name
-                );
+                $sessionId  = $this->storeInSession($asset);
+                $realAssets = $this->getRealAssets($asset);
 
                 // overwrite the target path
+                $url = $this->getDesignerModeProxyUrl('css', $realAssets, $sessionId);
                 $asset->setTargetPath($url);
 
                 // remember asset for debug tool
                 $this->developerTool->registerFile(
-                    $id,
+                    $sessionId,
                     (object) [
                         'asset' => $realAssets,
                         'type'  => 'css',
@@ -180,49 +128,28 @@ class StylesheetRendererSubscriber implements EventSubscriberInterface
                     ]
                 );
 
-                // generate html
-                $linkHtml = '<link';
-                $linkHtml .= sprintf(' id="%s"', $id);
-                $linkHtml .= sprintf(' href="%s"', $url);
-                if ($xhtml) {
-                    $linkHtml .= ' type="text/css"';
-                }
-                $linkHtml .= ' rel="stylesheet"';
-                if ($asset instanceof ExtendedAssetInterface && $asset->getMediaQuery()) {
-                    $linkHtml .= sprintf(' media="%s"', $asset->getMediaQuery());
-                }
-                $linkHtml .= $tagEnding;
-
-                // wrap cc around
-                if ($asset instanceof ExtendedAssetInterface && $asset->getConditionalComment()) {
-                    $linkHtml = ThemePlusUtils::wrapCc($linkHtml, $asset->getConditionalComment());
-                }
-
                 // add debug information
-                $html .= $this->developerTool->getDebugComment($asset);
-
-                $html .= $linkHtml . PHP_EOL;
+                $html  = $this->developerTool->getDebugComment($asset);
+                $html .= $this->generateLinkElement($asset, $url, $sessionId);
 
                 $event->setHtml($html);
             }
         }
     }
 
-    public function renderDesignerModeInlineHtml(
-        RenderAssetHtmlEvent $event,
-        $eventName,
-        EventDispatcherInterface $eventDispatcher
-    ) {
+    /**
+     * Render designer mode inline html.
+     *
+     * @param RenderAssetHtmlEvent $event The subscribed event.
+     *
+     * @return void
+     */
+    public function renderDesignerModeInlineHtml(RenderAssetHtmlEvent $event)
+    {
         if (!$event->getHtml() && $event->isDesignerMode()) {
             $asset = $event->getAsset();
 
             if ($asset instanceof ExtendedAssetInterface && $asset->isInline()) {
-                $page = $this->pageProvider->getPage();
-                $html = '';
-
-                // html mode
-                $xhtml = ($page->outputFormat == 'xhtml');
-
                 // retrieve page path
                 $targetPath = \Environment::get('requestUri');
                 // remove query string
@@ -238,32 +165,26 @@ class StylesheetRendererSubscriber implements EventSubscriberInterface
                 $css = $asset->dump($event->getDefaultFilters());
 
                 // generate html
-                $styleHtml = '<style';
-                if ($xhtml) {
-                    $styleHtml .= ' type="text/css"';
-                }
-                if ($asset instanceof ExtendedAssetInterface && $asset->getMediaQuery()) {
-                    $styleHtml .= sprintf(' media="%s"', $asset->getMediaQuery());
-                }
-                $styleHtml .= '>';
-                $styleHtml .= $css;
-                $styleHtml .= '</style>';
-
-                // wrap cc around
-                if ($asset instanceof ExtendedAssetInterface && $asset->getConditionalComment()) {
-                    $styleHtml = ThemePlusUtils::wrapCc($styleHtml, $asset->getConditionalComment());
-                }
-
                 // add debug information
-                $html .= $this->developerTools->getDebugComment($asset);
-
-                $html .= $styleHtml . PHP_EOL;
+                $html  = $this->developerTool->getDebugComment($asset);
+                $html .= $this->renderStyleElement($asset, $css);
 
                 $event->setHtml($html);
             }
         }
     }
 
+    /**
+     * Render link html.
+     *
+     * @param RenderAssetHtmlEvent     $event           The subscribed event.
+     * @param string                   $eventName       The event name.
+     * @param EventDispatcherInterface $eventDispatcher The event dispatcher.
+     *
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function renderLinkHtml(RenderAssetHtmlEvent $event, $eventName, EventDispatcherInterface $eventDispatcher)
     {
         if (!$event->getHtml() && !$event->isDesignerMode()) {
@@ -291,79 +212,113 @@ class StylesheetRendererSubscriber implements EventSubscriberInterface
                 $targetUrl = $addStaticDomainEvent->getUrl();
 
                 // html mode
-                $xhtml     = ($event->getPage()->outputFormat == 'xhtml');
-                $tagEnding = $xhtml ? ' />' : '>';
-
-                // generate html
-                $linkHtml = '<link';
-                $linkHtml .= sprintf(' href="%s"', $targetUrl);
-                if ($xhtml) {
-                    $linkHtml .= ' type="text/css"';
-                }
-                $linkHtml .= ' rel="stylesheet"';
-                if ($asset instanceof ExtendedAssetInterface && $asset->getMediaQuery()) {
-                    $linkHtml .= sprintf(' media="%s"', $asset->getMediaQuery());
-                }
-                $linkHtml .= $tagEnding;
-
-                // wrap cc around
-                if ($asset instanceof ExtendedAssetInterface && $asset->getConditionalComment()) {
-                    $linkHtml = ThemePlusUtils::wrapCc($linkHtml, $asset->getConditionalComment());
-                }
-
-                $linkHtml .= PHP_EOL;
+                $linkHtml = $this->generateLinkElement($asset, $targetUrl);
 
                 $event->setHtml($linkHtml);
             }
         }
     }
 
+    /**
+     * Render inline html.
+     *
+     * @param RenderAssetHtmlEvent $event The subscribed event.
+     *
+     * @return void
+     */
     public function renderInlineHtml(RenderAssetHtmlEvent $event)
     {
         if (!$event->getHtml() && !$event->isDesignerMode()) {
             $asset = $event->getAsset();
 
             if ($asset instanceof ExtendedAssetInterface && $asset->isInline()) {
-                $page = $this->pageProvider->getPage();
-
-                // retrieve page path
-                $targetPath = \Environment::get('requestUri');
-                // remove query string
-                $targetPath = preg_replace('~\?\.*~', '', $targetPath);
-                // remove leading /
-                $targetPath = ltrim($targetPath, '/');
-
                 // overwrite the target path
-                $asset->setTargetPath($targetPath);
+                $asset->setTargetPath($this->getTargetPath());
 
                 // load and dump the collection
                 $asset->load($event->getDefaultFilters());
-                $css = $asset->dump($event->getDefaultFilters());
 
-                // html mode
-                $xhtml = ($page->outputFormat == 'xhtml');
-
-                // generate html
-                $styleHtml = '<style';
-                if ($xhtml) {
-                    $styleHtml .= ' type="text/css"';
-                }
-                if ($asset instanceof ExtendedAssetInterface && $asset->getMediaQuery()) {
-                    $styleHtml .= sprintf(' media="%s"', $asset->getMediaQuery());
-                }
-                $styleHtml .= '>';
-                $styleHtml .= $css;
-                $styleHtml .= '</style>';
-
-                // wrap cc around
-                if ($asset instanceof ExtendedAssetInterface && $asset->getConditionalComment()) {
-                    $styleHtml = ThemePlusUtils::wrapCc($styleHtml, $asset->getConditionalComment());
-                }
-
-                $styleHtml .= PHP_EOL;
+                $css       = $asset->dump($event->getDefaultFilters());
+                $styleHtml = $this->renderStyleElement($asset, $css);
 
                 $event->setHtml($styleHtml);
             }
         }
+    }
+
+    /**
+     * Render style element.
+     *
+     * @param $asset
+     * @param $css
+     *
+     * @return string
+     */
+    private function renderStyleElement($asset, $css)
+    {
+        $page = $this->pageProvider->getPage();
+
+        // html mode
+        $xhtml = ($page->outputFormat == 'xhtml');
+
+        // generate html
+        $styleHtml = '<style';
+        if ($xhtml) {
+            $styleHtml .= ' type="text/css"';
+        }
+        if ($asset instanceof ExtendedAssetInterface && $asset->getMediaQuery()) {
+            $styleHtml .= sprintf(' media="%s"', $asset->getMediaQuery());
+        }
+        $styleHtml .= '>';
+        $styleHtml .= $css;
+        $styleHtml .= '</style>';
+
+        // wrap cc around
+        if ($asset instanceof ExtendedAssetInterface && $asset->getConditionalComment()) {
+            $styleHtml = ThemePlusUtils::wrapCc($styleHtml, $asset->getConditionalComment());
+        }
+
+        $styleHtml .= PHP_EOL;
+
+        return $styleHtml;
+    }
+
+    /**
+     * @param $asset
+     * @param $url
+     * @param $elementId
+     *
+     * @return string
+     */
+    private function generateLinkElement($asset, $url, $elementId = null)
+    {
+        // html mode
+        $xhtml = ($this->pageProvider->getPage()->outputFormat == 'xhtml');
+
+        // generate html
+        $linkHtml = '<link';
+
+        if ($elementId) {
+            $linkHtml .= sprintf(' id="%s"', $elementId);
+        }
+
+        $linkHtml .= sprintf(' href="%s"', $url);
+        if ($xhtml) {
+            $linkHtml .= ' type="text/css"';
+        }
+        $linkHtml .= ' rel="stylesheet"';
+        if ($asset instanceof ExtendedAssetInterface && $asset->getMediaQuery()) {
+            $linkHtml .= sprintf(' media="%s"', $asset->getMediaQuery());
+        }
+        $linkHtml .= ($xhtml ? ' />' : '>');
+
+        // wrap cc around
+        if ($asset instanceof ExtendedAssetInterface && $asset->getConditionalComment()) {
+            $linkHtml = ThemePlusUtils::wrapCc($linkHtml, $asset->getConditionalComment());
+        }
+
+        $linkHtml .= PHP_EOL;
+
+        return $linkHtml;
     }
 }
