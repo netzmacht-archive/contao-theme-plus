@@ -24,7 +24,7 @@ use Bit3\Contao\Assetic\Model\FilterModel;
 /**
  * Class ThemePlus
  */
-class File extends \Backend
+class File extends Base
 {
     public function __construct()
     {
@@ -103,32 +103,7 @@ class File extends \Backend
      */
     public function listFileFor($row, $layoutField = false)
     {
-        switch ($row['type']) {
-            case 'code':
-                $label = $row['code_snippet_title'];
-                break;
-
-            case 'url':
-                $label = preg_replace('#/([^/]+)$#', '/<strong>$1</strong>', $row['url']);
-                break;
-
-            case 'file':
-                if ($row['filesource'] == $GLOBALS['TL_CONFIG']['uploadPath'] && version_compare(VERSION, '3', '>=')) {
-                    $file = (version_compare(VERSION, '3.2', '>=') ? \FilesModel::findByUuid($row['file'])
-                        : \FilesModel::findByPk($row['file']));
-
-                    if ($file) {
-                        $label = preg_replace('#/([^/]+)$#', '/<strong>$1</strong>', $file->path);
-                        break;
-                    }
-                } else {
-                    $label = preg_replace('#([^/]+)$#', '<strong>$1</strong>', $row['file']);
-                    break;
-                }
-
-            default:
-                $label = '?';
-        }
+        $label = $this->getFileLabel($row);
 
         if ($row['inline']) {
             \Controller::loadLanguageFile('tl_theme_plus_file');
