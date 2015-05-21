@@ -30,10 +30,10 @@
     "php":">=5.3",
     "contao/core":">=3,<3.6-dev",
     "contao-community-alliance/composer-plugin": "2",
-    "bit3/contao-assetic":"~1",
+    "netzmacht/contao-assetic":"~1",
     "ikimea/browser":"dev-master",
     "mobiledetect/mobiledetectlib": "2.*",
-    "bit3/contao-meta-palettes":"~1"
+    "contao-community-alliance/meta-palettes":"~1"
   },
   "require-dev":{
     "squizlabs/php_codesniffer":"1.*",
