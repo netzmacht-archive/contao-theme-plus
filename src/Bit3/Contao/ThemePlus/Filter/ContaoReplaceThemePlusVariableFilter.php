@@ -13,6 +13,7 @@
 
 namespace Bit3\Contao\ThemePlus\Filter;
 
+use Bit3\Contao\ThemePlus\ThemePlusEnvironment;
 use \ThemePlus\Model\VariableModel;
 
 /**
@@ -30,7 +31,7 @@ class ContaoReplaceThemePlusVariableFilter
     {
         if ($GLOBALS['objPage']) {
             // find the current page layout
-            $layout = \LayoutModel::findByPk($GLOBALS['objPage']->layout);
+            $layout = ThemePlusEnvironment::getPageLayout();
 
             if ($layout !== null && $layout->next()) {
                 // find the current page theme

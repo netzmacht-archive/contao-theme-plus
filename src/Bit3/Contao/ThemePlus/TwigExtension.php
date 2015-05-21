@@ -43,7 +43,7 @@ class TwigExtension
 				$objPage->loadDetails();
 			}
 
-			$layout = \LayoutModel::findByPk($objPage->layout);
+			$layout = ThemePlusEnvironment::getPageLayout();
 			if (!$layout) {
 				return '';
 			}
@@ -73,7 +73,7 @@ class TwigExtension
 				$objPage->loadDetails();
 			}
 
-			$layout = \LayoutModel::findByPk($objPage->layout);
+			$layout = ThemePlusEnvironment::getPageLayout();
 			if (!$layout) {
 				return '';
 			}

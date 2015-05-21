@@ -669,7 +669,7 @@ class ThemePlus
 
 			else {
 				// search for the layout
-				$layout = \LayoutModel::findByPk($objPage->layout);
+				$layout = ThemePlusEnvironment::getPageLayout();
 
 				if ($layout) {
 					$this->excludeList = array();

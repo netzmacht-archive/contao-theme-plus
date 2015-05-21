@@ -272,4 +272,23 @@ class ThemePlusEnvironment
 
 		return static::getMobileDetect()->isMobile() || static::getMobileDetect()->isTablet();
 	}
+
+    /**
+     * Get the page layout being used from Contao. Will return the mobile layout if enabled.
+     *
+     * @return \LayoutModel|null
+     */
+    public static function getPageLayout()
+    {
+        /** @var \PageModel $objPage */
+        global $objPage;
+
+        if ($objPage) {
+            $layoutId = ($objPage->isMobile && $objPage->mobileLayout) ? $objPage->mobileLayout : $objPage->layout;
+
+            return \LayoutModel::findByPk($layoutId);
+        }
+
+        return null;
+    }
 }
