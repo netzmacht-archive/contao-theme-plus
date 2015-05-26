@@ -30,7 +30,7 @@
     "php":">=5.3",
     "contao/core":">=3,<3.6-dev",
     "contao-community-alliance/composer-plugin": "2",
-    "netzmacht/contao-assetic":"~1",
+    "bit3/contao-assetic":"~1",
     "ikimea/browser":"dev-master",
     "mobiledetect/mobiledetectlib": "2.*",
     "contao-community-alliance/meta-palettes":"~1"
