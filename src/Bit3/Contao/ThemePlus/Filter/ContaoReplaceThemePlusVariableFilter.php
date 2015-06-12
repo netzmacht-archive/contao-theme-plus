@@ -14,7 +14,7 @@
 namespace Bit3\Contao\ThemePlus\Filter;
 
 use Bit3\Contao\ThemePlus\ThemePlusEnvironment;
-use \ThemePlus\Model\VariableModel;
+use Bit3\Contao\ThemePlus\Model\VariableModel;
 
 /**
  * Class PageRegular

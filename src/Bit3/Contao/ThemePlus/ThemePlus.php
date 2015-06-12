@@ -66,12 +66,12 @@ class ThemePlus
 	/**
 	 * @return \Ikimea\Browser\Browser
 	 *
-	 * @deprecated use \ThemePlus\ThemePlusEnvironment::getBrowserDetect() instead
+	 * @deprecated use Bit3\Contao\ThemePlus\ThemePlusEnvironment::getBrowserDetect() instead
 	 */
 	public static function getBrowserDetect()
 	{
 		trigger_error(
-			'Deprecated, use \ThemePlus\ThemePlusEnvironment::getBrowserDetect() instead!',
+			'Deprecated, use Bit3\Contao\ThemePlus\ThemePlusEnvironment::getBrowserDetect() instead!',
 			E_USER_DEPRECATED
 		);
 		return ThemePlusEnvironment::getBrowserDetect();
@@ -80,11 +80,11 @@ class ThemePlus
 	/**
 	 * @return \Mobile_Detect
 	 *
-	 * @deprecated use \ThemePlus\ThemePlusEnvironment::getMobileDetect() instead
+	 * @deprecated use Bit3\Contao\ThemePlus\ThemePlusEnvironment::getMobileDetect() instead
 	 */
 	public static function getMobileDetect()
 	{
-		trigger_error('Deprecated, use \ThemePlus\ThemePlusEnvironment::getMobileDetect() instead!', E_USER_DEPRECATED);
+		trigger_error('Deprecated, use Bit3\Contao\ThemePlus\ThemePlusEnvironment::getMobileDetect() instead!', E_USER_DEPRECATED);
 		return ThemePlusEnvironment::getMobileDetect();
 	}
 
@@ -115,11 +115,11 @@ class ThemePlus
 	/**
 	 * Get productive mode status.
 	 *
-	 * @deprecated use \ThemePlus\ThemePlusEnvironment::isLiveMode() instead
+	 * @deprecated use Bit3\Contao\ThemePlus\ThemePlusEnvironment::isLiveMode() instead
 	 */
 	public static function isLiveMode()
 	{
-		trigger_error('Deprecated, use \ThemePlus\ThemePlusEnvironment::isLiveMode() instead!', E_USER_DEPRECATED);
+		trigger_error('Deprecated, use Bit3\Contao\ThemePlus\ThemePlusEnvironment::isLiveMode() instead!', E_USER_DEPRECATED);
 		return ThemePlusEnvironment::isLiveMode();
 	}
 
@@ -127,11 +127,11 @@ class ThemePlus
 	/**
 	 * Set productive mode.
 	 *
-	 * @deprecated use \ThemePlus\ThemePlusEnvironment::setLiveMode() instead
+	 * @deprecated use Bit3\Contao\ThemePlus\ThemePlusEnvironment::setLiveMode() instead
 	 */
 	public static function setLiveMode($liveMode = true)
 	{
-		trigger_error('Deprecated, use \ThemePlus\ThemePlusEnvironment::setLiveMode() instead!', E_USER_DEPRECATED);
+		trigger_error('Deprecated, use Bit3\Contao\ThemePlus\ThemePlusEnvironment::setLiveMode() instead!', E_USER_DEPRECATED);
 		ThemePlusEnvironment::setLiveMode($liveMode);
 	}
 
@@ -139,11 +139,11 @@ class ThemePlus
 	/**
 	 * Get productive mode status.
 	 *
-	 * @deprecated use \ThemePlus\ThemePlusEnvironment::isDesignerMode() instead
+	 * @deprecated use Bit3\Contao\ThemePlus\ThemePlusEnvironment::isDesignerMode() instead
 	 */
 	public static function isDesignerMode()
 	{
-		trigger_error('Deprecated, use \ThemePlus\ThemePlusEnvironment::isDesignerMode() instead!', E_USER_DEPRECATED);
+		trigger_error('Deprecated, use Bit3\Contao\ThemePlus\ThemePlusEnvironment::isDesignerMode() instead!', E_USER_DEPRECATED);
 		return ThemePlusEnvironment::isDesignerMode();
 	}
 
@@ -151,11 +151,11 @@ class ThemePlus
 	/**
 	 * Set designer mode.
 	 *
-	 * @deprecated use \ThemePlus\ThemePlusEnvironment::setDesignerMode() instead
+	 * @deprecated use Bit3\Contao\ThemePlus\ThemePlusEnvironment::setDesignerMode() instead
 	 */
 	public static function setDesignerMode($designerMode = true)
 	{
-		trigger_error('Deprecated, use \ThemePlus\ThemePlusEnvironment::setDesignerMode() instead!', E_USER_DEPRECATED);
+		trigger_error('Deprecated, use Bit3\Contao\ThemePlus\ThemePlusEnvironment::setDesignerMode() instead!', E_USER_DEPRECATED);
 		ThemePlusEnvironment::setDesignerMode($designerMode);
 	}
 
@@ -165,12 +165,12 @@ class ThemePlus
 	 *
 	 * @return bool
 	 *
-	 * @deprecated use \ThemePlus\ThemePlusEnvironment::isInPreCompileMode() instead
+	 * @deprecated use Bit3\Contao\ThemePlus\ThemePlusEnvironment::isInPreCompileMode() instead
 	 */
 	public static function isInPreCompileMode()
 	{
 		trigger_error(
-			'Deprecated, use \ThemePlus\ThemePlusEnvironment::isInPreCompileMode() instead!',
+			'Deprecated, use Bit3\Contao\ThemePlus\ThemePlusEnvironment::isInPreCompileMode() instead!',
 			E_USER_DEPRECATED
 		);
 		return ThemePlusEnvironment::isInPreCompileMode();
