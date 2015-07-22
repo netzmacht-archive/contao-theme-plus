@@ -57,6 +57,9 @@ class ThemePlusEnvironment
 				// Check the cookie hash
 				if ($hash == sha1(session_id() . (!$GLOBALS['TL_CONFIG']['disableIpCheck'] ? $ip : '') . $cookieName))
 				{
+					// Initialize Contao stack properly (#98).
+					\FrontendUser::getInstance();
+
 					$session = \Database::getInstance()
 						->prepare("SELECT * FROM tl_session WHERE hash=? AND name=?")
 						->execute($hash, $cookieName);
