@@ -1429,10 +1429,7 @@ class ThemePlus
 			$this->excludeList[] = $source;
 
 			// if stylesheet is an absolute url...
-			if (preg_match(
-				'#^\w+:#',
-				$source
-			)
+			if (preg_match('#^\w+:#', $source) || 0 === strpos($source, '//')
 			) {
 				// ...fetch the stylesheet
 				if ($mode == 'static' && ThemePlusEnvironment::isLiveMode()) {
