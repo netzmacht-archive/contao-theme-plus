@@ -40,7 +40,8 @@
     "bit3/php-coding-standard":"@dev"
   },
   "replace": {
-    "contao-legacy/theme_plus": "self.version"
+    "contao-legacy/theme_plus": "self.version",
+    "bit3/contao-assetic": "self.version"
   },
   "autoload":{
     "psr-0": {
