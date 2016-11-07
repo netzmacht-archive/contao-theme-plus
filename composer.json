@@ -1,5 +1,5 @@
 {
-  "name":"bit3/contao-theme-plus",
+  "name":"netzmacht/contao-theme-plus",
   "description":"Theme+ for Contao OpenSource CMS",
   "keywords":["contao", "theme", "css", "js", "stylesheet", "javascript", "assets"],
   "type":"contao-module",
