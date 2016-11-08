@@ -13,6 +13,7 @@
 
 namespace Bit3\Contao\ThemePlus;
 
+use Bit3\Contao\ThemePlus\Util\UrlUtil;
 use Template;
 use FrontendTemplate;
 use Bit3\Contao\ThemePlus\DataContainer\File;
@@ -1429,10 +1430,10 @@ class ThemePlus
 			$this->excludeList[] = $source;
 
 			// if stylesheet is an absolute url...
-			if (preg_match('#^\w+:#', $source) || 0 === strpos($source, '//')
-			) {
+			if (UrlUtil::isAbsoluteUrl($source)) {
 				// ...fetch the stylesheet
 				if ($mode == 'static' && ThemePlusEnvironment::isLiveMode()) {
+					$source = UrlUtil::addScheme($source);
 					$asset = new HttpAsset($source);
 					$asset->setTargetPath($this->getAssetPath($asset, $type));
 				}
@@ -1539,7 +1540,9 @@ class ThemePlus
 							$name = basename($data->url);
 							$time = $data->tstamp;
 							if ($data->fetchUrl) {
-								$asset = new HttpAsset($data->url, $filter);
+								$source = UrlUtil::addScheme($data->url);
+								$asset  = new HttpAsset($source, $filter);
+
 								$asset->setTargetPath($this->getAssetPath($asset, $type));
 							}
 							else {
