@@ -1372,7 +1372,7 @@ class ThemePlus
 					$array[]                       = array(
 						'id'       => $type . ':asset:' . spl_object_hash($source),
 						'name'     => basename($sourcePath, '.' . $type) . '.' . $type,
-						'time'     => filemtime($sourcePath),
+						'time'     => filemtime($source->getSourceRoot() . '/' . $sourcePath),
 						'asset'    => $source,
 						'position' => $defaultPosition
 					);
