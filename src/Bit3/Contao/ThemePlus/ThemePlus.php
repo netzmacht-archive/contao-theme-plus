@@ -41,6 +41,15 @@ class ThemePlus
 	 */
 	private static $instance = null;
 
+	/**
+	 * @var array
+	 */
+	private $contaoCssFiles = array();
+
+	/**
+	 * @var array
+	 */
+	private $contaoJavascriptFiles = array();
 
 	/**
 	 * Get the singleton instance.
@@ -950,6 +959,17 @@ class ThemePlus
 		$GLOBALS['TL_FRAMEWORK_CSS'] = array();
 
 		// Add the internal style sheets
+		if (!empty($this->contaoCssFiles) && is_array($this->contaoCssFiles)) {
+			$this->addAssetsToCollectionFromArray(
+				$this->contaoCssFiles,
+				'css',
+				true,
+				$collection,
+				$stylesheets,
+				$defaultFilters
+			);
+		}
+
 		if (is_array($GLOBALS['TL_CSS']) && !empty($GLOBALS['TL_CSS'])) {
 			$this->addAssetsToCollectionFromArray(
 				$GLOBALS['TL_CSS'],
@@ -960,6 +980,7 @@ class ThemePlus
 				$defaultFilters
 			);
 		}
+		$this->contaoCssFiles = $GLOBALS['TL_CSS'];
 		$GLOBALS['TL_CSS'] = array();
 
 		// Add the user style sheets
@@ -1140,6 +1161,18 @@ class ThemePlus
 		$collection = new AssetCollection(array(), array(), TL_ROOT);
 
 		// Add the internal scripts
+		if (!empty($this->contaoJavascriptFiles) && is_array($this->contaoJavascriptFiles)) {
+			$this->addAssetsToCollectionFromArray(
+				$this->contaoJavascriptFiles,
+				'js',
+				false,
+				$collection,
+				$javascripts,
+				$defaultFilters,
+				$layout->theme_plus_default_javascript_position
+			);
+		}
+
 		if (is_array($GLOBALS['TL_JAVASCRIPT']) && !empty($GLOBALS['TL_JAVASCRIPT'])) {
 			$this->addAssetsToCollectionFromArray(
 				$GLOBALS['TL_JAVASCRIPT'],
@@ -1151,6 +1184,7 @@ class ThemePlus
 				$layout->theme_plus_default_javascript_position
 			);
 		}
+		$this->contaoJavascriptFiles = $GLOBALS['TL_JAVASCRIPT'];
 		$GLOBALS['TL_JAVASCRIPT'] = array();
 
 		// Add layout files
