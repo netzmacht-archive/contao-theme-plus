@@ -49,6 +49,11 @@ class ThemePlus
 	/**
 	 * @var array
 	 */
+	private $contaoUserCssFiles = array();
+
+	/**
+	 * @var array
+	 */
 	private $contaoJavascriptFiles = array();
 
 	/**
@@ -970,7 +975,7 @@ class ThemePlus
 			);
 		}
 
-		if (is_array($GLOBALS['TL_CSS']) && !empty($GLOBALS['TL_CSS'])) {
+		if (!empty($GLOBALS['TL_CSS']) && is_array($GLOBALS['TL_CSS'])) {
 			$this->addAssetsToCollectionFromArray(
 				$GLOBALS['TL_CSS'],
 				'css',
@@ -979,12 +984,24 @@ class ThemePlus
 				$stylesheets,
 				$defaultFilters
 			);
+
+			$this->contaoCssFiles = array_merge($this->contaoCssFiles, $GLOBALS['TL_CSS']);
 		}
-		$this->contaoCssFiles = $GLOBALS['TL_CSS'];
 		$GLOBALS['TL_CSS'] = array();
 
 		// Add the user style sheets
-		if (is_array($GLOBALS['TL_USER_CSS']) && !empty($GLOBALS['TL_USER_CSS'])) {
+		if (!empty($this->contaoUserCssFiles)) {
+			$this->addAssetsToCollectionFromArray(
+				$this->contaoUserCssFiles,
+				'css',
+				true,
+				$collection,
+				$stylesheets,
+				$defaultFilters
+			);
+		}
+		
+		if (!empty($GLOBALS['TL_USER_CSS']) && is_array($GLOBALS['TL_USER_CSS'])) {
 			$this->addAssetsToCollectionFromArray(
 				array_unique($GLOBALS['TL_USER_CSS']),
 				'css',
@@ -993,6 +1010,8 @@ class ThemePlus
 				$stylesheets,
 				$defaultFilters
 			);
+
+			$this->contaoUserCssFiles = array_merge($this->contaoUserCssFiles, $GLOBALS['TL_USER_CSS']);
 		}
 		$GLOBALS['TL_USER_CSS'] = array();
 
@@ -1173,7 +1192,7 @@ class ThemePlus
 			);
 		}
 
-		if (is_array($GLOBALS['TL_JAVASCRIPT']) && !empty($GLOBALS['TL_JAVASCRIPT'])) {
+		if (!empty($GLOBALS['TL_JAVASCRIPT']) && is_array($GLOBALS['TL_JAVASCRIPT'])) {
 			$this->addAssetsToCollectionFromArray(
 				$GLOBALS['TL_JAVASCRIPT'],
 				'js',
@@ -1183,8 +1202,10 @@ class ThemePlus
 				$defaultFilters,
 				$layout->theme_plus_default_javascript_position
 			);
+
+			$this->contaoJavascriptFiles = array_merge($this->contaoJavascriptFiles, $GLOBALS['TL_JAVASCRIPT']);
 		}
-		$this->contaoJavascriptFiles = $GLOBALS['TL_JAVASCRIPT'];
+
 		$GLOBALS['TL_JAVASCRIPT'] = array();
 
 		// Add layout files
