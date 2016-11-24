@@ -31,7 +31,7 @@
     "contao/core":">=3,<3.6-dev",
     "contao-community-alliance/composer-plugin": "~2",
     "netzmacht/contao-assetic":"~1",
-    "ikimea/browser":"dev-master",
+    "ikimea/browser":"~1.0",
     "mobiledetect/mobiledetectlib": "2.*",
     "contao-community-alliance/meta-palettes":"~1"
   },
