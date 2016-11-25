@@ -19,7 +19,7 @@ CREATE TABLE `tl_theme_plus_variable` (
   `name` varchar(255) NOT NULL default '',
   `text` varchar(255) NOT NULL default '',
   `url` blob NULL,
-  `file` binary(16) NULL,
+  `file` blob NULL,
   `color` varchar(6) NOT NULL default '',
   `size` varchar(128) NOT NULL default '',
   PRIMARY KEY  (`id`),
